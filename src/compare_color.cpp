@@ -2,7 +2,7 @@
 
 AI_SHADER_NODE_EXPORT_METHODS(CompareColorMtd);
 
-enum CompareFloatParams
+enum CompareColorParams
 {
    p_operator = 0,
    p_invert,

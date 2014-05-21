@@ -1,8 +1,8 @@
-#include <ai.h>
+#include "common.h"
 
 AI_SHADER_NODE_EXPORT_METHODS(SelectFloatMtd);
 
-enum SelectFloatMtd
+enum SelectFloatParams
 {
    p_condition = 0,
    p_if_true,

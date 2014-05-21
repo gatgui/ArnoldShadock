@@ -1,4 +1,4 @@
-#include <ai.h>
+#include "common.h"
 
 AI_SHADER_NODE_EXPORT_METHODS(SelectColorMtd);
 

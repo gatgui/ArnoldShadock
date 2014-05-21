@@ -5,13 +5,17 @@ extern AtNodeMethods* CompareFloatMtd;
 extern AtNodeMethods* CompareColorMtd;
 extern AtNodeMethods* SelectFloatMtd;
 extern AtNodeMethods* SelectColorMtd;
+extern AtNodeMethods* UnaryMathFloatMtd;
+extern AtNodeMethods* BinaryMathFloatMtd;
 
 enum
 {
     COMPARE_FLOAT = 0,
     COMPARE_COLOR,
     SELECT_FLOAT,
-    SELECT_COLOR
+    SELECT_COLOR,
+    UNARY_MATH_FLOAT,
+    BINARY_MATH_FLOAT
 };
 
 node_loader
@@ -49,6 +53,24 @@ node_loader
       node->node_type = AI_NODE_SHADER;
       node->output_type = AI_TYPE_RGB;
       node->methods = SelectColorMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == UNARY_MATH_FLOAT)
+   {
+      node->name = "unary_math_float";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_FLOAT;
+      node->methods = UnaryMathFloatMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == BINARY_MATH_FLOAT)
+   {
+      node->name = "binary_math_float";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_FLOAT;
+      node->methods = BinaryMathFloatMtd;
       strcpy(node->version, AI_VERSION);
       return true;
    }
