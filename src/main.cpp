@@ -8,6 +8,7 @@ extern AtNodeMethods* SelectColorMtd;
 extern AtNodeMethods* UnaryMathFloatMtd;
 extern AtNodeMethods* BinaryMathFloatMtd;
 extern AtNodeMethods* UnaryMathColorMtd;
+extern AtNodeMethods* BinaryMathColorMtd;
 
 enum
 {
@@ -17,7 +18,8 @@ enum
     SELECT_COLOR,
     UNARY_MATH_FLOAT,
     BINARY_MATH_FLOAT,
-    UNARY_MATH_COLOR
+    UNARY_MATH_COLOR,
+    BINARY_MATH_COLOR
 };
 
 node_loader
@@ -82,6 +84,15 @@ node_loader
       node->node_type = AI_NODE_SHADER;
       node->output_type = AI_TYPE_RGB;
       node->methods = UnaryMathColorMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == BINARY_MATH_COLOR)
+   {
+      node->name = "binary_math_color";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_RGB;
+      node->methods = BinaryMathColorMtd;
       strcpy(node->version, AI_VERSION);
       return true;
    }
