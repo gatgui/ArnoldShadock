@@ -15,7 +15,7 @@ node_parameters
 {
    AiParameterEnum("operator", UMO_ABS, BinaryMathOperatorNames);
    AiParameterFlt("input1", 0.0f);
-   AiParameterFlt("input1", 0.0f);
+   AiParameterFlt("input2", 0.0f);
    AiParameterBool("abort_on_error", false);
    AiParameterFlt("error_value", 0.0f);
 }
