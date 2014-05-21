@@ -15,7 +15,7 @@ node_parameters
 {
    AiParameterEnum("operator", UMO_ABS, BinaryMathOperatorNames);
    AiParameterRGB("input1", 0.0f, 0.0f, 0.0f);
-   AiParameterRGB("input1", 0.0f, 0.0f, 0.0f);
+   AiParameterRGB("input2", 0.0f, 0.0f, 0.0f);
    AiParameterBool("abort_on_error", false);
    AiParameterRGB("error_value", 1.0f, 0.0f, 1.0f);
 }
