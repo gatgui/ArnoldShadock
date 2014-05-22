@@ -7,6 +7,9 @@ extern AtNodeMethods* CompareVectorMtd;
 extern AtNodeMethods* SelectFloatMtd;
 extern AtNodeMethods* SelectColorMtd;
 extern AtNodeMethods* SelectVectorMtd;
+extern AtNodeMethods* MultiSelectFloatMtd;
+extern AtNodeMethods* MultiSelectColorMtd;
+extern AtNodeMethods* MultiSelectVectorMtd;
 extern AtNodeMethods* UnaryMathFloatMtd;
 extern AtNodeMethods* UnaryMathColorMtd;
 extern AtNodeMethods* UnaryMathVectorMtd;
@@ -24,6 +27,9 @@ enum
     SELECT_FLOAT,
     SELECT_COLOR,
     SELECT_VECTOR,
+    MULTI_SELECT_FLOAT,
+    MULTI_SELECT_COLOR,
+    MULTI_SELECT_VECTOR,
     UNARY_MATH_FLOAT,
     UNARY_MATH_COLOR,
     UNARY_MATH_VECTOR,
@@ -87,6 +93,33 @@ node_loader
       node->node_type = AI_NODE_SHADER;
       node->output_type = AI_TYPE_VECTOR;
       node->methods = SelectVectorMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == MULTI_SELECT_FLOAT)
+   {
+      node->name = "multi_select_float";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_FLOAT;
+      node->methods = MultiSelectFloatMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == MULTI_SELECT_COLOR)
+   {
+      node->name = "multi_select_color";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_RGB;
+      node->methods = MultiSelectColorMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == MULTI_SELECT_VECTOR)
+   {
+      node->name = "multi_select_vector";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_VECTOR;
+      node->methods = MultiSelectVectorMtd;
       strcpy(node->version, AI_VERSION);
       return true;
    }
