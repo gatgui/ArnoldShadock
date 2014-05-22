@@ -18,6 +18,8 @@ extern AtNodeMethods* BinaryMathColorMtd;
 extern AtNodeMethods* BinaryMathVectorMtd;
 extern AtNodeMethods* FloatToIntMtd;
 extern AtNodeMethods* FloatToBoolMtd;
+extern AtNodeMethods* ClampFloatMtd;
+extern AtNodeMethods* SmoothStepFloatMtd;
 
 enum
 {
@@ -37,7 +39,9 @@ enum
     BINARY_MATH_COLOR,
     BINARY_MATH_VECTOR,
     FLOAT_TO_INT,
-    FLOAT_TO_BOOL
+    FLOAT_TO_BOOL,
+    CLAMP_FLOAT,
+    SMOOTHSTEP_FLOAT
 };
 
 node_loader
@@ -192,6 +196,24 @@ node_loader
       node->node_type = AI_NODE_SHADER;
       node->output_type = AI_TYPE_BOOLEAN;
       node->methods = FloatToBoolMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == CLAMP_FLOAT)
+   {
+      node->name = "clamp_float";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_FLOAT;
+      node->methods = ClampFloatMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == SMOOTHSTEP_FLOAT)
+   {
+      node->name = "smoothstep_float";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_FLOAT;
+      node->methods = SmoothStepFloatMtd;
       strcpy(node->version, AI_VERSION);
       return true;
    }

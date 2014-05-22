@@ -42,4 +42,9 @@ enum BinaryMathOperator
    BMO_SUBTRACT
 };
 
+inline float Clamp(float x, float m, float M)
+{
+   return (x < m ? m : (x > M ? M : x));
+}
+
 #endif
