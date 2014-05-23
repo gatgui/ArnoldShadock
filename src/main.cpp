@@ -16,8 +16,8 @@ extern AtNodeMethods* UnaryMathVectorMtd;
 extern AtNodeMethods* BinaryMathFloatMtd;
 extern AtNodeMethods* BinaryMathColorMtd;
 extern AtNodeMethods* BinaryMathVectorMtd;
-extern AtNodeMethods* FloatToIntMtd;
-extern AtNodeMethods* FloatToBoolMtd;
+extern AtNodeMethods* ConvertFloatToIntMtd;
+extern AtNodeMethods* ConvertFloatToBoolMtd;
 extern AtNodeMethods* ClampFloatMtd;
 extern AtNodeMethods* ClampColorMtd;
 extern AtNodeMethods* ClampVectorMtd;
@@ -48,8 +48,8 @@ enum
     BINARY_MATH_FLOAT,
     BINARY_MATH_COLOR,
     BINARY_MATH_VECTOR,
-    FLOAT_TO_INT,
-    FLOAT_TO_BOOL,
+    CONVERT_FLOAT_TO_INT,
+    CONVERT_FLOAT_TO_BOOL,
     CLAMP_FLOAT,
     CLAMP_COLOR,
     CLAMP_VECTOR,
@@ -201,21 +201,21 @@ node_loader
       strcpy(node->version, AI_VERSION);
       return true;
    }
-   else if (i == FLOAT_TO_INT)
+   else if (i == CONVERT_FLOAT_TO_INT)
    {
-      node->name = "float_to_int";
+      node->name = "convert_float_to_int";
       node->node_type = AI_NODE_SHADER;
       node->output_type = AI_TYPE_INT;
-      node->methods = FloatToIntMtd;
+      node->methods = ConvertFloatToIntMtd;
       strcpy(node->version, AI_VERSION);
       return true;
    }
-   else if (i == FLOAT_TO_BOOL)
+   else if (i == CONVERT_FLOAT_TO_BOOL)
    {
-      node->name = "float_to_bool";
+      node->name = "convert_float_to_bool";
       node->node_type = AI_NODE_SHADER;
       node->output_type = AI_TYPE_BOOLEAN;
-      node->methods = FloatToBoolMtd;
+      node->methods = ConvertFloatToBoolMtd;
       strcpy(node->version, AI_VERSION);
       return true;
    }
