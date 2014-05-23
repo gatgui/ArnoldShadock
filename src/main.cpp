@@ -27,6 +27,9 @@ extern AtNodeMethods* SmoothStepVectorMtd;
 extern AtNodeMethods* MixFloatMtd;
 extern AtNodeMethods* MixColorMtd;
 extern AtNodeMethods* MixVectorMtd;
+extern AtNodeMethods* RemapFloatMtd;
+extern AtNodeMethods* RemapColorMtd;
+extern AtNodeMethods* RemapVectorMtd;
 
 enum
 {
@@ -55,7 +58,10 @@ enum
     SMOOTHSTEP_VECTOR,
     MIX_FLOAT,
     MIX_COLOR,
-    MIX_VECTOR
+    MIX_VECTOR,
+    REMAP_FLOAT,
+    REMAP_COLOR,
+    REMAP_VECTOR
 };
 
 node_loader
@@ -291,6 +297,33 @@ node_loader
       node->node_type = AI_NODE_SHADER;
       node->output_type = AI_TYPE_VECTOR;
       node->methods = MixVectorMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == REMAP_FLOAT)
+   {
+      node->name = "remap_float";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_FLOAT;
+      node->methods = RemapFloatMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == REMAP_COLOR)
+   {
+      node->name = "remap_color";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_RGB;
+      node->methods = RemapColorMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == REMAP_VECTOR)
+   {
+      node->name = "remap_vector";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_VECTOR;
+      node->methods = RemapVectorMtd;
       strcpy(node->version, AI_VERSION);
       return true;
    }

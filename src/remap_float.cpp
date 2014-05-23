@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SmoothStepFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RemapFloatMtd);
 
-enum SmoothStepFloatParams
+enum RemapFloatParams
 {
    p_input = 0,
    p_input_min,
@@ -40,5 +40,5 @@ shader_evaluate
    float output_min = AiShaderEvalParamFlt(p_output_min);
    float output_max = AiShaderEvalParamFlt(p_output_max);
    
-   sg->out.FLT = ExpandToRange(SmoothStep(NormalizeToRange(input, input_min, input_max)), output_min, output_max);
+   sg->out.FLT = ExpandToRange(NormalizeToRange(input, input_min, input_max), output_min, output_max);
 }

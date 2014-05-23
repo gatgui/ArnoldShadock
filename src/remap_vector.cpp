@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SmoothStepVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RemapVectorMtd);
 
-enum SmoothStepVectorParams
+enum RemapVectorParams
 {
    p_input = 0,
    p_input_min,
@@ -40,5 +40,5 @@ shader_evaluate
    AtVector output_min = AiShaderEvalParamVec(p_output_min);
    AtVector output_max = AiShaderEvalParamVec(p_output_max);
    
-   sg->out.VEC = ExpandToRange(SmoothStep(NormalizeToRange(input, input_min, input_max)), output_min, output_max);
+   sg->out.VEC = ExpandToRange(NormalizeToRange(input, input_min, input_max), output_min, output_max);
 }

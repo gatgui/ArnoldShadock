@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SmoothStepColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RemapColorMtd);
 
-enum SmoothStepColorParams
+enum RemapColorParams
 {
    p_input = 0,
    p_input_min,
@@ -40,5 +40,5 @@ shader_evaluate
    AtRGB output_min = AiShaderEvalParamRGB(p_output_min);
    AtRGB output_max = AiShaderEvalParamRGB(p_output_max);
    
-   sg->out.RGB = ExpandToRange(SmoothStep(NormalizeToRange(input, input_min, input_max)), output_min, output_max);
+   sg->out.RGB = ExpandToRange(NormalizeToRange(input, input_min, input_max), output_min, output_max);
 }
