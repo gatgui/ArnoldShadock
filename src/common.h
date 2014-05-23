@@ -27,7 +27,7 @@ enum UnaryMathOperator
    UMO_CEIL,
    UMO_FLOOR,
    UMO_INVERSE,
-   UMO_OPPOSITE,
+   UMO_NEGATE,
    UMO_ROUND,
    UMO_SIGN
 };

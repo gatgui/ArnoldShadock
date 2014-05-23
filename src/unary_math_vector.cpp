@@ -73,7 +73,7 @@ shader_evaluate
          sg->out.VEC.z = 1.0f / input.z;
       }
       return;
-   case UMO_OPPOSITE:
+   case UMO_NEGATE:
       sg->out.VEC.x = -input.x;
       sg->out.VEC.y = -input.y;
       sg->out.VEC.z = -input.z;

@@ -17,7 +17,7 @@ const char* UnaryMathOperatorNames[] =
    "ceil",
    "floor",
    "inverse",
-   "opposite",
+   "negate",
    "round",
    "sign",
    NULL

@@ -73,7 +73,7 @@ shader_evaluate
          sg->out.RGB.b = 1.0f / input.b;
       }
       return;
-   case UMO_OPPOSITE:
+   case UMO_NEGATE:
       sg->out.RGB.r = -input.r;
       sg->out.RGB.g = -input.g;
       sg->out.RGB.b = -input.b;

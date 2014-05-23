@@ -63,7 +63,7 @@ shader_evaluate
          sg->out.FLT = 1.0f / input;
       }
       return;
-   case UMO_OPPOSITE:
+   case UMO_NEGATE:
       sg->out.FLT = -input;
       return;
    case UMO_ROUND:
