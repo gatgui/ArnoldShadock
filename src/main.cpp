@@ -19,7 +19,14 @@ extern AtNodeMethods* BinaryMathVectorMtd;
 extern AtNodeMethods* FloatToIntMtd;
 extern AtNodeMethods* FloatToBoolMtd;
 extern AtNodeMethods* ClampFloatMtd;
+extern AtNodeMethods* ClampColorMtd;
+extern AtNodeMethods* ClampVectorMtd;
 extern AtNodeMethods* SmoothStepFloatMtd;
+extern AtNodeMethods* SmoothStepColorMtd;
+extern AtNodeMethods* SmoothStepVectorMtd;
+extern AtNodeMethods* MixFloatMtd;
+extern AtNodeMethods* MixColorMtd;
+extern AtNodeMethods* MixVectorMtd;
 
 enum
 {
@@ -41,7 +48,14 @@ enum
     FLOAT_TO_INT,
     FLOAT_TO_BOOL,
     CLAMP_FLOAT,
-    SMOOTHSTEP_FLOAT
+    CLAMP_COLOR,
+    CLAMP_VECTOR,
+    SMOOTHSTEP_FLOAT,
+    SMOOTHSTEP_COLOR,
+    SMOOTHSTEP_VECTOR,
+    MIX_FLOAT,
+    MIX_COLOR,
+    MIX_VECTOR
 };
 
 node_loader
@@ -208,12 +222,75 @@ node_loader
       strcpy(node->version, AI_VERSION);
       return true;
    }
+   else if (i == CLAMP_COLOR)
+   {
+      node->name = "clamp_color";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_RGB;
+      node->methods = ClampColorMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == CLAMP_VECTOR)
+   {
+      node->name = "clamp_vector";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_VECTOR;
+      node->methods = ClampVectorMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
    else if (i == SMOOTHSTEP_FLOAT)
    {
       node->name = "smoothstep_float";
       node->node_type = AI_NODE_SHADER;
       node->output_type = AI_TYPE_FLOAT;
       node->methods = SmoothStepFloatMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == SMOOTHSTEP_COLOR)
+   {
+      node->name = "smoothstep_color";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_RGB;
+      node->methods = SmoothStepColorMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == SMOOTHSTEP_VECTOR)
+   {
+      node->name = "smoothstep_vector";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_VECTOR;
+      node->methods = SmoothStepVectorMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == MIX_FLOAT)
+   {
+      node->name = "mix_float";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_FLOAT;
+      node->methods = MixFloatMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == MIX_COLOR)
+   {
+      node->name = "mix_color";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_RGB;
+      node->methods = MixColorMtd;
+      strcpy(node->version, AI_VERSION);
+      return true;
+   }
+   else if (i == MIX_VECTOR)
+   {
+      node->name = "mix_vector";
+      node->node_type = AI_NODE_SHADER;
+      node->output_type = AI_TYPE_VECTOR;
+      node->methods = MixVectorMtd;
       strcpy(node->version, AI_VERSION);
       return true;
    }

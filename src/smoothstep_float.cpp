@@ -41,11 +41,15 @@ shader_evaluate
    float output_max = AiShaderEvalParamFlt(p_output_max);
    
    // remap input
-   float x = Clamp((input - input_min) / (input_max - input_min), 0.0f, 1.0f);
+   float x = (input - input_min) / (input_max - input_min);
+   
+   // clamp to [0, 1] range
+   x = CLAMP(x, 0.0f, 1.0f);
    
    // 3t^2 - 2t^3
    //x = x * x * (3.0f - 2.0f * x);
-   // 6t^5 - 15t^4 + 10t^3
+   
+   // 6t^5 - 15t^4 + 10t^3 (Perlin)
    x = x * x * x * (x * (x * 6.0f - 15.0f) + 10.0f);
    
    // remap output
