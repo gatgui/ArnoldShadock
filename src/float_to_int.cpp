@@ -13,6 +13,7 @@ static const char* FloatToIntModeNames[] =
    "floor",
    "ceil",
    "round",
+   "truncate",
    NULL
 };
 
@@ -20,7 +21,8 @@ enum FloatToIntMode
 {
    FTI_FLOOR = 0,
    FTI_CEIL,
-   FTI_ROUND
+   FTI_ROUND,
+   FTI_TRUNCATE
 };
 
 node_parameters
@@ -52,7 +54,10 @@ shader_evaluate
       sg->out.INT = static_cast<int>(ceilf(input));
       return;
    case FTI_ROUND:
-      sg->out.INT = static_cast<int>(floorf(0.5f * input));
+      sg->out.INT = static_cast<int>(floorf(0.5f + input));
+      return;
+   case FTI_TRUNCATE:
+      sg->out.INT = static_cast<int>(input < 0.0f ? -floorf(-input) : floorf(input));
       return;
    case FTI_FLOOR:
    default:
