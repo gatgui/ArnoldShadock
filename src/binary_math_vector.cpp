@@ -6,18 +6,14 @@ enum BinaryMathVectorParams
 {
    p_operator = 0,
    p_input1,
-   p_input2,
-   p_abort_on_error,
-   p_error_value
+   p_input2
 };
 
 node_parameters
 {
-   AiParameterEnum("operator", UMO_ABS, BinaryMathOperatorNames);
+   AiParameterEnum("operator", BMO_ADD, BinaryMathOperatorNames);
    AiParameterVec("input1", 0.0f, 0.0f, 0.0f);
-   AiParameterVec("input2", 0.0f, 0.0f, 0.0f);
-   AiParameterBool("abort_on_error", false);
-   AiParameterVec("error_value", 0.0f, 0.0f, 0.0f);
+   AiParameterVec("input2", 1.0f, 1.0f, 1.0f);
 }
 
 node_initialize
@@ -38,29 +34,11 @@ shader_evaluate
    
    AtVector input1 = AiShaderEvalParamVec(p_input1);
    AtVector input2 = AiShaderEvalParamVec(p_input2);
-   bool abort_on_error = AiShaderEvalParamBool(p_abort_on_error);
-   AtVector error_value = AiShaderEvalParamVec(p_error_value);
    
    switch (op)
    {
-   case BMO_ADD:
-      sg->out.VEC = input1 + input2;
-      return;
    case BMO_DIVIDE:
-      if ((-AI_EPSILON < input2.x && input2.x < AI_EPSILON) ||
-          (-AI_EPSILON < input2.y && input2.y < AI_EPSILON) ||
-          (-AI_EPSILON < input2.z && input2.z < AI_EPSILON))
-      {
-         if (abort_on_error)
-         {
-            AiRenderAbort();
-         }
-         sg->out.VEC = error_value;
-      }
-      else
-      {
-         sg->out.VEC = input1 / input2;
-      }
+      sg->out.VEC = input1 / input2;
       return;
    case BMO_MAX:
       sg->out.VEC.x = (input1.x < input2.x ? input2.x : input1.x);
@@ -78,11 +56,9 @@ shader_evaluate
    case BMO_SUBTRACT:
       sg->out.VEC = input1 - input2;
       return;
+   case BMO_ADD:
    default:
-      if (abort_on_error)
-      {
-         AiRenderAbort();
-      }
-      sg->out.VEC = error_value;
+      sg->out.VEC = input1 + input2;
+      return;
    }
 }
