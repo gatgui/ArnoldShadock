@@ -51,6 +51,8 @@ DECLARE_FCV_SHADER(Clamp);
 DECLARE_FCV_SHADER(Compare);
 DECLARE_SHADER(ConvertFloatToBool);
 DECLARE_SHADER(ConvertFloatToInt);
+DECLARE_SHADER(ConvertVectorToColor);
+DECLARE_SHADER(ConvertColorToVector);
 DECLARE_FCV_SHADER(Divide);
 DECLARE_FCV_SHADER(Floor);
 DECLARE_FCV_SHADER(Inverse);
@@ -79,6 +81,8 @@ node_loader
    REGISTER_FCV_SHADER(Compare, compare)
    REGISTER_SHADER(ConvertFloatToBool, convert_float_to_bool, AI_TYPE_BOOLEAN)
    REGISTER_SHADER(ConvertFloatToInt, convert_float_to_int, AI_TYPE_INT)
+   REGISTER_SHADER(ConvertVectorToColor, convert_vector_to_color, AI_TYPE_RGB)
+   REGISTER_SHADER(ConvertColorToVector, convert_color_to_vector, AI_TYPE_VECTOR)
    REGISTER_FCV_SHADER(Divide, divide)
    REGISTER_FCV_SHADER(Floor, floor)
    REGISTER_FCV_SHADER(Inverse, inverse)

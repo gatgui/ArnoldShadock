@@ -1,0 +1,30 @@
+
+trigonometic math operators
+  sin
+  cos
+  tan
+  atan
+  atan2
+  acos
+  asin
+
+advanced math operators
+  exp
+  log
+  sqrt
+  pow
+  spline
+  bias?
+  gain?
+
+vector math operators
+  length
+  cross
+  dot
+
+color operators
+  rgb to hsv
+  hsv to rgb
+  gamma
+  
+
