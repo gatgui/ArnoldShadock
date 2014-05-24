@@ -16,15 +16,15 @@ advanced math operators
   spline
   bias?
   gain?
+  gamma?
 
 vector math operators
   length
   cross
   dot
+  normalize
 
 color operators
-  rgb to hsv
-  hsv to rgb
-  gamma
-  
-
+  x rgb to hsv
+  x hsv to rgb
+  x convert to float
