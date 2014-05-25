@@ -9,11 +9,10 @@ trigonometic math operators
   x asin
 
 advanced math operators
-  exp
-  log
-  sqrt
-  pow
-  spline
+  x exp
+  x log
+  x sqrt
+  x pow
   x bias
   x gain
 
