@@ -11,7 +11,7 @@ enum GainColorParams
 node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
-   AiParameterFlt("gain", 0.5f);
+   AiParameterVec("gain", 0.5f, 0.5f, 0.5f);
 }
 
 node_initialize
@@ -29,9 +29,9 @@ node_finish
 shader_evaluate
 {
    AtRGB input = AiShaderEvalParamRGB(p_input);
-   float gain = AiShaderEvalParamFlt(p_gain);
+   AtVector gain = AiShaderEvalParamVec(p_gain);
    
-   sg->out.RGB.r = GAIN(input.r, gain);
-   sg->out.RGB.g = GAIN(input.g, gain);
-   sg->out.RGB.b = GAIN(input.b, gain);
+   sg->out.RGB.r = GAIN(input.r, gain.x);
+   sg->out.RGB.g = GAIN(input.g, gain.y);
+   sg->out.RGB.b = GAIN(input.b, gain.z);
 }

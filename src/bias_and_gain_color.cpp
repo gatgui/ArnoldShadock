@@ -12,8 +12,8 @@ enum BiasAndGainColorParams
 node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
-   AiParameterFlt("bias", 0.5f);
-   AiParameterFlt("gain", 0.5f);
+   AiParameterVec("bias", 0.5f, 0.5f, 0.5f);
+   AiParameterVec("gain", 0.5f, 0.5f, 0.5f);
 }
 
 node_initialize
@@ -31,10 +31,10 @@ node_finish
 shader_evaluate
 {
    AtRGB input = AiShaderEvalParamRGB(p_input);
-   float bias = AiShaderEvalParamFlt(p_bias);
-   float gain = AiShaderEvalParamFlt(p_gain);
+   AtVector bias = AiShaderEvalParamVec(p_bias);
+   AtVector gain = AiShaderEvalParamVec(p_gain);
    
-   sg->out.RGB.r = GAIN(BIAS(input.r, bias), gain);
-   sg->out.RGB.g = GAIN(BIAS(input.g, bias), gain);
-   sg->out.RGB.b = GAIN(BIAS(input.b, bias), gain);
+   sg->out.RGB.r = GAIN(BIAS(input.r, bias.x), gain.x);
+   sg->out.RGB.g = GAIN(BIAS(input.g, bias.y), gain.y);
+   sg->out.RGB.b = GAIN(BIAS(input.b, bias.z), gain.z);
 }

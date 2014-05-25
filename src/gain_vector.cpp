@@ -11,7 +11,7 @@ enum GainVectorParams
 node_parameters
 {
    AiParameterVec("input", 0.0f, 0.0f, 0.0f);
-   AiParameterFlt("gain", 0.5f);
+   AiParameterVec("gain", 0.5f, 0.5f, 0.5f);
 }
 
 node_initialize
@@ -29,9 +29,9 @@ node_finish
 shader_evaluate
 {
    AtVector input = AiShaderEvalParamVec(p_input);
-   float gain = AiShaderEvalParamFlt(p_gain);
+   AtVector gain = AiShaderEvalParamVec(p_gain);
    
-   sg->out.VEC.x = GAIN(input.x, gain);
-   sg->out.VEC.y = GAIN(input.y, gain);
-   sg->out.VEC.z = GAIN(input.z, gain);
+   sg->out.VEC.x = GAIN(input.x, gain.x);
+   sg->out.VEC.y = GAIN(input.y, gain.y);
+   sg->out.VEC.z = GAIN(input.z, gain.z);
 }
