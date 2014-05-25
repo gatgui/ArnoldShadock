@@ -14,9 +14,8 @@ advanced math operators
   sqrt
   pow
   spline
-  bias?
-  gain?
-  gamma?
+  x bias
+  x gain
 
 vector math operators
   length

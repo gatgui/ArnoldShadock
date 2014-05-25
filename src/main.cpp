@@ -57,7 +57,6 @@ DECLARE_SHADER(ConvertVectorToColor);
 DECLARE_SHADER(ConvertColorToVector);
 DECLARE_SHADER(ConvertColorToFloat);
 DECLARE_FCV_SHADER(Gain);
-DECLARE_SHADER(GradeColor);
 DECLARE_FCV_SHADER(Divide);
 DECLARE_FCV_SHADER(Floor);
 DECLARE_FCV_SHADER(Inverse);
@@ -92,7 +91,6 @@ node_loader
    REGISTER_SHADER(ConvertColorToVector, convert_color_to_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(ConvertColorToFloat, convert_color_to_float, AI_TYPE_FLOAT)
    REGISTER_FCV_SHADER(Gain, gain)
-   REGISTER_SHADER(GradeColor, grade_color, AI_TYPE_RGB)
    REGISTER_FCV_SHADER(Divide, divide)
    REGISTER_FCV_SHADER(Floor, floor)
    REGISTER_FCV_SHADER(Inverse, inverse)
