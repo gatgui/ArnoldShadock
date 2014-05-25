@@ -1,12 +1,12 @@
 
 trigonometic math operators
-  sin
-  cos
-  tan
-  atan
-  atan2
-  acos
-  asin
+  x sin
+  x cos
+  x tan
+  x atan
+  x atan2
+  x acos
+  x asin
 
 advanced math operators
   exp
@@ -18,10 +18,10 @@ advanced math operators
   x gain
 
 vector math operators
-  length
-  cross
-  dot
-  normalize
+  x length
+  x cross
+  x dot
+  x normalize
 
 color operators
   x rgb to hsv

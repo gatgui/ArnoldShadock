@@ -56,8 +56,10 @@ DECLARE_SHADER(ConvertFloatToInt);
 DECLARE_SHADER(ConvertVectorToColor);
 DECLARE_SHADER(ConvertColorToVector);
 DECLARE_SHADER(ConvertColorToFloat);
+DECLARE_SHADER(CrossProduct);
 DECLARE_FCV_SHADER(Gain);
 DECLARE_FCV_SHADER(Divide);
+DECLARE_SHADER(DotProduct);
 DECLARE_FCV_SHADER(Floor);
 DECLARE_FCV_SHADER(Inverse);
 DECLARE_FCV_SHADER(Max);
@@ -65,12 +67,16 @@ DECLARE_FCV_SHADER(Min);
 DECLARE_FCV_SHADER(MultiSelect);
 DECLARE_FCV_SHADER(Multiply);
 DECLARE_FCV_SHADER(Negate);
+DECLARE_SHADER(NormalizeVector);
 DECLARE_FCV_SHADER(Remap);
 DECLARE_FCV_SHADER(Round);
 DECLARE_FCV_SHADER(Select);
 DECLARE_FCV_SHADER(Sign);
 DECLARE_FCV_SHADER(SmoothStep);
 DECLARE_FCV_SHADER(Subtract);
+DECLARE_FLOAT_SHADER(Trigonometry);
+DECLARE_VECTOR_SHADER(Trigonometry);
+DECLARE_SHADER(VectorLength);
 
 node_loader
 {
@@ -90,8 +96,10 @@ node_loader
    REGISTER_SHADER(ConvertVectorToColor, convert_vector_to_color, AI_TYPE_RGB)
    REGISTER_SHADER(ConvertColorToVector, convert_color_to_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(ConvertColorToFloat, convert_color_to_float, AI_TYPE_FLOAT)
+   REGISTER_SHADER(CrossProduct, cross_product, AI_TYPE_VECTOR)
    REGISTER_FCV_SHADER(Gain, gain)
    REGISTER_FCV_SHADER(Divide, divide)
+   REGISTER_SHADER(DotProduct, dot_product, AI_TYPE_FLOAT)
    REGISTER_FCV_SHADER(Floor, floor)
    REGISTER_FCV_SHADER(Inverse, inverse)
    REGISTER_FCV_SHADER(Max, max)
@@ -99,12 +107,16 @@ node_loader
    REGISTER_FCV_SHADER(MultiSelect, multi_select)
    REGISTER_FCV_SHADER(Multiply, multiply)
    REGISTER_FCV_SHADER(Negate, negate)
+   REGISTER_SHADER(NormalizeVector, normalize_vector, AI_TYPE_VECTOR)
    REGISTER_FCV_SHADER(Remap, remap)
    REGISTER_FCV_SHADER(Round, round)
    REGISTER_FCV_SHADER(Select, select)
    REGISTER_FCV_SHADER(Sign, sign)
    REGISTER_FCV_SHADER(SmoothStep, smoothstep)
    REGISTER_FCV_SHADER(Subtract, subtract)
+   REGISTER_FLOAT_SHADER(Trigonometry, trigonometry)
+   REGISTER_VECTOR_SHADER(Trigonometry, trigonometry)
+   REGISTER_SHADER(VectorLength, vector_length, AI_TYPE_FLOAT)
    return false;
 }
 
