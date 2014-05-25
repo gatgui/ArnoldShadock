@@ -46,6 +46,8 @@ static int gsShaderCount = 0;
 
 DECLARE_FCV_SHADER(Abs);
 DECLARE_FCV_SHADER(Add);
+DECLARE_FCV_SHADER(Bias);
+DECLARE_FCV_SHADER(BiasAndGain);
 DECLARE_FCV_SHADER(Ceil);
 DECLARE_FCV_SHADER(Clamp);
 DECLARE_FCV_SHADER(Compare);
@@ -54,6 +56,7 @@ DECLARE_SHADER(ConvertFloatToInt);
 DECLARE_SHADER(ConvertVectorToColor);
 DECLARE_SHADER(ConvertColorToVector);
 DECLARE_SHADER(ConvertColorToFloat);
+DECLARE_FCV_SHADER(Gain);
 DECLARE_SHADER(GradeColor);
 DECLARE_FCV_SHADER(Divide);
 DECLARE_FCV_SHADER(Floor);
@@ -78,6 +81,8 @@ node_loader
    }
    REGISTER_FCV_SHADER(Abs, absolute)
    REGISTER_FCV_SHADER(Add, add)
+   REGISTER_FCV_SHADER(Bias, bias)
+   REGISTER_FCV_SHADER(BiasAndGain, bias_and_gain)
    REGISTER_FCV_SHADER(Ceil, ceil)
    REGISTER_FCV_SHADER(Clamp, clamp)
    REGISTER_FCV_SHADER(Compare, compare)
@@ -86,6 +91,7 @@ node_loader
    REGISTER_SHADER(ConvertVectorToColor, convert_vector_to_color, AI_TYPE_RGB)
    REGISTER_SHADER(ConvertColorToVector, convert_color_to_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(ConvertColorToFloat, convert_color_to_float, AI_TYPE_FLOAT)
+   REGISTER_FCV_SHADER(Gain, gain)
    REGISTER_SHADER(GradeColor, grade_color, AI_TYPE_RGB)
    REGISTER_FCV_SHADER(Divide, divide)
    REGISTER_FCV_SHADER(Floor, floor)
