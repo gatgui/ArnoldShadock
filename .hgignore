@@ -4,3 +4,7 @@ syntax: glob
 release/
 debug/
 .build/
+.cproject
+.project
+.settings/
+
