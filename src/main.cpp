@@ -83,6 +83,12 @@ DECLARE_FCV_SHADER(Subtract);
 DECLARE_FLOAT_SHADER(Trigonometry);
 DECLARE_VECTOR_SHADER(Trigonometry);
 DECLARE_SHADER(VectorLength);
+#ifdef USE_AGSTATE
+DECLARE_SHADER(agIntState);
+DECLARE_SHADER(agFloatState);
+DECLARE_SHADER(agColorState);
+DECLARE_SHADER(agVectorState);
+#endif
 
 node_loader
 {
@@ -129,6 +135,12 @@ node_loader
    REGISTER_FLOAT_SHADER(Trigonometry, trigonometry)
    REGISTER_VECTOR_SHADER(Trigonometry, trigonometry)
    REGISTER_SHADER(VectorLength, vector_length, AI_TYPE_FLOAT)
+#ifdef USE_AGSTATE
+   REGISTER_SHADER(agIntState, shader_globals_int, AI_TYPE_INT)
+   REGISTER_SHADER(agFloatState, shader_globals_float, AI_TYPE_FLOAT)
+   REGISTER_SHADER(agColorState, shader_globals_color, AI_TYPE_RGB)
+   REGISTER_SHADER(agVectorState, shader_globals_vector, AI_TYPE_VECTOR)
+#endif
    return false;
 }
 
