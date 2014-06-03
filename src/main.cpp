@@ -83,6 +83,14 @@ DECLARE_FCV_SHADER(Subtract);
 DECLARE_FLOAT_SHADER(Trigonometry);
 DECLARE_VECTOR_SHADER(Trigonometry);
 DECLARE_SHADER(VectorLength);
+DECLARE_SHADER(ShapeAttrBool);
+DECLARE_SHADER(ShapeAttrInt);
+DECLARE_SHADER(ShapeAttrFloat);
+DECLARE_SHADER(ShapeAttrPoint2);
+DECLARE_SHADER(ShapeAttrVector);
+DECLARE_SHADER(ShapeAttrColor);
+DECLARE_SHADER(ShapeAttrRGBA);
+DECLARE_SHADER(ShapeAttrString);
 #ifdef USE_AGSTATE
 DECLARE_SHADER(agIntState);
 DECLARE_SHADER(agFloatState);
@@ -135,6 +143,14 @@ node_loader
    REGISTER_FLOAT_SHADER(Trigonometry, trigonometry)
    REGISTER_VECTOR_SHADER(Trigonometry, trigonometry)
    REGISTER_SHADER(VectorLength, vector_length, AI_TYPE_FLOAT)
+   REGISTER_SHADER(ShapeAttrBool, shape_attr_bool, AI_TYPE_BOOLEAN)
+   REGISTER_SHADER(ShapeAttrInt, shape_attr_bool, AI_TYPE_BOOLEAN)
+   REGISTER_SHADER(ShapeAttrFloat, shape_attr_float, AI_TYPE_FLOAT)
+   REGISTER_SHADER(ShapeAttrPoint2, shape_attr_point2, AI_TYPE_POINT2)
+   REGISTER_SHADER(ShapeAttrVector, shape_attr_vector, AI_TYPE_VECTOR)
+   REGISTER_SHADER(ShapeAttrColor, shape_attr_color, AI_TYPE_RGB)
+   REGISTER_SHADER(ShapeAttrRGBA, shape_attr_rgba, AI_TYPE_RGBA)
+   REGISTER_SHADER(ShapeAttrString, shape_attr_string, AI_TYPE_STRING)
 #ifdef USE_AGSTATE
    REGISTER_SHADER(agIntState, shader_globals_int, AI_TYPE_INT)
    REGISTER_SHADER(agFloatState, shader_globals_float, AI_TYPE_FLOAT)
