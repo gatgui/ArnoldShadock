@@ -105,6 +105,8 @@ DECLARE_SHADER(MultiplyMatrix);
 DECLARE_SHADER(SetTraceSet);
 DECLARE_SHADER(Shade);
 DECLARE_SHADER(Holdout);
+DECLARE_SHADER(ShadingPoint);
+DECLARE_SHADER(ShadingNormal);
 
 node_loader
 {
@@ -172,6 +174,8 @@ node_loader
    REGISTER_SHADER(SetTraceSet, set_trace_set, AI_TYPE_RGBA)
    REGISTER_SHADER(Shade, shade, AI_TYPE_RGB)
    REGISTER_SHADER(Holdout, holdout, AI_TYPE_RGBA)
+   REGISTER_SHADER(ShadingPoint, shading_point, AI_TYPE_POINT)
+   REGISTER_SHADER(ShadingNormal, shading_normal, AI_TYPE_VECTOR)
    return false;
 }
 
