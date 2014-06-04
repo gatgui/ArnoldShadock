@@ -107,6 +107,7 @@ DECLARE_SHADER(Shade);
 DECLARE_SHADER(Holdout);
 DECLARE_SHADER(ShadingPoint);
 DECLARE_SHADER(ShadingNormal);
+DECLARE_SHADER(WriteAOVs);
 
 node_loader
 {
@@ -176,6 +177,7 @@ node_loader
    REGISTER_SHADER(Holdout, holdout, AI_TYPE_RGBA)
    REGISTER_SHADER(ShadingPoint, shading_point, AI_TYPE_POINT)
    REGISTER_SHADER(ShadingNormal, shading_normal, AI_TYPE_VECTOR)
+   REGISTER_SHADER(WriteAOVs, write_aovs, AI_TYPE_RGBA)
    return false;
 }
 

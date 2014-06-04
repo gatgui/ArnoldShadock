@@ -12,6 +12,8 @@ node_parameters
 {
    AiParameterStr("attribute", "");
    AiParameterRGB("default", 0.0f, 0.0f, 0.0f);
+   
+   AiMetaDataSetBool(mds, "attribute", "linkable", false);
 }
 
 node_initialize

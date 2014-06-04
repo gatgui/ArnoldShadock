@@ -12,6 +12,8 @@ node_parameters
 {
    AiParameterStr("attribute", "");
    AiParameterStr("default", "");
+   
+   AiMetaDataSetBool(mds, "attribute", "linkable", false);
 }
 
 node_initialize
