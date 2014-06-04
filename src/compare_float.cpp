@@ -18,6 +18,8 @@ node_parameters
    AiParameterFlt("input1", 0.0f);
    AiParameterFlt("input2", 0.0f);
    AiParameterFlt("precision", AI_EPSILON);
+   
+   AiMetaDataSetBool(mds, "operator", "linkable", false);
 }
 
 node_initialize

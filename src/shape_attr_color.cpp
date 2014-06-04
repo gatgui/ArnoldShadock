@@ -4,13 +4,13 @@ AI_SHADER_NODE_EXPORT_METHODS(ShapeAttrColorMtd);
 
 enum ShapeAttrColorParams
 {
-   p_name,
+   p_attribute = 0,
    p_default
 };
 
 node_parameters
 {
-   AiParameterStr("name", "");
+   AiParameterStr("attribute", "");
    AiParameterRGB("default", 0.0f, 0.0f, 0.0f);
 }
 
@@ -28,7 +28,7 @@ node_finish
 
 shader_evaluate
 {
-   const char *attr_name = AiShaderEvalParamStr(p_name);
+   const char *attr_name = AiShaderEvalParamStr(p_attribute);
    
    if (!AiUDataGetRGB(attr_name, &(sg->out.RGB)) &&
        !AiUDataGetRGBA(attr_name, &(sg->out.RGBA)))

@@ -27,7 +27,9 @@ static const char* ConvertVectorToColorModeNames[] =
 node_parameters
 {
    AiParameterVec("input", 0.0f, 0.0f, 0.0f);
-   AiParameterENUM("mode", VTC_RAW, ConvertVectorToColorModeNames);
+   AiParameterEnum("mode", VTC_RAW, ConvertVectorToColorModeNames);
+   
+   AiMetaDataSetBool(mds, "mode", "linkable", false);
 }
 
 node_initialize

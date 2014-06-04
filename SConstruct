@@ -8,7 +8,8 @@ env = excons.MakeBaseEnv()
 agStateSrcs = ["agState/agColorState.cpp",
                "agState/agFloatState.cpp",
                "agState/agIntState.cpp",
-               "agState/agVectorState.cpp"]
+               "agState/agVectorState.cpp",
+               "agState/agMatrixState.cpp"]
 
 withoutState = (int(ARGUMENTS.get("without-state", "0")) != 0)
 

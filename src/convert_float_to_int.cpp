@@ -29,6 +29,8 @@ node_parameters
 {
    AiParameterFlt("input", 0.0f);
    AiParameterEnum("mode", 0, ConvertFloatToIntModeNames);
+   
+   AiMetaDataSetBool(mds, "mode", "linkable", false);
 }
 
 node_initialize

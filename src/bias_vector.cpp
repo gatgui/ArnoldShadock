@@ -4,7 +4,7 @@ AI_SHADER_NODE_EXPORT_METHODS(BiasVectorMtd);
 
 enum BiasVectorParams
 {
-   p_input,
+   p_input = 0,
    p_bias
 };
 

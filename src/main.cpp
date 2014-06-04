@@ -1,5 +1,6 @@
 #include <ai.h>
 #include <cstring>
+#include <cstdlib>
 
 // ---
 
@@ -96,7 +97,11 @@ DECLARE_SHADER(agIntState);
 DECLARE_SHADER(agFloatState);
 DECLARE_SHADER(agColorState);
 DECLARE_SHADER(agVectorState);
+DECLARE_SHADER(agMatrixState);
 #endif
+DECLARE_SHADER(TransformVector);
+DECLARE_SHADER(BuildMatrix);
+DECLARE_SHADER(MultiplyMatrix);
 
 node_loader
 {
@@ -144,7 +149,7 @@ node_loader
    REGISTER_VECTOR_SHADER(Trigonometry, trigonometry)
    REGISTER_SHADER(VectorLength, vector_length, AI_TYPE_FLOAT)
    REGISTER_SHADER(ShapeAttrBool, shape_attr_bool, AI_TYPE_BOOLEAN)
-   REGISTER_SHADER(ShapeAttrInt, shape_attr_bool, AI_TYPE_BOOLEAN)
+   REGISTER_SHADER(ShapeAttrInt, shape_attr_int, AI_TYPE_INT)
    REGISTER_SHADER(ShapeAttrFloat, shape_attr_float, AI_TYPE_FLOAT)
    REGISTER_SHADER(ShapeAttrPoint2, shape_attr_point2, AI_TYPE_POINT2)
    REGISTER_SHADER(ShapeAttrVector, shape_attr_vector, AI_TYPE_VECTOR)
@@ -156,7 +161,11 @@ node_loader
    REGISTER_SHADER(agFloatState, shader_globals_float, AI_TYPE_FLOAT)
    REGISTER_SHADER(agColorState, shader_globals_color, AI_TYPE_RGB)
    REGISTER_SHADER(agVectorState, shader_globals_vector, AI_TYPE_VECTOR)
+   REGISTER_SHADER(agMatrixState, shader_globals_matrix, AI_TYPE_MATRIX)
 #endif
+   REGISTER_SHADER(TransformVector, transform_vector, AI_TYPE_VECTOR)
+   REGISTER_SHADER(BuildMatrix, build_matrix, AI_TYPE_MATRIX)
+   REGISTER_SHADER(MultiplyMatrix, multiply_matrix, AI_TYPE_MATRIX)
    return false;
 }
 

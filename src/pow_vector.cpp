@@ -4,7 +4,7 @@ AI_SHADER_NODE_EXPORT_METHODS(PowVectorMtd);
 
 enum PowVectorParams
 {
-   p_input1,
+   p_input1 = 0,
    p_input2
 };
 

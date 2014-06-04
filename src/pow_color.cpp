@@ -4,7 +4,7 @@ AI_SHADER_NODE_EXPORT_METHODS(PowColorMtd);
 
 enum PowColorParams
 {
-   p_input1,
+   p_input1 = 0,
    p_input2
 };
 

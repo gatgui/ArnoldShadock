@@ -4,7 +4,7 @@ AI_SHADER_NODE_EXPORT_METHODS(RoundFloatMtd);
 
 enum RoundFloatParams
 {
-   p_input
+   p_input = 0
 };
 
 node_parameters

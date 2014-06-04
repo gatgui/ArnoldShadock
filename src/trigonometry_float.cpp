@@ -4,7 +4,7 @@ AI_SHADER_NODE_EXPORT_METHODS(TrigonometryFloatMtd);
 
 enum TrigonometryFloatParams
 {
-   p_input1,
+   p_input1 = 0,
    p_input2,
    p_operation,
    p_units
@@ -50,8 +50,11 @@ node_parameters
 {
    AiParameterFlt("input1", 0.0f);
    AiParameterFlt("input2", 0.0f);
-   AiParameterENUM("operation", TO_COS, TrigonometryOperationNames);
-   AiParameterENUM("units", TU_RADIANS, TrigonometryUnitsNames);
+   AiParameterEnum("operation", TO_COS, TrigonometryOperationNames);
+   AiParameterEnum("units", TU_RADIANS, TrigonometryUnitsNames);
+   
+   AiMetaDataSetBool(mds, "operation", "linkable", false);
+   AiMetaDataSetBool(mds, "units", "linkable", false);
 }
 
 node_initialize

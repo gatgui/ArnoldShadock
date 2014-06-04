@@ -4,14 +4,13 @@ AI_SHADER_NODE_EXPORT_METHODS(ShapeAttrIntMtd);
 
 enum ShapeAttrIntParams
 {
-   p_name,
-   p_default,
-   p_aliasing
+   p_attribute = 0,
+   p_default
 };
 
 node_parameters
 {
-   AiParameterStr("name", "");
+   AiParameterStr("attribute", "");
    AiParameterInt("default", 0);
 }
 
@@ -29,7 +28,7 @@ node_finish
 
 shader_evaluate
 {
-   const char *attr_name = AiShaderEvalParamStr(p_name);
+   const char *attr_name = AiShaderEvalParamStr(p_attribute);
    
    if (!AiUDataGetInt(attr_name, &(sg->out.INT)))
    {

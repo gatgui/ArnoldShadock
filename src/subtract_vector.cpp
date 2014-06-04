@@ -4,7 +4,7 @@ AI_SHADER_NODE_EXPORT_METHODS(SubtractVectorMtd);
 
 enum SubtractVectorParams
 {
-   p_input1,
+   p_input1 = 0,
    p_input2
 };
 

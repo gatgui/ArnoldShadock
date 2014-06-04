@@ -28,7 +28,9 @@ static const char* ConvertColorToFloatModeNames[] =
 node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
-   AiParameterENUM("mode", CTF_LUMINANCE, ConvertColorToFloatModeNames);
+   AiParameterEnum("mode", CTF_LUMINANCE, ConvertColorToFloatModeNames);
+   
+   AiMetaDataSetBool(mds, "mode", "linkable", false);
 }
 
 node_initialize

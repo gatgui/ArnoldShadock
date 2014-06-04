@@ -4,7 +4,7 @@ AI_SHADER_NODE_EXPORT_METHODS(GainFloatMtd);
 
 enum GainFloatParams
 {
-   p_input,
+   p_input = 0,
    p_gain
 };
 
