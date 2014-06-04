@@ -5,6 +5,7 @@ AI_SHADER_NODE_EXPORT_METHODS(ShadeMtd);
 enum ShadeParams
 {
    p_mode = 0,
+   p_override_normal,
    p_normal
 };
 
@@ -24,7 +25,11 @@ static const char* ShadeModeNames[] =
 node_parameters
 {
    AiParameterEnum("mode", SM_DirectDiffuse, ShadeModeNames);
+   AiParameterBool("override_normal", false);
    AiParameterVec("normal", 1.0f, 0.0f, 0.0f);
+   
+   AiMetaDataSetBool(mds, "mode", "linkable", false);
+   AiMetaDataSetBool(mds, "override_normal", "linkable", false);
 }
 
 node_initialize
@@ -33,18 +38,6 @@ node_initialize
 
 node_update
 {
-   if (!AiNodeIsLinked(node, "normal") &&
-       !AiNodeIsLinked(node, "normal.x") &&
-       !AiNodeIsLinked(node, "normal.y") && 
-       !AiNodeIsLinked(node, "normal.z"))
-   {
-      // normal not linked at all, use sg->N in evaluate
-      AiNodeSetLocalData(node, (void*)1);
-   }
-   else
-   {
-      AiNodeSetLocalData(node, (void*)0);
-   }
 }
 
 node_finish
@@ -55,7 +48,7 @@ shader_evaluate
 {
    ShadeMode mode = (ShadeMode) AiShaderEvalParamInt(p_mode);
    
-   AtVector N = (AiNodeGetLocalData(node) == (void*)1 ? sg->N : AiShaderEvalParamVec(p_normal));
+   AtVector N = (AiShaderEvalParamBool(p_override_normal) ? AiShaderEvalParamVec(p_normal) : sg->N);
    
    switch (mode)
    {

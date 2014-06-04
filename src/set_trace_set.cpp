@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SelectTraceSetMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SetTraceSetMtd);
 
-enum SelectTraceSetParams
+enum SetTraceSetParams
 {
    p_input = 0,
    p_trace_set,
@@ -14,6 +14,9 @@ node_parameters
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
    AiParameterStr("trace_set", "");
    AiParameterBool("inclusive", true);
+   
+   AiMetaDataSetBool(mds, "trace_set", "linkable", false);
+   AiMetaDataSetBool(mds, "inclusive", "linkable", false);
 }
 
 node_initialize
