@@ -47,18 +47,21 @@ shader_evaluate
 {
    ShadingNormalMode mode = (ShadingNormalMode) AiShaderEvalParamInt(p_mode);
    
-   AtPoint P, Ndummy;
+   AtPoint P;
+   AtVector N, Ns, Ng;
+   
+   AiShaderGlobalsGetPositionAtTime(sg, AiShaderEvalParamFlt(p_time), &P, &N, &Ng, &Ns);
    
    switch (mode)
    {
    case SN_geometric:
-      AiShaderGlobalsGetPositionAtTime(sg, AiShaderEvalParamFlt(p_time), &P, &Ndummy, &(sg->out.VEC), &Ndummy);
+      sg->out.VEC = Ng;
       break;
    case SN_smoothed:
-      AiShaderGlobalsGetPositionAtTime(sg, AiShaderEvalParamFlt(p_time), &P, &Ndummy, &Ndummy, &(sg->out.VEC));
+      sg->out.VEC = Ns;
       break;
    default:
-      AiShaderGlobalsGetPositionAtTime(sg, AiShaderEvalParamFlt(p_time), &P, &(sg->out.VEC), &Ndummy, &Ndummy);
+      sg->out.VEC = N;
    }
    
 }
