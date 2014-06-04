@@ -22,7 +22,7 @@ static int gsShaderCount = 0;
    DECLARE_VECTOR_SHADER(name)
 
 #define REGISTER_SHADER(s_name, a_name, a_type)\
-   else if (i == s_name)\
+   if (i == s_name)\
    {\
       node->name = #a_name;\
       node->node_type = AI_NODE_SHADER;\
