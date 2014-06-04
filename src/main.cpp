@@ -102,6 +102,9 @@ DECLARE_SHADER(agMatrixState);
 DECLARE_SHADER(TransformVector);
 DECLARE_SHADER(BuildMatrix);
 DECLARE_SHADER(MultiplyMatrix);
+DECLARE_SHADER(SelectTraceSet);
+DECLARE_SHADER(Shade);
+DECLARE_SHADER(Holdout);
 
 node_loader
 {
@@ -166,6 +169,9 @@ node_loader
    REGISTER_SHADER(TransformVector, transform_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(BuildMatrix, build_matrix, AI_TYPE_MATRIX)
    REGISTER_SHADER(MultiplyMatrix, multiply_matrix, AI_TYPE_MATRIX)
+   REGISTER_SHADER(SelectTraceSet, select_trace_set, AI_TYPE_RGBA)
+   REGISTER_SHADER(Shade, shader, AI_TYPE_RGB)
+   REGISTER_SHADER(Holdout, holdout, AI_TYPE_RGBA)
    return false;
 }
 
