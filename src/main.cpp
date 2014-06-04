@@ -108,6 +108,14 @@ DECLARE_SHADER(Holdout);
 DECLARE_SHADER(ShadingPoint);
 DECLARE_SHADER(ShadingNormal);
 DECLARE_SHADER(WriteAOVs);
+DECLARE_SHADER(ReadAOVBool);
+DECLARE_SHADER(ReadAOVInt);
+DECLARE_SHADER(ReadAOVFlt);
+DECLARE_SHADER(ReadAOVPnt2);
+DECLARE_SHADER(ReadAOVPnt);
+DECLARE_SHADER(ReadAOVVec);
+DECLARE_SHADER(ReadAOVRGB);
+DECLARE_SHADER(ReadAOVRGBA);
 
 node_loader
 {
@@ -178,6 +186,14 @@ node_loader
    REGISTER_SHADER(ShadingPoint, shading_point, AI_TYPE_POINT)
    REGISTER_SHADER(ShadingNormal, shading_normal, AI_TYPE_VECTOR)
    REGISTER_SHADER(WriteAOVs, write_aovs, AI_TYPE_RGBA)
+   REGISTER_SHADER(ReadAOVBool, read_aov_bool, AI_TYPE_BOOLEAN)
+   REGISTER_SHADER(ReadAOVInt, read_aov_int, AI_TYPE_INT)
+   REGISTER_SHADER(ReadAOVFlt, read_aov_float, AI_TYPE_FLOAT)
+   REGISTER_SHADER(ReadAOVPnt2, read_aov_point2, AI_TYPE_POINT2)
+   REGISTER_SHADER(ReadAOVPnt, read_aov_point, AI_TYPE_POINT)
+   REGISTER_SHADER(ReadAOVVec, read_aov_vector, AI_TYPE_VECTOR)
+   REGISTER_SHADER(ReadAOVRGB, read_aov_color, AI_TYPE_RGB)
+   REGISTER_SHADER(ReadAOVRGBA, read_aov_rgba, AI_TYPE_RGBA)
    return false;
 }
 
