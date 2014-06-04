@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(InverseFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(InvertFloatMtd);
 
-enum InverseFloatParams
+enum InvertFloatParams
 {
    p_input = 0
 };

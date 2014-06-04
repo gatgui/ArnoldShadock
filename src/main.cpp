@@ -63,7 +63,7 @@ DECLARE_FCV_SHADER(Divide);
 DECLARE_SHADER(DotProduct);
 DECLARE_FCV_SHADER(Exp);
 DECLARE_FCV_SHADER(Floor);
-DECLARE_FCV_SHADER(Inverse);
+DECLARE_FCV_SHADER(Invert);
 DECLARE_FCV_SHADER(Log);
 DECLARE_FCV_SHADER(Max);
 DECLARE_FCV_SHADER(Min);
@@ -116,6 +116,9 @@ DECLARE_SHADER(ReadAOVPnt);
 DECLARE_SHADER(ReadAOVVec);
 DECLARE_SHADER(ReadAOVRGB);
 DECLARE_SHADER(ReadAOVRGBA);
+DECLARE_SHADER(InvertMatrix);
+DECLARE_SHADER(TransposeMatrix);
+DECLARE_SHADER(InterpolateMatrix);
 
 node_loader
 {
@@ -141,7 +144,7 @@ node_loader
    REGISTER_SHADER(DotProduct, dot_product, AI_TYPE_FLOAT)
    REGISTER_FCV_SHADER(Exp, exp)
    REGISTER_FCV_SHADER(Floor, floor)
-   REGISTER_FCV_SHADER(Inverse, inverse)
+   REGISTER_FCV_SHADER(Invert, invert)
    REGISTER_FCV_SHADER(Log, log)
    REGISTER_FCV_SHADER(Max, max)
    REGISTER_FCV_SHADER(Min, min)
@@ -194,6 +197,9 @@ node_loader
    REGISTER_SHADER(ReadAOVVec, read_aov_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(ReadAOVRGB, read_aov_color, AI_TYPE_RGB)
    REGISTER_SHADER(ReadAOVRGBA, read_aov_rgba, AI_TYPE_RGBA)
+   REGISTER_SHADER(InvertMatrix, invert_matrix, AI_TYPE_MATRIX)
+   REGISTER_SHADER(TransposeMatrix, transpose_matrix, AI_TYPE_MATRIX)
+   REGISTER_SHADER(InterpolateMatrix, interpolate_matrix, AI_TYPE_MATRIX)
    return false;
 }
 

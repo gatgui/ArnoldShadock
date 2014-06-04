@@ -15,7 +15,9 @@ node_parameters
    AiM4Identity(id);
    AiParameterMtx("matrix", id);
    AiParameterVec("vector", 0.0f, 0.0f, 0.0f);
-   AiParameterBool("as_point", true);
+   AiParameterBool("as_point", false);
+   
+   AiMetaDataSetBool(mds, "as_point", "linkable", false);
 }
 
 node_initialize

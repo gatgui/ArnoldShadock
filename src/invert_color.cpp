@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(InverseColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(InvertColorMtd);
 
-enum InverseColorParams
+enum InvertColorParams
 {
    p_input = 0
 };

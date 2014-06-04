@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(InverseVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(InvertVectorMtd);
 
-enum InverseVectorParams
+enum InvertVectorParams
 {
    p_input = 0
 };
