@@ -106,7 +106,7 @@ node_update
    }
    else
    {
-      AiMsgWarning("[ramp_color] Invalid ramp parameters");
+      AiMsgWarning("[ramp_vector] Invalid ramp parameters");
    }
 }
 
@@ -139,7 +139,7 @@ shader_evaluate
    
    if (v->nelements != data->nkeys || p->nelements != data->nkeys || i->nelements != data->nkeys)
    {
-      AiMsgWarning("[ramp_color] Array size mismatch");
+      AiMsgWarning("[ramp_vector] Array size mismatch");
       sg->out.VEC = AiShaderEvalParamFlt(p_default_value);
    }
    else
