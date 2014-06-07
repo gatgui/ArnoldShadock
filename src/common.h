@@ -19,7 +19,23 @@ enum CompareOperator
    CO_GTE
 };
 
+extern const char* InterpolationTypeNames[];
+
+enum InterpolationType
+{
+   IT_None = 0,
+   IT_Linear,
+   IT_Smooth,
+   IT_Spline
+};
+
 // ---
+
+bool SortPositions(AtArray *a, unsigned int *shuffle);
+
+void EvalFloatRamp(AtArray *p, AtArray *v, AtArray *i, InterpolationType defi, unsigned int *s, float t, float &out);
+void EvalVectorRamp(AtArray *p, AtArray *v, AtArray *i, InterpolationType defi, unsigned int *s, float t, AtVector &out);
+void EvalColorRamp(AtArray *p, AtArray *v, AtArray *i, InterpolationType defi, unsigned int *s, float t, AtRGB &out);
 
 inline float SmoothStep(float v)
 {
