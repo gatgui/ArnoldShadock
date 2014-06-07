@@ -12,6 +12,7 @@ agStateSrcs = ["agState/agColorState.cpp",
                "agState/agMatrixState.cpp"]
 
 withoutState = (int(ARGUMENTS.get("without-state", "0")) != 0)
+shdprefix = ARGUMENTS.get("shaders-prefix", "gas_")
 
 defs = []
 incs = []
@@ -30,6 +31,6 @@ prjs = [
   }
 ]
 
-env.Append(CPPFLAGS=" -Wno-unused-parameter")
+env.Append(CPPFLAGS=" -Wno-unused-parameter -DSHADERS_PREFIX=\"\\\"%s\\\"\"" % shdprefix)
 
 excons.DeclareTargets(env, prjs)

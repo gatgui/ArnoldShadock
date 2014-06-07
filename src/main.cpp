@@ -4,6 +4,10 @@
 
 // ---
 
+#ifndef SHADERS_PREFIX
+#  define SHADERS_PREFIX ""
+#endif
+
 static int gsShaderCount = 0;
 
 #define DECLARE_SHADER(name)\
@@ -24,7 +28,7 @@ static int gsShaderCount = 0;
 #define REGISTER_SHADER(s_name, a_name, a_type)\
    if (i == s_name)\
    {\
-      node->name = #a_name;\
+      node->name = SHADERS_PREFIX #a_name;\
       node->node_type = AI_NODE_SHADER;\
       node->output_type = a_type;\
       node->methods = s_name##Mtd;\
