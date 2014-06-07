@@ -1,5 +1,4 @@
 #include "common.h"
-#include <iostream>
 
 AI_SHADER_NODE_EXPORT_METHODS(RampColorMtd);
 
@@ -20,17 +19,23 @@ node_parameters
    AiParameterArray("interpolations", AiArray(2, 1, AI_TYPE_INT, IT_Linear, IT_Linear));
    AiParameterRGB("default_value", 0.0f, 0.0f, 0.0f);
    
-   // only allow values to be linked
-   AiMetaDataSetBool(mds, "positions", "linkable", false);
-   AiMetaDataSetBool(mds, "interpolations", "linkable", false);
+   AiMetaDataSetStr(mds, NULL, "ramps", "values");
+   AiMetaDataSetStr(mds, NULL, "ramps.values.positions", "positions");
+   AiMetaDataSetStr(mds, NULL, "ramps.values.interpolations", "interpolations");
 }
 
 struct RampColorData
 {
    bool valid;
+   unsigned int nkeys;
    AtArray *positions;
+   bool linked_positions;
+   AtArray *values;
+   bool linked_values;
    AtArray *interpolations;
-   unsigned int *shuffle;
+   bool linked_interpolations;
+   unsigned int nshuffles;
+   unsigned int **shuffles;
 };
 
 node_initialize
@@ -38,9 +43,15 @@ node_initialize
    RampColorData *data = (RampColorData*) AiMalloc(sizeof(RampColorData));
    
    data->valid = false;
+   data->nkeys = 0;
    data->positions = 0;
+   data->linked_positions = false;
+   data->values = 0;
+   data->linked_values = false;
    data->interpolations = 0;
-   data->shuffle = 0;
+   data->linked_interpolations = false;
+   data->nshuffles = 0;
+   data->shuffles = 0;
    
    AiNodeSetLocalData(node, data);
 }
@@ -49,45 +60,66 @@ node_update
 {
    RampColorData *data = (RampColorData*) AiNodeGetLocalData(node);
    
-   AtNode *opts = AiUniverseGetOptions();
-   int nthreads = AiNodeGetInt(opts, "threads");
-   
    data->valid = false;
+   data->nkeys = 0;
    
-   if (data->shuffle)
+   if (data->shuffles)
    {
-      AiFree(data->shuffle);
-      data->shuffle = 0;
+      for (unsigned int i=0; i<data->nshuffles; ++i)
+      {
+         AiFree(data->shuffles[i]);
+      }
+      AiFree(data->shuffles);
+      data->shuffles = 0;
    }
+   data->nshuffles = 0;
    
    data->positions = AiNodeGetArray(node, "positions");
-   data->interpolations = AiNodeGetArray(node, "interpolations");
+   data->linked_positions = AiNodeIsLinked(node, "positions");
    
-   if (data->positions &&
-       data->interpolations &&
+   data->values = AiNodeGetArray(node, "values");
+   data->linked_values = AiNodeIsLinked(node, "values");
+   
+   data->interpolations = AiNodeGetArray(node, "interpolations");
+   data->linked_interpolations = AiNodeIsLinked(node, "interpolations");
+   
+   if (data->positions->nelements > 0 ||
+       data->positions->nelements == data->values->nelements ||
        data->positions->nelements == data->interpolations->nelements)
    {
-      data->shuffle = (unsigned int*) AiMalloc(data->positions->nelements * sizeof(unsigned int));
+      data->nkeys = data->positions->nelements;
       
-      SortPositions(data->positions, data->shuffle);
+      data->nshuffles = (data->linked_positions ? GetRenderThreadsCount() : 1);
+      data->shuffles = (unsigned int **) AiMalloc(data->nshuffles * sizeof(unsigned int*));
+      
+      for (unsigned int i=0; i<data->nshuffles; ++i)
+      {
+         data->shuffles[i] = (unsigned int*) AiMalloc(data->nkeys * sizeof(unsigned int));
+      }
+      
+      if (!data->linked_positions)
+      {
+         SortPositions(data->positions, data->shuffles[0]);
+      }
       
       data->valid = true;
    }
    else
    {
-      AiMsgWarning("[ramp_color] Invalid positions and/or interpolations");
-      
-      data->positions = 0;
-      data->interpolations = 0;
+      AiMsgWarning("[ramp_color] Invalid ramp parameters");
    }
-   
-   std::cout << "[ramp_color] Threads Count: " << nthreads << std::endl;
 }
 
 node_finish
 {
    RampColorData *data = (RampColorData*) AiNodeGetLocalData(node);
-   AiFree(data->shuffle);
+   
+   for (unsigned int i=0; i<data->nshuffles; ++i)
+   {
+      AiFree(data->shuffles[i]);
+   }
+   AiFree(data->shuffles);
+   
    AiFree(data);
 }
 
@@ -101,16 +133,26 @@ shader_evaluate
       return;
    }
    
-   AtArray *v = AiShaderEvalParamArray(p_values);
+   AtArray *p = (data->linked_positions ? AiShaderEvalParamArray(p_values) : data->positions);
+   AtArray *v = (data->linked_values ? AiShaderEvalParamArray(p_values) : data->values);
+   AtArray *i = (data->linked_interpolations ? AiShaderEvalParamArray(p_values) : data->interpolations);
    
-   if (v->nelements != data->positions->nelements)
+   if (v->nelements != data->nkeys || p->nelements != data->nkeys || i->nelements != data->nkeys)
    {
       AiMsgWarning("[ramp_color] Array size mismatch");
-      sg->out.RGB = AiShaderEvalParamRGB(p_default_value);
-      return;
+      sg->out.RGB = AiShaderEvalParamFlt(p_default_value);
    }
-   
-   EvalColorRamp(data->positions, v, data->interpolations, IT_Linear,
-                 data->shuffle, AiShaderEvalParamFlt(p_input),
-                 sg->out.RGB);
+   else
+   {
+      float input = AiShaderEvalParamFlt(p_input);
+      int si = 0;
+      
+      if (data->linked_positions)
+      {
+         si = sg->tid;
+         SortPositions(i, data->shuffles[si]);
+      }
+      
+      EvalColorRamp(p, v, i, IT_Linear, data->shuffles[si], input, sg->out.RGB);
+   }
 }

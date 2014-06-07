@@ -31,6 +31,11 @@ enum InterpolationType
 
 // ---
 
+inline int GetRenderThreadsCount()
+{
+   return AiNodeGetInt(AiUniverseGetOptions(), "threads");
+}
+
 bool SortPositions(AtArray *a, unsigned int *shuffle);
 
 void EvalFloatRamp(AtArray *p, AtArray *v, AtArray *i, InterpolationType defi, unsigned int *s, float t, float &out);
