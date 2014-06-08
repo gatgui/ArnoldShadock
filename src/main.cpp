@@ -63,6 +63,8 @@ DECLARE_SHADER(ConvertColorToVector);
 DECLARE_SHADER(ConvertColorToFloat);
 DECLARE_SHADER(ConvertFloatToColor);
 DECLARE_SHADER(ConvertFloatToRGBA);
+DECLARE_SHADER(ConvertBoolToInt);
+DECLARE_SHADER(ConvertBoolToFloat);
 DECLARE_SHADER(CrossProduct);
 DECLARE_FCV_SHADER(Gain);
 DECLARE_FCV_SHADER(Divide);
@@ -153,6 +155,8 @@ node_loader
    REGISTER_SHADER(ConvertColorToFloat, convert_color_to_float, AI_TYPE_FLOAT)
    REGISTER_SHADER(ConvertFloatToColor, convert_float_to_color, AI_TYPE_RGB)
    REGISTER_SHADER(ConvertFloatToRGBA, convert_float_to_rgba, AI_TYPE_RGBA)
+   REGISTER_SHADER(ConvertBoolToInt, convert_bool_to_int, AI_TYPE_INT)
+   REGISTER_SHADER(ConvertBoolToFloat, convert_bool_to_float, AI_TYPE_FLOAT)
    REGISTER_SHADER(CrossProduct, cross_product, AI_TYPE_VECTOR)
    REGISTER_FCV_SHADER(Gain, gain)
    REGISTER_FCV_SHADER(Divide, divide)
