@@ -131,6 +131,7 @@ DECLARE_FCV_SHADER(RangeSelect);
 DECLARE_FCV_SHADER(SmoothRangeSelect);
 DECLARE_SHADER(BuildColor);
 DECLARE_SHADER(BuildRGBA);
+DECLARE_FCV_SHADER(Gaussian);
 
 node_loader
 {
@@ -220,6 +221,7 @@ node_loader
    REGISTER_FCV_SHADER(SmoothRangeSelect, smooth_range_select)
    REGISTER_SHADER(BuildColor, build_color, AI_TYPE_RGB)
    REGISTER_SHADER(BuildRGBA, build_rgba, AI_TYPE_RGBA)
+   REGISTER_FCV_SHADER(Gaussian, gaussian)
    return false;
 }
 
