@@ -129,6 +129,8 @@ DECLARE_FCV_SHADER(Ramp);
 DECLARE_FCV_SHADER(SmoothSelect);
 DECLARE_FCV_SHADER(RangeSelect);
 DECLARE_FCV_SHADER(SmoothRangeSelect);
+DECLARE_SHADER(BuildColor);
+DECLARE_SHADER(BuildRGBA);
 
 node_loader
 {
@@ -216,6 +218,8 @@ node_loader
    REGISTER_FCV_SHADER(SmoothSelect, smooth_select)
    REGISTER_FCV_SHADER(RangeSelect, range_select)
    REGISTER_FCV_SHADER(SmoothRangeSelect, smooth_range_select)
+   REGISTER_SHADER(BuildColor, build_color, AI_TYPE_RGB)
+   REGISTER_SHADER(BuildRGBA, build_rgba, AI_TYPE_RGBA)
    return false;
 }
 
