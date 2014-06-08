@@ -126,6 +126,7 @@ DECLARE_SHADER(InterpolateMatrix);
 DECLARE_FCV_SHADER(Ramp);
 DECLARE_FCV_SHADER(SmoothSelect);
 DECLARE_FCV_SHADER(RangeSelect);
+DECLARE_FCV_SHADER(SmoothRangeSelect);
 
 node_loader
 {
@@ -210,6 +211,7 @@ node_loader
    REGISTER_FCV_SHADER(Ramp, ramp)
    REGISTER_FCV_SHADER(SmoothSelect, smooth_select)
    REGISTER_FCV_SHADER(RangeSelect, range_select)
+   REGISTER_FCV_SHADER(SmoothRangeSelect, smooth_range_select)
    return false;
 }
 
