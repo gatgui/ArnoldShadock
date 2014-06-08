@@ -55,7 +55,9 @@ DECLARE_FCV_SHADER(Bias);
 DECLARE_FCV_SHADER(BiasAndGain);
 DECLARE_FCV_SHADER(Ceil);
 DECLARE_FCV_SHADER(Clamp);
-DECLARE_FCV_SHADER(Compare);
+DECLARE_SHADER(CompareFloat);
+DECLARE_SHADER(CompareColor);
+DECLARE_SHADER(CompareVector);
 DECLARE_SHADER(ConvertFloatToBool);
 DECLARE_SHADER(ConvertFloatToInt);
 DECLARE_SHADER(ConvertVectorToColor);
@@ -147,7 +149,9 @@ node_loader
    REGISTER_FCV_SHADER(BiasAndGain, bias_and_gain)
    REGISTER_FCV_SHADER(Ceil, ceil)
    REGISTER_FCV_SHADER(Clamp, clamp)
-   REGISTER_FCV_SHADER(Compare, compare)
+   REGISTER_SHADER(CompareFloat, compare_float, AI_TYPE_BOOLEAN)
+   REGISTER_SHADER(CompareColor, compare_color, AI_TYPE_BOOLEAN)
+   REGISTER_SHADER(CompareVector, compare_vector, AI_TYPE_BOOLEAN)
    REGISTER_SHADER(ConvertFloatToBool, convert_float_to_bool, AI_TYPE_BOOLEAN)
    REGISTER_SHADER(ConvertFloatToInt, convert_float_to_int, AI_TYPE_INT)
    REGISTER_SHADER(ConvertVectorToColor, convert_vector_to_color, AI_TYPE_RGB)
