@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(BuildColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MakeColorMtd);
 
-enum BuildColorParams
+enum MakeColorParams
 {
    p_r = 0,
    p_g,

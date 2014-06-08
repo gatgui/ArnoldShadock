@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(BuildMatrixMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MakeMatrixMtd);
 
-enum BuildMatrixParams
+enum MakeMatrixParams
 {
    p_transform_order = 0,
    p_translation,
@@ -85,7 +85,7 @@ node_parameters
    AiMetaDataSetBool(mds, "angle_units", "linkable", false);
 }
 
-struct BuildMatrixData
+struct MakeMatrixData
 {
    AtMatrix T;
    AtMatrix Rx;
@@ -116,7 +116,7 @@ struct BuildMatrixData
 
 node_initialize
 {
-   BuildMatrixData *data = (BuildMatrixData*) AiMalloc(sizeof(BuildMatrixData));
+   MakeMatrixData *data = (MakeMatrixData*) AiMalloc(sizeof(MakeMatrixData));
 
    data->T_set = false;
    data->Rx_set = false;
@@ -134,7 +134,7 @@ node_initialize
 
 node_update
 {
-   BuildMatrixData *data = (BuildMatrixData*) AiNodeGetLocalData(node);
+   MakeMatrixData *data = (MakeMatrixData*) AiNodeGetLocalData(node);
    
    data->transformOrder = (TransformOrder) AiNodeGetInt(node, "transform_order");
    data->rotationOrder = (RotationOrder) AiNodeGetInt(node, "rotation_order");
@@ -264,13 +264,13 @@ node_update
 
 node_finish
 {
-   BuildMatrixData *data = (BuildMatrixData*) AiNodeGetLocalData(node);
+   MakeMatrixData *data = (MakeMatrixData*) AiNodeGetLocalData(node);
    AiFree(data);
 }
 
 shader_evaluate
 {
-   BuildMatrixData *data = (BuildMatrixData*) AiNodeGetLocalData(node);
+   MakeMatrixData *data = (MakeMatrixData*) AiNodeGetLocalData(node);
    
    AtVector p, ip, r, t, s;
    AtMatrix T, R, Rx, Ry, Rz, S, P, iP, tmp;

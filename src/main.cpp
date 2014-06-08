@@ -110,7 +110,7 @@ DECLARE_SHADER(agVectorState);
 DECLARE_SHADER(agMatrixState);
 #endif
 DECLARE_SHADER(TransformVector);
-DECLARE_SHADER(BuildMatrix);
+DECLARE_SHADER(MakeMatrix);
 DECLARE_SHADER(MultiplyMatrix);
 DECLARE_SHADER(SetTraceSet);
 DECLARE_SHADER(Shade);
@@ -133,8 +133,8 @@ DECLARE_FCV_SHADER(Ramp);
 DECLARE_FCV_SHADER(SmoothSelect);
 DECLARE_FCV_SHADER(RangeSelect);
 DECLARE_FCV_SHADER(SmoothRangeSelect);
-DECLARE_SHADER(BuildColor);
-DECLARE_SHADER(BuildRGBA);
+DECLARE_SHADER(MakeColor);
+DECLARE_SHADER(MakeRGBA);
 DECLARE_FCV_SHADER(Gaussian);
 
 node_loader
@@ -204,7 +204,7 @@ node_loader
    REGISTER_SHADER(agMatrixState, shader_globals_matrix, AI_TYPE_MATRIX)
 #endif
    REGISTER_SHADER(TransformVector, transform_vector, AI_TYPE_VECTOR)
-   REGISTER_SHADER(BuildMatrix, build_matrix, AI_TYPE_MATRIX)
+   REGISTER_SHADER(MakeMatrix, make_matrix, AI_TYPE_MATRIX)
    REGISTER_SHADER(MultiplyMatrix, multiply_matrix, AI_TYPE_MATRIX)
    REGISTER_SHADER(SetTraceSet, set_trace_set, AI_TYPE_RGBA)
    REGISTER_SHADER(Shade, shade, AI_TYPE_RGB)
@@ -227,8 +227,8 @@ node_loader
    REGISTER_FCV_SHADER(SmoothSelect, smooth_select)
    REGISTER_FCV_SHADER(RangeSelect, range_select)
    REGISTER_FCV_SHADER(SmoothRangeSelect, smooth_range_select)
-   REGISTER_SHADER(BuildColor, build_color, AI_TYPE_RGB)
-   REGISTER_SHADER(BuildRGBA, build_rgba, AI_TYPE_RGBA)
+   REGISTER_SHADER(MakeColor, make_color, AI_TYPE_RGB)
+   REGISTER_SHADER(MakeRGBA, make_rgba, AI_TYPE_RGBA)
    REGISTER_FCV_SHADER(Gaussian, gaussian)
    return false;
 }

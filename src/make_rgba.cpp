@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(BuildRGBAMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MakeRGBAMtd);
 
-enum BuildRGBAParams
+enum MakeRGBAParams
 {
    p_r = 0,
    p_g,
