@@ -1,14 +1,14 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ConvertFloatToIntMtd);
+AI_SHADER_NODE_EXPORT_METHODS(FloatToIntMtd);
 
-enum ConvertFloatToIntParams
+enum FloatToIntParams
 {
    p_input = 0,
    p_mode
 };
 
-static const char* ConvertFloatToIntModeNames[] =
+static const char* FloatToIntModeNames[] =
 {
    "floor",
    "ceil",
@@ -17,7 +17,7 @@ static const char* ConvertFloatToIntModeNames[] =
    NULL
 };
 
-enum ConvertFloatToIntMode
+enum FloatToIntMode
 {
    FTI_FLOOR = 0,
    FTI_CEIL,
@@ -28,7 +28,7 @@ enum ConvertFloatToIntMode
 node_parameters
 {
    AiParameterFlt("input", 0.0f);
-   AiParameterEnum("mode", 0, ConvertFloatToIntModeNames);
+   AiParameterEnum("mode", 0, FloatToIntModeNames);
    
    AiMetaDataSetBool(mds, "mode", "linkable", false);
 }
@@ -47,7 +47,7 @@ node_finish
 
 shader_evaluate
 {
-   ConvertFloatToIntMode mode = (ConvertFloatToIntMode) AiShaderEvalParamInt(p_mode);
+   FloatToIntMode mode = (FloatToIntMode) AiShaderEvalParamInt(p_mode);
    float input = AiShaderEvalParamFlt(p_input);
    
    switch (mode)

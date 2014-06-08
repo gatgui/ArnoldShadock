@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ConvertBoolToIntMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BoolToFloatMtd);
 
-enum ConvertBoolToIntParams
+enum BoolToFloatParams
 {
    p_input = 0
 };
@@ -26,5 +26,5 @@ node_finish
 
 shader_evaluate
 {
-   sg->out.INT = (AiShaderEvalParamBool(p_input) ? 1 : 0);
+   sg->out.FLT = (AiShaderEvalParamBool(p_input) ? 1.0f : 0.0f);
 }

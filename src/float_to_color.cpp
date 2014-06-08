@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ConvertFloatToColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(FloatToColorMtd);
 
-enum ConvertFloatToColorParams
+enum FloatToColorParams
 {
    p_input = 0
 };

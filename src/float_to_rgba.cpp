@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ConvertFloatToRGBAMtd);
+AI_SHADER_NODE_EXPORT_METHODS(FloatToRGBAMtd);
 
-enum ConvertFloatToRGBAParams
+enum FloatToRGBAParams
 {
    p_input = 0,
    p_alpha

@@ -1,21 +1,21 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ConvertVectorToColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(VectorToColorMtd);
 
-enum ConvertVectorToColorParams
+enum VectorToColorParams
 {
    p_input = 0,
    p_mode
 };
 
-enum ConvertVectorToColorMode
+enum VectorToColorMode
 {
    VTC_RAW = 0,
    VTC_HSV,
    VTC_HSL
 };
 
-static const char* ConvertVectorToColorModeNames[] =
+static const char* VectorToColorModeNames[] =
 {
    "raw",
    "hsv",
@@ -27,7 +27,7 @@ static const char* ConvertVectorToColorModeNames[] =
 node_parameters
 {
    AiParameterVec("input", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("mode", VTC_RAW, ConvertVectorToColorModeNames);
+   AiParameterEnum("mode", VTC_RAW, VectorToColorModeNames);
    
    AiMetaDataSetBool(mds, "mode", "linkable", false);
 }
@@ -48,7 +48,7 @@ shader_evaluate
 {
    AtVector input = AiShaderEvalParamVec(p_input);
    
-   ConvertVectorToColorMode mode = (ConvertVectorToColorMode) AiShaderEvalParamInt(p_mode);
+   VectorToColorMode mode = (VectorToColorMode) AiShaderEvalParamInt(p_mode);
    
    switch (mode)
    {

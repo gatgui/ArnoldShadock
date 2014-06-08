@@ -1,14 +1,14 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ConvertColorToFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ColorToFloatMtd);
 
-enum ConvertColorToFloatParams
+enum ColorToFloatParams
 {
    p_input = 0,
    p_mode
 };
 
-enum ConvertColorToFloatMode
+enum ColorToFloatMode
 {
    CTF_LUMINANCE = 0,
    CTF_INTENSITY,
@@ -16,7 +16,7 @@ enum ConvertColorToFloatMode
    CTF_MIN
 };
 
-static const char* ConvertColorToFloatModeNames[] =
+static const char* ColorToFloatModeNames[] =
 {
    "luminance",
    "intensity",
@@ -28,7 +28,7 @@ static const char* ConvertColorToFloatModeNames[] =
 node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("mode", CTF_LUMINANCE, ConvertColorToFloatModeNames);
+   AiParameterEnum("mode", CTF_LUMINANCE, ColorToFloatModeNames);
    
    AiMetaDataSetBool(mds, "mode", "linkable", false);
 }
@@ -50,7 +50,7 @@ shader_evaluate
    static float sOneThird = 1.0f / 3.0f;
    
    AtRGB input = AiShaderEvalParamRGB(p_input);
-   ConvertColorToFloatMode mode = (ConvertColorToFloatMode) AiShaderEvalParamInt(p_mode);
+   ColorToFloatMode mode = (ColorToFloatMode) AiShaderEvalParamInt(p_mode);
    
    switch (mode)
    {

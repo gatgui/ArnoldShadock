@@ -58,15 +58,15 @@ DECLARE_FCV_SHADER(Clamp);
 DECLARE_SHADER(CompareFloat);
 DECLARE_SHADER(CompareColor);
 DECLARE_SHADER(CompareVector);
-DECLARE_SHADER(ConvertFloatToBool);
-DECLARE_SHADER(ConvertFloatToInt);
-DECLARE_SHADER(ConvertVectorToColor);
-DECLARE_SHADER(ConvertColorToVector);
-DECLARE_SHADER(ConvertColorToFloat);
-DECLARE_SHADER(ConvertFloatToColor);
-DECLARE_SHADER(ConvertFloatToRGBA);
-DECLARE_SHADER(ConvertBoolToInt);
-DECLARE_SHADER(ConvertBoolToFloat);
+DECLARE_SHADER(FloatToBool);
+DECLARE_SHADER(FloatToInt);
+DECLARE_SHADER(VectorToColor);
+DECLARE_SHADER(ColorToVector);
+DECLARE_SHADER(ColorToFloat);
+DECLARE_SHADER(FloatToColor);
+DECLARE_SHADER(FloatToRGBA);
+DECLARE_SHADER(BoolToInt);
+DECLARE_SHADER(BoolToFloat);
 DECLARE_SHADER(CrossProduct);
 DECLARE_FCV_SHADER(Gain);
 DECLARE_FCV_SHADER(Divide);
@@ -152,15 +152,15 @@ node_loader
    REGISTER_SHADER(CompareFloat, compare_float, AI_TYPE_BOOLEAN)
    REGISTER_SHADER(CompareColor, compare_color, AI_TYPE_BOOLEAN)
    REGISTER_SHADER(CompareVector, compare_vector, AI_TYPE_BOOLEAN)
-   REGISTER_SHADER(ConvertFloatToBool, convert_float_to_bool, AI_TYPE_BOOLEAN)
-   REGISTER_SHADER(ConvertFloatToInt, convert_float_to_int, AI_TYPE_INT)
-   REGISTER_SHADER(ConvertVectorToColor, convert_vector_to_color, AI_TYPE_RGB)
-   REGISTER_SHADER(ConvertColorToVector, convert_color_to_vector, AI_TYPE_VECTOR)
-   REGISTER_SHADER(ConvertColorToFloat, convert_color_to_float, AI_TYPE_FLOAT)
-   REGISTER_SHADER(ConvertFloatToColor, convert_float_to_color, AI_TYPE_RGB)
-   REGISTER_SHADER(ConvertFloatToRGBA, convert_float_to_rgba, AI_TYPE_RGBA)
-   REGISTER_SHADER(ConvertBoolToInt, convert_bool_to_int, AI_TYPE_INT)
-   REGISTER_SHADER(ConvertBoolToFloat, convert_bool_to_float, AI_TYPE_FLOAT)
+   REGISTER_SHADER(FloatToBool, float_to_bool, AI_TYPE_BOOLEAN)
+   REGISTER_SHADER(FloatToInt, float_to_int, AI_TYPE_INT)
+   REGISTER_SHADER(VectorToColor, vector_to_color, AI_TYPE_RGB)
+   REGISTER_SHADER(ColorToVector, color_to_vector, AI_TYPE_VECTOR)
+   REGISTER_SHADER(ColorToFloat, color_to_float, AI_TYPE_FLOAT)
+   REGISTER_SHADER(FloatToColor, float_to_color, AI_TYPE_RGB)
+   REGISTER_SHADER(FloatToRGBA, float_to_rgba, AI_TYPE_RGBA)
+   REGISTER_SHADER(BoolToInt, bool_to_int, AI_TYPE_INT)
+   REGISTER_SHADER(BoolToFloat, bool_to_float, AI_TYPE_FLOAT)
    REGISTER_SHADER(CrossProduct, cross_product, AI_TYPE_VECTOR)
    REGISTER_FCV_SHADER(Gain, gain)
    REGISTER_FCV_SHADER(Divide, divide)
