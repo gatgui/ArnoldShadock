@@ -11,7 +11,7 @@ const char* CompareOperatorNames[] =
    NULL
 };
 
-const char* InterpolationTypeNames[] =
+const char* RampInterpolationNames[] =
 {
    "None",
    "Linear",
@@ -36,7 +36,7 @@ static void GetArrayElement(AtArray *a, unsigned int i, AtRGB &e)
 }
 
 template <typename T>
-static void EvalRampT(AtArray *p, AtArray *v, AtArray *it, InterpolationType defi, unsigned int *shuffle, float t, T &result)
+static void RampT(AtArray *p, AtArray *v, AtArray *it, RampInterpolation defi, unsigned int *shuffle, float t, T &result)
 {
    unsigned int inext = p->nelements;
 
@@ -77,7 +77,7 @@ static void EvalRampT(AtArray *p, AtArray *v, AtArray *it, InterpolationType def
    if (it)
    {
       itype = AiArrayGetInt(it, shuffle[iprev]);
-      if (itype < IT_None || itype > IT_Spline)
+      if (itype < RI_None || itype > RI_Spline)
       {
          itype = defi;
       }
@@ -85,15 +85,15 @@ static void EvalRampT(AtArray *p, AtArray *v, AtArray *it, InterpolationType def
 
    switch (itype)
    {
-   case IT_None:
+   case RI_None:
       result = v1;
       break;
 
-   case IT_Linear:
+   case RI_Linear:
       result = v1 + u * (v2 - v1);
       break;
 
-   case IT_Smooth:
+   case RI_Smooth:
       {
          float u2 = u * u;
          float u3 = u * u2;
@@ -103,7 +103,7 @@ static void EvalRampT(AtArray *p, AtArray *v, AtArray *it, InterpolationType def
       }
       break;
 
-   case IT_Spline:
+   case RI_Spline:
       {
          T t1, t2;
 
@@ -169,7 +169,7 @@ static void EvalRampT(AtArray *p, AtArray *v, AtArray *it, InterpolationType def
    }
 }
 
-bool SortPositions(AtArray *a, unsigned int *shuffle)
+bool SortRampPositions(AtArray *a, unsigned int *shuffle)
 {
    bool modified = false;
 
@@ -210,17 +210,17 @@ bool SortPositions(AtArray *a, unsigned int *shuffle)
    return modified;
 }
 
-void EvalFloatRamp(AtArray *p, AtArray *v, AtArray *i, InterpolationType defi, unsigned int *s, float t, float &out)
+void FloatRamp(AtArray *p, AtArray *v, AtArray *i, RampInterpolation defi, unsigned int *s, float t, float &out)
 {
-   EvalRampT(p, v, i, defi, s, t, out);
+   RampT(p, v, i, defi, s, t, out);
 }
 
-void EvalVectorRamp(AtArray *p, AtArray *v, AtArray *i, InterpolationType defi, unsigned int *s, float t, AtVector &out)
+void VectorRamp(AtArray *p, AtArray *v, AtArray *i, RampInterpolation defi, unsigned int *s, float t, AtVector &out)
 {
-   EvalRampT(p, v, i, defi, s, t, out);
+   RampT(p, v, i, defi, s, t, out);
 }
 
-void EvalColorRamp(AtArray *p, AtArray *v, AtArray *i, InterpolationType defi, unsigned int *s, float t, AtRGB &out)
+void ColorRamp(AtArray *p, AtArray *v, AtArray *i, RampInterpolation defi, unsigned int *s, float t, AtRGB &out)
 {
-   EvalRampT(p, v, i, defi, s, t, out);
+   RampT(p, v, i, defi, s, t, out);
 }

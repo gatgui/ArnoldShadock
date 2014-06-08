@@ -19,14 +19,14 @@ enum CompareOperator
    CO_GTE
 };
 
-extern const char* InterpolationTypeNames[];
+extern const char* RampInterpolationNames[];
 
-enum InterpolationType
+enum RampInterpolation
 {
-   IT_None = 0,
-   IT_Linear,
-   IT_Smooth,
-   IT_Spline
+   RI_None = 0,
+   RI_Linear,
+   RI_Smooth,
+   RI_Spline
 };
 
 // ---
@@ -36,11 +36,11 @@ inline int GetRenderThreadsCount()
    return AiNodeGetInt(AiUniverseGetOptions(), "threads");
 }
 
-bool SortPositions(AtArray *a, unsigned int *shuffle);
+bool SortRampPositions(AtArray *a, unsigned int *shuffle);
 
-void EvalFloatRamp(AtArray *p, AtArray *v, AtArray *i, InterpolationType defi, unsigned int *s, float t, float &out);
-void EvalVectorRamp(AtArray *p, AtArray *v, AtArray *i, InterpolationType defi, unsigned int *s, float t, AtVector &out);
-void EvalColorRamp(AtArray *p, AtArray *v, AtArray *i, InterpolationType defi, unsigned int *s, float t, AtRGB &out);
+void FloatRamp(AtArray *p, AtArray *v, AtArray *i, RampInterpolation defi, unsigned int *s, float t, float &out);
+void VectorRamp(AtArray *p, AtArray *v, AtArray *i, RampInterpolation defi, unsigned int *s, float t, AtVector &out);
+void ColorRamp(AtArray *p, AtArray *v, AtArray *i, RampInterpolation defi, unsigned int *s, float t, AtRGB &out);
 
 inline float SmoothStep(float v)
 {

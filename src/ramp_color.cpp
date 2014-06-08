@@ -16,7 +16,7 @@ node_parameters
    AiParameterFlt("input", 0.0f);
    AiParameterArray("positions", AiArray(2, 1, AI_TYPE_FLOAT, 0.0f, 1.0f));
    AiParameterArray("values", AiArray(2, 1, AI_TYPE_RGB, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f));
-   AiParameterArray("interpolations", AiArray(2, 1, AI_TYPE_INT, IT_Linear, IT_Linear));
+   AiParameterArray("interpolations", AiArray(2, 1, AI_TYPE_INT, RI_Linear, RI_Linear));
    AiParameterRGB("default_value", 0.0f, 0.0f, 0.0f);
    
    AiMetaDataSetStr(mds, NULL, "ramps", "values");
@@ -99,7 +99,7 @@ node_update
       
       if (!data->linked_positions)
       {
-         SortPositions(data->positions, data->shuffles[0]);
+         SortRampPositions(data->positions, data->shuffles[0]);
       }
       
       data->valid = true;
@@ -150,9 +150,9 @@ shader_evaluate
       if (data->linked_positions)
       {
          si = sg->tid;
-         SortPositions(i, data->shuffles[si]);
+         SortRampPositions(i, data->shuffles[si]);
       }
       
-      EvalColorRamp(p, v, i, IT_Linear, data->shuffles[si], input, sg->out.RGB);
+      ColorRamp(p, v, i, RI_Linear, data->shuffles[si], input, sg->out.RGB);
    }
 }
