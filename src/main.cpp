@@ -136,6 +136,13 @@ DECLARE_FCV_SHADER(SmoothRangeSelect);
 DECLARE_SHADER(MakeColor);
 DECLARE_SHADER(MakeRGBA);
 DECLARE_FCV_SHADER(Gaussian);
+#ifdef USE_AGNOISES
+DECLARE_SHADER(Perlin);
+DECLARE_SHADER(Billow);
+DECLARE_SHADER(Voronoi);
+DECLARE_SHADER(Ridged);
+DECLARE_SHADER(Turbulence);
+#endif
 
 node_loader
 {
@@ -230,6 +237,13 @@ node_loader
    REGISTER_SHADER(MakeColor, make_color, AI_TYPE_RGB)
    REGISTER_SHADER(MakeRGBA, make_rgba, AI_TYPE_RGBA)
    REGISTER_FCV_SHADER(Gaussian, gaussian)
+#ifdef USE_AGNOISES
+   REGISTER_SHADER(Perlin, perlin_noise, AI_TYPE_FLOAT);
+   REGISTER_SHADER(Billow, billow_noise, AI_TYPE_FLOAT);
+   REGISTER_SHADER(Voronoi, voronoi_noise, AI_TYPE_FLOAT);
+   REGISTER_SHADER(Ridged, ridged_noise, AI_TYPE_FLOAT);
+   REGISTER_SHADER(Turbulence, point_turbulence, AI_TYPE_POINT);
+#endif
    return false;
 }
 
