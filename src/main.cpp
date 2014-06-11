@@ -147,6 +147,11 @@ DECLARE_SHADER(agSeExpr);
 #ifdef USE_AGANIMCURVE
 DECLARE_SHADER(agAnimCurve);
 #endif
+#ifdef USE_AGUSERDATARAMP
+DECLARE_SHADER(agUserDataFloatRamp);
+DECLARE_SHADER(agUserDataColorRamp);
+DECLARE_SHADER(agUserDataVectorRamp);
+#endif
 
 node_loader
 {
@@ -252,6 +257,12 @@ node_loader
 #ifdef USE_AGANIMCURVE
    REGISTER_SHADER(agAnimCurve, curve, AI_TYPE_FLOAT)
 #endif
+#ifdef USE_AGUSERDATARAMP
+   REGISTER_SHADER(agUserDataFloatRamp, shape_attr_ramp_float, AI_TYPE_FLOAT)
+   REGISTER_SHADER(agUserDataColorRamp, shape_attr_ramp_color, AI_TYPE_RGB)
+   REGISTER_SHADER(agUserDataVectorRamp, shape_attr_ramp_vector, AI_TYPE_VECTOR)
+#endif
+
    return false;
 }
 
