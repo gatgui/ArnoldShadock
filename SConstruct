@@ -5,19 +5,11 @@ from excons.tools import arnold
 
 env = excons.MakeBaseEnv()
 
-agStateSrcs = ["agState/agColorState.cpp",
-               "agState/agFloatState.cpp",
-               "agState/agIntState.cpp",
-               "agState/agVectorState.cpp",
-               "agState/agMatrixState.cpp"]
+agStateSrcs = glob.glob("agState/ag?*State.cpp")
 
-agNoisesSrcs = ["agNoises/src/ln_billow.cpp",
-                "agNoises/src/ln_common.cpp",
-                "agNoises/src/ln_perlin.cpp",
-                "agNoises/src/ln_ridged.cpp",
-                "agNoises/src/ln_turbulence.cpp",
-                "agNoises/src/ln_voronoi.cpp",
-                "agNoises/src/libnoise/noisegen.cpp"]
+agNoisesSrcs = glob.glob("agNoises/src/ln_*.cpp") + \
+               glob.glob("agNoises/src/libnoise/*.cpp") + \
+               glob.glob("agNoises/src/stegu/*.cpp")
 
 withoutState = (int(ARGUMENTS.get("without-state", "0")) != 0)
 withoutNoises = (int(ARGUMENTS.get("without-noises", "0")) != 0)
