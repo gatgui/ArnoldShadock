@@ -141,6 +141,9 @@ DECLARE_SHADER(Fractal);
 DECLARE_SHADER(Voronoi);
 DECLARE_SHADER(DistortPoint);
 #endif
+#ifdef USE_AGSEEXPR
+DECLARE_SHADER(agSeExpr);
+#endif
 
 node_loader
 {
@@ -239,6 +242,9 @@ node_loader
    REGISTER_SHADER(Fractal, fractal_noise, AI_TYPE_FLOAT);
    REGISTER_SHADER(Voronoi, voronoi_noise, AI_TYPE_FLOAT);
    REGISTER_SHADER(DistortPoint, distort_point, AI_TYPE_POINT);
+#endif
+#ifdef USE_AGSEEXPR
+   REGISTER_SHADER(agSeExpr, seexpr, AI_TYPE_VECTOR)
 #endif
    return false;
 }
