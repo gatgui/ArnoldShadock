@@ -13,9 +13,15 @@ agNoisesSrcs = glob.glob("agNoises/src/ln_*.cpp") + \
 
 agSeExprSrcs = ["agSeExpr/src/agSeExpr.cpp"]
 
-withoutState = (int(ARGUMENTS.get("without-state", "0")) != 0)
-withoutNoises = (int(ARGUMENTS.get("without-noises", "0")) != 0)
-withoutSeExpr = (int(ARGUMENTS.get("without-seexpr", "0")) != 0)
+agAnimCurveSrcs = ["agAnimCurve/src/agAnimCurve.cpp",
+                   "agAnimCurve/gmath/src/lib/curve.cpp",
+                   "agAnimCurve/gmath/src/lib/polynomial.cpp",
+                   "agAnimCurve/gmath/src/lib/vector.cpp"]
+
+withState = (int(ARGUMENTS.get("with-state", "1")) != 0)
+withNoises = (int(ARGUMENTS.get("with-noises", "1")) != 0)
+withSeExpr = (int(ARGUMENTS.get("with-seexpr", "1")) != 0)
+withAnimCurve = (int(ARGUMENTS.get("with-animcurve", "1")) != 0)
 shdprefix = ARGUMENTS.get("shaders-prefix", "gas_")
 
 defs = []
@@ -23,17 +29,17 @@ incs = []
 libs = []
 extra_srcs = []
 
-if not withoutState:
+if withState:
   defs.append("USE_AGSTATE")
   incs.append("agState")
   extra_srcs += agStateSrcs
 
-if not withoutNoises:
+if withNoises:
   defs.append("USE_AGNOISES")
   incs.append("agNoises/src")
   extra_srcs += agNoisesSrcs
 
-if not withoutSeExpr:
+if withSeExpr:
   ARGUMENTS["static"] = "1"
   SConscript("agSeExpr/SeExpr/SConstruct")
   defs.append("USE_AGSEEXPR")
@@ -41,8 +47,14 @@ if not withoutSeExpr:
   libs.append("SeExpr")
   extra_srcs += agSeExprSrcs
 
+if withAnimCurve:
+  defs.extend(["USE_AGANIMCURVE", "GMATH_STATIC"])
+  incs.append("agAnimCurve/gmath/include")
+  extra_srcs += agAnimCurveSrcs
+  
+
 prjs = [
-  {"name": "agShaderLib",
+  {"name": "agShadingBlocks",
    "type": "dynamicmodule",
    "defs": defs,
    "incdirs": incs,
@@ -57,4 +69,4 @@ env.Append(CPPFLAGS=" -Wno-unused-parameter -DSHADERS_PREFIX=\"\\\"%s\\\"\"" % s
 
 excons.DeclareTargets(env, prjs)
 
-Default("agShaderLib")
+Default("agShadingBlocks")

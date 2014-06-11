@@ -2,3 +2,4 @@ excons = [git]git://github.com/gatgui/excons.git
 agState = [hg]https://bitbucket.org/gatgui/agState
 agNoises = [hg]https://bitbucket.org/gatgui/agNoises
 agSeExpr = [hg]https://bitbucket.org/gatgui/agSeExpr
+agAnimCurve = [hg]https://bitbucket.org/gatgui/agAnimCurve

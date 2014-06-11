@@ -144,6 +144,9 @@ DECLARE_SHADER(DistortPoint);
 #ifdef USE_AGSEEXPR
 DECLARE_SHADER(agSeExpr);
 #endif
+#ifdef USE_AGANIMCURVE
+DECLARE_SHADER(agAnimCurve);
+#endif
 
 node_loader
 {
@@ -245,6 +248,9 @@ node_loader
 #endif
 #ifdef USE_AGSEEXPR
    REGISTER_SHADER(agSeExpr, seexpr, AI_TYPE_VECTOR)
+#endif
+#ifdef USE_AGANIMCURVE
+   REGISTER_SHADER(agAnimCurve, curve, AI_TYPE_FLOAT)
 #endif
    return false;
 }
