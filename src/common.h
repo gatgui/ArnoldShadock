@@ -50,7 +50,11 @@ inline float SmoothStep(float v)
 
 inline AtRGB SmoothStep(const AtRGB &v)
 {
-   return AiColor(SmoothStep(v.r), SmoothStep(v.g), SmoothStep(v.b));
+   AtRGB rv;
+   rv.r = SmoothStep(v.r);
+   rv.g = SmoothStep(v.g);
+   rv.b = SmoothStep(v.b);
+   return rv;
 }
 
 inline AtVector SmoothStep(const AtVector &v)
