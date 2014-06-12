@@ -62,7 +62,9 @@ prjs = [
   }
 ]
 
-env.Append(CPPFLAGS=" -Wno-unused-parameter -DSHADERS_PREFIX=\"\\\"%s\\\"\"" % shdprefix)
+env.Append(CPPFLAGS=" -DSHADERS_PREFIX=\"\\\"%s\\\"\"" % shdprefix)
+if sys.platform != "win32":
+  env.Append(CPPFLAGS=" -Wno-unused-parameter")
 
 excons.DeclareTargets(env, prjs)
 

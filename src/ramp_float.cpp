@@ -13,10 +13,25 @@ enum RampFloatParams
 
 node_parameters
 {
+   AtArray *def;
+   
    AiParameterFlt("input", 0.0f);
-   AiParameterArray("positions", AiArray(2, 1, AI_TYPE_FLOAT, 0.0f, 1.0f));
-   AiParameterArray("values", AiArray(2, 1, AI_TYPE_FLOAT, 0.0f, 0.0f));
-   AiParameterArray("interpolations", AiArray(2, 1, AI_TYPE_INT, RI_Linear, RI_Linear));
+   
+   def = AiArrayAllocate(2, 1, AI_TYPE_FLOAT);
+   AiArraySetFlt(def, 0, 0.0f);
+   AiArraySetFlt(def, 1, 1.0f);
+   AiParameterArray("positions", def);
+   
+   def = AiArrayAllocate(2, 1, AI_TYPE_FLOAT);
+   AiArraySetFlt(def, 0, 0.0f);
+   AiArraySetFlt(def, 1, 1.0f);
+   AiParameterArray("values", def);
+   
+   def = AiArrayAllocate(2, 1, AI_TYPE_INT);
+   AiArraySetInt(def, 0, RI_Linear);
+   AiArraySetInt(def, 1, RI_Linear);
+   AiParameterArray("interpolations", def);
+   
    AiParameterFlt("default_value", 0.0f);
    
    AiMetaDataSetStr(mds, NULL, "ramps", "values");
