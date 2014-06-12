@@ -20,7 +20,7 @@ extra_srcs = []
 if withState:
   defs.append("USE_AGSTATE")
   incs.append("agState")
-  extra_srcs += glob.glob("agState/ag?*State.cpp")
+  extra_srcs += glob.glob("agState/src/ag?*State.cpp")
 
 if withNoises:
   defs.append("USE_AGNOISES")
