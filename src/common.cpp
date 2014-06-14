@@ -224,3 +224,74 @@ void ColorRamp(AtArray *p, AtArray *v, AtArray *i, RampInterpolation defi, unsig
 {
    RampT(p, v, i, defi, s, t, out);
 }
+
+// ---
+
+UVData::UVData(AtShaderGlobals *sg)
+{
+   store(sg);
+}
+
+void UVData::store(AtShaderGlobals *sg)
+{
+   u = sg->u;
+   v = sg->v;
+   dudx = sg->dudx;
+   dudy = sg->dudy;
+   dvdx = sg->dvdx;
+   dvdy = sg->dvdy;
+   dPdu = sg->dPdu;
+   dPdv = sg->dPdv;
+}
+
+void UVData::restore(AtShaderGlobals *sg)
+{
+   sg->u = u;
+   sg->v = v;
+   sg->dudx = dudx;
+   sg->dudy = dudy;
+   sg->dvdx = dvdx;
+   sg->dvdy = dvdy;
+   sg->dPdu = dPdu;
+   sg->dPdv = dPdv;
+}
+
+void ComputeSurfaceScreenDerivatives(AtShaderGlobals *sg, AtVector &dPdx, AtVector &dPdy)
+{
+   dPdx = sg->dudx * sg->dPdu + sg->dvdx * sg->dPdv;
+   dPdy = sg->dudy * sg->dPdu + sg->dvdy * sg->dPdv;
+}
+
+void ComputeSurfaceUVDerivatives(AtShaderGlobals *sg, const AtVector &dPdx, const AtVector &dPdy)
+{
+   // (1) dPdx = dudx * dPdu + dvdx * dPdv
+   // (2) dPdy = dudy * dPdu + dvdy * dPdv
+
+   // Note 1: sg's dPdu and dPdv are left unchanged when the system cannot be solved
+   // Note 2: Could scale all equations to gain precision
+   
+   float rv[6];
+   LinearSystem<6> lsys;
+
+   lsys[0][0] = sg->dudx; lsys[0][3] = sg->dvdx; lsys[0][6] = dPdx.x;
+   lsys[1][1] = sg->dudx; lsys[1][4] = sg->dvdx; lsys[1][6] = dPdx.y;
+   lsys[2][2] = sg->dudx; lsys[2][5] = sg->dvdx; lsys[2][6] = dPdx.z;
+   lsys[3][0] = sg->dudy; lsys[3][3] = sg->dvdy; lsys[3][6] = dPdy.x;
+   lsys[4][1] = sg->dudy; lsys[4][4] = sg->dvdy; lsys[4][6] = dPdy.y;
+   lsys[5][2] = sg->dudy; lsys[5][5] = sg->dvdy; lsys[5][6] = dPdy.z;
+
+   if (lsys.solve(rv))
+   {
+      sg->dPdu.x = rv[0];
+      sg->dPdu.y = rv[1];
+      sg->dPdu.z = rv[2];
+      sg->dPdv.x = rv[3];
+      sg->dPdv.y = rv[4];
+      sg->dPdv.z = rv[5];
+   }
+   else
+   {
+      AiMsgWarning("Could no re-compute dPdu and dPdv");
+   }
+}
+

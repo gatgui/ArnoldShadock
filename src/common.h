@@ -166,6 +166,24 @@ inline AtRGB ExpandToRange(const AtRGB &in, const AtRGB &range_min, const AtRGB 
 
 // ---
 
+struct UVData
+{
+   float u, v;
+   float dudx, dudy;
+   float dvdx, dvdy;
+   AtVector dPdu, dPdv;
+   
+   UVData(AtShaderGlobals *sg);
+   
+   void store(AtShaderGlobals *sg);
+   void restore(AtShaderGlobals *sg);
+};
+
+void ComputeSurfaceScreenDerivatives(AtShaderGlobals *sg, AtVector &dPdx, AtVector &dPdy);
+void ComputeSurfaceUVDerivatives(AtShaderGlobals *sg, const AtVector &dPdx, const AtVector &dPdy);
+
+// ---
+
 template <int dim>
 class LinearSystem
 {
