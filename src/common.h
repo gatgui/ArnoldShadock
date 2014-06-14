@@ -164,4 +164,168 @@ inline AtRGB ExpandToRange(const AtRGB &in, const AtRGB &range_min, const AtRGB 
    return rv;
 }
 
+// ---
+
+template <int dim>
+class LinearSystem
+{
+public:
+
+   LinearSystem(float eps=0.000001f)
+      : EPS(eps)
+   {
+      for (int i=0; i<dim; ++i)
+      {
+         memset(matrix[i], 0, (dim+1)*sizeof(float));
+      }
+   }
+
+   LinearSystem(const LinearSystem<dim> &rhs)
+      : EPS(rhs.EPS)
+   {
+      for (int i=0; i<dim; ++i)
+      {
+         memcpy(matrix[i], rhs.matrix[i], (dim+1)*sizeof(float));
+      }
+   }
+
+   ~LinearSystem()
+   {
+   }
+
+   LinearSystem<dim>& operator=(const LinearSystem<dim> &rhs)
+   {
+      if (this != &rhs)
+      {
+         for (int i=0; i<dim; ++i)
+         {
+            memcpy(matrix[i], rhs.matrix[i], (dim+1)*sizeof(float));
+         }
+         EPS = rhs.EPS;
+      }
+      return *this;
+   }
+
+   float* operator[](int i)
+   {
+      return matrix[i];
+   }
+
+   const float* operator[](int i) const
+   {
+      return matrix[i];
+   }
+
+   // result size is dim
+   bool solve(float result[dim])
+   {
+      int i, j, k;
+      int ccol = 0;
+      int crow = 0;
+      int mrow = 0;
+      float cval;
+      float mval;
+
+      for (i=0; i<dim; ++i)
+      {
+         memcpy(rmatrix[i], matrix[i], (dim+1)*sizeof(float));
+      }
+
+      // gauss-jordan reduction
+      for (ccol=0; ccol<dim; ++ccol)
+      {
+         mrow = ccol;
+         mval = cval = fabs(rmatrix[mrow][ccol]);
+
+         // select pivot
+         for (crow=ccol+1; crow<dim; ++crow)
+         {
+            cval = fabs(rmatrix[crow][ccol]);
+            if (cval > mval)
+            {
+               mval = cval;
+               mrow = crow;
+            }
+         }
+
+         // check if pivot is valid
+         if (mval >= EPS)
+         {
+            float factor = 1.0f / rmatrix[mrow][ccol];
+
+            swap(ccol, mrow);
+
+            for (crow=ccol; crow<dim; ++crow)
+            {
+               multiply(crow, factor);
+            }
+
+            for (crow=ccol+1; crow<dim; ++crow)
+            {
+               subtractMultiplied(crow, rmatrix[crow][ccol], ccol);
+            }
+         }
+         else
+         {
+            // maximum value on this column is zero, cannot reduce
+            // could swap column here maybe
+         }
+      }
+
+      // backsubstitute
+
+      memset(result, 0, dim*sizeof(float));
+
+      j = dim-1;
+
+      if (fabs(rmatrix[j][j]) >= EPS)
+      {
+         result[j] = rmatrix[j][dim];
+      }
+
+      while (--j >= 0)
+      {
+         result[j] = rmatrix[j][dim];
+         for (k=dim-1; k>j; --k)
+         {
+            result[j] -= rmatrix[j][k] * result[k];
+         }
+      }
+
+      return true;
+   }
+
+private:
+
+   void swap(int i, int j)
+   {
+      float tmp[dim+1];
+      memcpy(tmp, rmatrix[i], (dim+1)*sizeof(float));
+      memcpy(rmatrix[i], rmatrix[j], (dim+1)*sizeof(float));
+      memcpy(rmatrix[j], tmp, (dim+1)*sizeof(float));
+   }
+
+   void multiply(int i, float s)
+   {
+      for (int j=0; j<=dim; ++j)
+      {
+         rmatrix[i][j] *= s;
+      }
+   }
+
+   void subtractMultiplied(int i, float s, int j)
+   {
+      for (int k=0; k<=dim; ++k)
+      {
+         rmatrix[i][k] -= s * rmatrix[j][k];
+      }
+   }
+
+private:
+
+   float matrix[dim][dim+1]; //rows : augmented
+   float rmatrix[dim][dim+1]; // rmatrix is the matrix to be modified
+   float EPS;
+};
+
 #endif

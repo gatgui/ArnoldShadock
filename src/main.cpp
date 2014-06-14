@@ -152,6 +152,7 @@ DECLARE_SHADER(agUserDataFloatRamp);
 DECLARE_SHADER(agUserDataColorRamp);
 DECLARE_SHADER(agUserDataVectorRamp);
 #endif
+DECLARE_SHADER(UVSwitch);
 
 node_loader
 {
@@ -262,6 +263,7 @@ node_loader
    REGISTER_SHADER(agUserDataColorRamp, shape_attr_ramp_color, AI_TYPE_RGB)
    REGISTER_SHADER(agUserDataVectorRamp, shape_attr_ramp_vector, AI_TYPE_VECTOR)
 #endif
+   REGISTER_SHADER(UVSwitch, uv_switch, AI_TYPE_RGB)
 
    return false;
 }
