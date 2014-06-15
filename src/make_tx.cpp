@@ -20,46 +20,46 @@ AI_SHADER_NODE_EXPORT_METHODS(MakeTxMtd);
 
 enum MakeTxWrap
 {
-   W_BLACK = 0,
-   W_CLAMP,
-   W_PERIODIC,
-   W_MIRROR,
-   W_DEFAULT,
-   W_S
+   Wrap_black = 0,
+   Wrap_clamp,
+   Wrap_periodic,
+   Wrap_mirror,
+   Wrap_default,
+   Wrap_s
 };
 
 enum MakeTxFilter
 {
-   F_BOX = 0,
-   F_TRIANGLE,
-   F_GAUSSIAN,
-   F_CATROM,
-   F_BLACKMAN_HARRIS,
-   F_SINC,
-   F_LANCZOS3,
-   F_RADIAL_LANCZOS3,
-   F_MITCHELL,
-   F_BSPLINE,
-   F_DISK
+   Filter_box = 0,
+   Filter_triangle,
+   Filter_gaussian,
+   Filter_catrom,
+   Filter_blackman_harris,
+   Filter_sinc,
+   Filter_lanczos3,
+   Filter_radial_lanczos3,
+   Filter_mitchell,
+   Filter_bspline,
+   Filter_disk
 };
 
 enum MakeTxFormat
 {
-   D_UINT8 = 0,
-   D_SINT8,
-   D_UINT16,
-   D_SINT16,
-   D_HALF,
-   D_FLOAT,
-   D_INPUT
+   Format_uint8 = 0,
+   Format_sint8,
+   Format_uint16,
+   Format_sint16,
+   Format_half,
+   Format_float,
+   Format_input
 };
 
 enum MakeTxMode
 {
-   M_IF_NEWER = 0,
-   M_ALWAYS,
-   M_REUSE,
-   M_DISABLE
+   Mode_if_newer = 0,
+   Mode_always,
+   Mode_reuse,
+   Mode_disable
 };
 
 enum MakeTxParams
@@ -255,7 +255,7 @@ static bool MakeTx(MakeTxData *data, const char *in_filename, const char *outfil
    {
       bool txExists = (stat(outfilename, &st1) == 0);
 
-      if (!txExists || st0.st_mtime > st1.st_mtime || data->mode == M_ALWAYS)
+      if (!txExists || st0.st_mtime > st1.st_mtime || data->mode == Mode_always)
       {
          //std::string cmd = "maketx -o ";
          //cmd += outfilename;
@@ -266,9 +266,9 @@ static bool MakeTx(MakeTxData *data, const char *in_filename, const char *outfil
          args.push_back("-o");
          args.push_back(outfilename);
 
-         if (data->wrapt == W_S)
+         if (data->wrapt == Wrap_s)
          {
-            if (data->wraps != W_DEFAULT && data->wraps != W_S)
+            if (data->wraps != Wrap_default && data->wraps != Wrap_s)
             {
                //cmd += " --wrap ";
                //cmd += MakeTxWrapNames[data->wraps];
@@ -278,14 +278,14 @@ static bool MakeTx(MakeTxData *data, const char *in_filename, const char *outfil
          }
          else
          {
-            if (data->wraps != W_DEFAULT && data->wraps != W_S)
+            if (data->wraps != Wrap_default && data->wraps != Wrap_s)
             {
                //cmd += " --swrap ";
                //cmd += MakeTxWrapNames[data->wraps];
                args.push_back("--swrap");
                args.push_back(MakeTxWrapNames[data->wraps]);
             }
-            if (data->wrapt != W_DEFAULT)
+            if (data->wrapt != Wrap_default)
             {
                //cmd += " --twrap ";
                //cmd += MakeTxWrapNames[data->wrapt];
@@ -294,7 +294,7 @@ static bool MakeTx(MakeTxData *data, const char *in_filename, const char *outfil
             }
          }
 
-         if (data->format != D_INPUT)
+         if (data->format != Format_input)
          {
             //cmd += " -d ";
             //cmd += MakeTxFormatNames[data->format];
@@ -410,16 +410,16 @@ static bool MakeTx(MakeTxData *data, const char *in_filename, const char *outfil
 node_parameters
 {
    AiParameterSTR("filename", "");
-   AiParameterENUM("format", D_INPUT, MakeTxFormatNames);
-   AiParameterENUM("wraps", W_DEFAULT, MakeTxWrapNames);
-   AiParameterENUM("wrapt", W_S, MakeTxWrapNames);
+   AiParameterENUM("format", Format_input, MakeTxFormatNames);
+   AiParameterENUM("wraps", Wrap_default, MakeTxWrapNames);
+   AiParameterENUM("wrapt", Wrap_s, MakeTxWrapNames);
    AiParameterINT("tile", 0);
    AiParameterBOOL("resize", false);
    AiParameterBOOL("mipmap", true);
-   AiParameterENUM("filter", F_BOX, MakeTxFilterNames);
+   AiParameterENUM("filter", Filter_box, MakeTxFilterNames);
    AiParameterBOOL("stripxmp", true);
    AiParameterBOOL("oiioopt", true);
-   AiParameterENUM("mode", M_IF_NEWER, MakeTxModeNames);
+   AiParameterENUM("mode", Mode_if_newer, MakeTxModeNames);
    
    //AiMetaDataSetBool(mds, NULL, "maya.hide", true);
    
@@ -469,9 +469,9 @@ node_update
       
       const char *in_filename = AiNodeGetStr(node, "filename");
       
-      if (data->mode != M_DISABLE && GetTxName(in_filename, data->tx_filenames[0], MAX_FILENAME))
+      if (data->mode != Mode_disable && GetTxName(in_filename, data->tx_filenames[0], MAX_FILENAME))
       {
-         if (data->mode == M_REUSE)
+         if (data->mode == Mode_reuse)
          {
             AiMsgInfo("[MakeTx] %s: Reuse %s", AiNodeGetName(node), data->tx_filenames[0]);
             struct stat inst, txst;
@@ -488,7 +488,7 @@ node_update
       }
       else
       {
-         if (data->mode == M_DISABLE)
+         if (data->mode == Mode_disable)
          {
             AiMsgInfo("[MakeTx] %s: Disabled", AiNodeGetName(node));
          }
@@ -505,7 +505,7 @@ node_update
    }
    else
    {
-      if (data->mode == M_IF_NEWER || data->mode == M_ALWAYS)
+      if (data->mode == Mode_if_newer || data->mode == Mode_always)
       {
          AiMsgInfo("[MakeTx] %s: Convertion delayed to shader evaluation time.", AiNodeGetName(node));
       }
@@ -552,7 +552,7 @@ shader_evaluate
    {
       const char *in_filename = AiShaderEvalParamStr(p_filename);
       
-      if (data->mode != M_DISABLE && GetTxName(in_filename, data->tx_filenames[sg->tid], MAX_FILENAME))
+      if (data->mode != Mode_disable && GetTxName(in_filename, data->tx_filenames[sg->tid], MAX_FILENAME))
       {
          bool success = false;
          
@@ -566,7 +566,7 @@ shader_evaluate
          }
          else
          {
-            if (data->mode == M_REUSE)
+            if (data->mode == Mode_reuse)
             {
                struct stat inst, txst;
                if (stat(in_filename, &inst) == 0 && stat(data->tx_filenames[sg->tid], &txst) == 0)
