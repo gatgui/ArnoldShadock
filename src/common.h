@@ -179,7 +179,29 @@ struct UVData
    void restore(AtShaderGlobals *sg);
 };
 
+inline void ScaleUV(const AtPoint2 &pivot, const AtPoint2 &s, AtPoint2 &uv)
+{
+   uv -= pivot;
+   uv.x *= s.x;
+   uv.y *= s.y;
+   uv += pivot;
+}
+
+inline void RotateUV(const AtPoint2 &pivot, float cosA, float sinA, AtPoint2 &uv)
+{
+   AtPoint2 tmp = uv - pivot;
+   
+   uv.x = pivot.x + cosA * tmp.x - sinA * tmp.y;
+   uv.y = pivot.y + cosA * tmp.y + sinA * tmp.x;
+}
+
+inline void TranslateUV(const AtPoint2 &t, AtPoint2 &uv)
+{
+   uv += t;
+}
+
 void ComputeSurfaceScreenDerivatives(AtShaderGlobals *sg, AtVector &dPdx, AtVector &dPdy);
+
 void ComputeSurfaceUVDerivatives(AtShaderGlobals *sg, const AtVector &dPdx, const AtVector &dPdy);
 
 // ---
