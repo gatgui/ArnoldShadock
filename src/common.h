@@ -29,6 +29,18 @@ enum RampInterpolation
    RI_Spline
 };
 
+enum TransformOrder
+{
+   TO_SRT = 0,
+   TO_STR,
+   TO_RST,
+   TO_RTS,
+   TO_TSR,
+   TO_TRS
+};
+
+extern const char* TransformOrderNames[];
+
 // ---
 
 inline int GetRenderThreadsCount()

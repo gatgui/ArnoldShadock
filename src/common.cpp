@@ -20,6 +20,17 @@ const char* RampInterpolationNames[] =
    NULL
 };
 
+const char* TransformOrderNames[] =
+{
+   "SRT",
+   "STR",
+   "RST",
+   "RTS",
+   "TSR",
+   "TRS",
+   NULL
+};
+
 static void GetArrayElement(AtArray *a, unsigned int i, float &e)
 {
    e = AiArrayGetFlt(a, i);

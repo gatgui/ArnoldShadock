@@ -14,27 +14,6 @@ enum MakeMatrixParams
    p_scale
 };
 
-enum TransformOrder
-{
-   TO_SRT = 0,
-   TO_STR,
-   TO_RST,
-   TO_RTS,
-   TO_TSR,
-   TO_TRS
-};
-
-static const char* TransformOrderNames[] =
-{
-   "SRT",
-   "STR",
-   "RST",
-   "RTS",
-   "TSR",
-   "TRS",
-   NULL
-};
-
 enum RotationOrder
 {
    RO_XYZ = 0,

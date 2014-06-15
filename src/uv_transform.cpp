@@ -15,31 +15,10 @@ enum UVTransformParams
    p_recompute_surface_uv_derivs
 };
 
-enum UVTransformOrder
-{
-   Order_SRT = 0,
-   Order_STR,
-   Order_RST,
-   Order_RTS,
-   Order_TSR,
-   Order_TRS
-};
-
-static const char* UVTransformOrderNames[] =
-{
-   "SRT",
-   "STR",
-   "RST",
-   "RTS",
-   "TSR",
-   "TRS",
-   NULL
-};
-
 node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("order", Order_SRT, UVTransformOrderNames);
+   AiParameterEnum("order", TO_SRT, TransformOrderNames);
    AiParameterPnt2("scale", 1.0f, 1.0f);
    AiParameterPnt2("scale_pivot", 0.5f, 0.5f);
    AiParameterFlt("rotation", 0.0f);
@@ -73,7 +52,7 @@ shader_evaluate
    
    UVData uvs(sg);
    
-   UVTransformOrder order = (UVTransformOrder) AiShaderEvalParamInt(p_order);
+   TransformOrder order = (TransformOrder) AiShaderEvalParamInt(p_order);
    AtPoint2 S = AiShaderEvalParamPnt2(p_scale);
    AtPoint2 Sp = AiShaderEvalParamPnt2(p_scale_pivot);
    float R = AiShaderEvalParamFlt(p_rotation);
@@ -107,7 +86,7 @@ shader_evaluate
    
    switch (order)
    {
-   case Order_SRT:
+   case TO_SRT:
       ScaleUV(Sp, S, uv);
       ScaleUV(Sp, S, dx);
       ScaleUV(Sp, S, dy);
@@ -119,7 +98,7 @@ shader_evaluate
       TranslateUV(T, dx);
       TranslateUV(T, dy);
       break;
-   case Order_STR:
+   case TO_STR:
       ScaleUV(Sp, S, uv);
       ScaleUV(Sp, S, dx);
       ScaleUV(Sp, S, dy);
@@ -132,7 +111,7 @@ shader_evaluate
       RotateUV(Rp, cosA, sinA, dx);
       RotateUV(Rp, cosA, sinA, dy);
       break;
-   case Order_RST:
+   case TO_RST:
       RotateUV(Rp, cosA, sinA, uv);
       RotateUV(Rp, cosA, sinA, dx);
       RotateUV(Rp, cosA, sinA, dy);
@@ -144,7 +123,7 @@ shader_evaluate
       TranslateUV(T, dx);
       TranslateUV(T, dy);
       break;
-   case Order_RTS:
+   case TO_RTS:
       RotateUV(Rp, cosA, sinA, uv);
       RotateUV(Rp, cosA, sinA, dx);
       RotateUV(Rp, cosA, sinA, dy);
@@ -157,7 +136,7 @@ shader_evaluate
       ScaleUV(Sp, S, dx);
       ScaleUV(Sp, S, dy);
       break;
-   case Order_TSR:
+   case TO_TSR:
       TranslateUV(T, uv);
       TranslateUV(T, dx);
       TranslateUV(T, dy);
@@ -170,7 +149,7 @@ shader_evaluate
       RotateUV(Rp, cosA, sinA, dx);
       RotateUV(Rp, cosA, sinA, dy);
       break;
-   case Order_TRS:
+   case TO_TRS:
       TranslateUV(T, uv);
       TranslateUV(T, dx);
       TranslateUV(T, dy);
