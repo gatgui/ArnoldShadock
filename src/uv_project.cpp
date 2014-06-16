@@ -116,7 +116,7 @@ node_finish
 
 shader_evaluate
 {
-   AtVector dPdx, dPdy, d, ddx, ddy, tmp;
+   AtVector dPdx, dPdy, d, ddx, ddy;
    
    UVData uvs(sg);
    
@@ -150,53 +150,30 @@ shader_evaluate
       {
          if (S)
          {
-            tmp = sg->P;
-            AiM4PointByMatrixMult(&d, Sinv, &tmp);
-            tmp = sg->P + sg->dPdx;
-            AiM4PointByMatrixMult(&ddx, Sinv, &tmp);
-            tmp = sg->P + sg->dPdy;
-            AiM4PointByMatrixMult(&ddy, Sinv, &tmp);
-            AiV3Normalize(d);
-            AiV3Normalize(ddx);
-            AiV3Normalize(ddy);
-            ddx -= d;
-            ddy -= d;
+            AiM4PointByMatrixMult(&d, Sinv, &(sg->P));
+            AiM4VectorByMatrixMult(&ddx, Sinv, &(sg->dPdx));
+            AiM4VectorByMatrixMult(&ddy, Sinv, &(sg->dPdy));
          }
          else if (data->space == LVS_world)
          {
             d = sg->P;
-            ddx = sg->P + sg->dPdx;
-            ddy = sg->P + sg->dPdy;
-            AiV3Normalize(d);
-            AiV3Normalize(ddx);
-            AiV3Normalize(ddy);
-            ddx -= d;
-            ddy -= d;
+            ddx = sg->dPdx;
+            ddy = sg->dPdy;
          }
          else
          {
             d = sg->Po;
-            tmp = sg->P + sg->dPdx;
-            AiM4PointByMatrixMult(&ddx, sg->Minv, &tmp);
-            tmp = sg->P + sg->dPdy;
-            AiM4PointByMatrixMult(&ddy, sg->Minv, &tmp);
-            AiV3Normalize(d);
-            AiV3Normalize(ddx);
-            AiV3Normalize(ddy);
-            ddx -= d;
-            ddy -= d;
+            AiM4VectorByMatrixMult(&ddx, sg->Minv, &(sg->dPdx));
+            AiM4VectorByMatrixMult(&ddy, sg->Minv, &(sg->dPdy));
          }
       }
       else
       {
          if (S)
          {
-            tmp = sg->N;
-            AiM4VectorByMatrixMult(&d, Sinv, &tmp);
-            tmp = sg->dNdx;
-            AiM4VectorByMatrixMult(&ddx, Sinv, &tmp);
-            tmp = sg->dNdy;
-            AiM4VectorByMatrixMult(&ddy, Sinv, &tmp);
+            AiM4VectorByMatrixMult(&d, Sinv, &(sg->N));
+            AiM4VectorByMatrixMult(&ddx, Sinv, &(sg->dNdx));
+            AiM4VectorByMatrixMult(&ddx, Sinv, &(sg->dNdy));
          }
          else if (data->space == LVS_world)
          {
@@ -206,12 +183,9 @@ shader_evaluate
          }
          else
          {
-            tmp = sg->N;
-            AiM4VectorByMatrixMult(&d, sg->Minv, &tmp);
-            tmp = sg->dNdx;
-            AiM4VectorByMatrixMult(&ddx, sg->Minv, &tmp);
-            tmp = sg->dNdy;
-            AiM4VectorByMatrixMult(&ddx, sg->Minv, &tmp);
+            AiM4VectorByMatrixMult(&d, sg->Minv, &(sg->N));
+            AiM4VectorByMatrixMult(&ddx, sg->Minv, &(sg->dNdx));
+            AiM4VectorByMatrixMult(&ddx, sg->Minv, &(sg->dNdy));
          }
       }
    }
