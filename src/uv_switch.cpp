@@ -18,7 +18,7 @@ struct NodeData
 
 node_parameters
 {
-   AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
+   AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
    AiParameterStr("uv_set_name", "");
    AiParameterBool("recompute_surface_uv_derivs", false);
    
@@ -95,7 +95,7 @@ shader_evaluate
       }
    }
    
-   sg->out.RGB = AiShaderEvalParamRGB(p_input);
+   sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
    
    uvs.restore(sg);
 }

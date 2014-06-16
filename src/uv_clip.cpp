@@ -19,7 +19,7 @@ enum UVClipParams
 
 node_parameters
 {
-   AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
+   AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
    AiParameterEnum("order", TO_SRT, TransformOrderNames);
    AiParameterPnt2("scale", 1.0f, 1.0f);
    AiParameterPnt2("scale_pivot", 0.5f, 0.5f);
@@ -29,7 +29,7 @@ node_parameters
    AiParameterBool("transform_pivots", false);
    AiParameterPnt2("u_range", 0.0f, 1.0f);
    AiParameterPnt2("v_range", 0.0f, 1.0f);
-   AiParameterRGB("clipped_input", 0.0f, 0.0f, 0.0f);
+   AiParameterRGBA("clipped_input", 0.0f, 0.0f, 0.0f, 1.0f);
    
    AiMetaDataSetBool(mds, "order", "linkable", false);
    AiMetaDataSetBool(mds, "transform_pivots", "linkable", false);
@@ -123,10 +123,10 @@ shader_evaluate
    if (uv.x < u_range.x || uv.x > u_range.y ||
        uv.y < v_range.x || uv.y > v_range.y)
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_clipped_input);
+      sg->out.RGBA = AiShaderEvalParamRGBA(p_clipped_input);
    }
    else
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_input);
+      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
    }
 }

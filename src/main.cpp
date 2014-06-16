@@ -267,10 +267,10 @@ node_loader
    REGISTER_SHADER(agUserDataColorRamp, shape_attr_ramp_color, AI_TYPE_RGB)
    REGISTER_SHADER(agUserDataVectorRamp, shape_attr_ramp_vector, AI_TYPE_VECTOR)
 #endif
-   REGISTER_SHADER(UVSwitch, uv_switch, AI_TYPE_RGB)
-   REGISTER_SHADER(UVProject, uv_project, AI_TYPE_RGB)
-   REGISTER_SHADER(UVTransform, uv_transform, AI_TYPE_RGB)
-   REGISTER_SHADER(UVClip, uv_clip, AI_TYPE_RGB)
+   REGISTER_SHADER(UVSwitch, uv_switch, AI_TYPE_RGBA)
+   REGISTER_SHADER(UVProject, uv_project, AI_TYPE_RGBA)
+   REGISTER_SHADER(UVTransform, uv_transform, AI_TYPE_RGBA)
+   REGISTER_SHADER(UVClip, uv_clip, AI_TYPE_RGBA)
    REGISTER_SHADER(MakeTx, make_tx, AI_TYPE_STRING)
    
    return false;

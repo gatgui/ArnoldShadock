@@ -17,7 +17,7 @@ enum UVTransformParams
 
 node_parameters
 {
-   AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
+   AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
    AiParameterEnum("order", TO_SRT, TransformOrderNames);
    AiParameterPnt2("scale", 1.0f, 1.0f);
    AiParameterPnt2("scale_pivot", 0.5f, 0.5f);
@@ -179,7 +179,7 @@ shader_evaluate
       ComputeSurfaceUVDerivatives(sg, dPdx, dPdy);
    }
    
-   sg->out.RGB = AiShaderEvalParamRGB(p_input);
+   sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
    
    uvs.restore(sg);
 }
