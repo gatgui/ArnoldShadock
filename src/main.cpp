@@ -159,6 +159,7 @@ DECLARE_SHADER(UVProject);
 DECLARE_SHADER(UVTransform);
 DECLARE_SHADER(UVClip);
 DECLARE_SHADER(MakeTx);
+DECLARE_SHADER(CameraMatrix);
 
 node_loader
 {
@@ -276,6 +277,7 @@ node_loader
    REGISTER_SHADER(UVTransform, uv_transform, AI_TYPE_RGBA)
    REGISTER_SHADER(UVClip, uv_clip, AI_TYPE_RGBA)
    REGISTER_SHADER(MakeTx, make_tx, AI_TYPE_STRING)
+   REGISTER_SHADER(CameraMatrix, camera_matrix, AI_TYPE_MATRIX)
    
    return false;
 }
