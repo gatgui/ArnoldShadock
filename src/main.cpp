@@ -63,6 +63,7 @@ DECLARE_SHADER(FloatToInt);
 DECLARE_SHADER(VectorToColor);
 DECLARE_SHADER(ColorToVector);
 DECLARE_SHADER(ColorToFloat);
+DECLARE_SHADER(FloatToVector);
 DECLARE_SHADER(FloatToColor);
 DECLARE_SHADER(FloatToRGBA);
 DECLARE_SHADER(BoolToInt);
@@ -133,6 +134,7 @@ DECLARE_FCV_SHADER(Ramp);
 DECLARE_FCV_SHADER(SmoothSelect);
 DECLARE_FCV_SHADER(RangeSelect);
 DECLARE_FCV_SHADER(SmoothRangeSelect);
+DECLARE_SHADER(MakeVector);
 DECLARE_SHADER(MakeColor);
 DECLARE_SHADER(MakeRGBA);
 DECLARE_FCV_SHADER(Gaussian);
@@ -178,6 +180,7 @@ node_loader
    REGISTER_SHADER(VectorToColor, vector_to_color, AI_TYPE_RGB)
    REGISTER_SHADER(ColorToVector, color_to_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(ColorToFloat, color_to_float, AI_TYPE_FLOAT)
+   REGISTER_SHADER(FloatToVector, float_to_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(FloatToColor, float_to_color, AI_TYPE_RGB)
    REGISTER_SHADER(FloatToRGBA, float_to_rgba, AI_TYPE_RGBA)
    REGISTER_SHADER(BoolToInt, bool_to_int, AI_TYPE_INT)
@@ -248,6 +251,7 @@ node_loader
    REGISTER_FCV_SHADER(SmoothSelect, smooth_select)
    REGISTER_FCV_SHADER(RangeSelect, range_select)
    REGISTER_FCV_SHADER(SmoothRangeSelect, smooth_range_select)
+   REGISTER_SHADER(MakeVector, make_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(MakeColor, make_color, AI_TYPE_RGB)
    REGISTER_SHADER(MakeRGBA, make_rgba, AI_TYPE_RGBA)
    REGISTER_FCV_SHADER(Gaussian, gaussian)
