@@ -421,15 +421,10 @@ node_parameters
    AiParameterBOOL("oiioopt", true);
    AiParameterENUM("mode", Mode_if_newer, MakeTxModeNames);
    
-   //AiMetaDataSetBool(mds, NULL, "maya.hide", true);
-   
-   AiMetaDataSetStr(mds, NULL, "maya.name", "aiMakeTx");
-   //AiMetaDataSetInt(mds, NULL, "maya.id", 0x00115D19);
-   AiMetaDataSetStr(mds, NULL, "maya.classification", "utility/general");
-   AiMetaDataSetBool(mds, NULL, "maya.swatch", false);
-
    AiMetaDataSetBool(mds, "filename", "filepath", true);
    AiMetaDataSetBool(mds, "output", "filepath", true);
+   
+   AiMetaDataSetStr(mds, "filename", "houdini.type", "file:image");
 }
 
 node_initialize

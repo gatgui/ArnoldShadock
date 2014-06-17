@@ -134,6 +134,7 @@ DECLARE_FCV_SHADER(Ramp);
 DECLARE_FCV_SHADER(SmoothSelect);
 DECLARE_FCV_SHADER(RangeSelect);
 DECLARE_FCV_SHADER(SmoothRangeSelect);
+DECLARE_SHADER(MakePoint2);
 DECLARE_SHADER(MakeVector);
 DECLARE_SHADER(MakeColor);
 DECLARE_SHADER(MakeRGBA);
@@ -160,6 +161,8 @@ DECLARE_SHADER(UVTransform);
 DECLARE_SHADER(UVClip);
 DECLARE_SHADER(MakeTx);
 DECLARE_SHADER(CameraMatrix);
+DECLARE_SHADER(ImageResolution);
+DECLARE_SHADER(RenderResolution);
 
 node_loader
 {
@@ -252,6 +255,7 @@ node_loader
    REGISTER_FCV_SHADER(SmoothSelect, smooth_select)
    REGISTER_FCV_SHADER(RangeSelect, range_select)
    REGISTER_FCV_SHADER(SmoothRangeSelect, smooth_range_select)
+   REGISTER_SHADER(MakePoint2, make_point2, AI_TYPE_POINT2)
    REGISTER_SHADER(MakeVector, make_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(MakeColor, make_color, AI_TYPE_RGB)
    REGISTER_SHADER(MakeRGBA, make_rgba, AI_TYPE_RGBA)
@@ -278,6 +282,8 @@ node_loader
    REGISTER_SHADER(UVClip, uv_clip, AI_TYPE_RGBA)
    REGISTER_SHADER(MakeTx, make_tx, AI_TYPE_STRING)
    REGISTER_SHADER(CameraMatrix, camera_matrix, AI_TYPE_MATRIX)
+   REGISTER_SHADER(ImageResolution, image_resolution, AI_TYPE_VECTOR)
+   REGISTER_SHADER(RenderResolution, render_resolution, AI_TYPE_VECTOR)
    
    return false;
 }
