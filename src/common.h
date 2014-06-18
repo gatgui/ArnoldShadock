@@ -7,6 +7,13 @@
 #include <cmath>
 #include <cstring>
 
+#if AI_VERSION_ARCH_NUM > 4 || (AI_VERSION_ARCH_NUM == 4 && AI_VERSION_MAJOR_NUM >= 1)
+#  define ARNOLD_4_1_AND_ABOVE
+#  if AI_VERSION_MAJOR_NUM > 1 || (AI_VERSION_MAJOR_NUM == 1 && AI_VERSION_MINOR_NUM >= 1)
+#     define HAS_START_CHANNEL
+#  endif
+#endif
+
 extern const char* CompareOperatorNames[];
 
 enum CompareOperator
