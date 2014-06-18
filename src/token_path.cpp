@@ -89,6 +89,7 @@ node_parameters
    AiParameterFlt("frame", 0.0f);
    
    AiMetaDataSetBool(mds, "filename", "filepath", true);
+   AiMetaDataSetStr(mds, "filename", "houdini.type", "file:image");
 }
 
 node_initialize

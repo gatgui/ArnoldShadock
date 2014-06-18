@@ -164,6 +164,7 @@ DECLARE_SHADER(CameraMatrix);
 DECLARE_SHADER(ImageResolution);
 DECLARE_SHADER(RenderResolution);
 DECLARE_SHADER(TokenPath);
+DECLARE_SHADER(Texture);
 
 node_loader
 {
@@ -286,6 +287,7 @@ node_loader
    REGISTER_SHADER(ImageResolution, image_resolution, AI_TYPE_VECTOR)
    REGISTER_SHADER(RenderResolution, render_resolution, AI_TYPE_VECTOR)
    REGISTER_SHADER(TokenPath, token_path, AI_TYPE_STRING)
+   REGISTER_SHADER(Texture, texture, AI_TYPE_RGBA);
    
    return false;
 }

@@ -422,7 +422,6 @@ node_parameters
    AiParameterENUM("mode", Mode_if_newer, MakeTxModeNames);
    
    AiMetaDataSetBool(mds, "filename", "filepath", true);
-   AiMetaDataSetBool(mds, "output", "filepath", true);
    
    AiMetaDataSetStr(mds, "filename", "houdini.type", "file:image");
 }
