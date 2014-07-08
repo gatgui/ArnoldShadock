@@ -1,6 +1,7 @@
 import sys
 import glob
 import re
+import os
 import excons
 import shutil
 from excons.tools import arnold
