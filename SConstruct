@@ -1,6 +1,8 @@
 import sys
 import glob
+import re
 import excons
+import shutil
 from excons.tools import arnold
 
 env = excons.MakeBaseEnv()
@@ -11,6 +13,56 @@ withSeExpr = (int(ARGUMENTS.get("with-seexpr", "1")) != 0)
 withAnimCurve = (int(ARGUMENTS.get("with-animcurve", "1")) != 0)
 withUserDataRamp = (int(ARGUMENTS.get("with-userdataramp", "1")) != 0)
 shdprefix = ARGUMENTS.get("shaders-prefix", "gas_")
+
+def make_mtd():
+  nodeexp = re.compile(r"^(\s*\[\s*node\s+)([^]]+)(\s*\]\s*)$")
+  df = open("agShadingBlocks.mtd", "w")
+  
+  def append_file_content(path, remap={}):
+    if not os.path.isfile(path):
+      return
+    sf = open(path, "r")
+    for line in sf.readlines():
+      m = nodeexp.match(line)
+      if m:
+        df.write("%s%s%s%s" % (m.group(1), shdprefix, remap.get(m.group(2), m.group(2)), m.group(3)))
+      else:
+        df.write(line)
+    sf.close()
+  
+  append_file_content("src/agShadingBlocks.mtd")
+  
+  if withState:
+    df.write("\n")
+    append_file_content("agState/src/agState.mtd", remap={"vector_state": "shader_globals_vector",
+                                                          "float_state": "shader_globals_float",
+                                                          "color_state": "shader_globals_color",
+                                                          "integer_state": "shader_globals_int",
+                                                          "matrix_state": "shader_globals_matrix"})
+  
+  if withNoises:
+    df.write("\n")
+    append_file_content("agNoises/src/agNoises.mtd", remap={"ln_factal": "fractal_noise",
+                                                            "ln_voronoi": "voronoi_noise",
+                                                            "ln_distort_point": "distort_point"})
+  
+  if withSeExpr:
+    df.write("\n")
+    append_file_content("agSeExpr/src/agSeExpr.mtd")
+  
+  if withAnimCurve:
+    df.write("\n")
+    append_file_content("agAnimCurve/src/agAnimCurve.mtd", remap={"anim_curve": "curve"})
+  
+  if withUserDataRamp:
+    df.write("\n")
+    append_file_content("agUserDataRamp/src/agUserDataRamp.mtd", remap={"userDataFloatRamp": "shape_attr_ramp_float",
+                                                                        "userDataColorRamp": "shape_attr_ramp_color",
+                                                                        "userDataVectorRamp": "shape_attr_ramp_vector"})
+  
+  df.write("\n")
+  df.close()
+
 
 defs = []
 incs = []
@@ -50,6 +102,8 @@ if withUserDataRamp:
   incs.append("agUserDataRamp/src")
   extra_srcs += glob.glob("agUserDataRamp/src/agUserData*.cpp")
 
+make_mtd()
+
 prjs = [
   {"name": "agShadingBlocks",
    "type": "dynamicmodule",
@@ -58,6 +112,7 @@ prjs = [
    "ext": arnold.PluginExt(),
    "libs": libs,
    "srcs": glob.glob("src/*.cpp") + extra_srcs,
+   "install": {"": "agShadingBlocks.mtd"},
    "custom": [arnold.Require]
   }
 ]
