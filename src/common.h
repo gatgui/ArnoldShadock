@@ -50,6 +50,16 @@ extern const char* TransformOrderNames[];
 
 // ---
 
+struct BRDFData
+{
+   AtBRDFEvalSampleFunc evalSample;
+   AtBRDFEvalBrdfFunc evalBrdf;
+   AtBRDFEvalPdfFunc evalPdf;
+   void *data;
+};
+
+// ---
+
 inline int GetRenderThreadsCount()
 {
    return AiNodeGetInt(AiUniverseGetOptions(), "threads");
