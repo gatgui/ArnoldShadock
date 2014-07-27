@@ -665,3 +665,7 @@
 [node illuminance_loop]
    maya.classification STRING "utility/general"
    maya.id INT 0x0011654B
+
+[node light_weight]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x0011654A
