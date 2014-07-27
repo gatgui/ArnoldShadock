@@ -625,3 +625,40 @@
 [node texture]
    maya.classification STRING "utility/texture"
    maya.id INT 0x001165F2
+
+[node write_aovs]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x0011654C
+
+[node read_aov_bool]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x0011654D
+
+[node read_aov_int]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x0011654E
+
+[node read_aov_float]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x0011654F
+
+[node read_aov_point2]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x00116550
+
+[node read_aov_point]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x00116551
+
+[node read_aov_vector]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x00116552
+
+[node read_aov_color]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x00116553
+
+[node read_aov_rgba]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x00116554
+

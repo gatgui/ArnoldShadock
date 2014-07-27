@@ -4,12 +4,14 @@ AI_SHADER_NODE_EXPORT_METHODS(ReadAOVIntMtd);
 
 enum ReadAOVIntParams
 {
-   p_aov_name = 0
+   p_aov_name = 0,
+   p_default_value
 };
 
 node_parameters
 {
    AiParameterStr("aov_name", "");
+   AiParameterInt("default_value", 0);
    
    AiMetaDataSetBool(mds, "aov_name", "linkable", false);
 }
@@ -43,5 +45,8 @@ shader_evaluate
 {
    ReadAOVIntData *data = (ReadAOVIntData*) AiNodeGetLocalData(node);
    
-   AiAOVGetInt(sg, data->aovName, sg->out.INT);
+   if (!AiAOVGetInt(sg, data->aovName, sg->out.INT))
+   {
+      sg->out.INT = AiShaderEvalParamInt(p_default_value);
+   }
 }

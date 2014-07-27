@@ -4,12 +4,14 @@ AI_SHADER_NODE_EXPORT_METHODS(ReadAOVVecMtd);
 
 enum ReadAOVVecParams
 {
-   p_aov_name = 0
+   p_aov_name = 0,
+   p_default_value
 };
 
 node_parameters
 {
    AiParameterStr("aov_name", "");
+   AiParameterVec("default_value", 0.0f, 0.0f, 0.0f);
    
    AiMetaDataSetBool(mds, "aov_name", "linkable", false);
 }
@@ -43,5 +45,8 @@ shader_evaluate
 {
    ReadAOVVecData *data = (ReadAOVVecData*) AiNodeGetLocalData(node);
    
-   AiAOVGetVec(sg, data->aovName, sg->out.VEC);
+   if (!AiAOVGetVec(sg, data->aovName, sg->out.VEC))
+   {
+      sg->out.VEC = AiShaderEvalParamVec(p_default_value);
+   }
 }

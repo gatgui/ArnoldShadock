@@ -4,12 +4,14 @@ AI_SHADER_NODE_EXPORT_METHODS(ReadAOVRGBAMtd);
 
 enum ReadAOVRGBAParams
 {
-   p_aov_name = 0
+   p_aov_name = 0,
+   p_default_value
 };
 
 node_parameters
 {
    AiParameterStr("aov_name", "");
+   AiParameterRGBA("default_value", 0.0f, 0.0f, 0.0f, 1.0f);
    
    AiMetaDataSetBool(mds, "aov_name", "linkable", false);
 }
@@ -43,5 +45,8 @@ shader_evaluate
 {
    ReadAOVRGBAData *data = (ReadAOVRGBAData*) AiNodeGetLocalData(node);
    
-   AiAOVGetRGBA(sg, data->aovName, sg->out.RGBA);
+   if (!AiAOVGetRGBA(sg, data->aovName, sg->out.RGBA))
+   {
+      sg->out.RGBA = AiShaderEvalParamRGBA(p_default_value);
+   }
 }

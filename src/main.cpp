@@ -109,6 +109,7 @@ DECLARE_SHADER(agFloatState);
 DECLARE_SHADER(agColorState);
 DECLARE_SHADER(agVectorState);
 DECLARE_SHADER(agMatrixState);
+DECLARE_SHADER(agNodeState);
 #endif
 DECLARE_SHADER(TransformVector);
 DECLARE_SHADER(MakeMatrix);
@@ -165,6 +166,15 @@ DECLARE_SHADER(ImageResolution);
 DECLARE_SHADER(RenderResolution);
 DECLARE_SHADER(TokenPath);
 DECLARE_SHADER(Texture);
+DECLARE_SHADER(WriteMsgs);
+DECLARE_SHADER(ReadMsgBool);
+DECLARE_SHADER(ReadMsgInt);
+DECLARE_SHADER(ReadMsgFlt);
+DECLARE_SHADER(ReadMsgPnt2);
+DECLARE_SHADER(ReadMsgPnt);
+DECLARE_SHADER(ReadMsgVec);
+DECLARE_SHADER(ReadMsgRGB);
+DECLARE_SHADER(ReadMsgRGBA);
 
 node_loader
 {
@@ -232,6 +242,7 @@ node_loader
    REGISTER_SHADER(agColorState, shader_globals_color, AI_TYPE_RGB)
    REGISTER_SHADER(agVectorState, shader_globals_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(agMatrixState, shader_globals_matrix, AI_TYPE_MATRIX)
+   REGISTER_SHADER(agNodeState, shader_globals_node, AI_TYPE_NODE)
 #endif
    REGISTER_SHADER(TransformVector, transform_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(MakeMatrix, make_matrix, AI_TYPE_MATRIX)
@@ -287,7 +298,16 @@ node_loader
    REGISTER_SHADER(ImageResolution, image_resolution, AI_TYPE_VECTOR)
    REGISTER_SHADER(RenderResolution, render_resolution, AI_TYPE_VECTOR)
    REGISTER_SHADER(TokenPath, token_path, AI_TYPE_STRING)
-   REGISTER_SHADER(Texture, texture, AI_TYPE_RGBA);
+   REGISTER_SHADER(Texture, texture, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteMsgs, write_msgs, AI_TYPE_RGBA)
+   REGISTER_SHADER(ReadMsgBool, read_msg_bool, AI_TYPE_BOOLEAN)
+   REGISTER_SHADER(ReadMsgInt, read_msg_int, AI_TYPE_INT)
+   REGISTER_SHADER(ReadMsgFlt, read_msg_float, AI_TYPE_FLOAT)
+   REGISTER_SHADER(ReadMsgPnt2, read_msg_point2, AI_TYPE_POINT2)
+   REGISTER_SHADER(ReadMsgPnt, read_msg_point, AI_TYPE_POINT)
+   REGISTER_SHADER(ReadMsgVec, read_msg_vector, AI_TYPE_VECTOR)
+   REGISTER_SHADER(ReadMsgRGB, read_msg_color, AI_TYPE_RGB)
+   REGISTER_SHADER(ReadMsgRGBA, read_msg_rgba, AI_TYPE_RGBA)
    
    return false;
 }
