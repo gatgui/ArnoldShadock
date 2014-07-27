@@ -678,3 +678,10 @@
    maya.classification STRING "utility/vector"
    maya.id INT 0x00116548
 
+[node fresnel_weight_color]
+   maya.classification STRING "utility/color"
+   maya.id INT 0x00116547
+
+[node fresnel_weight_float]
+   maya.classification STRING "utility/float"
+   maya.id INT 0x00116546

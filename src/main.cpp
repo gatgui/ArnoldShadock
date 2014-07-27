@@ -179,6 +179,8 @@ DECLARE_SHADER(IlluminanceLoop);
 DECLARE_SHADER(LightWeight);
 DECLARE_SHADER(Reflect);
 DECLARE_SHADER(Refract);
+DECLARE_FLOAT_SHADER(FresnelWeight);
+DECLARE_COLOR_SHADER(FresnelWeight);
 
 node_loader
 {
@@ -316,6 +318,8 @@ node_loader
    REGISTER_SHADER(LightWeight, light_weight, AI_TYPE_FLOAT)
    REGISTER_SHADER(Reflect, reflect, AI_TYPE_VECTOR)
    REGISTER_SHADER(Refract, refract, AI_TYPE_VECTOR)
+   REGISTER_FLOAT_SHADER(FresnelWeight, fresnel_weight)
+   REGISTER_COLOR_SHADER(FresnelWeight, fresnel_weight)
    
    return false;
 }
