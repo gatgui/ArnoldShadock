@@ -50,8 +50,8 @@ shader_evaluate
    {
       if (weight == (void*)LW_diffuse)
       {
-         // API is set deprecated, what should be used instead?
-         // AiLightGetSpecular doesn't seem affected
+         // Note: AiLightGetAffectDiffuse API is set deprecated
+         //       but still in use by MtoA
          if (AiLightGetAffectDiffuse(sg->Lp))
          {
             sg->out.FLT = AiLightGetDiffuse(sg->Lp);
@@ -64,8 +64,8 @@ shader_evaluate
       }
       else if (weight == (void*)LW_specular)
       {
-         // API is set deprecated, what should be used instead?
-         // AiLightGetSpecular doesn't seem affected
+         // Note: AiLightGetAffectSpecular is set deprecated
+         //       but still in use by MtoA
          if (AiLightGetAffectSpecular(sg->Lp))
          {
             sg->out.FLT = AiLightGetSpecular(sg->Lp);

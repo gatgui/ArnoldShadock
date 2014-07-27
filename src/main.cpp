@@ -177,6 +177,7 @@ DECLARE_SHADER(ReadMsgRGB);
 DECLARE_SHADER(ReadMsgRGBA);
 DECLARE_SHADER(IlluminanceLoop);
 DECLARE_SHADER(LightWeight);
+DECLARE_SHADER(Reflect);
 
 node_loader
 {
@@ -312,6 +313,7 @@ node_loader
    REGISTER_SHADER(ReadMsgRGBA, read_msg_rgba, AI_TYPE_RGBA)
    REGISTER_SHADER(IlluminanceLoop, illuminance_loop, AI_TYPE_RGB)
    REGISTER_SHADER(LightWeight, light_weight, AI_TYPE_FLOAT)
+   REGISTER_SHADER(Reflect, reflect, AI_TYPE_VECTOR)
    
    return false;
 }
