@@ -175,6 +175,7 @@ DECLARE_SHADER(ReadMsgPnt);
 DECLARE_SHADER(ReadMsgVec);
 DECLARE_SHADER(ReadMsgRGB);
 DECLARE_SHADER(ReadMsgRGBA);
+DECLARE_SHADER(IlluminanceLoop);
 
 node_loader
 {
@@ -308,6 +309,7 @@ node_loader
    REGISTER_SHADER(ReadMsgVec, read_msg_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(ReadMsgRGB, read_msg_color, AI_TYPE_RGB)
    REGISTER_SHADER(ReadMsgRGBA, read_msg_rgba, AI_TYPE_RGBA)
+   REGISTER_SHADER(IlluminanceLoop, illuminance_loop, AI_TYPE_RGB)
    
    return false;
 }
