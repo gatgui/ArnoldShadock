@@ -183,8 +183,11 @@ DECLARE_FLOAT_SHADER(FresnelWeight);
 DECLARE_COLOR_SHADER(FresnelWeight);
 DECLARE_SHADER(OrenNayarBrdf);
 DECLARE_SHADER(CookTorranceBrdf);
+DECLARE_SHADER(WardDuerBrdf);
+DECLARE_SHADER(AshikhminShirleyBrdf);
 DECLARE_SHADER(EvaluateLightSample);
 DECLARE_SHADER(BrdfIntegrate);
+DECLARE_SHADER(LocalFrame);
 
 node_loader
 {
@@ -326,8 +329,11 @@ node_loader
    REGISTER_COLOR_SHADER(FresnelWeight, fresnel_weight)
    REGISTER_SHADER(OrenNayarBrdf, oren_nayar_brdf, AI_TYPE_POINTER)
    REGISTER_SHADER(CookTorranceBrdf, cook_torrance_brdf, AI_TYPE_POINTER)
+   REGISTER_SHADER(WardDuerBrdf, ward_duer_brdf, AI_TYPE_POINTER)
+   REGISTER_SHADER(AshikhminShirleyBrdf, ashikhmin_shirley_brdf, AI_TYPE_POINTER)
    REGISTER_SHADER(EvaluateLightSample, evaluate_light_sample, AI_TYPE_RGB)
    REGISTER_SHADER(BrdfIntegrate, brdf_integrate, AI_TYPE_RGB)
+   REGISTER_SHADER(LocalFrame, local_frame, AI_TYPE_VECTOR)
    
    return false;
 }
