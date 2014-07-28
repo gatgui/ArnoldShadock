@@ -31,6 +31,13 @@ const char* TransformOrderNames[] =
    NULL
 };
 
+extern const char* CoordinateSpaceNames[] =
+{
+   "world",
+   "object",
+   NULL
+};
+
 static void GetArrayElement(AtArray *a, unsigned int i, float &e)
 {
    e = AiArrayGetFlt(a, i);

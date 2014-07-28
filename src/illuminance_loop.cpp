@@ -5,8 +5,10 @@ AI_SHADER_NODE_EXPORT_METHODS(IlluminanceLoopMtd);
 enum IlluminanceLoopParams
 {
    p_input = 0,
-   p_position,
-   p_normal,
+   p_P,
+   p_P_space,
+   p_N,
+   p_N_space,
    p_trace_set,
    p_exclusive_trace_set
    //p_reset_lights_cache
@@ -15,11 +17,15 @@ enum IlluminanceLoopParams
 node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
-   AiParameterPnt("position", 0.0f, 0.0f, 0.0f);
-   AiParameterVec("normal", 0.0f, 0.0f, 0.0f);
+   AiParameterPnt("P", 0.0f, 0.0f, 0.0f);
+   AiParameterEnum("P_space", CS_World, CoordinateSpaceNames);
+   AiParameterVec("N", 0.0f, 0.0f, 0.0f);
+   AiParameterEnum("N_space", CS_World, CoordinateSpaceNames);
    AiParameterStr("trace_set", "");
    AiParameterBool("exclusive_trace_set", false);
    
+   AiMetaDataSetBool(mds, "P_space", "linkable", false);
+   AiMetaDataSetBool(mds, "N_space", "linkable", false);
    AiMetaDataSetBool(mds, "trace_set", "linkable", false);
    AiMetaDataSetBool(mds, "exclusive_trace_set", "linkable", false);
 }
@@ -27,7 +33,9 @@ node_parameters
 struct NodeData
 {
    bool P_is_linked;
+   CoordinateSpace P_space;
    bool N_is_linked;
+   CoordinateSpace N_space;
    const char *trace_set;
    bool exclusive_trace_set;
 };
@@ -41,8 +49,10 @@ node_update
 {
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->P_is_linked = AiNodeIsLinked(node, "position");
-   data->N_is_linked = AiNodeIsLinked(node, "normal");
+   data->P_is_linked = AiNodeIsLinked(node, "P");
+   data->P_space = (CoordinateSpace) AiNodeGetInt(node, "P_space");
+   data->N_is_linked = AiNodeIsLinked(node, "N");
+   data->N_space = (CoordinateSpace) AiNodeGetInt(node, "N_space");
    data->trace_set = AiNodeGetStr(node, "trace_set");
    data->exclusive_trace_set = AiNodeGetBool(node, "exclusive_trace_set");
    
@@ -73,14 +83,28 @@ shader_evaluate
    
    if (data->P_is_linked)
    {
-      sg->P = AiShaderEvalParamPnt(p_position);
-      AiM4PointByMatrixMult(&(sg->Po), sg->Minv, &(sg->P));
+      if (data->P_space == CS_World)
+      {
+         sg->P = AiShaderEvalParamPnt(p_P);
+         AiM4PointByMatrixMult(&(sg->Po), sg->Minv, &(sg->P));
+      }
+      else
+      {
+         sg->Po = AiShaderEvalParamPnt(p_P);
+         AiM4PointByMatrixMult(&(sg->P), sg->M, &(sg->Po));
+      }
       reset_lights_cache = true;
    }
    
    if (data->N_is_linked)
    {
-      sg->N = AiShaderEvalParamVec(p_normal);
+      sg->N = AiShaderEvalParamVec(p_N);
+      if (data->N_space == CS_Object)
+      {
+         AtVector No = sg->N;
+         AiM4VectorByMatrixMult(&(sg->N), sg->M, &No);
+         sg->N = AiV3Normalize(sg->N);
+      }
       sg->Ns = sg->N;
       AiFaceForward(&(sg->Nf), sg->Rd);
       reset_lights_cache = true;

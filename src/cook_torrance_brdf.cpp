@@ -4,24 +4,40 @@ AI_SHADER_NODE_EXPORT_METHODS(CookTorranceBrdfMtd);
 
 enum CookTorranceBrdfParams
 {
-   p_u = 0,
+   p_roughness_x = 0,
+   p_roughness_y,
+   p_u,
+   p_u_space,
    p_v,
-   p_roughness_x,
-   p_roughness_y
+   p_v_space,
+   p_N,
+   p_N_space
 };
 
 node_parameters
 {
-   AiParameterVec("u", 0.0f, 0.0f, 0.0f);
-   AiParameterVec("v", 0.0f, 0.0f, 0.0f);
    AiParameterFlt("roughness_x", 0.467f);
    AiParameterFlt("roughness_y", 0.467f);
+   AiParameterVec("u", 0.0f, 0.0f, 0.0f);
+   AiParameterEnum("u_space", CS_World, CoordinateSpaceNames);
+   AiParameterVec("v", 0.0f, 0.0f, 0.0f);
+   AiParameterEnum("v_space", CS_World, CoordinateSpaceNames);
+   AiParameterVec("N", 0.0f, 0.0f, 0.0f);
+   AiParameterEnum("N_space", CS_World, CoordinateSpaceNames);
+   
+   AiMetaDataSetBool(mds, "u_space", "linkable", false);
+   AiMetaDataSetBool(mds, "v_space", "linkable", false);
+   AiMetaDataSetBool(mds, "N_space", "linkable", false);
 }
 
 struct NodeData
 {
    bool u_is_connected;
+   CoordinateSpace u_space;
    bool v_is_connected;
+   CoordinateSpace v_space;
+   bool N_is_connected;
+   CoordinateSpace N_space;
 };
 
 node_initialize
@@ -34,7 +50,11 @@ node_update
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    data->u_is_connected = AiNodeIsLinked(node, "u");
+   data->u_space = (CoordinateSpace) AiNodeGetInt(node, "u_space");
    data->v_is_connected = AiNodeIsLinked(node, "v");
+   data->v_space = (CoordinateSpace) AiNodeGetInt(node, "v_space");
+   data->N_is_connected = AiNodeIsLinked(node, "N");
+   data->N_space = (CoordinateSpace) AiNodeGetInt(node, "N_space");
 }
 
 node_finish
@@ -49,24 +69,45 @@ shader_evaluate
    
    float rx = AiShaderEvalParamFlt(p_roughness_x);
    float ry = AiShaderEvalParamFlt(p_roughness_y);
-   AtVector u, v;
+   AtVector N, u, v;
+   
+   if (node_data->N_is_connected)
+   {
+      N = AiShaderEvalParamVec(p_N);
+      if (node_data->N_space == CS_Object)
+      {
+         AtVector No = N;
+         AiM4VectorByMatrixMult(&N, sg->M, &No);
+         N = AiV3Normalize(N);
+      }
+   }
+   else
+   {
+      N = sg->N;
+   }
+   
+   AiBuildLocalFramePolar(&u, &v, &N);
    
    if (node_data->u_is_connected)
    {
       u = AiShaderEvalParamVec(p_u);
-   }
-   else
-   {
-      u = AiV3Normalize(sg->dPdu);
+      if (node_data->u_space == CS_Object)
+      {
+         AtVector uo = u;
+         AiM4VectorByMatrixMult(&u, sg->M, &uo);
+         u = AiV3Normalize(u);
+      }
    }
    
    if (node_data->v_is_connected)
    {
       v = AiShaderEvalParamVec(p_v);
-   }
-   else
-   {
-      v = AiV3Normalize(sg->dPdv);
+      if (node_data->v_space == CS_Object)
+      {
+         AtVector vo = v;
+         AiM4VectorByMatrixMult(&v, sg->M, &vo);
+         v = AiV3Normalize(v);
+      }
    }
    
    brdf_data->evalSample = AiCookTorranceMISSample;
