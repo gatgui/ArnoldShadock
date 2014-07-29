@@ -12,8 +12,8 @@ enum IlluminanceLoopParams
    p_N_space,
    p_no_shadows,
    p_trace_set,
-   p_exclusive_trace_set
-   //p_reset_lights_cache
+   p_exclusive_trace_set,
+   p_hemispherical
 };
 
 enum Combine
@@ -44,6 +44,7 @@ node_parameters
    AiParameterBool("no_shadows", false);
    AiParameterStr("trace_set", "");
    AiParameterBool("exclusive_trace_set", false);
+   AiParameterBool("hemispherical", true);
    
    AiMetaDataSetBool(mds, "combine", "linkable", false);
    AiMetaDataSetBool(mds, "P_space", "linkable", false);
@@ -51,6 +52,7 @@ node_parameters
    AiMetaDataSetBool(mds, "no_shadows", "linkable", false);
    AiMetaDataSetBool(mds, "trace_set", "linkable", false);
    AiMetaDataSetBool(mds, "exclusive_trace_set", "linkable", false);
+   AiMetaDataSetBool(mds, "hemispherical", "linkable", false);
 }
 
 struct NodeData
@@ -63,6 +65,7 @@ struct NodeData
    bool no_shadows;
    const char *trace_set;
    bool exclusive_trace_set;
+   bool hemispherical;
 };
 
 node_initialize
@@ -82,6 +85,7 @@ node_update
    data->no_shadows = AiNodeGetBool(node, "no_shadows");
    data->trace_set = AiNodeGetStr(node, "trace_set");
    data->exclusive_trace_set = AiNodeGetBool(node, "exclusive_trace_set");
+   data->hemispherical = AiNodeGetBool(node, "hemispherical");
    
    if (data->trace_set && data->trace_set[0] == '\0')
    {
@@ -108,6 +112,7 @@ shader_evaluate
    const char *old_traceset = sg->traceset;
    bool old_inclusive_traceset = sg->inclusive_traceset;
    bool old_skip_shadow = sg->skip_shadow;
+   bool old_fhemi = sg->fhemi;
    
    if (data->P_is_linked)
    {
@@ -145,6 +150,7 @@ shader_evaluate
    }
    
    sg->skip_shadow = data->no_shadows;
+   sg->fhemi = data->hemispherical;
    
    if (reset_lights_cache)
    {
@@ -188,6 +194,7 @@ shader_evaluate
       sg->out.RGB *= sample_count;
    }
    
+   sg->fhemi = old_fhemi;
    sg->skip_shadow = old_skip_shadow;
    
    if (data->P_is_linked)
