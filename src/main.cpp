@@ -188,6 +188,8 @@ DECLARE_SHADER(AshikhminShirleyBrdf);
 DECLARE_SHADER(EvaluateLightSample);
 DECLARE_SHADER(BrdfIntegrate);
 DECLARE_SHADER(LocalFrame);
+DECLARE_SHADER(RotateVector);
+DECLARE_SHADER(ScaleVector);
 
 node_loader
 {
@@ -334,6 +336,8 @@ node_loader
    REGISTER_SHADER(EvaluateLightSample, evaluate_light_sample, AI_TYPE_RGB)
    REGISTER_SHADER(BrdfIntegrate, brdf_integrate, AI_TYPE_RGB)
    REGISTER_SHADER(LocalFrame, local_frame, AI_TYPE_VECTOR)
+   REGISTER_SHADER(RotateVector, rotate_vector, AI_TYPE_VECTOR)
+   REGISTER_SHADER(ScaleVector, scale_vector, AI_TYPE_VECTOR)
    
    return false;
 }

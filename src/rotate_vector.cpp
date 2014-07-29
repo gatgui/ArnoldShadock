@@ -1,38 +1,30 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MakeMatrixMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RotateVectorMtd);
 
-enum MakeMatrixParams
+enum RotateVectorParams
 {
-   p_transform_order = 0,
-   p_translation,
+   p_input = 0,
    p_rotation_order,
    p_angle_units,
    p_rotation_pivot,
-   p_rotation,
-   p_scale_pivot,
-   p_scale
+   p_rotation
 };
 
 node_parameters
 {
-   AiParameterEnum("transform_order", TO_SRT, TransformOrderNames);
-   AiParameterVec("translation", 0.0f, 0.0f, 0.0f);
+   AiParameterVec("input", 0.0f, 0.0f, 0.0f);
    AiParameterEnum("rotation_order", RO_XYZ, RotationOrderNames);
    AiParameterEnum("angle_units", AU_Degrees, AngleUnitsNames);
    AiParameterVec("rotation", 0.0f, 0.0f, 0.0f);
    AiParameterPnt("rotation_pivot", 0.0f, 0.0f, 0.0f);
-   AiParameterVec("scale", 1.0f, 1.0f, 1.0f);
-   AiParameterPnt("scale_pivot", 0.0f, 0.0f, 0.0f);
    
-   AiMetaDataSetBool(mds, "transform_order", "linkable", false);
    AiMetaDataSetBool(mds, "rotation_order", "linkable", false);
    AiMetaDataSetBool(mds, "angle_units", "linkable", false);
 }
 
-struct MakeMatrixData
+struct RotateVectorData
 {
-   AtMatrix T;
    AtMatrix Rx;
    AtMatrix Ry;
    AtMatrix Rz;
@@ -40,38 +32,26 @@ struct MakeMatrixData
    AtMatrix iRp;
    AtMatrix R;  // composed rotate matrix -> Rz * Ry * Rx for ZYX rotation order
    AtMatrix Rf; // final rotate matrix -> iRp * R * Rp
-   AtMatrix S;
-   AtMatrix Sp;
-   AtMatrix iSp;
-   AtMatrix Sf; // final scale matrix -> iSp * S * Sp
-
-   bool T_set;
+   
    bool Rx_set;
    bool Ry_set;
    bool Rz_set;
    bool Rp_set;
-   bool S_set;
-   bool Sp_set;
    
    float angleScale;
    
-   TransformOrder transformOrder;
    RotationOrder rotationOrder;
 };
 
 node_initialize
 {
-   MakeMatrixData *data = (MakeMatrixData*) AiMalloc(sizeof(MakeMatrixData));
+   RotateVectorData *data = (RotateVectorData*) AiMalloc(sizeof(RotateVectorData));
 
-   data->T_set = false;
    data->Rx_set = false;
    data->Ry_set = false;
    data->Rz_set = false;
    data->Rp_set = false;
-   data->S_set = false;
-   data->Sp_set = false;
    data->angleScale = 1.0f;
-   data->transformOrder = TO_SRT;
    data->rotationOrder = RO_XYZ;
 
    AiNodeSetLocalData(node, data);
@@ -79,20 +59,11 @@ node_initialize
 
 node_update
 {
-   MakeMatrixData *data = (MakeMatrixData*) AiNodeGetLocalData(node);
+   RotateVectorData *data = (RotateVectorData*) AiNodeGetLocalData(node);
    
-   data->transformOrder = (TransformOrder) AiNodeGetInt(node, "transform_order");
    data->rotationOrder = (RotationOrder) AiNodeGetInt(node, "rotation_order");
    data->angleScale = (AiNodeGetInt(node, "angle_units") == AU_Radians ? AI_RTOD : 1.0f);
    
-   data->T_set = false;
-   if (!AiNodeIsLinked(node, "translation"))
-   {
-      data->T_set = true;
-      AtVector T = AiNodeGetVec(node, "translation");
-      AiM4Translation(data->T, &T);
-   }
-
    if (!AiNodeIsLinked(node, "rotation"))
    {
       AtVector R = AiNodeGetVec(node, "rotation");
@@ -142,24 +113,6 @@ node_update
       AiM4Translation(data->iRp, &P);
    }
 
-   data->S_set = false;
-   if (!AiNodeIsLinked(node, "scale"))
-   {
-      data->S_set = true;
-      AtVector S = AiNodeGetVec(node, "scale");
-      AiM4Scaling(data->S, &S);
-   }
-
-   data->Sp_set = false;
-   if (!AiNodeIsLinked(node, "scale_pivot"))
-   {
-      data->Sp_set = true;
-      AtPoint P = AiNodeGetPnt(node, "scale_pivot");
-      AiM4Translation(data->Sp, &P);
-      P = -P;
-      AiM4Translation(data->iSp, &P);
-   }
-
    if (data->Rx_set && data->Ry_set && data->Rz_set)
    {
       AtMatrix tmp;
@@ -198,43 +151,21 @@ node_update
          AiM4Mult(data->Rf, data->Rp, tmp);
       }
    }
-
-   if (data->S_set && data->Sp_set)
-   {
-      AtMatrix tmp;
-      AiM4Mult(tmp, data->S, data->iSp);
-      AiM4Mult(data->Sf, data->Sp, tmp);
-   }
 }
 
 node_finish
 {
-   MakeMatrixData *data = (MakeMatrixData*) AiNodeGetLocalData(node);
+   RotateVectorData *data = (RotateVectorData*) AiNodeGetLocalData(node);
    AiFree(data);
 }
 
 shader_evaluate
 {
-   MakeMatrixData *data = (MakeMatrixData*) AiNodeGetLocalData(node);
+   RotateVectorData *data = (RotateVectorData*) AiNodeGetLocalData(node);
    
-   AtVector p, ip, r, t, s;
-   AtMatrix T, R, Rx, Ry, Rz, S, P, iP, tmp;
+   AtVector p, ip, r;
+   AtMatrix R, Rx, Ry, Rz, P, iP, tmp;
    bool computeR = true;
-   bool computeS = true;
-   
-   // Compute translation matrix
-   
-   if (!data->T_set)
-   {
-      t = AiShaderEvalParamVec(p_translation);
-      AiM4Translation(T, &t);
-   }
-   else
-   {
-      AiM4Copy(T, data->T);
-   }
-   
-   // Compute rotation matrix
    
    if (!data->Rz_set || !data->Ry_set || !data->Rz_set)
    {
@@ -325,70 +256,7 @@ shader_evaluate
       AiM4Mult(R, data->Rp, tmp);
    }
    
-   // Compute scale matrix
+   AtVector v = AiShaderEvalParamVec(p_input);
    
-   if (!data->S_set)
-   {
-      s = AiShaderEvalParamVec(p_scale);
-      AiM4Scaling(S, &s);
-   }
-   else
-   {
-      if (data->Sp_set)
-      {
-         AiM4Copy(S, data->Sf);
-         computeS = false;
-      }
-      else
-      {
-         AiM4Copy(S, data->S);
-      }
-   }
-   
-   if (!data->Sp_set)
-   {
-      p = AiShaderEvalParamVec(p_scale_pivot);
-      ip = -p;
-      
-      AiM4Translation(P, &p);
-      AiM4Translation(iP, &ip);
-      
-      AiM4Mult(tmp, S, iP);
-      AiM4Mult(S, P, tmp);
-   }
-   else if (computeS)
-   {
-      AiM4Mult(tmp, S, data->iSp);
-      AiM4Mult(S, data->Sp, tmp);
-   }
-   
-   sg->out.pMTX = (AtMatrix*)AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
-   
-   switch (data->transformOrder)
-   {
-   case TO_SRT:
-      AiM4Mult(tmp, R, S);
-      AiM4Mult(*(sg->out.pMTX), T, tmp);
-      break;
-   case TO_STR:
-      AiM4Mult(tmp, T, S);
-      AiM4Mult(*(sg->out.pMTX), R, tmp);
-      break;
-   case TO_RST:
-      AiM4Mult(tmp, S, R);
-      AiM4Mult(*(sg->out.pMTX), T, tmp);
-      break;
-   case TO_RTS:
-      AiM4Mult(tmp, T, R);
-      AiM4Mult(*(sg->out.pMTX), S, tmp);
-      break;
-   case TO_TSR:
-      AiM4Mult(tmp, S, T);
-      AiM4Mult(*(sg->out.pMTX), R, tmp);
-      break;
-   case TO_TRS:
-   default:
-      AiM4Mult(tmp, R, T);
-      AiM4Mult(*(sg->out.pMTX), S, tmp);
-   }
+   AiM4VectorByMatrixMult(&(sg->out.VEC), R, &v);
 }

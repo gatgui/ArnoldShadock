@@ -31,10 +31,28 @@ const char* TransformOrderNames[] =
    NULL
 };
 
-extern const char* CoordinateSpaceNames[] =
+const char* CoordinateSpaceNames[] =
 {
    "world",
    "object",
+   NULL
+};
+
+const char* RotationOrderNames[] =
+{
+   "XYZ",
+   "XZY",
+   "YXZ",
+   "YZX",
+   "ZXY",
+   "ZYX",
+   NULL
+};
+
+const char* AngleUnitsNames[] =
+{
+   "degrees",
+   "radians",
    NULL
 };
 

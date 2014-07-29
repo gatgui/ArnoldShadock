@@ -56,6 +56,26 @@ enum CoordinateSpace
 
 extern const char* CoordinateSpaceNames[];
 
+enum RotationOrder
+{
+   RO_XYZ = 0,
+   RO_XZY,
+   RO_YXZ,
+   RO_YZX,
+   RO_ZXY,
+   RO_ZYX
+};
+
+extern const char* RotationOrderNames[];
+
+enum AngleUnits
+{
+   AU_Degrees = 0,
+   AU_Radians
+};
+
+extern const char* AngleUnitsNames[];
+
 // ---
 
 struct BRDFData
