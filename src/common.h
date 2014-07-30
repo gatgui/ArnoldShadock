@@ -48,14 +48,6 @@ enum TransformOrder
 
 extern const char* TransformOrderNames[];
 
-enum CoordinateSpace
-{
-   CS_World = 0,
-   CS_Object
-};
-
-extern const char* CoordinateSpaceNames[];
-
 enum RotationOrder
 {
    RO_XYZ = 0,

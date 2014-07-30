@@ -31,13 +31,6 @@ const char* TransformOrderNames[] =
    NULL
 };
 
-const char* CoordinateSpaceNames[] =
-{
-   "world",
-   "object",
-   NULL
-};
-
 const char* RotationOrderNames[] =
 {
    "XYZ",

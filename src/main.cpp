@@ -190,6 +190,7 @@ DECLARE_SHADER(BrdfIntegrate);
 DECLARE_SHADER(LocalFrame);
 DECLARE_SHADER(RotateVector);
 DECLARE_SHADER(ScaleVector);
+DECLARE_SHADER(ShaderGlobalsTweak);
 
 node_loader
 {
@@ -338,6 +339,7 @@ node_loader
    REGISTER_SHADER(LocalFrame, local_frame, AI_TYPE_VECTOR)
    REGISTER_SHADER(RotateVector, rotate_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(ScaleVector, scale_vector, AI_TYPE_VECTOR)
+   REGISTER_SHADER(ShaderGlobalsTweak, shader_globlals_tweak, AI_TYPE_RGB)
    
    return false;
 }
