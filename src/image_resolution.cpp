@@ -7,7 +7,7 @@ enum ImageResolutionParams
    p_filename = 0
 };
 
-struct NodeData
+struct ImageResolutionData
 {
    bool is_linked;
    bool valid;
@@ -26,12 +26,12 @@ node_parameters
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(NodeData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(ImageResolutionData)));
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ImageResolutionData *data = (ImageResolutionData*) AiNodeGetLocalData(node);
    
    data->is_linked = AiNodeIsLinked(node, "filename");
    
@@ -49,7 +49,7 @@ node_finish
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ImageResolutionData *data = (ImageResolutionData*) AiNodeGetLocalData(node);
    
    if (data->is_linked)
    {

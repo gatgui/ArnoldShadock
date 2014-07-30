@@ -55,7 +55,7 @@ node_parameters
    AiMetaDataSetBool(mds, "hemispherical", "linkable", false);
 }
 
-struct NodeData
+struct IlluminanceLoopData
 {
    Combine combine;
    bool P_is_linked;
@@ -70,12 +70,12 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(NodeData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(IlluminanceLoopData)));
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   IlluminanceLoopData *data = (IlluminanceLoopData*) AiNodeGetLocalData(node);
    
    data->combine = (Combine) AiNodeGetInt(node, "combine");
    data->P_is_linked = AiNodeIsLinked(node, "P");
@@ -100,7 +100,7 @@ node_finish
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   IlluminanceLoopData *data = (IlluminanceLoopData*) AiNodeGetLocalData(node);
    
    bool reset_lights_cache = false;
    

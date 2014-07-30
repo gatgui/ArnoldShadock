@@ -69,7 +69,7 @@ node_parameters
    AiMetaDataSetBool(mds, "hemispherical", "linkable", false);
 }
 
-struct NodeData
+struct BrdfIntegrateData
 {
    int ray_type;
    bool P_is_linked;
@@ -84,12 +84,12 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(NodeData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(BrdfIntegrateData)));
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BrdfIntegrateData *data = (BrdfIntegrateData*) AiNodeGetLocalData(node);
    
    data->ray_type = AiNodeGetInt(node, "ray_type");
    data->P_is_linked = AiNodeIsLinked(node, "P");
@@ -114,7 +114,7 @@ node_finish
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BrdfIntegrateData *data = (BrdfIntegrateData*) AiNodeGetLocalData(node);
    
    AtPoint old_P = sg->P;
    AtPoint old_Po = sg->Po;

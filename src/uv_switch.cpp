@@ -9,7 +9,7 @@ enum UVSwitchParams
    p_recompute_surface_uv_derivs
 };
 
-struct NodeData
+struct UVSwitchData
 {
    bool linked_uv_set_name;
    const char *uv_set_name;
@@ -27,12 +27,12 @@ node_parameters
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(NodeData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(UVSwitchData)));
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVSwitchData *data = (UVSwitchData*) AiNodeGetLocalData(node);
    
    data->uv_set_name = 0;
    data->linked_uv_set_name = AiNodeIsLinked(node, "uv_set_name");
@@ -56,7 +56,7 @@ shader_evaluate
    
    UVData uvs(sg);
    
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVSwitchData *data = (UVSwitchData*) AiNodeGetLocalData(node);
    
    if (data->recompute_surface_uv_derivs)
    {

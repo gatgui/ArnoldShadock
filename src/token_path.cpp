@@ -39,7 +39,7 @@ struct Part
 
 typedef std::vector<Part> Parts;
 
-struct NodeData
+struct TokenPathData
 {
    bool path_is_linked;
    bool frame_is_linked;
@@ -50,7 +50,7 @@ struct NodeData
    char* *out_paths; // final path per thread
    char const_path[PATH_MAX_LENGTH];
    
-   NodeData()
+   TokenPathData()
    {
       path_is_linked = false;
       frame_is_linked = false;
@@ -59,7 +59,7 @@ struct NodeData
       out_paths = 0;
    }
    
-   ~NodeData()
+   ~TokenPathData()
    {
       clear();
    }
@@ -94,13 +94,12 @@ node_parameters
 
 node_initialize
 {
-   NodeData *data = new NodeData();
-   AiNodeSetLocalData(node, (void*)data);
+   AiNodeSetLocalData(node, new TokenPathData());
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TokenPathData *data = (TokenPathData*) AiNodeGetLocalData(node);
    
    data->clear();
    
@@ -333,13 +332,13 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TokenPathData *data = (TokenPathData*) AiNodeGetLocalData(node);
    delete data;
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TokenPathData *data = (TokenPathData*) AiNodeGetLocalData(node);
    
    if (data->parts.size() == 0)
    {

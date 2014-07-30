@@ -67,7 +67,7 @@ static const char* UVModeNames[] =
 
 // ---
 
-struct NodeData
+struct UVProjectData
 {
    LookupVector lookup_vector;
    LookupVectorSpace space;
@@ -104,12 +104,12 @@ node_parameters
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(NodeData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(UVProjectData)));
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVProjectData *data = (UVProjectData*) AiNodeGetLocalData(node);
    
    data->lookup_vector = (LookupVector) AiNodeGetInt(node, "lookup_vector");
    data->space = (LookupVectorSpace) AiNodeGetInt(node, "lookup_vector_space");
@@ -134,7 +134,7 @@ shader_evaluate
    
    UVData uvs(sg);
    
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVProjectData *data = (UVProjectData*) AiNodeGetLocalData(node);
    
    if (data->recompute_surface_uv_derivs)
    {

@@ -18,7 +18,7 @@ node_parameters
    AiMetaDataSetBool(mds, "reflectance", "linkable", false);
 }
 
-struct NodeData
+struct FresnelWeightColorData
 {
    bool V_is_linked;
    bool N_is_linked;
@@ -27,13 +27,12 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = (NodeData*) AiMalloc(sizeof(NodeData));
-   AiNodeSetLocalData(node, data);
+   AiNodeSetLocalData(node, AiMalloc(sizeof(FresnelWeightColorData)));
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   FresnelWeightColorData *data = (FresnelWeightColorData*) AiNodeGetLocalData(node);
    
    data->V_is_linked = AiNodeIsLinked(node, "view_vector");
    data->N_is_linked = AiNodeIsLinked(node, "normal");
@@ -47,7 +46,7 @@ node_finish
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   FresnelWeightColorData *data = (FresnelWeightColorData*) AiNodeGetLocalData(node);
    
    AtVector V = (data->V_is_linked ? AiShaderEvalParamVec(p_view_vector) : sg->Rd);
    AtVector N = (data->N_is_linked ? AiShaderEvalParamVec(p_normal) : sg->N);

@@ -32,7 +32,7 @@ static const char* MatrixModeNames[] =
    NULL
 };
 
-struct NodeData
+struct CameraMatrixData
 {
    AtNode *camera;
    MatrixMode mode;
@@ -50,12 +50,12 @@ node_parameters
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(NodeData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(CameraMatrixData)));
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   CameraMatrixData *data = (CameraMatrixData*) AiNodeGetLocalData(node);
    
    data->mode = (MatrixMode) AiNodeGetInt(node, "mode");
    
@@ -130,7 +130,7 @@ node_finish
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   CameraMatrixData *data = (CameraMatrixData*) AiNodeGetLocalData(node);
    
    sg->out.pMTX = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
    

@@ -2,7 +2,7 @@
 
 AI_SHADER_NODE_EXPORT_METHODS(RenderResolutionMtd);
 
-struct NodeData
+struct RenderResolutionData
 {
    float w;
    float h;
@@ -14,12 +14,12 @@ node_parameters
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(NodeData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(RenderResolutionData)));
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RenderResolutionData *data = (RenderResolutionData*) AiNodeGetLocalData(node);
    
    AtNode *opts = AiUniverseGetOptions();
    data->w = float(AiNodeGetInt(opts, "xres"));
@@ -33,7 +33,7 @@ node_finish
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RenderResolutionData *data = (RenderResolutionData*) AiNodeGetLocalData(node);
    
    sg->out.VEC.x = float(data->w);
    sg->out.VEC.y = float(data->h);

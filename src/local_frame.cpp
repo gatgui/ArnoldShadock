@@ -6,54 +6,57 @@ enum LocalFrameParams
 {
    p_method = 0,
    p_N,
-   p_output_vector
+   p_output_axis
 };
 
 enum Method
 {
    M_polar = 0,
-   M_shirley
+   M_shirley,
+   M_x_along_dPdu,
+   M_x_along_dPdv
 };
 
-enum OutputVector
+enum OutputAxis
 {
-   OV_u = 0,
-   OV_v
+   OA_x = 0,
+   OA_y,
+   OA_z
 };
 
-const char* MethodNames[] = { "polar", "shirley", NULL };
+const char* MethodNames[] = { "polar", "shirley", "x_along_dPdu", "x_along_dPdv", NULL };
 
-const char* OutputVectorNames[] = { "u", "v", NULL };
+const char* OutputAxisNames[] = { "x", "y", "z", NULL };
 
 node_parameters
 {
    AiParameterEnum("method", M_polar, MethodNames);
    AiParameterVec("N", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("output_vector", OV_u, OutputVectorNames);
+   AiParameterEnum("output_axis", OA_x, OutputAxisNames);
    
    AiMetaDataSetBool(mds, "method", "linkable", false);
-   AiMetaDataSetBool(mds, "output_vector", "linkable", false);
+   AiMetaDataSetBool(mds, "output_axis", "linkable", false);
 }
 
-struct NodeData
+struct LocalFrameData
 {
    Method method;
    bool N_is_linked;
-   OutputVector output_vector;
+   OutputAxis output_axis;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(NodeData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(LocalFrameData)));
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   LocalFrameData *data = (LocalFrameData*) AiNodeGetLocalData(node);
    
    data->method = (Method) AiNodeGetInt(node, "method");
    data->N_is_linked = AiNodeIsLinked(node, "N");
-   data->output_vector = (OutputVector) AiNodeGetInt(node, "output_vector");
+   data->output_axis = (OutputAxis) AiNodeGetInt(node, "output_vector");
 }
 
 node_finish
@@ -63,29 +66,51 @@ node_finish
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   LocalFrameData *data = (LocalFrameData*) AiNodeGetLocalData(node);
    
-   AtVector U, V, N = (data->N_is_linked ? AiShaderEvalParamVec(p_N) : sg->N);
+   AtVector X, Y, Z = (data->N_is_linked ? AiV3Normalize(AiShaderEvalParamVec(p_N)) : sg->N);
    
-   switch (data->method)
+   if (data->output_axis == OA_z)
    {
-   case M_shirley:
-      AiBuildLocalFrameShirley(&U, &V, &N);
-      break;
-   case M_polar:
-   default:
-      AiBuildLocalFramePolar(&U, &V, &N);
-      break;
+      sg->out.VEC = Z;
    }
-   
-   switch (data->output_vector)
+   else
    {
-   case OV_v:
-      sg->out.VEC = V;
-      break;
-   case OV_u:
-   default:
-      sg->out.VEC = U;
-      break;
+      switch (data->method)
+      {
+      case M_x_along_dPdu:
+         if (!AiV3IsZero(sg->dPdu))
+         {
+            X = AiV3Normalize(sg->dPdu);
+            Y = AiV3Normalize(AiV3Cross(Z, X));
+            X = AiV3Cross(Y, Z);
+         }
+         else
+         {
+            AiBuildLocalFramePolar(&X, &Y, &Z);
+         }
+         break;
+      case M_x_along_dPdv:
+         if (!AiV3IsZero(sg->dPdv))
+         {
+            X = AiV3Normalize(sg->dPdv);
+            Y = AiV3Normalize(AiV3Cross(Z, X));
+            X = AiV3Cross(Y, Z);
+         }
+         else
+         {
+            AiBuildLocalFramePolar(&X, &Y, &Z);
+         }
+         break;
+      case M_shirley:
+         AiBuildLocalFrameShirley(&X, &Y, &Z);
+         break;
+      case M_polar:
+      default:
+         AiBuildLocalFramePolar(&X, &Y, &Z);
+         break;
+      }
+      
+      sg->out.VEC = (data->output_axis == OA_x ? X : Y);
    }
 }

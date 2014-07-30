@@ -21,7 +21,7 @@ node_parameters
    AiMetaDataSetBool(mds, "ior2", "linkable", false);
 }
 
-struct NodeData
+struct RefractData
 {
    bool N_is_linked;
    float ior1;
@@ -30,13 +30,12 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = (NodeData*) AiMalloc(sizeof(NodeData));
-   AiNodeSetLocalData(node, data);
+   AiNodeSetLocalData(node, AiMalloc(sizeof(RefractData)));
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RefractData *data = (RefractData*) AiNodeGetLocalData(node);
    
    data->N_is_linked = AiNodeIsLinked(node, "normal");
    data->ior1 = AiNodeGetFlt(node, "ior1");
@@ -50,7 +49,7 @@ node_finish
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RefractData *data = (RefractData*) AiNodeGetLocalData(node);
    
    AtVector D = AiShaderEvalParamVec(p_direction);
    AtVector N = (data->N_is_linked ? AiShaderEvalParamVec(p_normal) : sg->N);

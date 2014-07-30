@@ -92,7 +92,7 @@ static const char* WrapNames[] =
    NULL
 };
 
-struct NodeData
+struct TextureData
 {
    bool path_is_linked;
    const char *filename;
@@ -166,19 +166,17 @@ node_parameters
 
 node_initialize
 {
-   NodeData *data = (NodeData*) AiMalloc(sizeof(NodeData));
+   TextureData *data = (TextureData*) AiMalloc(sizeof(TextureData));
    
-   data->path_is_linked = false;
-   data->filename = 0;
+   // initialize for first node_update call
    data->handle = 0;
-   data->use_default_color = false;
    
    AiNodeSetLocalData(node, data);
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TextureData *data = (TextureData*) AiNodeGetLocalData(node);
    
    data->path_is_linked = AiNodeIsLinked(node, "filename");
    data->filename = 0;
@@ -227,7 +225,7 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TextureData *data = (TextureData*) AiNodeGetLocalData(node);
    
    if (data->handle)
    {
@@ -239,7 +237,7 @@ node_finish
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TextureData *data = (TextureData*) AiNodeGetLocalData(node);
    
    bool success = true;
    bool *psuccess = (data->use_default_color ? &success : 0);

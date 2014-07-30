@@ -20,7 +20,7 @@ node_parameters
    AiMetaDataSetBool(mds, "safe", "linkable", false);
 }
 
-struct NodeData
+struct ReflectData
 {
    bool N_is_linked;
    bool safe;
@@ -29,13 +29,12 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = (NodeData*) AiMalloc(sizeof(NodeData));
-   AiNodeSetLocalData(node, data);
+   AiNodeSetLocalData(node, AiMalloc(sizeof(ReflectData)));
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReflectData *data = (ReflectData*) AiNodeGetLocalData(node);
    
    data->N_is_linked = AiNodeIsLinked(node, "normal");
    data->Ng_is_linked = AiNodeIsLinked(node, "geometric_normal");
@@ -49,7 +48,7 @@ node_finish
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReflectData *data = (ReflectData*) AiNodeGetLocalData(node);
    
    AtVector D = AiShaderEvalParamVec(p_direction);
    AtVector N = (data->N_is_linked ? AiShaderEvalParamVec(p_normal) : sg->N);
