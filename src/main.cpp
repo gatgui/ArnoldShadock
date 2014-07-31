@@ -187,7 +187,7 @@ DECLARE_SHADER(WardDuerBrdf);
 DECLARE_SHADER(AshikhminShirleyBrdf);
 DECLARE_SHADER(EvaluateLightSample);
 DECLARE_SHADER(BrdfIntegrate);
-DECLARE_SHADER(LocalFrame);
+DECLARE_SHADER(MakeFrame);
 DECLARE_SHADER(RotateVector);
 DECLARE_SHADER(ScaleVector);
 DECLARE_SHADER(ShaderGlobalsTweak);
@@ -336,7 +336,7 @@ node_loader
    REGISTER_SHADER(AshikhminShirleyBrdf, ashikhmin_shirley_brdf, AI_TYPE_POINTER)
    REGISTER_SHADER(EvaluateLightSample, evaluate_light_sample, AI_TYPE_RGB)
    REGISTER_SHADER(BrdfIntegrate, brdf_integrate, AI_TYPE_RGB)
-   REGISTER_SHADER(LocalFrame, local_frame, AI_TYPE_VECTOR)
+   REGISTER_SHADER(MakeFrame, make_frame, AI_TYPE_MATRIX)
    REGISTER_SHADER(RotateVector, rotate_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(ScaleVector, scale_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(ShaderGlobalsTweak, shader_globlals_tweak, AI_TYPE_RGB)
