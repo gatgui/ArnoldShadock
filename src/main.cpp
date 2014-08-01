@@ -191,6 +191,9 @@ DECLARE_SHADER(MakeFrame);
 DECLARE_SHADER(RotateVector);
 DECLARE_SHADER(ScaleVector);
 DECLARE_SHADER(ShaderGlobalsTweak);
+DECLARE_FCV_SHADER(Cache);
+DECLARE_SHADER(CacheMatrix);
+DECLARE_SHADER(CacheBrdf);
 
 node_loader
 {
@@ -330,16 +333,19 @@ node_loader
    REGISTER_SHADER(Refract, refract, AI_TYPE_VECTOR)
    REGISTER_FLOAT_SHADER(FresnelWeight, fresnel_weight)
    REGISTER_COLOR_SHADER(FresnelWeight, fresnel_weight)
-   REGISTER_SHADER(OrenNayarBrdf, oren_nayar_brdf, AI_TYPE_POINTER)
-   REGISTER_SHADER(CookTorranceBrdf, cook_torrance_brdf, AI_TYPE_POINTER)
-   REGISTER_SHADER(WardDuerBrdf, ward_duer_brdf, AI_TYPE_POINTER)
-   REGISTER_SHADER(AshikhminShirleyBrdf, ashikhmin_shirley_brdf, AI_TYPE_POINTER)
+   REGISTER_SHADER(OrenNayarBrdf, oren_nayar_brdf, AI_TYPE_RGB)
+   REGISTER_SHADER(CookTorranceBrdf, cook_torrance_brdf, AI_TYPE_RGB)
+   REGISTER_SHADER(WardDuerBrdf, ward_duer_brdf, AI_TYPE_RGB)
+   REGISTER_SHADER(AshikhminShirleyBrdf, ashikhmin_shirley_brdf, AI_TYPE_RGB)
    REGISTER_SHADER(EvaluateLightSample, evaluate_light_sample, AI_TYPE_RGB)
    REGISTER_SHADER(BrdfIntegrate, brdf_integrate, AI_TYPE_RGB)
    REGISTER_SHADER(MakeFrame, make_frame, AI_TYPE_MATRIX)
    REGISTER_SHADER(RotateVector, rotate_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(ScaleVector, scale_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(ShaderGlobalsTweak, shader_globlals_tweak, AI_TYPE_RGB)
+   REGISTER_FCV_SHADER(Cache, cache)
+   REGISTER_SHADER(CacheMatrix, cache_matrix, AI_TYPE_MATRIX)
+   REGISTER_SHADER(CacheBrdf, cache_brdf, AI_TYPE_RGB)
    
    return false;
 }

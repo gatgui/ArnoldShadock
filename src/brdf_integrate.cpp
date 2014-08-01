@@ -41,7 +41,7 @@ static AtUInt16 RayTypeValues[] =
 
 node_parameters
 {
-   AiParameterPtr("brdf", 0);
+   AiParameterRGB("brdf", 0.0f, 0.0f, 0.0f);
    AiParameterEnum("ray_type", RT_diffuse, RayTypeNames);
    
    AiMetaDataSetBool(mds, "ray_type", "linkable", false);
@@ -73,9 +73,13 @@ shader_evaluate
 {
    BrdfIntegrateData *data = (BrdfIntegrateData*) AiNodeGetLocalData(node);
    
-   BRDFData *brdf = (BRDFData*) AiShaderEvalParamPtr(p_brdf);
+   BRDFData *brdf = 0;
    
-   if (!brdf)
+   AiStateSetMsgPtr("brdf", 0);
+   
+   AiShaderEvalParamRGB(p_brdf);
+   
+   if (!AiStateGetMsgPtr("brdf", (void**)&brdf) || !brdf)
    {
       sg->out.RGB = AI_RGB_BLACK;
    }

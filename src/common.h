@@ -1,5 +1,5 @@
-#ifndef __agUtils_common_h__
-#define __agUtils_common_h__
+#ifndef __agShadingBlocks_common_h__
+#define __agShadingBlocks_common_h__
 
 #include <ai.h>
 #include <cstdlib>

@@ -82,7 +82,7 @@ node_update
       AiNodeGetMatrix(node, "custom_frame", data->custom_frame);
    }
    
-   if (!data->frame_rotation)
+   if (!data->frame_rotation_is_linked)
    {
       data->frame_rotation = AiNodeGetFlt(node, "frame_rotation");
    }
@@ -167,5 +167,7 @@ shader_evaluate
    brdf_data->evalPdf = AiCookTorranceMISPDF;
    brdf_data->data = AiCookTorranceMISCreateData(sg, &U, &V, rx, ry);
    
-   sg->out.PTR = brdf_data;
+   AiStateSetMsgPtr("brdf", brdf_data);
+   
+   sg->out.RGB = AI_RGB_BLACK;
 }
