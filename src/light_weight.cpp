@@ -14,7 +14,7 @@ enum LightWeight
    LW_sss
 };
 
-const char* LightWeightNames[] =
+static const char* LightWeightNames[] =
 {
    "diffuse",
    "specular",
