@@ -199,6 +199,7 @@ DECLARE_SHADER(ShadowMatte);
 DECLARE_SHADER(MakeRay);
 DECLARE_SHADER(ReflectRay);
 DECLARE_SHADER(RefractRay);
+DECLARE_SHADER(Trace);
 
 node_loader
 {
@@ -356,6 +357,7 @@ node_loader
    REGISTER_SHADER(MakeRay, make_ray, AI_TYPE_VECTOR)
    REGISTER_SHADER(ReflectRay, reflect_ray, AI_TYPE_VECTOR)
    REGISTER_SHADER(RefractRay, refract_ray, AI_TYPE_VECTOR)
+   REGISTER_SHADER(Trace, trace, AI_TYPE_BOOLEAN)
    
    return false;
 }
