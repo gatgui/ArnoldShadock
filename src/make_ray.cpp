@@ -31,7 +31,7 @@ node_parameters
    AiParameterEnum("type", RT_generic, RayTypeNames);
    AiParameterPnt("origin", 0.0f, 0.0f, 0.0f);
    AiParameterVec("direction", 0.0f, 0.0f, 0.0f);
-   AiParameterFlt("maxdist", 1.0f);
+   AiParameterFlt("maxdist", AI_BIG);
 }
 
 node_initialize
