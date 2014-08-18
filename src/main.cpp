@@ -196,6 +196,9 @@ DECLARE_SHADER(CacheMatrix);
 DECLARE_SHADER(CacheBrdf);
 DECLARE_SHADER(Wireframe);
 DECLARE_SHADER(ShadowMatte);
+DECLARE_SHADER(MakeRay);
+DECLARE_SHADER(ReflectRay);
+DECLARE_SHADER(RefractRay);
 
 node_loader
 {
@@ -350,6 +353,9 @@ node_loader
    REGISTER_SHADER(CacheBrdf, cache_brdf, AI_TYPE_RGB)
    REGISTER_SHADER(Wireframe, wireframe, AI_TYPE_FLOAT)
    REGISTER_SHADER(ShadowMatte, shadow_matte, AI_TYPE_RGB)
+   REGISTER_SHADER(MakeRay, make_ray, AI_TYPE_VECTOR)
+   REGISTER_SHADER(ReflectRay, reflect_ray, AI_TYPE_VECTOR)
+   REGISTER_SHADER(RefractRay, refract_ray, AI_TYPE_VECTOR)
    
    return false;
 }
