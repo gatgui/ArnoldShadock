@@ -12,7 +12,8 @@ enum MakeRayParams
 
 enum RayType
 {
-   RT_camera = 0,
+   RT_generic = 0,
+   RT_camera,
    RT_shadow,
    RT_reflected,
    RT_refracted,
@@ -20,13 +21,14 @@ enum RayType
    RT_glossy
 };
 
-static const char* RayTypeNames[] = {"camera", "shadow", "reflected", "refracted", "diffuse", "glossy", NULL};
+static const char* RayTypeNames[] = {"genenric", "camera", "shadow", "reflected", "refracted", "diffuse", "glossy", NULL};
 
-static unsigned int RayTypeValues[] = {AI_RAY_CAMERA, AI_RAY_SHADOW, AI_RAY_REFLECTED, AI_RAY_REFRACTED, AI_RAY_DIFFUSE, AI_RAY_GLOSSY};
+static unsigned int RayTypeValues[] = {AI_RAY_GENERIC, AI_RAY_CAMERA, AI_RAY_SHADOW, AI_RAY_REFLECTED,
+                                       AI_RAY_REFRACTED, AI_RAY_DIFFUSE, AI_RAY_GLOSSY};
 
 node_parameters
 {
-   AiParameterEnum("type", RT_shadow, RayTypeNames);
+   AiParameterEnum("type", RT_generic, RayTypeNames);
    AiParameterPnt("origin", 0.0f, 0.0f, 0.0f);
    AiParameterVec("direction", 0.0f, 0.0f, 0.0f);
    AiParameterFlt("maxdist", 1.0f);

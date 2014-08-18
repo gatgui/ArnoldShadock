@@ -32,11 +32,13 @@ node_finish
 
 shader_evaluate
 {
-   AiShaderEvalParamVec(p_ray);
-   
    AtRay *ray = 0;
    
-   if (AiStateGetMsgPtr("ray", (void**)&ray))
+   AiStateSetMsgPtr("ray", 0);
+   
+   AiShaderEvalParamVec(p_ray);
+   
+   if (AiStateGetMsgPtr("ray", (void**)&ray) && ray)
    {
       AtVector N = AiShaderEvalParamVec(p_normal);
       AiRefractRay(ray, (AiV3IsZero(N) ? &(sg->N) : &N),
