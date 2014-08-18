@@ -194,6 +194,7 @@ DECLARE_SHADER(ShaderGlobalsTweak);
 DECLARE_FCV_SHADER(Cache);
 DECLARE_SHADER(CacheMatrix);
 DECLARE_SHADER(CacheBrdf);
+DECLARE_SHADER(Wireframe);
 
 node_loader
 {
@@ -346,6 +347,7 @@ node_loader
    REGISTER_FCV_SHADER(Cache, cache)
    REGISTER_SHADER(CacheMatrix, cache_matrix, AI_TYPE_MATRIX)
    REGISTER_SHADER(CacheBrdf, cache_brdf, AI_TYPE_RGB)
+   REGISTER_SHADER(Wireframe, wireframe, AI_TYPE_FLOAT)
    
    return false;
 }
