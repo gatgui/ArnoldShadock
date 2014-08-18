@@ -195,6 +195,7 @@ DECLARE_FCV_SHADER(Cache);
 DECLARE_SHADER(CacheMatrix);
 DECLARE_SHADER(CacheBrdf);
 DECLARE_SHADER(Wireframe);
+DECLARE_SHADER(ShadowMatte);
 
 node_loader
 {
@@ -348,6 +349,7 @@ node_loader
    REGISTER_SHADER(CacheMatrix, cache_matrix, AI_TYPE_MATRIX)
    REGISTER_SHADER(CacheBrdf, cache_brdf, AI_TYPE_RGB)
    REGISTER_SHADER(Wireframe, wireframe, AI_TYPE_FLOAT)
+   REGISTER_SHADER(ShadowMatte, shadow_matte, AI_TYPE_RGB)
    
    return false;
 }
