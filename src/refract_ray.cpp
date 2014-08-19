@@ -34,11 +34,11 @@ shader_evaluate
 {
    AtRay *ray = 0;
    
-   AiStateSetMsgPtr("ray", 0);
+   AiStateSetMsgPtr("agsb_ray", 0);
    
    AiShaderEvalParamVec(p_ray);
    
-   if (AiStateGetMsgPtr("ray", (void**)&ray) && ray)
+   if (AiStateGetMsgPtr("agsb_ray", (void**)&ray) && ray)
    {
       AtVector N = AiShaderEvalParamVec(p_normal);
       AiRefractRay(ray, (AiV3IsZero(N) ? &(sg->N) : &N),

@@ -33,7 +33,7 @@ shader_evaluate
    data->evalPdf = AiOrenNayarMISPDF;
    data->data = AiOrenNayarMISCreateData(sg, AiShaderEvalParamFlt(p_roughness));
    
-   AiStateSetMsgPtr("brdf", data);
+   AiStateSetMsgPtr("agsb_brdf", data);
    
    sg->out.RGB = AI_RGB_BLACK;
 }

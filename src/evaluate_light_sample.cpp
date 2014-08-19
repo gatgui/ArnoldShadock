@@ -84,11 +84,11 @@ shader_evaluate
    
    BRDFData *brdf = 0;
    
-   AiStateSetMsgPtr("brdf", 0);
+   AiStateSetMsgPtr("agsb_brdf", 0);
    
    AiShaderEvalParamRGB(p_brdf);
    
-   if (!AiStateGetMsgPtr("brdf", (void**)&brdf) || !brdf)
+   if (!AiStateGetMsgPtr("agsb_brdf", (void**)&brdf) || !brdf)
    {
       sg->out.RGB = AI_RGB_BLACK;
    }

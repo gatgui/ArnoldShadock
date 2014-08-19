@@ -49,7 +49,7 @@ shader_evaluate
    AtShaderGlobals *hitsg = 0;
    
    if (!AiShaderEvalParamBool(p_trace) ||
-       !AiStateGetMsgPtr("trace_hit", (void**)&hitsg) ||
+       !AiStateGetMsgPtr("agsb_trace_hit", (void**)&hitsg) ||
        !hitsg)
    {
       sg->out.VEC = AiShaderEvalParamVec(p_default);

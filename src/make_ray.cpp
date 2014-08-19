@@ -56,7 +56,7 @@ shader_evaluate
    float maxdist = AiShaderEvalParamFlt(p_maxdist);
    
    AiMakeRay(ray, type, &origin, (AiV3IsZero(dir) ? NULL : &dir), maxdist, sg);
-   AiStateSetMsgPtr("ray", ray);
+   AiStateSetMsgPtr("agsb_ray", ray);
    
    sg->out.VEC = ray->dir;
 }

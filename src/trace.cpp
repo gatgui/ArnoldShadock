@@ -154,11 +154,11 @@ shader_evaluate
    AtRay *ray = 0;
    void *hit = 0;
    
-   AiStateSetMsgPtr("ray", 0);
+   AiStateSetMsgPtr("agsb_ray", 0);
    
    AiShaderEvalParamVec(p_ray);
    
-   if (!AiStateGetMsgPtr("ray", (void**)&ray) || !ray)
+   if (!AiStateGetMsgPtr("agsb_ray", (void**)&ray) || !ray)
    {
       sg->out.BOOL = false;
    }
@@ -181,5 +181,5 @@ shader_evaluate
       }
    }
    
-   AiStateSetMsgPtr("trace_hit", (sg->out.BOOL ? hit : 0));
+   AiStateSetMsgPtr("agsb_trace_hit", (sg->out.BOOL ? hit : 0));
 }

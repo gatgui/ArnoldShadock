@@ -58,7 +58,7 @@ shader_evaluate
    
    AiShaderEvalParamVec(p_ray);
    
-   if (!AiStateGetMsgPtr("ray", (void**)&ray) || !ray)
+   if (!AiStateGetMsgPtr("agsb_ray", (void**)&ray) || !ray)
    {
       sg->out.VEC = AiShaderEvalParamVec(p_default);
    }

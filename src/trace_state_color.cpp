@@ -49,7 +49,7 @@ shader_evaluate
    AtScrSample *sample = 0;
    
    if (!AiShaderEvalParamBool(p_trace) ||
-       !AiStateGetMsgPtr("trace_hit", (void**)&sample) ||
+       !AiStateGetMsgPtr("agsb_trace_hit", (void**)&sample) ||
        !sample)
    {
       sg->out.RGB = AiShaderEvalParamRGB(p_default);

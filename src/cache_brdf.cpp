@@ -43,13 +43,13 @@ shader_evaluate
    if (!GetCacheValue(sg, cache, brdf_data))
    {
       AiShaderEvalParamRGB(p_input);
-      AiStateGetMsgPtr("brdf", (void**)&brdf_data);
+      AiStateGetMsgPtr("agsb_brdf", (void**)&brdf_data);
       
       SetCacheValue(sg, cache, brdf_data);
    }
    else
    {
-      AiStateSetMsgPtr("brdf", brdf_data);
+      AiStateSetMsgPtr("agsb_brdf", brdf_data);
    }
    
    sg->out.RGB = AI_RGB_BLACK;

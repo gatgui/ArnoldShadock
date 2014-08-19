@@ -167,7 +167,7 @@ shader_evaluate
    brdf_data->evalPdf = AiWardDuerMISPDF;
    brdf_data->data = AiWardDuerMISCreateData(sg, &U, &V, rx, ry);
    
-   AiStateSetMsgPtr("brdf", brdf_data);
+   AiStateSetMsgPtr("agsb_brdf", brdf_data);
    
    sg->out.RGB = AI_RGB_BLACK;
 }
