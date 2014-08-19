@@ -203,6 +203,10 @@ DECLARE_SHADER(RayStateInt);
 DECLARE_SHADER(RayStateFloat);
 DECLARE_SHADER(RayStateVector);
 DECLARE_SHADER(Trace);
+DECLARE_SHADER(TraceStateFloat);
+DECLARE_SHADER(TraceStateColor);
+DECLARE_SHADER(TraceStateVector);
+DECLARE_SHADER(ProbeStateVector);
 
 node_loader
 {
@@ -364,6 +368,10 @@ node_loader
    REGISTER_SHADER(RayStateFloat, ray_state_float, AI_TYPE_FLOAT)
    REGISTER_SHADER(RayStateVector, ray_state_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(Trace, trace, AI_TYPE_BOOLEAN)
+   REGISTER_SHADER(TraceStateFloat, trace_state_float, AI_TYPE_FLOAT)
+   REGISTER_SHADER(TraceStateColor, trace_state_color, AI_TYPE_RGB)
+   REGISTER_SHADER(TraceStateVector, trace_state_vector, AI_TYPE_VECTOR)
+   REGISTER_SHADER(ProbeStateVector, probe_state_vector, AI_TYPE_VECTOR)
    
    return false;
 }
