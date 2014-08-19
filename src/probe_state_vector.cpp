@@ -47,17 +47,25 @@ node_finish
 shader_evaluate
 {
    AtShaderGlobals *hitsg = 0;
+   HitData *hit = 0;
    
    if (!AiShaderEvalParamBool(p_trace) ||
-       !AiStateGetMsgPtr("agsb_trace_hit", (void**)&hitsg) ||
-       !hitsg)
+       !AiStateGetMsgPtr("agsb_trace_hit", (void**)&hit) ||
+       !hit ||
+       !hit->isSG)
    {
+      if (!hit->isSG)
+      {
+         AiMsgWarning("[probe_state_vector] Trying to access result from a 'standard' or 'background' trace: Use 'trace_state_vector' instead");
+      }
       sg->out.VEC = AiShaderEvalParamVec(p_default);
    }
    else
    {
       void *data = AiNodeGetLocalData(node);
       ProbeState state = (ProbeState) *((int*)&data);
+      
+      hitsg = (AtShaderGlobals*) hit->ptr;
       
       switch (state)
       {

@@ -80,6 +80,14 @@ struct BRDFData
 
 // ---
 
+struct HitData
+{
+   void *ptr;
+   bool isSG;
+};
+
+// ---
+
 inline int GetRenderThreadsCount()
 {
    return AiNodeGetInt(AiUniverseGetOptions(), "threads");

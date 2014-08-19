@@ -47,17 +47,25 @@ node_finish
 shader_evaluate
 {
    AtScrSample *sample = 0;
+   HitData *hit = 0;
    
    if (!AiShaderEvalParamBool(p_trace) ||
-       !AiStateGetMsgPtr("agsb_trace_hit", (void**)&sample) ||
-       !sample)
+       !AiStateGetMsgPtr("agsb_trace_hit", (void**)&hit) ||
+       !hit ||
+       hit->isSG)
    {
+      if (hit->isSG)
+      {
+         AiMsgWarning("[trace_state_color] Trying to access result from a 'probe' trace: Use 'probe_state_vector' instead");
+      }
       sg->out.RGB = AiShaderEvalParamRGB(p_default);
    }
    else
    {
       void *data = AiNodeGetLocalData(node);
       TraceState state = (TraceState) *((int*)&data);
+      
+      sample = (AtScrSample*) hit->ptr;
       
       switch (state)
       {

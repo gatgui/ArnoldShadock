@@ -29,7 +29,7 @@ struct TraceData
 {
    TraceType type;
    int count;
-   void **hits;
+   HitData *hits;
 };
 
 node_initialize
@@ -57,14 +57,14 @@ node_update
          {
             for (int i=0; i<data->count; ++i)
             {
-               AiShaderGlobalsDestroy((AtShaderGlobals*) data->hits[i]);
+               AiShaderGlobalsDestroy((AtShaderGlobals*) data->hits[i].ptr);
             }
          }
          else
          {
             for (int i=0; i<data->count; ++i)
             {
-               AiFree(data->hits[i]);
+               AiFree(data->hits[i].ptr);
             }
          }
          
@@ -81,7 +81,7 @@ node_update
    
    if (nthreads != data->count)
    {
-      void **hits = (void**) AiMalloc(nthreads * sizeof(void*));
+      HitData *hits = (HitData*) AiMalloc(nthreads * sizeof(HitData));
       
       int cc = (nthreads < data->count ? nthreads : data->count);
       
@@ -94,22 +94,24 @@ node_update
       {
          for (int i=cc; i<data->count; ++i)
          {
-            AiShaderGlobalsDestroy((AtShaderGlobals*) data->hits[i]);
+            AiShaderGlobalsDestroy((AtShaderGlobals*) data->hits[i].ptr);
          }
          for (int i=cc; i<nthreads; ++i)
          {
-            hits[i] = AiShaderGlobals();
+            hits[i].ptr = AiShaderGlobals();
+            hits[i].isSG = true;
          }
       }
       else
       {
          for (int i=cc; i<data->count; ++i)
          {
-            AiFree(data->hits[i]);
+            AiFree(data->hits[i].ptr);
          }
          for (int i=cc; i<nthreads; ++i)
          {
-            hits[i] = AiMalloc(sizeof(AtScrSample));
+            hits[i].ptr = AiMalloc(sizeof(AtScrSample));
+            hits[i].isSG = false;
          }
       }
       
@@ -130,14 +132,14 @@ node_finish
       {
          for (int i=0; i<data->count; ++i)
          {
-            AiShaderGlobalsDestroy((AtShaderGlobals*) data->hits[i]);
+            AiShaderGlobalsDestroy((AtShaderGlobals*) data->hits[i].ptr);
          }
       }
       else
       {
          for (int i=0; i<data->count; ++i) 
          {
-            AiFree(data->hits[i]);
+            AiFree(data->hits[i].ptr);
          }
       }
       
@@ -152,7 +154,7 @@ shader_evaluate
    TraceData *data = (TraceData*) AiNodeGetLocalData(node);
    
    AtRay *ray = 0;
-   void *hit = 0;
+   HitData *hit = 0;
    
    AiStateSetMsgPtr("agsb_ray", 0);
    
@@ -164,7 +166,7 @@ shader_evaluate
    }
    else
    {
-      void *hit = data->hits[sg->tid];
+      hit = &(data->hits[sg->tid]);
       
       switch (data->type)
       {
