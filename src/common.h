@@ -68,6 +68,16 @@ enum AngleUnits
 
 extern const char* AngleUnitsNames[];
 
+enum CombineMode
+{
+   CM_Add = 0,
+   CM_Avg,
+   CM_Max,
+   CM_Min
+};
+
+extern const char* CombineModeNames[];
+
 // ---
 
 struct BRDFData

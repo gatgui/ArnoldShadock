@@ -9,27 +9,10 @@ enum IlluminanceLoopParams
    p_reset_lights_cache
 };
 
-enum Combine
-{
-   C_Add = 0,
-   C_Avg,
-   C_Max,
-   C_Min
-};
-
-static const char* CombineNames[] =
-{
-   "add",
-   "avg",
-   "max",
-   "min",
-   NULL
-};
-
 node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("combine", C_Add, CombineNames);
+   AiParameterEnum("combine", CM_Add, CombineModeNames);
    AiParameterBool("reset_lights_cache", false);
    
    AiMetaDataSetBool(mds, "combine", "linkable", false);
@@ -38,7 +21,7 @@ node_parameters
 
 struct IlluminanceLoopData
 {
-   Combine combine;
+   CombineMode combine;
    bool reset_lights_cache;
 };
 
@@ -51,7 +34,7 @@ node_update
 {
    IlluminanceLoopData *data = (IlluminanceLoopData*) AiNodeGetLocalData(node);
    
-   data->combine = (Combine) AiNodeGetInt(node, "combine");
+   data->combine = (CombineMode) AiNodeGetInt(node, "combine");
    data->reset_lights_cache = AiNodeGetBool(node, "reset_lights_cache");
 }
 
@@ -81,18 +64,18 @@ shader_evaluate
       sample_value = AiShaderEvalParamRGB(p_input);
       switch (data->combine)
       {
-      case C_Max:
+      case CM_Max:
          sg->out.RGB.r = MAX(sample_value.r, sg->out.RGB.r);
          sg->out.RGB.g = MAX(sample_value.g, sg->out.RGB.g);
          sg->out.RGB.b = MAX(sample_value.b, sg->out.RGB.b);
          break;
-      case C_Min:
+      case CM_Min:
          sg->out.RGB.r = MIN(sample_value.r, sg->out.RGB.r);
          sg->out.RGB.g = MIN(sample_value.g, sg->out.RGB.g);
          sg->out.RGB.b = MIN(sample_value.b, sg->out.RGB.b);
          break;
-      case C_Add:
-      case C_Avg:
+      case CM_Add:
+      case CM_Avg:
       default:
          sg->out.RGB += sample_value;
       }
@@ -100,7 +83,7 @@ shader_evaluate
       sample_count += 1.0f;
    }
    
-   if (data->combine == C_Avg && sample_count > 0.0f)
+   if (data->combine == CM_Avg && sample_count > 0.0f)
    {
       sample_count = 1.0f / sample_count;
       sg->out.RGB *= sample_count;

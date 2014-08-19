@@ -49,6 +49,15 @@ const char* AngleUnitsNames[] =
    NULL
 };
 
+const char* CombineModeNames[] =
+{
+   "add",
+   "avg",
+   "max",
+   "min",
+   NULL
+};
+
 static void GetArrayElement(AtArray *a, unsigned int i, float &e)
 {
    e = AiArrayGetFlt(a, i);

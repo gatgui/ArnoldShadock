@@ -207,6 +207,9 @@ DECLARE_SHADER(TraceStateFloat);
 DECLARE_SHADER(TraceStateColor);
 DECLARE_SHADER(TraceStateVector);
 DECLARE_SHADER(ProbeStateVector);
+DECLARE_SHADER(Sampler);
+DECLARE_SHADER(SampleValue);
+DECLARE_FCV_SHADER(SamplesLoop);
 
 node_loader
 {
@@ -372,6 +375,9 @@ node_loader
    REGISTER_SHADER(TraceStateColor, trace_state_color, AI_TYPE_RGB)
    REGISTER_SHADER(TraceStateVector, trace_state_vector, AI_TYPE_VECTOR)
    REGISTER_SHADER(ProbeStateVector, probe_state_vector, AI_TYPE_VECTOR)
+   REGISTER_SHADER(Sampler, sampler, AI_TYPE_RGB)
+   REGISTER_SHADER(SampleValue, sample_value, AI_TYPE_FLOAT)
+   REGISTER_FCV_SHADER(SamplesLoop, samples_loop)
    
    return false;
 }
