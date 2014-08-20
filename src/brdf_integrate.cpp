@@ -8,41 +8,10 @@ enum BrdfIntegrateParams
    p_ray_type,
 };
 
-enum RayType
-{
-   RT_camera = 0,
-   RT_shadow,
-   RT_reflected,
-   RT_refracted,
-   RT_diffuse,
-   RT_glossy
-};
-
-static const char* RayTypeNames[] = 
-{
-   "camera",
-   "shadow",
-   "reflected",
-   "refracted",
-   "diffuse",
-   "glossy",
-   NULL
-};
-
-static AtUInt16 RayTypeValues[] =
-{
-   AI_RAY_CAMERA,
-   AI_RAY_SHADOW,
-   AI_RAY_REFLECTED,
-   AI_RAY_REFRACTED,
-   AI_RAY_DIFFUSE,
-   AI_RAY_GLOSSY
-};
-
 node_parameters
 {
    AiParameterRGB("brdf", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("ray_type", RT_diffuse, RayTypeNames);
+   AiParameterEnum("ray_type", RT_Diffuse, RayTypeNames);
    
    AiMetaDataSetBool(mds, "ray_type", "linkable", false);
 }

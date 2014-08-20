@@ -10,25 +10,9 @@ enum MakeRayParams
    p_maxdist
 };
 
-enum RayType
-{
-   RT_generic = 0,
-   RT_camera,
-   RT_shadow,
-   RT_reflected,
-   RT_refracted,
-   RT_diffuse,
-   RT_glossy
-};
-
-static const char* RayTypeNames[] = {"genenric", "camera", "shadow", "reflected", "refracted", "diffuse", "glossy", NULL};
-
-static unsigned int RayTypeValues[] = {AI_RAY_GENERIC, AI_RAY_CAMERA, AI_RAY_SHADOW, AI_RAY_REFLECTED,
-                                       AI_RAY_REFRACTED, AI_RAY_DIFFUSE, AI_RAY_GLOSSY};
-
 node_parameters
 {
-   AiParameterEnum("type", RT_generic, RayTypeNames);
+   AiParameterEnum("type", RT_Generic, RayTypeNames);
    AiParameterPnt("origin", 0.0f, 0.0f, 0.0f);
    AiParameterVec("direction", 0.0f, 0.0f, 0.0f);
    AiParameterFlt("maxdist", AI_BIG);

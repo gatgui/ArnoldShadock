@@ -58,6 +58,29 @@ const char* CombineModeNames[] =
    NULL
 };
 
+const char* RayTypeNames[] = 
+{
+   "camera",
+   "shadow",
+   "reflected",
+   "refracted",
+   "diffuse",
+   "glossy",
+   "generic",
+   NULL
+};
+
+AtUInt16 RayTypeValues[] =
+{
+   AI_RAY_CAMERA,
+   AI_RAY_SHADOW,
+   AI_RAY_REFLECTED,
+   AI_RAY_REFRACTED,
+   AI_RAY_DIFFUSE,
+   AI_RAY_GLOSSY,
+   AI_RAY_GENERIC
+};
+
 static void GetArrayElement(AtArray *a, unsigned int i, float &e)
 {
    e = AiArrayGetFlt(a, i);

@@ -78,6 +78,20 @@ enum CombineMode
 
 extern const char* CombineModeNames[];
 
+enum RayType
+{
+   RT_Camera = 0,
+   RT_Shadow,
+   RT_Reflected,
+   RT_Refracted,
+   RT_Diffuse,
+   RT_Glossy,
+   RT_Generic
+};
+
+extern const char* RayTypeNames[];
+extern AtUInt16 RayTypeValues[];
+
 // ---
 
 struct BRDFData
