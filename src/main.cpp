@@ -210,6 +210,8 @@ DECLARE_SHADER(ProbeStateVector);
 DECLARE_SHADER(Sampler);
 DECLARE_SHADER(SampleValue);
 DECLARE_FCV_SHADER(SamplesLoop);
+DECLARE_SHADER(SssSingle);
+DECLARE_SHADER(SssMulti);
 
 node_loader
 {
@@ -378,6 +380,8 @@ node_loader
    REGISTER_SHADER(Sampler, sampler, AI_TYPE_RGB)
    REGISTER_SHADER(SampleValue, sample_value, AI_TYPE_FLOAT)
    REGISTER_FCV_SHADER(SamplesLoop, samples_loop)
+   REGISTER_SHADER(SssSingle, sss_single, AI_TYPE_RGB)
+   REGISTER_SHADER(SssMulti, sss_multi, AI_TYPE_RGB)
    
    return false;
 }
