@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(BiasFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BiasFMtd);
 
-enum BiasFloatParams
+enum BiasFParams
 {
    p_input = 0,
    p_bias

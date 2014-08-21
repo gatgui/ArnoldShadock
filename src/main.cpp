@@ -14,11 +14,11 @@ static int gsShaderCount = 0;
    extern AtNodeMethods* name##Mtd;\
    static int name = gsShaderCount++
 
-#define DECLARE_FLOAT_SHADER(name) DECLARE_SHADER(name##Float)
+#define DECLARE_FLOAT_SHADER(name) DECLARE_SHADER(name##F)
 
-#define DECLARE_COLOR_SHADER(name) DECLARE_SHADER(name##Color)
+#define DECLARE_COLOR_SHADER(name) DECLARE_SHADER(name##C3)
 
-#define DECLARE_VECTOR_SHADER(name) DECLARE_SHADER(name##Vector)
+#define DECLARE_VECTOR_SHADER(name) DECLARE_SHADER(name##V)
 
 #define DECLARE_FCV_SHADER(name)\
    DECLARE_FLOAT_SHADER(name);\
@@ -36,11 +36,11 @@ static int gsShaderCount = 0;
       return true;\
    }
 
-#define REGISTER_FLOAT_SHADER(s_name, a_name) REGISTER_SHADER(s_name##Float, a_name##_float, AI_TYPE_FLOAT)
+#define REGISTER_FLOAT_SHADER(s_name, a_name) REGISTER_SHADER(s_name##F, a_name##_f, AI_TYPE_FLOAT)
 
-#define REGISTER_COLOR_SHADER(s_name, a_name) REGISTER_SHADER(s_name##Color, a_name##_color, AI_TYPE_RGB)
+#define REGISTER_COLOR_SHADER(s_name, a_name) REGISTER_SHADER(s_name##C3, a_name##_c3, AI_TYPE_RGB)
 
-#define REGISTER_VECTOR_SHADER(s_name, a_name) REGISTER_SHADER(s_name##Vector, a_name##_vector, AI_TYPE_VECTOR)
+#define REGISTER_VECTOR_SHADER(s_name, a_name) REGISTER_SHADER(s_name##V, a_name##_v, AI_TYPE_VECTOR)
 
 #define REGISTER_FCV_SHADER(s_name, a_name)\
    REGISTER_FLOAT_SHADER(s_name, a_name)\
@@ -55,9 +55,9 @@ DECLARE_FCV_SHADER(Bias);
 DECLARE_FCV_SHADER(BiasAndGain);
 DECLARE_FCV_SHADER(Ceil);
 DECLARE_FCV_SHADER(Clamp);
-DECLARE_SHADER(CompareFloat);
-DECLARE_SHADER(CompareColor);
-DECLARE_SHADER(CompareVector);
+DECLARE_SHADER(CompareF);
+DECLARE_SHADER(CompareC3);
+DECLARE_SHADER(CompareV);
 DECLARE_SHADER(FloatToBool);
 DECLARE_SHADER(FloatToInt);
 DECLARE_SHADER(VectorToColor);
@@ -228,7 +228,7 @@ node_loader
    {
       return false;
    }
-   REGISTER_FCV_SHADER(Abs, absolute)
+   REGISTER_FCV_SHADER(Abs, abs)
    REGISTER_FCV_SHADER(Add, add)
    REGISTER_FCV_SHADER(Bias, bias)
    REGISTER_FCV_SHADER(BiasAndGain, bias_and_gain)

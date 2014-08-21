@@ -1,8 +1,8 @@
 #include "cache.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(CacheColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(CacheC3Mtd);
 
-enum CacheColorParams
+enum CacheC3Params
 {
    p_input = 0
 };

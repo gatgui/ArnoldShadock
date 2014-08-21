@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(AbsColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(AbsC3Mtd);
 
-enum AbsColorParams
+enum AbsC3Params
 {
    p_input = 0
 };

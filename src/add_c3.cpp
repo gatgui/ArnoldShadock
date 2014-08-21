@@ -1,6 +1,6 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(AddColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(AddC3Mtd);
 
 enum AddColorParams
 {

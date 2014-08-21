@@ -1,8 +1,8 @@
 #include "cache.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(CacheVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(CacheVMtd);
 
-enum CacheVectorParams
+enum CacheVParams
 {
    p_input = 0
 };

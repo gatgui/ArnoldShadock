@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(TransformVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(TransformMtd);
 
-enum TransformVectorParams
+enum TransformParams
 {
    p_matrix = 0,
    p_vector,

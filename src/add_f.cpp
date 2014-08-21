@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(AddFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(AddFMtd);
 
-enum AddFloatParams
+enum AddFParams
 {
    p_input1 = 0,
    p_input2

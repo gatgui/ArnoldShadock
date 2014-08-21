@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(BiasVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BiasVMtd);
 
-enum BiasVectorParams
+enum BiasVParams
 {
    p_input = 0,
    p_bias

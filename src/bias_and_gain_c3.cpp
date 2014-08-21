@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(BiasAndGainVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BiasAndGainC3Mtd);
 
-enum BiasAndGainVectorParams
+enum BiasAndGainC3Params
 {
    p_input = 0,
    p_bias,
@@ -11,7 +11,7 @@ enum BiasAndGainVectorParams
 
 node_parameters
 {
-   AiParameterVec("input", 0.0f, 0.0f, 0.0f);
+   AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
    AiParameterVec("bias", 0.5f, 0.5f, 0.5f);
    AiParameterVec("gain", 0.5f, 0.5f, 0.5f);
 }
@@ -30,11 +30,11 @@ node_finish
 
 shader_evaluate
 {
-   AtVector input = AiShaderEvalParamVec(p_input);
+   AtRGB input = AiShaderEvalParamRGB(p_input);
    AtVector bias = AiShaderEvalParamVec(p_bias);
    AtVector gain = AiShaderEvalParamVec(p_gain);
    
-   sg->out.VEC.x = GAIN(BIAS(input.x, bias.x), gain.x);
-   sg->out.VEC.y = GAIN(BIAS(input.y, bias.y), gain.y);
-   sg->out.VEC.z = GAIN(BIAS(input.z, bias.z), gain.z);
+   sg->out.RGB.r = GAIN(BIAS(input.r, bias.x), gain.x);
+   sg->out.RGB.g = GAIN(BIAS(input.g, bias.y), gain.y);
+   sg->out.RGB.b = GAIN(BIAS(input.b, bias.z), gain.z);
 }

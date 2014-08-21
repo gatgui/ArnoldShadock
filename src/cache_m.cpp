@@ -1,8 +1,8 @@
 #include "cache.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(CacheMatrixMtd);
+AI_SHADER_NODE_EXPORT_METHODS(CacheMMtd);
 
-enum CacheMatrixParams
+enum CacheMParams
 {
    p_input = 0
 };

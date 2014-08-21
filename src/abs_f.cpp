@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(AbsFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(AbsFMtd);
 
-enum AbsFloatParams
+enum AbsFParams
 {
    p_input = 0
 };

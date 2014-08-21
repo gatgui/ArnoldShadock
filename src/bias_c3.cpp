@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(BiasColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BiasC3Mtd);
 
-enum BiasColorParams
+enum BiasC3Params
 {
    p_input = 0,
    p_bias

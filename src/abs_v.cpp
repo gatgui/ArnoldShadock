@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(VectorLengthMtd);
+AI_SHADER_NODE_EXPORT_METHODS(AbsVMtd);
 
-enum VectorLengthParams
+enum AbsVParams
 {
    p_input = 0
 };
@@ -28,5 +28,7 @@ shader_evaluate
 {
    AtVector input = AiShaderEvalParamVec(p_input);
    
-   sg->out.VEC = AiV3Length(input);
+   sg->out.VEC.x = ABS(input.x);
+   sg->out.VEC.y = ABS(input.y);
+   sg->out.VEC.z = ABS(input.z);
 }

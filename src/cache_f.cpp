@@ -1,8 +1,8 @@
 #include "cache.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(CacheFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(CacheFMtd);
 
-enum CacheFloatParams
+enum CacheFParams
 {
    p_input = 0
 };

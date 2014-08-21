@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(AddVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(AddVMtd);
 
-enum AddVectorParams
+enum AddVParams
 {
    p_input1 = 0,
    p_input2
