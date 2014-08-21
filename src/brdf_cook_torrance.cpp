@@ -1,15 +1,15 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(AshikhminShirleyBrdfMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BrdfCookTorranceMtd);
 
-enum AshikhminShirleyBrdfParams
+enum BrdfCookTorranceParams
 {
-   p_glossiness_x = 0,
-   p_glossiness_y,
+   p_roughness_x = 0,
+   p_roughness_y,
    p_local_frame,
    p_custom_frame,
    p_frame_rotation,
-   p_angle_units,
+   p_angle_units
 };
 
 enum LocalFrame
@@ -25,8 +25,8 @@ static const char* LocalFrameNames[] = { "Nf_dPdu", "Nf_dPdv", "polar", "shirley
 
 node_parameters
 {
-   AiParameterFlt("glossiness_x", 0.467f);
-   AiParameterFlt("glossiness_y", 0.467f);
+   AiParameterFlt("roughness_x", 0.467f);
+   AiParameterFlt("roughness_y", 0.467f);
    AiParameterEnum("local_frame", LF_Nf_dPdu, LocalFrameNames);
    AiParameterMtx("custom_frame", AI_M4_IDENTITY);
    AiParameterFlt("frame_rotation", 0.0f);
@@ -36,12 +36,12 @@ node_parameters
    AiMetaDataSetBool(mds, "angle_units", "linkable", false);
 }
 
-struct AshikhminShirleyData
+struct CookTorranceData
 {
-   bool glossiness_x_is_linked;
-   float glossiness_x;
-   bool glossiness_y_is_linked;
-   float glossiness_y;
+   bool roughness_x_is_linked;
+   float roughness_x;
+   bool roughness_y_is_linked;
+   float roughness_y;
    LocalFrame local_frame;
    bool custom_frame_is_linked;
    AtMatrix custom_frame;
@@ -52,29 +52,29 @@ struct AshikhminShirleyData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(AshikhminShirleyData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(CookTorranceData)));
 }
 
 node_update
 {
-   AshikhminShirleyData *data = (AshikhminShirleyData*) AiNodeGetLocalData(node);
+   CookTorranceData *data = (CookTorranceData*) AiNodeGetLocalData(node);
    
-   data->glossiness_x_is_linked = AiNodeIsLinked(node, "glossiness_x");
-   data->glossiness_y_is_linked = AiNodeIsLinked(node, "glossiness_y");
+   data->roughness_x_is_linked = AiNodeIsLinked(node, "roughness_x");
+   data->roughness_y_is_linked = AiNodeIsLinked(node, "roughness_y");
    data->custom_frame_is_linked = AiNodeIsLinked(node, "custom_frame");
    data->frame_rotation_is_linked = AiNodeIsLinked(node, "frame_rotation");
    
    data->local_frame = (LocalFrame) AiNodeGetInt(node, "local_frame");
    data->angle_scale = (AiNodeGetInt(node, "angle_units") == AU_Degrees ? AI_DTOR : 1.0f);
    
-   if (!data->glossiness_x_is_linked)
+   if (!data->roughness_x_is_linked)
    {
-      data->glossiness_x = AiNodeGetFlt(node, "glossiness_x");
+      data->roughness_x = AiNodeGetFlt(node, "roughness_x");
    }
    
-   if (!data->glossiness_y_is_linked)
+   if (!data->roughness_y_is_linked)
    {
-      data->glossiness_y = AiNodeGetFlt(node, "glossiness_y");
+      data->roughness_y = AiNodeGetFlt(node, "roughness_y");
    }
    
    if (!data->custom_frame_is_linked)
@@ -95,10 +95,10 @@ node_finish
 
 shader_evaluate
 {
-   AshikhminShirleyData *data = (AshikhminShirleyData*) AiNodeGetLocalData(node);
+   CookTorranceData *data = (CookTorranceData*) AiNodeGetLocalData(node);
    
-   float gx = (data->glossiness_x_is_linked ? AiShaderEvalParamFlt(p_glossiness_x) : data->glossiness_x);
-   float gy = (data->glossiness_y_is_linked ? AiShaderEvalParamFlt(p_glossiness_y) : data->glossiness_y);
+   float rx = (data->roughness_x_is_linked ? AiShaderEvalParamFlt(p_roughness_x) : data->roughness_x);
+   float ry = (data->roughness_y_is_linked ? AiShaderEvalParamFlt(p_roughness_y) : data->roughness_y);
    
    AtVector U, V;
    
@@ -162,10 +162,10 @@ shader_evaluate
    
    BRDFData *brdf_data = (BRDFData*) AiShaderGlobalsQuickAlloc(sg, sizeof(BRDFData));
    
-   brdf_data->evalSample = AiAshikhminShirleyMISSample;
-   brdf_data->evalBrdf = AiAshikhminShirleyMISBRDF;
-   brdf_data->evalPdf = AiAshikhminShirleyMISPDF;
-   brdf_data->data = AiAshikhminShirleyMISCreateData(sg, &U, &V, gx, gy);
+   brdf_data->evalSample = AiCookTorranceMISSample;
+   brdf_data->evalBrdf = AiCookTorranceMISBRDF;
+   brdf_data->evalPdf = AiCookTorranceMISPDF;
+   brdf_data->data = AiCookTorranceMISCreateData(sg, &U, &V, rx, ry);
    
    AiStateSetMsgPtr("agsb_brdf", brdf_data);
    

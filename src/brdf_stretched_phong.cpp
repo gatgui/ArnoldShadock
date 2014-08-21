@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(StretchedPhongBrdfMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BrdfStretchedPhongMtd);
 
-enum StretchedPhongBrdfParams
+enum BrdfStretchedPhongParams
 {
    p_exponent = 0
 };

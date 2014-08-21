@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(CookTorranceBrdfMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BrdfWardDuerMtd);
 
-enum CookTorranceBrdfParams
+enum BrdfWardDuerParams
 {
    p_roughness_x = 0,
    p_roughness_y,
@@ -36,7 +36,7 @@ node_parameters
    AiMetaDataSetBool(mds, "angle_units", "linkable", false);
 }
 
-struct CookTorranceData
+struct WardDuerData
 {
    bool roughness_x_is_linked;
    float roughness_x;
@@ -52,12 +52,12 @@ struct CookTorranceData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(CookTorranceData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(WardDuerData)));
 }
 
 node_update
 {
-   CookTorranceData *data = (CookTorranceData*) AiNodeGetLocalData(node);
+   WardDuerData *data = (WardDuerData*) AiNodeGetLocalData(node);
    
    data->roughness_x_is_linked = AiNodeIsLinked(node, "roughness_x");
    data->roughness_y_is_linked = AiNodeIsLinked(node, "roughness_y");
@@ -95,7 +95,7 @@ node_finish
 
 shader_evaluate
 {
-   CookTorranceData *data = (CookTorranceData*) AiNodeGetLocalData(node);
+   WardDuerData *data = (WardDuerData*) AiNodeGetLocalData(node);
    
    float rx = (data->roughness_x_is_linked ? AiShaderEvalParamFlt(p_roughness_x) : data->roughness_x);
    float ry = (data->roughness_y_is_linked ? AiShaderEvalParamFlt(p_roughness_y) : data->roughness_y);
@@ -162,10 +162,10 @@ shader_evaluate
    
    BRDFData *brdf_data = (BRDFData*) AiShaderGlobalsQuickAlloc(sg, sizeof(BRDFData));
    
-   brdf_data->evalSample = AiCookTorranceMISSample;
-   brdf_data->evalBrdf = AiCookTorranceMISBRDF;
-   brdf_data->evalPdf = AiCookTorranceMISPDF;
-   brdf_data->data = AiCookTorranceMISCreateData(sg, &U, &V, rx, ry);
+   brdf_data->evalSample = AiWardDuerMISSample;
+   brdf_data->evalBrdf = AiWardDuerMISBRDF;
+   brdf_data->evalPdf = AiWardDuerMISPDF;
+   brdf_data->data = AiWardDuerMISCreateData(sg, &U, &V, rx, ry);
    
    AiStateSetMsgPtr("agsb_brdf", brdf_data);
    

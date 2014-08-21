@@ -1,15 +1,18 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(WardDuerBrdfMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BtdfMicrofacetIntegrateMtd);
 
-enum WardDuerBrdfParams
+enum BtdfMicrofacetIntegrateParams
 {
    p_roughness_x = 0,
    p_roughness_y,
    p_local_frame,
    p_custom_frame,
    p_frame_rotation,
-   p_angle_units
+   p_angle_units,
+   p_eta_i,
+   p_eta_o,
+   p_transmittance
 };
 
 enum LocalFrame
@@ -31,12 +34,17 @@ node_parameters
    AiParameterMtx("custom_frame", AI_M4_IDENTITY);
    AiParameterFlt("frame_rotation", 0.0f);
    AiParameterEnum("angle_units", AU_Degrees, AngleUnitsNames);
+   AiParameterFlt("eta_i", 1.0);
+   AiParameterFlt("eta_o", 1.0);
+   AiParameterRGB("transmittance", 1.0f, 1.0f, 1.0f);
    
    AiMetaDataSetBool(mds, "local_frame", "linkable", false);
    AiMetaDataSetBool(mds, "angle_units", "linkable", false);
+   //AiMetaDataSetFlt(mds, "eta_i", "min", 1.0f);
+   //AiMetaDataSetFlt(mds, "eta_o", "min", 1.0f);
 }
 
-struct WardDuerData
+struct CookTorranceData
 {
    bool roughness_x_is_linked;
    float roughness_x;
@@ -48,21 +56,30 @@ struct WardDuerData
    bool frame_rotation_is_linked;
    float frame_rotation;
    float angle_scale;
+   bool eta_i_is_linked;
+   float eta_i;
+   bool eta_o_is_linked;
+   float eta_o;
+   bool transmittance_is_linked;
+   AtColor transmittance;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(WardDuerData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(CookTorranceData)));
 }
 
 node_update
 {
-   WardDuerData *data = (WardDuerData*) AiNodeGetLocalData(node);
+   CookTorranceData *data = (CookTorranceData*) AiNodeGetLocalData(node);
    
    data->roughness_x_is_linked = AiNodeIsLinked(node, "roughness_x");
    data->roughness_y_is_linked = AiNodeIsLinked(node, "roughness_y");
    data->custom_frame_is_linked = AiNodeIsLinked(node, "custom_frame");
    data->frame_rotation_is_linked = AiNodeIsLinked(node, "frame_rotation");
+   data->eta_i_is_linked = AiNodeIsLinked(node, "eta_i");
+   data->eta_o_is_linked = AiNodeIsLinked(node, "eta_o");
+   data->transmittance_is_linked = AiNodeIsLinked(node, "transmittance");
    
    data->local_frame = (LocalFrame) AiNodeGetInt(node, "local_frame");
    data->angle_scale = (AiNodeGetInt(node, "angle_units") == AU_Degrees ? AI_DTOR : 1.0f);
@@ -86,6 +103,21 @@ node_update
    {
       data->frame_rotation = AiNodeGetFlt(node, "frame_rotation");
    }
+   
+   if (!data->eta_i_is_linked)
+   {
+      data->eta_i = AiNodeGetFlt(node, "eta_i");
+   }
+   
+   if (!data->eta_o_is_linked)
+   {
+      data->eta_o = AiNodeGetFlt(node, "eta_o");
+   }
+   
+   if (!data->transmittance_is_linked)
+   {
+      data->transmittance = AiNodeGetRGB(node, "transmittance");
+   }
 }
 
 node_finish
@@ -95,7 +127,7 @@ node_finish
 
 shader_evaluate
 {
-   WardDuerData *data = (WardDuerData*) AiNodeGetLocalData(node);
+   CookTorranceData *data = (CookTorranceData*) AiNodeGetLocalData(node);
    
    float rx = (data->roughness_x_is_linked ? AiShaderEvalParamFlt(p_roughness_x) : data->roughness_x);
    float ry = (data->roughness_y_is_linked ? AiShaderEvalParamFlt(p_roughness_y) : data->roughness_y);
@@ -160,14 +192,11 @@ shader_evaluate
       V = cosa * v - sina * u;
    }
    
-   BRDFData *brdf_data = (BRDFData*) AiShaderGlobalsQuickAlloc(sg, sizeof(BRDFData));
+   float eta_i = (data->eta_i_is_linked ? AiShaderEvalParamFlt(p_eta_i) : data->eta_i);
    
-   brdf_data->evalSample = AiWardDuerMISSample;
-   brdf_data->evalBrdf = AiWardDuerMISBRDF;
-   brdf_data->evalPdf = AiWardDuerMISPDF;
-   brdf_data->data = AiWardDuerMISCreateData(sg, &U, &V, rx, ry);
+   float eta_o = (data->eta_o_is_linked ? AiShaderEvalParamFlt(p_eta_o) : data->eta_o);
    
-   AiStateSetMsgPtr("agsb_brdf", brdf_data);
+   AtColor transmittance = (data->transmittance_is_linked ? AiShaderEvalParamRGB(p_transmittance) : data->transmittance);
    
-   sg->out.RGB = AI_RGB_BLACK;
+   sg->out.RGB = AiMicrofacetBTDFIntegrate(&(sg->N), sg, &U, &V, rx, ry, eta_i, eta_o, transmittance);
 }

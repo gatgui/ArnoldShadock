@@ -4,33 +4,33 @@ AI_SHADER_NODE_EXPORT_METHODS(BrdfIntegrateMtd);
 
 enum BrdfIntegrateParams
 {
-   p_BRDF = 0,
-   p_MIS_brdf,
-   p_MIS_ray_type
+   p_brdf_type = 0,
+   p_mis_brdf,
+   p_mis_ray_type
 };
 
-enum BRDF
+enum BrdfType
 {
-   BRDF_MIS = 0,
-   BRDF_LommelSeeliger
+   BT_MIS = 0,
+   BT_LommelSeeliger
 };
 
-static const char* BRDFNames[] = {"MIS", "lommel_seeliger", NULL};
+static const char* BrdfTypeNames[] = {"mis", "lommel_seeliger", NULL};
 
 node_parameters
 {
-   AiParameterEnum("BRDF", BRDF_MIS, BRDFNames);
-   AiParameterRGB("MIS_brdf", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("MIS_ray_type", RT_Diffuse, RayTypeNames);
+   AiParameterEnum("brdf_type", BT_MIS, BrdfTypeNames);
+   AiParameterRGB("mis_brdf", 0.0f, 0.0f, 0.0f);
+   AiParameterEnum("mis_ray_type", RT_Diffuse, RayTypeNames);
    
-   AiMetaDataSetBool(mds, "BRDF", "linkable", false);
-   AiMetaDataSetBool(mds, "MIS_ray_type", "linkable", false);
+   AiMetaDataSetBool(mds, "brdf_type", "linkable", false);
+   AiMetaDataSetBool(mds, "mis_ray_type", "linkable", false);
 }
 
 struct BrdfIntegrateData
 {
-   BRDF brdf;
-   int MIS_ray_type;
+   BrdfType brdf_type;
+   int mis_ray_type;
    
 };
 
@@ -43,8 +43,8 @@ node_update
 {
    BrdfIntegrateData *data = (BrdfIntegrateData*) AiNodeGetLocalData(node);
    
-   data->brdf = (BRDF) AiNodeGetBool(node, "BRDF");
-   data->MIS_ray_type = AiNodeGetInt(node, "MIS_ray_type");
+   data->brdf_type = (BrdfType) AiNodeGetBool(node, "brdf_type");
+   data->mis_ray_type = AiNodeGetInt(node, "mis_ray_type");
 }
 
 node_finish
@@ -56,13 +56,13 @@ shader_evaluate
 {
    BrdfIntegrateData *data = (BrdfIntegrateData*) AiNodeGetLocalData(node);
    
-   if (data->brdf == BRDF_MIS)
+   if (data->brdf_type == BT_MIS)
    {
       BRDFData *brdf = 0;
       
       AiStateSetMsgPtr("agsb_brdf", 0);
       
-      AiShaderEvalParamRGB(p_MIS_brdf);
+      AiShaderEvalParamRGB(p_mis_brdf);
       
       if (!AiStateGetMsgPtr("agsb_brdf", (void**)&brdf) || !brdf)
       {
@@ -70,7 +70,7 @@ shader_evaluate
       }
       else
       {
-         sg->out.RGB = AiBRDFIntegrate(sg, brdf->data, brdf->evalSample, brdf->evalBrdf, brdf->evalPdf, RayTypeValues[data->MIS_ray_type]);
+         sg->out.RGB = AiBRDFIntegrate(sg, brdf->data, brdf->evalSample, brdf->evalBrdf, brdf->evalPdf, RayTypeValues[data->mis_ray_type]);
       }
    }
    else

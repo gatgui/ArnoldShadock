@@ -1,18 +1,15 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MicrofacetBtdfIntegrateMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BrdfAshikhminShirleyMtd);
 
-enum MicrofacetBtdfParams
+enum BrdfAshikhminShirleyParams
 {
-   p_roughness_x = 0,
-   p_roughness_y,
+   p_glossiness_x = 0,
+   p_glossiness_y,
    p_local_frame,
    p_custom_frame,
    p_frame_rotation,
    p_angle_units,
-   p_eta_i,
-   p_eta_o,
-   p_transmittance
 };
 
 enum LocalFrame
@@ -28,70 +25,56 @@ static const char* LocalFrameNames[] = { "Nf_dPdu", "Nf_dPdv", "polar", "shirley
 
 node_parameters
 {
-   AiParameterFlt("roughness_x", 0.467f);
-   AiParameterFlt("roughness_y", 0.467f);
+   AiParameterFlt("glossiness_x", 0.467f);
+   AiParameterFlt("glossiness_y", 0.467f);
    AiParameterEnum("local_frame", LF_Nf_dPdu, LocalFrameNames);
    AiParameterMtx("custom_frame", AI_M4_IDENTITY);
    AiParameterFlt("frame_rotation", 0.0f);
    AiParameterEnum("angle_units", AU_Degrees, AngleUnitsNames);
-   AiParameterFlt("eta_i", 1.0);
-   AiParameterFlt("eta_o", 1.0);
-   AiParameterRGB("transmittance", 1.0f, 1.0f, 1.0f);
    
    AiMetaDataSetBool(mds, "local_frame", "linkable", false);
    AiMetaDataSetBool(mds, "angle_units", "linkable", false);
-   //AiMetaDataSetFlt(mds, "eta_i", "min", 1.0f);
-   //AiMetaDataSetFlt(mds, "eta_o", "min", 1.0f);
 }
 
-struct CookTorranceData
+struct AshikhminShirleyData
 {
-   bool roughness_x_is_linked;
-   float roughness_x;
-   bool roughness_y_is_linked;
-   float roughness_y;
+   bool glossiness_x_is_linked;
+   float glossiness_x;
+   bool glossiness_y_is_linked;
+   float glossiness_y;
    LocalFrame local_frame;
    bool custom_frame_is_linked;
    AtMatrix custom_frame;
    bool frame_rotation_is_linked;
    float frame_rotation;
    float angle_scale;
-   bool eta_i_is_linked;
-   float eta_i;
-   bool eta_o_is_linked;
-   float eta_o;
-   bool transmittance_is_linked;
-   AtColor transmittance;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(CookTorranceData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(AshikhminShirleyData)));
 }
 
 node_update
 {
-   CookTorranceData *data = (CookTorranceData*) AiNodeGetLocalData(node);
+   AshikhminShirleyData *data = (AshikhminShirleyData*) AiNodeGetLocalData(node);
    
-   data->roughness_x_is_linked = AiNodeIsLinked(node, "roughness_x");
-   data->roughness_y_is_linked = AiNodeIsLinked(node, "roughness_y");
+   data->glossiness_x_is_linked = AiNodeIsLinked(node, "glossiness_x");
+   data->glossiness_y_is_linked = AiNodeIsLinked(node, "glossiness_y");
    data->custom_frame_is_linked = AiNodeIsLinked(node, "custom_frame");
    data->frame_rotation_is_linked = AiNodeIsLinked(node, "frame_rotation");
-   data->eta_i_is_linked = AiNodeIsLinked(node, "eta_i");
-   data->eta_o_is_linked = AiNodeIsLinked(node, "eta_o");
-   data->transmittance_is_linked = AiNodeIsLinked(node, "transmittance");
    
    data->local_frame = (LocalFrame) AiNodeGetInt(node, "local_frame");
    data->angle_scale = (AiNodeGetInt(node, "angle_units") == AU_Degrees ? AI_DTOR : 1.0f);
    
-   if (!data->roughness_x_is_linked)
+   if (!data->glossiness_x_is_linked)
    {
-      data->roughness_x = AiNodeGetFlt(node, "roughness_x");
+      data->glossiness_x = AiNodeGetFlt(node, "glossiness_x");
    }
    
-   if (!data->roughness_y_is_linked)
+   if (!data->glossiness_y_is_linked)
    {
-      data->roughness_y = AiNodeGetFlt(node, "roughness_y");
+      data->glossiness_y = AiNodeGetFlt(node, "glossiness_y");
    }
    
    if (!data->custom_frame_is_linked)
@@ -103,21 +86,6 @@ node_update
    {
       data->frame_rotation = AiNodeGetFlt(node, "frame_rotation");
    }
-   
-   if (!data->eta_i_is_linked)
-   {
-      data->eta_i = AiNodeGetFlt(node, "eta_i");
-   }
-   
-   if (!data->eta_o_is_linked)
-   {
-      data->eta_o = AiNodeGetFlt(node, "eta_o");
-   }
-   
-   if (!data->transmittance_is_linked)
-   {
-      data->transmittance = AiNodeGetRGB(node, "transmittance");
-   }
 }
 
 node_finish
@@ -127,10 +95,10 @@ node_finish
 
 shader_evaluate
 {
-   CookTorranceData *data = (CookTorranceData*) AiNodeGetLocalData(node);
+   AshikhminShirleyData *data = (AshikhminShirleyData*) AiNodeGetLocalData(node);
    
-   float rx = (data->roughness_x_is_linked ? AiShaderEvalParamFlt(p_roughness_x) : data->roughness_x);
-   float ry = (data->roughness_y_is_linked ? AiShaderEvalParamFlt(p_roughness_y) : data->roughness_y);
+   float gx = (data->glossiness_x_is_linked ? AiShaderEvalParamFlt(p_glossiness_x) : data->glossiness_x);
+   float gy = (data->glossiness_y_is_linked ? AiShaderEvalParamFlt(p_glossiness_y) : data->glossiness_y);
    
    AtVector U, V;
    
@@ -192,11 +160,14 @@ shader_evaluate
       V = cosa * v - sina * u;
    }
    
-   float eta_i = (data->eta_i_is_linked ? AiShaderEvalParamFlt(p_eta_i) : data->eta_i);
+   BRDFData *brdf_data = (BRDFData*) AiShaderGlobalsQuickAlloc(sg, sizeof(BRDFData));
    
-   float eta_o = (data->eta_o_is_linked ? AiShaderEvalParamFlt(p_eta_o) : data->eta_o);
+   brdf_data->evalSample = AiAshikhminShirleyMISSample;
+   brdf_data->evalBrdf = AiAshikhminShirleyMISBRDF;
+   brdf_data->evalPdf = AiAshikhminShirleyMISPDF;
+   brdf_data->data = AiAshikhminShirleyMISCreateData(sg, &U, &V, gx, gy);
    
-   AtColor transmittance = (data->transmittance_is_linked ? AiShaderEvalParamRGB(p_transmittance) : data->transmittance);
+   AiStateSetMsgPtr("agsb_brdf", brdf_data);
    
-   sg->out.RGB = AiMicrofacetBTDFIntegrate(&(sg->N), sg, &U, &V, rx, ry, eta_i, eta_o, transmittance);
+   sg->out.RGB = AI_RGB_BLACK;
 }

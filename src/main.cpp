@@ -181,10 +181,10 @@ DECLARE_SHADER(Reflect);
 DECLARE_SHADER(Refract);
 DECLARE_FLOAT_SHADER(FresnelWeight);
 DECLARE_COLOR_SHADER(FresnelWeight);
-DECLARE_SHADER(OrenNayarBrdf);
-DECLARE_SHADER(CookTorranceBrdf);
-DECLARE_SHADER(WardDuerBrdf);
-DECLARE_SHADER(AshikhminShirleyBrdf);
+DECLARE_SHADER(BrdfOrenNayar);
+DECLARE_SHADER(BrdfCookTorrance);
+DECLARE_SHADER(BrdfWardDuer);
+DECLARE_SHADER(BrdfAshikhminShirley);
 DECLARE_SHADER(EvaluateLightSample);
 DECLARE_SHADER(BrdfIntegrate);
 DECLARE_SHADER(MakeFrame);
@@ -214,10 +214,13 @@ DECLARE_SHADER(SssSingle);
 DECLARE_SHADER(SssMulti);
 DECLARE_SHADER(GetNode);
 DECLARE_SHADER(CompareNode);
-DECLARE_SHADER(StretchedPhongBrdf);
-DECLARE_SHADER(MicrofacetBtdfIntegrate);
+DECLARE_SHADER(BrdfStretchedPhong);
+DECLARE_SHADER(BtdfMicrofacetIntegrate);
 DECLARE_SHADER(CacheRay);
 DECLARE_SHADER(SetOpacity);
+DECLARE_SHADER(BrdfEvaluateSample);
+DECLARE_SHADER(BrdfEvaluatePdf);
+DECLARE_SHADER(BrdfEvaluate);
 
 node_loader
 {
@@ -357,10 +360,10 @@ node_loader
    REGISTER_SHADER(Refract, refract, AI_TYPE_VECTOR)
    REGISTER_FLOAT_SHADER(FresnelWeight, fresnel_weight)
    REGISTER_COLOR_SHADER(FresnelWeight, fresnel_weight)
-   REGISTER_SHADER(OrenNayarBrdf, oren_nayar_brdf, AI_TYPE_RGB)
-   REGISTER_SHADER(CookTorranceBrdf, cook_torrance_brdf, AI_TYPE_RGB)
-   REGISTER_SHADER(WardDuerBrdf, ward_duer_brdf, AI_TYPE_RGB)
-   REGISTER_SHADER(AshikhminShirleyBrdf, ashikhmin_shirley_brdf, AI_TYPE_RGB)
+   REGISTER_SHADER(BrdfOrenNayar, brdf_oren_nayar, AI_TYPE_RGB)
+   REGISTER_SHADER(BrdfCookTorrance, brdf_cook_torrance, AI_TYPE_RGB)
+   REGISTER_SHADER(BrdfWardDuer, brdf_ward_duer, AI_TYPE_RGB)
+   REGISTER_SHADER(BrdfAshikhminShirley, brdf_ashikhmin_shirley, AI_TYPE_RGB)
    REGISTER_SHADER(EvaluateLightSample, evaluate_light_sample, AI_TYPE_RGB)
    REGISTER_SHADER(BrdfIntegrate, brdf_integrate, AI_TYPE_RGB)
    REGISTER_SHADER(MakeFrame, make_frame, AI_TYPE_MATRIX)
@@ -390,10 +393,13 @@ node_loader
    REGISTER_SHADER(SssMulti, sss_multi, AI_TYPE_RGB)
    REGISTER_SHADER(GetNode, get_node, AI_TYPE_NODE)
    REGISTER_SHADER(CompareNode, compare_node, AI_TYPE_BOOLEAN)
-   REGISTER_SHADER(StretchedPhongBrdf, stretched_phong_brdf, AI_TYPE_RGB)
-   REGISTER_SHADER(MicrofacetBtdfIntegrate, microfacet_btdf_integrate, AI_TYPE_RGB)
+   REGISTER_SHADER(BrdfStretchedPhong, brdf_stretched_phong, AI_TYPE_RGB)
+   REGISTER_SHADER(BtdfMicrofacetIntegrate, btdf_microfacet_integrate, AI_TYPE_RGB)
    REGISTER_SHADER(CacheRay, cache_ray, AI_TYPE_VECTOR)
    REGISTER_SHADER(SetOpacity, set_opacity, AI_TYPE_RGB)
+   REGISTER_SHADER(BrdfEvaluateSample, brdf_evaluate_sample, AI_TYPE_VECTOR)
+   REGISTER_SHADER(BrdfEvaluatePdf, brdf_evaluate_pdf, AI_TYPE_FLOAT)
+   REGISTER_SHADER(BrdfEvaluate, brdf_evaluate, AI_TYPE_RGB)
    
    return false;
 }

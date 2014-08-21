@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(OrenNayarBrdfMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BrdfOrenNayarMtd);
 
-enum OrenNayarBrdfParams
+enum BrdfOrenNayarParams
 {
    p_roughness = 0
 };
