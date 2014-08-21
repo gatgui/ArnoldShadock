@@ -54,7 +54,7 @@ shader_evaluate
        !hit ||
        hit->isSG)
    {
-      if (hit->isSG)
+      if (hit && hit->isSG)
       {
          AiMsgWarning("[trace_state_float] Trying to access result from a 'probe' trace: Use 'probe_state_vector' instead");
       }

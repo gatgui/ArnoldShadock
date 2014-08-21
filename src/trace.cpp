@@ -171,15 +171,15 @@ shader_evaluate
       switch (data->type)
       {
       case TT_probe:
-         sg->out.BOOL = AiTraceProbe(ray, (AtShaderGlobals*) hit);
+         sg->out.BOOL = AiTraceProbe(ray, (AtShaderGlobals*) hit->ptr);
          break;
       case TT_background:
-         AiTraceBackground(ray, (AtScrSample*) hit);
+         AiTraceBackground(ray, (AtScrSample*) hit->ptr);
          sg->out.BOOL = true;
          break;
       case TT_standard:
       default:
-         sg->out.BOOL = AiTrace(ray, (AtScrSample*) hit);
+         sg->out.BOOL = AiTrace(ray, (AtScrSample*) hit->ptr);
       }
    }
    

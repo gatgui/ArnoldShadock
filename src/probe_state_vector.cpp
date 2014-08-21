@@ -54,7 +54,7 @@ shader_evaluate
        !hit ||
        !hit->isSG)
    {
-      if (!hit->isSG)
+      if (hit && !hit->isSG)
       {
          AiMsgWarning("[probe_state_vector] Trying to access result from a 'standard' or 'background' trace: Use 'trace_state_vector' instead");
       }
