@@ -117,6 +117,20 @@ inline int GetRenderThreadsCount()
    return AiNodeGetInt(AiUniverseGetOptions(), "threads");
 }
 
+template <unsigned int DIM, typename T>
+inline T MaxComponent(const T *val)
+{
+   T maxval = val[0];
+   for (unsigned int i=1; i<DIM; ++i)
+   {
+      if (val[i] > maxval)
+      {
+         maxval = val[i];
+      }
+   }
+   return maxval;
+}
+
 bool SortRampPositions(AtArray *a, unsigned int *shuffle);
 
 void FloatRamp(AtArray *p, AtArray *v, AtArray *i, RampInterpolation defi, unsigned int *s, float t, float &out);
