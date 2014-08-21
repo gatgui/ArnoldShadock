@@ -216,6 +216,7 @@ DECLARE_SHADER(GetNode);
 DECLARE_SHADER(CompareNode);
 DECLARE_SHADER(StretchedPhongBrdf);
 DECLARE_SHADER(MicrofacetBtdfIntegrate);
+DECLARE_SHADER(CacheRay);
 
 node_loader
 {
@@ -390,6 +391,7 @@ node_loader
    REGISTER_SHADER(CompareNode, compare_node, AI_TYPE_BOOLEAN)
    REGISTER_SHADER(StretchedPhongBrdf, stretched_phong_brdf, AI_TYPE_RGB)
    REGISTER_SHADER(MicrofacetBtdfIntegrate, microfacet_btdf_integrate, AI_TYPE_RGB)
+   REGISTER_SHADER(CacheRay, cache_ray, AI_TYPE_VECTOR)
    
    return false;
 }
