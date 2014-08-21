@@ -212,6 +212,8 @@ DECLARE_SHADER(SampleValue);
 DECLARE_FCV_SHADER(SamplesLoop);
 DECLARE_SHADER(SssSingle);
 DECLARE_SHADER(SssMulti);
+DECLARE_SHADER(GetNode);
+DECLARE_SHADER(CompareNode);
 
 node_loader
 {
@@ -382,6 +384,8 @@ node_loader
    REGISTER_FCV_SHADER(SamplesLoop, samples_loop)
    REGISTER_SHADER(SssSingle, sss_single, AI_TYPE_RGB)
    REGISTER_SHADER(SssMulti, sss_multi, AI_TYPE_RGB)
+   REGISTER_SHADER(GetNode, get_node, AI_TYPE_NODE)
+   REGISTER_SHADER(CompareNode, compare_node, AI_TYPE_BOOLEAN)
    
    return false;
 }
