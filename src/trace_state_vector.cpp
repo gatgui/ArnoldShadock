@@ -61,7 +61,7 @@ shader_evaluate
    else
    {
       void *data = AiNodeGetLocalData(node);
-      TraceState state = (TraceState) *((int*)&data);
+      TraceState state = (TraceState) size_t(data);
       
       sample = (AtScrSample*) hit->ptr;
       

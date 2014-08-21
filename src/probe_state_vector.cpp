@@ -63,7 +63,7 @@ shader_evaluate
    else
    {
       void *data = AiNodeGetLocalData(node);
-      ProbeState state = (ProbeState) *((int*)&data);
+      ProbeState state = (ProbeState) size_t(data);
       
       hitsg = (AtShaderGlobals*) hit->ptr;
       

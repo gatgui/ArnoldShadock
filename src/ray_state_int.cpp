@@ -69,7 +69,7 @@ shader_evaluate
    else
    {
       void *data = AiNodeGetLocalData(node);
-      RayState state = (RayState) *((int*)&data);
+      RayState state = (RayState) size_t(data);
       
       switch (state)
       {
