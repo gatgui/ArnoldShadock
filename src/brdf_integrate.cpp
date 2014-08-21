@@ -4,21 +4,34 @@ AI_SHADER_NODE_EXPORT_METHODS(BrdfIntegrateMtd);
 
 enum BrdfIntegrateParams
 {
-   p_brdf = 0,
-   p_ray_type,
+   p_BRDF = 0,
+   p_MIS_brdf,
+   p_MIS_ray_type
 };
+
+enum BRDF
+{
+   BRDF_MIS = 0,
+   BRDF_LommelSeeliger
+};
+
+static const char* BRDFNames[] = {"MIS", "lommel_seeliger", NULL};
 
 node_parameters
 {
-   AiParameterRGB("brdf", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("ray_type", RT_Diffuse, RayTypeNames);
+   AiParameterEnum("BRDF", BRDF_MIS, BRDFNames);
+   AiParameterRGB("MIS_brdf", 0.0f, 0.0f, 0.0f);
+   AiParameterEnum("MIS_ray_type", RT_Diffuse, RayTypeNames);
    
-   AiMetaDataSetBool(mds, "ray_type", "linkable", false);
+   AiMetaDataSetBool(mds, "BRDF", "linkable", false);
+   AiMetaDataSetBool(mds, "MIS_ray_type", "linkable", false);
 }
 
 struct BrdfIntegrateData
 {
-   int ray_type;
+   BRDF brdf;
+   int MIS_ray_type;
+   
 };
 
 node_initialize
@@ -30,7 +43,8 @@ node_update
 {
    BrdfIntegrateData *data = (BrdfIntegrateData*) AiNodeGetLocalData(node);
    
-   data->ray_type = AiNodeGetInt(node, "ray_type");
+   data->brdf = (BRDF) AiNodeGetBool(node, "BRDF");
+   data->MIS_ray_type = AiNodeGetInt(node, "MIS_ray_type");
 }
 
 node_finish
@@ -42,18 +56,26 @@ shader_evaluate
 {
    BrdfIntegrateData *data = (BrdfIntegrateData*) AiNodeGetLocalData(node);
    
-   BRDFData *brdf = 0;
-   
-   AiStateSetMsgPtr("agsb_brdf", 0);
-   
-   AiShaderEvalParamRGB(p_brdf);
-   
-   if (!AiStateGetMsgPtr("agsb_brdf", (void**)&brdf) || !brdf)
+   if (data->brdf == BRDF_MIS)
    {
-      sg->out.RGB = AI_RGB_BLACK;
+      BRDFData *brdf = 0;
+      
+      AiStateSetMsgPtr("agsb_brdf", 0);
+      
+      AiShaderEvalParamRGB(p_MIS_brdf);
+      
+      if (!AiStateGetMsgPtr("agsb_brdf", (void**)&brdf) || !brdf)
+      {
+         sg->out.RGB = AI_RGB_BLACK;
+      }
+      else
+      {
+         sg->out.RGB = AiBRDFIntegrate(sg, brdf->data, brdf->evalSample, brdf->evalBrdf, brdf->evalPdf, RayTypeValues[data->MIS_ray_type]);
+      }
    }
    else
    {
-      sg->out.RGB = AiBRDFIntegrate(sg, brdf->data, brdf->evalSample, brdf->evalBrdf, brdf->evalPdf, RayTypeValues[data->ray_type]);
+      // Only LommelSeeliger
+      sg->out.RGB = AiLommelSeeligerIntegrate(&(sg->N), sg);
    }
 }
