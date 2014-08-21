@@ -173,12 +173,12 @@ shader_evaluate
       AtMatrix *frame = (data->custom_frame_is_linked ? AiShaderEvalParamMtx(p_custom_frame) : &(data->custom_frame));
       
       U.x = (*frame)[0][0];
-      U.y = (*frame)[1][0];
-      U.z = (*frame)[2][0];
+      U.y = (*frame)[0][1];
+      U.z = (*frame)[0][2];
       
-      V.x = (*frame)[0][1];
+      V.x = (*frame)[1][0];
       V.y = (*frame)[1][1];
-      V.z = (*frame)[2][1];
+      V.z = (*frame)[1][2];
    }
    
    float a = data->angle_scale * (data->frame_rotation_is_linked ? AiShaderEvalParamFlt(p_frame_rotation) : data->frame_rotation);
