@@ -40,7 +40,7 @@ shader_evaluate
    }
    else
    {
-      float sample = 0.0f;
+      AtPoint2 sample;
       
       CombineMode combine = (CombineMode) AiShaderEvalParamInt(p_combine);
       
@@ -48,9 +48,9 @@ shader_evaluate
       
       AtSamplerIterator *it = AiSamplerIterator(sampler, sg);
       
-      while (AiSamplerGetSample(it, &sample))
+      while (AiSamplerGetSample(it, &(sample.x)))
       {
-         AiStateSetMsgFlt("agsb_sample_value", sample);
+         AiStateSetMsgPnt2("agsb_sample_value", sample);
          
          AtVector input = AiShaderEvalParamVec(p_input);
          
