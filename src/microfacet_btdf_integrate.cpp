@@ -40,8 +40,8 @@ node_parameters
    
    AiMetaDataSetBool(mds, "local_frame", "linkable", false);
    AiMetaDataSetBool(mds, "angle_units", "linkable", false);
-   AiMetaDataSetFlt(mds, "eta_i", "min", 1.0f);
-   AiMetaDataSetFlt(mds, "eta_o", "min", 1.0f);
+   //AiMetaDataSetFlt(mds, "eta_i", "min", 1.0f);
+   //AiMetaDataSetFlt(mds, "eta_o", "min", 1.0f);
 }
 
 struct CookTorranceData
