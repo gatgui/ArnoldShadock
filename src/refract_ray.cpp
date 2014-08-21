@@ -41,9 +41,17 @@ shader_evaluate
    if (AiStateGetMsgPtr("agsb_ray", (void**)&ray) && ray)
    {
       AtVector N = AiShaderEvalParamVec(p_normal);
-      AiRefractRay(ray, (AiV3IsZero(N) ? &(sg->N) : &N),
-                   AiShaderEvalParamFlt(p_n1), AiShaderEvalParamFlt(p_n2), sg);
-      sg->out.VEC = ray->dir;
+      if (!AiRefractRay(ray, (AiV3IsZero(N) ? &(sg->N) : &N),
+                        AiShaderEvalParamFlt(p_n1),
+                        AiShaderEvalParamFlt(p_n2), sg))
+      {
+         sg->out.VEC = AI_V3_ZERO;
+         AiStateSetMsgPtr("agsb_ray", 0);
+      }
+      else
+      {
+         sg->out.VEC = ray->dir;
+      }
    }
    else
    {
