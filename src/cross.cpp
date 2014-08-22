@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(CrossProductMtd);
+AI_SHADER_NODE_EXPORT_METHODS(CrossMtd);
 
-enum CrossProductParams
+enum CrossParams
 {
    p_input1 = 0,
    p_input2

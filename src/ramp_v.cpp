@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RampVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RampVMtd);
 
-enum RampVectorParams
+enum RampVParams
 {
    p_input = 0,
    p_positions,
@@ -39,7 +39,7 @@ node_parameters
    //AiMetaDataSetStr(mds, NULL, "ramps.values.interpolations", "interpolations");
 }
 
-struct RampVectorData
+struct RampVData
 {
    bool valid;
    unsigned int nkeys;
@@ -55,7 +55,7 @@ struct RampVectorData
 
 node_initialize
 {
-   RampVectorData *data = (RampVectorData*) AiMalloc(sizeof(RampVectorData));
+   RampVData *data = (RampVData*) AiMalloc(sizeof(RampVData));
    
    data->valid = false;
    data->nkeys = 0;
@@ -73,7 +73,7 @@ node_initialize
 
 node_update
 {
-   RampVectorData *data = (RampVectorData*) AiNodeGetLocalData(node);
+   RampVData *data = (RampVData*) AiNodeGetLocalData(node);
    
    data->valid = false;
    data->nkeys = 0;
@@ -127,7 +127,7 @@ node_update
 
 node_finish
 {
-   RampVectorData *data = (RampVectorData*) AiNodeGetLocalData(node);
+   RampVData *data = (RampVData*) AiNodeGetLocalData(node);
    
    for (unsigned int i=0; i<data->nshuffles; ++i)
    {
@@ -140,7 +140,7 @@ node_finish
 
 shader_evaluate
 {
-   RampVectorData *data = (RampVectorData*) AiNodeGetLocalData(node);
+   RampVData *data = (RampVData*) AiNodeGetLocalData(node);
    
    if (!data->valid)
    {

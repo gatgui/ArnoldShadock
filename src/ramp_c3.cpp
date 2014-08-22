@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RampColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RampC3Mtd);
 
-enum RampColorParams
+enum RampC3Params
 {
    p_input = 0,
    p_positions,
@@ -38,7 +38,7 @@ node_parameters
    AiMetaDataSetStr(mds, NULL, "ramps.values.interpolations", "interpolations");
 }
 
-struct RampColorData
+struct RampC3Data
 {
    bool valid;
    unsigned int nkeys;
@@ -54,7 +54,7 @@ struct RampColorData
 
 node_initialize
 {
-   RampColorData *data = (RampColorData*) AiMalloc(sizeof(RampColorData));
+   RampC3Data *data = (RampC3Data*) AiMalloc(sizeof(RampC3Data));
    
    data->valid = false;
    data->nkeys = 0;
@@ -72,7 +72,7 @@ node_initialize
 
 node_update
 {
-   RampColorData *data = (RampColorData*) AiNodeGetLocalData(node);
+   RampC3Data *data = (RampC3Data*) AiNodeGetLocalData(node);
    
    data->valid = false;
    data->nkeys = 0;
@@ -126,7 +126,7 @@ node_update
 
 node_finish
 {
-   RampColorData *data = (RampColorData*) AiNodeGetLocalData(node);
+   RampC3Data *data = (RampC3Data*) AiNodeGetLocalData(node);
    
    for (unsigned int i=0; i<data->nshuffles; ++i)
    {
@@ -139,7 +139,7 @@ node_finish
 
 shader_evaluate
 {
-   RampColorData *data = (RampColorData*) AiNodeGetLocalData(node);
+   RampC3Data *data = (RampC3Data*) AiNodeGetLocalData(node);
    
    if (!data->valid)
    {

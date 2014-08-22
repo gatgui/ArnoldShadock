@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ShapeAttrRGBAMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ShapeAttrC4Mtd);
 
-enum ShapeAttrRGBAParams
+enum ShapeAttrC4Params
 {
    p_attribute = 0,
    p_default

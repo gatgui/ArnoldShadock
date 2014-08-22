@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SignFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SignFMtd);
 
-enum SignFloatParams
+enum SignFParams
 {
    p_input = 0
 };

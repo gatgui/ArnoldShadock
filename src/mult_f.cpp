@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MultiplyFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MultFMtd);
 
-enum MultiplyFloatParams
+enum MultFParams
 {
    p_input1 = 0,
    p_input2

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RangeSelectColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RangeSwitchC3Mtd);
 
-enum RangeSelectColorParams
+enum RangeSwitchC3Params
 {
    p_value = 0,
    p_lower_bound,

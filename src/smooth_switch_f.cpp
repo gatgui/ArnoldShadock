@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SmoothSelectFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SmoothSwitchFMtd);
 
-enum SmoothSelectFloatParams
+enum SmoothSwitchFParams
 {
    p_value = 0,
    p_threshold,

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(LogVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(LogVMtd);
 
-enum LogVectorParams
+enum LogVParams
 {
    p_input = 0
 };

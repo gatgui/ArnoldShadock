@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(GainFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(GainFMtd);
 
-enum GainFloatParams
+enum GainFParams
 {
    p_input = 0,
    p_gain

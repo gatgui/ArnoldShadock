@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(NegateColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(NegC3Mtd);
 
-enum NegateColorParams
+enum NegC3Params
 {
    p_input = 0
 };

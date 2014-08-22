@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SqrtColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SqrtC3Mtd);
 
-enum SqrtColorParams
+enum SqrtC3Params
 {
    p_input = 0
 };

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(BrdfEvaluateMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BrdfEvalMtd);
 
-enum BrdfEvaluateParams
+enum BrdfEvalParams
 {
    p_brdf_type = 0,
    p_mis_brdf,

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(CompareFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(CompareFMtd);
 
-enum CompareFloatParams
+enum CompareFParams
 {
    p_operator = 0,
    p_invert,

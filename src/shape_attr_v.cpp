@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ShapeAttrVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ShapeAttrVMtd);
 
-enum ShapeAttrVectorParams
+enum ShapeAttrVParams
 {
    p_attribute = 0,
    p_default

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ReadAOVRGBMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ReadAOVC3Mtd);
 
-enum ReadAOVRGBParams
+enum ReadAOVC3Params
 {
    p_aov_name = 0,
    p_default_value
@@ -16,34 +16,34 @@ node_parameters
    AiMetaDataSetBool(mds, "aov_name", "linkable", false);
 }
 
-struct ReadAOVRGBData
+struct ReadAOVC3Data
 {
    const char *aovName;
 };
 
 node_initialize
 {
-   ReadAOVRGBData *data = (ReadAOVRGBData*) AiMalloc(sizeof(ReadAOVRGBData));
+   ReadAOVC3Data *data = (ReadAOVC3Data*) AiMalloc(sizeof(ReadAOVC3Data));
    
    AiNodeSetLocalData(node, data);
 }
 
 node_update
 {
-   ReadAOVRGBData *data = (ReadAOVRGBData*) AiNodeGetLocalData(node);
+   ReadAOVC3Data *data = (ReadAOVC3Data*) AiNodeGetLocalData(node);
    
    data->aovName = AiNodeGetStr(node, "aov_name");
 }
 
 node_finish
 {
-   ReadAOVRGBData *data = (ReadAOVRGBData*) AiNodeGetLocalData(node);
+   ReadAOVC3Data *data = (ReadAOVC3Data*) AiNodeGetLocalData(node);
    AiFree(data);
 }
 
 shader_evaluate
 {
-   ReadAOVRGBData *data = (ReadAOVRGBData*) AiNodeGetLocalData(node);
+   ReadAOVC3Data *data = (ReadAOVC3Data*) AiNodeGetLocalData(node);
    
    if (!AiAOVGetRGB(sg, data->aovName, sg->out.RGB))
    {

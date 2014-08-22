@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MakeColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MakeRGBMtd);
 
-enum MakeColorParams
+enum MakeRGBParams
 {
    p_r = 0,
    p_g,

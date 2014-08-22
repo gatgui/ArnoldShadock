@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(InterpolateMatrixMtd);
+AI_SHADER_NODE_EXPORT_METHODS(LerpMMtd);
 
-enum InterpolateMatrixParams
+enum LerpMParams
 {
    p_input1 = 0,
    p_input2,

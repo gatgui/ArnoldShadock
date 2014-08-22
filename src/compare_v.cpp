@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(CompareVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(CompareVMtd);
 
-enum CompareVectorParams
+enum CompareVParams
 {
    p_operator = 0,
    p_invert,

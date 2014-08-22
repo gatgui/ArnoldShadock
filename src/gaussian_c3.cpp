@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(GaussianColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(GaussianC3Mtd);
 
-enum GaussianColorParams
+enum GaussianC3Params
 {
    p_input = 0,
    p_amplitude,

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(CeilFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(CeilFMtd);
 
-enum CeilFloatParams
+enum CeilFParams
 {
    p_input = 0
 };

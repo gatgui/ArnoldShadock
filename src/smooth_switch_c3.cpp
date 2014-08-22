@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SmoothSelectColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SmoothSwitchC3Mtd);
 
-enum SmoothSelectColorParams
+enum SmoothSwitchC3Params
 {
    p_value = 0,
    p_threshold,

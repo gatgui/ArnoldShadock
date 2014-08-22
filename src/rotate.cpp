@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RotateVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RotateMtd);
 
-enum RotateVectorParams
+enum RotateParams
 {
    p_input = 0,
    p_rotation_order,
@@ -23,7 +23,7 @@ node_parameters
    AiMetaDataSetBool(mds, "angle_units", "linkable", false);
 }
 
-struct RotateVectorData
+struct RotateData
 {
    AtMatrix Rx;
    AtMatrix Ry;
@@ -45,7 +45,7 @@ struct RotateVectorData
 
 node_initialize
 {
-   RotateVectorData *data = (RotateVectorData*) AiMalloc(sizeof(RotateVectorData));
+   RotateData *data = (RotateData*) AiMalloc(sizeof(RotateData));
 
    data->Rx_set = false;
    data->Ry_set = false;
@@ -59,7 +59,7 @@ node_initialize
 
 node_update
 {
-   RotateVectorData *data = (RotateVectorData*) AiNodeGetLocalData(node);
+   RotateData *data = (RotateData*) AiNodeGetLocalData(node);
    
    data->rotationOrder = (RotationOrder) AiNodeGetInt(node, "rotation_order");
    data->angleScale = (AiNodeGetInt(node, "angle_units") == AU_Radians ? AI_RTOD : 1.0f);
@@ -155,13 +155,13 @@ node_update
 
 node_finish
 {
-   RotateVectorData *data = (RotateVectorData*) AiNodeGetLocalData(node);
+   RotateData *data = (RotateData*) AiNodeGetLocalData(node);
    AiFree(data);
 }
 
 shader_evaluate
 {
-   RotateVectorData *data = (RotateVectorData*) AiNodeGetLocalData(node);
+   RotateData *data = (RotateData*) AiNodeGetLocalData(node);
    
    AtVector p, ip, r;
    AtMatrix R, Rx, Ry, Rz, P, iP, tmp;

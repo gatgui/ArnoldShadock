@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(GainVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(GainVMtd);
 
-enum GainVectorParams
+enum GainVParams
 {
    p_input = 0,
    p_gain

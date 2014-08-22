@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ColorToFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RGBToFloatMtd);
 
-enum ColorToFloatParams
+enum RGBToFloatParams
 {
    p_input = 0,
    p_mode

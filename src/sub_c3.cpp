@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SubtractColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SubC3Mtd);
 
-enum SubtractColorParams
+enum SubC3Params
 {
    p_input1 = 0,
    p_input2

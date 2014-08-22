@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SmoothStepColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SmoothStepC3Mtd);
 
-enum SmoothStepColorParams
+enum SmoothStepC3Params
 {
    p_input = 0,
    p_input_min,

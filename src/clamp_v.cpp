@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ClampVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ClampVMtd);
 
-enum ClampVectorParams
+enum ClampVParams
 {
    p_input = 0,
    p_input_min,

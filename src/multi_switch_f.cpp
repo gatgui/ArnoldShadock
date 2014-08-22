@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MultiSelectFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MultiSwitchFMtd);
 
-enum MultiSelectFloatParams
+enum MultiSwitchFParams
 {
    p_which = 0,
    p_input0,

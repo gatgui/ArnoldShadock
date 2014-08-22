@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ReadMsgBoolMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ReadMsgBMtd);
 
-enum ReadMsgBoolParams
+enum ReadMsgBParams
 {
    p_msg_name = 0,
    p_default_value
@@ -16,34 +16,34 @@ node_parameters
    AiMetaDataSetBool(mds, "msg_name", "linkable", false);
 }
 
-struct ReadMsgBoolData
+struct ReadMsgBData
 {
    const char *msgName;
 };
 
 node_initialize
 {
-   ReadMsgBoolData *data = (ReadMsgBoolData*) AiMalloc(sizeof(ReadMsgBoolData));
+   ReadMsgBData *data = (ReadMsgBData*) AiMalloc(sizeof(ReadMsgBData));
    
    AiNodeSetLocalData(node, data);
 }
 
 node_update
 {
-   ReadMsgBoolData *data = (ReadMsgBoolData*) AiNodeGetLocalData(node);
+   ReadMsgBData *data = (ReadMsgBData*) AiNodeGetLocalData(node);
    
    data->msgName = AiNodeGetStr(node, "msg_name");
 }
 
 node_finish
 {
-   ReadMsgBoolData *data = (ReadMsgBoolData*) AiNodeGetLocalData(node);
+   ReadMsgBData *data = (ReadMsgBData*) AiNodeGetLocalData(node);
    AiFree(data);
 }
 
 shader_evaluate
 {
-   ReadMsgBoolData *data = (ReadMsgBoolData*) AiNodeGetLocalData(node);
+   ReadMsgBData *data = (ReadMsgBData*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgBool(data->msgName, &(sg->out.BOOL)))
    {

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RangeSelectVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RangeSwitchVMtd);
 
-enum RangeSelectVectorParams
+enum RangeSwitchVParams
 {
    p_value = 0,
    p_lower_bound,

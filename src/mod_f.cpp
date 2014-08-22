@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ModuloFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ModFMtd);
 
-enum ModuloFloatParams
+enum ModFParams
 {
    p_input1 = 0,
    p_input2

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(GaussianFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(GaussianFMtd);
 
-enum GaussianFloatParams
+enum GaussianFParams
 {
    p_input = 0,
    p_amplitude,

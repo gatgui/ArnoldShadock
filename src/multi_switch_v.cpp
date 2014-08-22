@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MultiSelectVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MultiSwitchVMtd);
 
-enum MultiSelectVectorParams
+enum MultiSwitchVParams
 {
    p_which = 0,
    p_input0,

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(NegateVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(NegVMtd);
 
-enum NegateVectorParams
+enum NegVParams
 {
    p_input = 0
 };

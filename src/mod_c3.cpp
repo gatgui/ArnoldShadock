@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ModuloColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ModC3Mtd);
 
-enum ModuloColorParams
+enum ModC3Params
 {
    p_input1 = 0,
    p_input2

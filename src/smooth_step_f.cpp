@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SmoothStepFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SmoothStepFMtd);
 
-enum SmoothStepFloatParams
+enum SmoothStepFParams
 {
    p_input = 0,
    p_input_min,

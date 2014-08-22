@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(PowColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(PowC3Mtd);
 
-enum PowColorParams
+enum PowC3Params
 {
    p_input1 = 0,
    p_input2

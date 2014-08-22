@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(CompareColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(CompareC3Mtd);
 
-enum CompareColorParams
+enum CompareC3Params
 {
    p_operator = 0,
    p_invert,

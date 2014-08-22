@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RayStateVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RayStateVMtd);
 
-enum RayStateVectorParams
+enum RayStateVParams
 {
    p_state = 0,
    p_ray,

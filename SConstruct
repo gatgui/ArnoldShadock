@@ -15,6 +15,38 @@ withAnimCurve = (int(ARGUMENTS.get("with-animcurve", "1")) != 0)
 withUserDataRamp = (int(ARGUMENTS.get("with-userdataramp", "1")) != 0)
 shdprefix = ARGUMENTS.get("shaders-prefix", "gas_")
 
+def check_symbols(*args, **kwargs):
+  import subprocess
+  
+  try:
+    
+    _, arnilib = excons.GetDirs("arnold", libdirname=("bin" if sys.platform != "win32" else "lib"))
+    
+    envvar = ("PATH" if sys.platform == "win32" else ("DYLD_LIBRARY_PATH" if sys.platform == "darwin" else "LD_LIBRARY_PATH"))
+    
+    if not arnilib in os.environ.get(envvar, ""):
+      os.environ[envvar] = os.environ.get(envvar, "") + os.pathsep + arnilib
+    
+    cmd = "python -c \"import ctypes; ctypes.cdll.LoadLibrary('%s')\"" % kwargs["target"][0]
+    
+    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = p.communicate()
+    
+    if p.returncode != 0:
+      raise Exception(err)
+    
+  except Exception, e:
+    msg = str(e)
+    
+    if "undefined symbol" in msg:
+      print("\n!!! MISSING SYMBOLS FOUND !!!")
+    else:
+      print("\n!!! FAILED TO CHECK SYMBOLS !!!")
+    
+    print(msg)
+    
+    sys.exit(1)
+
 def make_mtd():
   nodeexp = re.compile(r"^(\s*\[\s*node\s+)([^]]+)(\s*\]\s*)$")
   df = open("agShadingBlocks.mtd", "w")
@@ -114,7 +146,8 @@ prjs = [
    "libs": libs,
    "srcs": glob.glob("src/*.cpp") + extra_srcs,
    "install": {"": "agShadingBlocks.mtd"},
-   "custom": [arnold.Require]
+   "custom": [arnold.Require],
+   "post": [check_symbols]
   }
 ]
 

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SignColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SignC3Mtd);
 
-enum SignColorParams
+enum SignC3Params
 {
    p_input = 0
 };

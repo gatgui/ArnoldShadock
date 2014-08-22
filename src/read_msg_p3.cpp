@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ReadMsgPntMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ReadMsgP3Mtd);
 
-enum ReadMsgPntParams
+enum ReadMsgP3Params
 {
    p_msg_name = 0,
    p_default_value
@@ -16,34 +16,34 @@ node_parameters
    AiMetaDataSetBool(mds, "msg_name", "linkable", false);
 }
 
-struct ReadMsgPntData
+struct ReadMsgP3Data
 {
    const char *msgName;
 };
 
 node_initialize
 {
-   ReadMsgPntData *data = (ReadMsgPntData*) AiMalloc(sizeof(ReadMsgPntData));
+   ReadMsgP3Data *data = (ReadMsgP3Data*) AiMalloc(sizeof(ReadMsgP3Data));
    
    AiNodeSetLocalData(node, data);
 }
 
 node_update
 {
-   ReadMsgPntData *data = (ReadMsgPntData*) AiNodeGetLocalData(node);
+   ReadMsgP3Data *data = (ReadMsgP3Data*) AiNodeGetLocalData(node);
    
    data->msgName = AiNodeGetStr(node, "msg_name");
 }
 
 node_finish
 {
-   ReadMsgPntData *data = (ReadMsgPntData*) AiNodeGetLocalData(node);
+   ReadMsgP3Data *data = (ReadMsgP3Data*) AiNodeGetLocalData(node);
    AiFree(data);
 }
 
 shader_evaluate
 {
-   ReadMsgPntData *data = (ReadMsgPntData*) AiNodeGetLocalData(node);
+   ReadMsgP3Data *data = (ReadMsgP3Data*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgPnt(data->msgName, &(sg->out.PNT)))
    {

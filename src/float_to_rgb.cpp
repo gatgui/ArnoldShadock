@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(FloatToColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(FloatToRGBMtd);
 
-enum FloatToColorParams
+enum FloatToRGBParams
 {
    p_input = 0
 };

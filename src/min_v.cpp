@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MinVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MinVMtd);
 
-enum MinVectorParams
+enum MinVParams
 {
    p_input1 = 0,
    p_input2

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(CeilColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(CeilC3Mtd);
 
-enum CeilColorParams
+enum CeilC3Params
 {
    p_input = 0
 };

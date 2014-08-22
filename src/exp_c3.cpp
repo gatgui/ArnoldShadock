@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ExpColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ExpC3Mtd);
 
-enum ExpColorParams
+enum ExpC3Params
 {
    p_input = 0
 };

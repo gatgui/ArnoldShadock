@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ReflectMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ReflectVMtd);
 
-enum ReflectParams
+enum ReflectVParams
 {
    p_direction = 0,
    p_normal,
@@ -20,7 +20,7 @@ node_parameters
    AiMetaDataSetBool(mds, "safe", "linkable", false);
 }
 
-struct ReflectData
+struct ReflectVData
 {
    bool N_is_linked;
    bool safe;
@@ -29,12 +29,12 @@ struct ReflectData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(ReflectData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(ReflectVData)));
 }
 
 node_update
 {
-   ReflectData *data = (ReflectData*) AiNodeGetLocalData(node);
+   ReflectVData *data = (ReflectVData*) AiNodeGetLocalData(node);
    
    data->N_is_linked = AiNodeIsLinked(node, "normal");
    data->Ng_is_linked = AiNodeIsLinked(node, "geometric_normal");
@@ -48,7 +48,7 @@ node_finish
 
 shader_evaluate
 {
-   ReflectData *data = (ReflectData*) AiNodeGetLocalData(node);
+   ReflectVData *data = (ReflectVData*) AiNodeGetLocalData(node);
    
    AtVector D = AiShaderEvalParamVec(p_direction);
    AtVector N = (data->N_is_linked ? AiShaderEvalParamVec(p_normal) : sg->N);

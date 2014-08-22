@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(TrigonometryFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(TrigoFMtd);
 
-enum TrigonometryFloatParams
+enum TrigoFParams
 {
    p_input1 = 0,
    p_input2,

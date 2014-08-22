@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SmoothRangeSelectColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SmoothRangeSwitchC3Mtd);
 
-enum SmoothRangeSelectColorParams
+enum SmoothRangeSwitchC3Params
 {
    p_value = 0,
    p_lower_bound,

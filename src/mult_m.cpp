@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MultiplyMatrixMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MultMMtd);
 
-enum MultiplyMatrixParams
+enum MultMParams
 {
    p_input1 = 0,
    p_input2

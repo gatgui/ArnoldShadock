@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ReadMsgRGBMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ReadMsgC3Mtd);
 
-enum ReadMsgRGBParams
+enum ReadMsgC3Params
 {
    p_msg_name = 0,
    p_default_value
@@ -16,34 +16,34 @@ node_parameters
    AiMetaDataSetBool(mds, "msg_name", "linkable", false);
 }
 
-struct ReadMsgRGBData
+struct ReadMsgC3Data
 {
    const char *msgName;
 };
 
 node_initialize
 {
-   ReadMsgRGBData *data = (ReadMsgRGBData*) AiMalloc(sizeof(ReadMsgRGBData));
+   ReadMsgC3Data *data = (ReadMsgC3Data*) AiMalloc(sizeof(ReadMsgC3Data));
    
    AiNodeSetLocalData(node, data);
 }
 
 node_update
 {
-   ReadMsgRGBData *data = (ReadMsgRGBData*) AiNodeGetLocalData(node);
+   ReadMsgC3Data *data = (ReadMsgC3Data*) AiNodeGetLocalData(node);
    
    data->msgName = AiNodeGetStr(node, "msg_name");
 }
 
 node_finish
 {
-   ReadMsgRGBData *data = (ReadMsgRGBData*) AiNodeGetLocalData(node);
+   ReadMsgC3Data *data = (ReadMsgC3Data*) AiNodeGetLocalData(node);
    AiFree(data);
 }
 
 shader_evaluate
 {
-   ReadMsgRGBData *data = (ReadMsgRGBData*) AiNodeGetLocalData(node);
+   ReadMsgC3Data *data = (ReadMsgC3Data*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgRGB(data->msgName, &(sg->out.RGB)))
    {

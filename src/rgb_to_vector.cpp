@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ColorToVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RGBToVectorMtd);
 
-enum ColorToVectorParams
+enum RGBToVectorParams
 {
    p_input = 0,
    p_mode

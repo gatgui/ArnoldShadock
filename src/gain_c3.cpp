@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(GainColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(GainC3Mtd);
 
-enum GainColorParams
+enum GainC3Params
 {
    p_input = 0,
    p_gain

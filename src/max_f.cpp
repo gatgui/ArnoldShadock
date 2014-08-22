@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MaxFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MaxFMtd);
 
-enum MaxFloatParams
+enum MaxFParams
 {
    p_input1 = 0,
    p_input2

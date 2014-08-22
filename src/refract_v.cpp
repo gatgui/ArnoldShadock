@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RefractMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RefractVMtd);
 
-enum RefractParams
+enum RefractVParams
 {
    p_direction = 0,
    p_normal,
@@ -21,7 +21,7 @@ node_parameters
    AiMetaDataSetBool(mds, "ior2", "linkable", false);
 }
 
-struct RefractData
+struct RefractVData
 {
    bool N_is_linked;
    float ior1;
@@ -30,12 +30,12 @@ struct RefractData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(RefractData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(RefractVData)));
 }
 
 node_update
 {
-   RefractData *data = (RefractData*) AiNodeGetLocalData(node);
+   RefractVData *data = (RefractVData*) AiNodeGetLocalData(node);
    
    data->N_is_linked = AiNodeIsLinked(node, "normal");
    data->ior1 = AiNodeGetFlt(node, "ior1");
@@ -49,7 +49,7 @@ node_finish
 
 shader_evaluate
 {
-   RefractData *data = (RefractData*) AiNodeGetLocalData(node);
+   RefractVData *data = (RefractVData*) AiNodeGetLocalData(node);
    
    AtVector D = AiShaderEvalParamVec(p_direction);
    AtVector N = (data->N_is_linked ? AiShaderEvalParamVec(p_normal) : sg->N);

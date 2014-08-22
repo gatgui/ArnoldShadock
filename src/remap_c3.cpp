@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RemapColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RemapC3Mtd);
 
-enum RemapColorParams
+enum RemapC3Params
 {
    p_input = 0,
    p_input_min,

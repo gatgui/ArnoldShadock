@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ScaleVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ScaleMtd);
 
-enum ScaleVectorParams
+enum ScaleParams
 {
    p_input = 0,
    p_scale_pivot,
@@ -16,7 +16,7 @@ node_parameters
    AiParameterPnt("scale_pivot", 0.0f, 0.0f, 0.0f);
 }
 
-struct ScaleVectorData
+struct ScaleData
 {
    AtMatrix S;
    AtMatrix Sp;
@@ -29,7 +29,7 @@ struct ScaleVectorData
 
 node_initialize
 {
-   ScaleVectorData *data = (ScaleVectorData*) AiMalloc(sizeof(ScaleVectorData));
+   ScaleData *data = (ScaleData*) AiMalloc(sizeof(ScaleData));
 
    data->S_set = false;
    data->Sp_set = false;
@@ -39,7 +39,7 @@ node_initialize
 
 node_update
 {
-   ScaleVectorData *data = (ScaleVectorData*) AiNodeGetLocalData(node);
+   ScaleData *data = (ScaleData*) AiNodeGetLocalData(node);
    
    data->S_set = false;
    if (!AiNodeIsLinked(node, "scale"))
@@ -69,13 +69,13 @@ node_update
 
 node_finish
 {
-   ScaleVectorData *data = (ScaleVectorData*) AiNodeGetLocalData(node);
+   ScaleData *data = (ScaleData*) AiNodeGetLocalData(node);
    AiFree(data);
 }
 
 shader_evaluate
 {
-   ScaleVectorData *data = (ScaleVectorData*) AiNodeGetLocalData(node);
+   ScaleData *data = (ScaleData*) AiNodeGetLocalData(node);
    
    AtVector p, ip, s;
    AtMatrix S, P, iP, tmp;

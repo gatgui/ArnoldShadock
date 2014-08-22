@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(TraceStateFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(TraceResultFMtd);
 
-enum TraceStateFloatParams
+enum TraceResultFParams
 {
    p_state = 0,
    p_trace,

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(DivideColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(DivC3Mtd);
 
-enum DivideColorParams
+enum DivC3Params
 {
    p_input1 = 0,
    p_input2

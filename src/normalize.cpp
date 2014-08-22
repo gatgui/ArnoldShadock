@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(NormalizeVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(NormalizeMtd);
 
-enum NormalizeVectorParams
+enum NormalizeParams
 {
    p_input = 0
 };

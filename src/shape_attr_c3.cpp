@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ShapeAttrColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ShapeAttrC3Mtd);
 
-enum ShapeAttrColorParams
+enum ShapeAttrC3Params
 {
    p_attribute = 0,
    p_default

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MultiplyColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MultC3Mtd);
 
-enum MultiplyColorParams
+enum MultC3Params
 {
    p_input1 = 0,
    p_input2

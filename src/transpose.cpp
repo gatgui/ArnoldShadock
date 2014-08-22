@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(TransposeMatrixMtd);
+AI_SHADER_NODE_EXPORT_METHODS(TransposeMtd);
 
-enum TransposeMatrixParams
+enum TransposeParams
 {
    p_input = 0
 };

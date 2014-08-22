@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RemapFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RemapFMtd);
 
-enum RemapFloatParams
+enum RemapFParams
 {
    p_input = 0,
    p_input_min,

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SignVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SignVMtd);
 
-enum SignVectorParams
+enum SignVParams
 {
    p_input = 0
 };

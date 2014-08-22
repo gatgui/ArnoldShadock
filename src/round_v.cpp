@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RoundVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RoundVMtd);
 
-enum RoundVectorParams
+enum RoundVParams
 {
    p_input = 0
 };

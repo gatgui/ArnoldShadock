@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(FresnelWeightColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(FresnelC3Mtd);
 
-enum FresnelWeightColorParams
+enum FresnelC3Params
 {
    p_view_vector = 0,
    p_normal,
@@ -18,7 +18,7 @@ node_parameters
    AiMetaDataSetBool(mds, "reflectance", "linkable", false);
 }
 
-struct FresnelWeightColorData
+struct FresnelC3Data
 {
    bool V_is_linked;
    bool N_is_linked;
@@ -27,12 +27,12 @@ struct FresnelWeightColorData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(FresnelWeightColorData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(FresnelC3Data)));
 }
 
 node_update
 {
-   FresnelWeightColorData *data = (FresnelWeightColorData*) AiNodeGetLocalData(node);
+   FresnelC3Data *data = (FresnelC3Data*) AiNodeGetLocalData(node);
    
    data->V_is_linked = AiNodeIsLinked(node, "view_vector");
    data->N_is_linked = AiNodeIsLinked(node, "normal");
@@ -46,7 +46,7 @@ node_finish
 
 shader_evaluate
 {
-   FresnelWeightColorData *data = (FresnelWeightColorData*) AiNodeGetLocalData(node);
+   FresnelC3Data *data = (FresnelC3Data*) AiNodeGetLocalData(node);
    
    AtVector V = (data->V_is_linked ? AiShaderEvalParamVec(p_view_vector) : sg->Rd);
    AtVector N = (data->N_is_linked ? AiShaderEvalParamVec(p_normal) : sg->N);

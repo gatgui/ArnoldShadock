@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(NegateFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(NegFMtd);
 
-enum NegateFloatParams
+enum NegFParams
 {
    p_input = 0
 };

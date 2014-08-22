@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ExpFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ExpFMtd);
 
-enum ExpFloatParams
+enum ExpFParams
 {
    p_input = 0
 };

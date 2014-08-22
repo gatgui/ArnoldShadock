@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RoundFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RoundFMtd);
 
-enum RoundFloatParams
+enum RoundFParams
 {
    p_input = 0
 };

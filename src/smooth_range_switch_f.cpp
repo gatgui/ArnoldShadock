@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SmoothRangeSelectFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SmoothRangeSwitchFMtd);
 
-enum SmoothRangeSelectFloatParams
+enum SmoothRangeSwitchFParams
 {
    p_value = 0,
    p_lower_bound,

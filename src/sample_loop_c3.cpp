@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SamplesLoopColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SampleLoopC3Mtd);
 
-enum SamplesLoopColorParams
+enum SampleLoopC3Params
 {
    p_sampler = 0,
    p_input,

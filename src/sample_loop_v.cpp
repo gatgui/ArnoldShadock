@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SamplesLoopVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SampleLoopVMtd);
 
-enum SamplesLoopVectorParams
+enum SampleLoopVParams
 {
    p_sampler = 0,
    p_input,

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MixVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MixVMtd);
 
-enum MixVectorParams
+enum MixVParams
 {
    p_mix = 0,
    p_input1,

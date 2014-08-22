@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ReadMsgIntMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ReadMsgIMtd);
 
-enum ReadMsgIntParams
+enum ReadMsgIParams
 {
    p_msg_name = 0,
    p_default_value
@@ -16,34 +16,34 @@ node_parameters
    AiMetaDataSetBool(mds, "msg_name", "linkable", false);
 }
 
-struct ReadMsgIntData
+struct ReadMsgIData
 {
    const char *msgName;
 };
 
 node_initialize
 {
-   ReadMsgIntData *data = (ReadMsgIntData*) AiMalloc(sizeof(ReadMsgIntData));
+   ReadMsgIData *data = (ReadMsgIData*) AiMalloc(sizeof(ReadMsgIData));
    
    AiNodeSetLocalData(node, data);
 }
 
 node_update
 {
-   ReadMsgIntData *data = (ReadMsgIntData*) AiNodeGetLocalData(node);
+   ReadMsgIData *data = (ReadMsgIData*) AiNodeGetLocalData(node);
    
    data->msgName = AiNodeGetStr(node, "msg_name");
 }
 
 node_finish
 {
-   ReadMsgIntData *data = (ReadMsgIntData*) AiNodeGetLocalData(node);
+   ReadMsgIData *data = (ReadMsgIData*) AiNodeGetLocalData(node);
    AiFree(data);
 }
 
 shader_evaluate
 {
-   ReadMsgIntData *data = (ReadMsgIntData*) AiNodeGetLocalData(node);
+   ReadMsgIData *data = (ReadMsgIData*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgInt(data->msgName, &(sg->out.INT)))
    {

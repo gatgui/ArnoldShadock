@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(BrdfEvaluateSampleMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BrdfEvalSampleMtd);
 
-enum BrdfEvaluateSampleParams
+enum BrdfEvalSampleParams
 {
    p_brdf = 0,
    p_sample

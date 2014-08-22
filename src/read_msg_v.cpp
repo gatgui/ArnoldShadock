@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ReadMsgVecMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ReadMsgVMtd);
 
-enum ReadMsgVecParams
+enum ReadMsgVParams
 {
    p_msg_name = 0,
    p_default_value
@@ -16,34 +16,34 @@ node_parameters
    AiMetaDataSetBool(mds, "msg_name", "linkable", false);
 }
 
-struct ReadMsgVecData
+struct ReadMsgVData
 {
    const char *msgName;
 };
 
 node_initialize
 {
-   ReadMsgVecData *data = (ReadMsgVecData*) AiMalloc(sizeof(ReadMsgVecData));
+   ReadMsgVData *data = (ReadMsgVData*) AiMalloc(sizeof(ReadMsgVData));
    
    AiNodeSetLocalData(node, data);
 }
 
 node_update
 {
-   ReadMsgVecData *data = (ReadMsgVecData*) AiNodeGetLocalData(node);
+   ReadMsgVData *data = (ReadMsgVData*) AiNodeGetLocalData(node);
    
    data->msgName = AiNodeGetStr(node, "msg_name");
 }
 
 node_finish
 {
-   ReadMsgVecData *data = (ReadMsgVecData*) AiNodeGetLocalData(node);
+   ReadMsgVData *data = (ReadMsgVData*) AiNodeGetLocalData(node);
    AiFree(data);
 }
 
 shader_evaluate
 {
-   ReadMsgVecData *data = (ReadMsgVecData*) AiNodeGetLocalData(node);
+   ReadMsgVData *data = (ReadMsgVData*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgVec(data->msgName, &(sg->out.VEC)))
    {

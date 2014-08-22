@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RayStateIntMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RayStateIMtd);
 
-enum RayStateIntParams
+enum RayStateIParams
 {
    p_state = 0,
    p_ray,

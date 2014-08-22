@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(TraceStateColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(TraceResultC3Mtd);
 
-enum TraceStateColorParams
+enum TraceResultC3Params
 {
    p_state = 0,
    p_trace,

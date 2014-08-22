@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SelectFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SwitchFMtd);
 
-enum SelectFloatParams
+enum SwitchFParams
 {
    p_condition = 0,
    p_if_true,

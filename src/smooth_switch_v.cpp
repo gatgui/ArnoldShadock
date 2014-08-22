@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SmoothSelectVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SmoothSwitchVMtd);
 
-enum SmoothSelectVectorParams
+enum SmoothSwitchVParams
 {
    p_value = 0,
    p_threshold,

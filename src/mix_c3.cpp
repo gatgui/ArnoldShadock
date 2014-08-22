@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MixColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MixC3Mtd);
 
-enum MixColorParams
+enum MixC3Params
 {
    p_mix = 0,
    p_input1,

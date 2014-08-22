@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ReadMsgFltMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ReadMsgFMtd);
 
-enum ReadMsgFltParams
+enum ReadMsgFParams
 {
    p_msg_name = 0,
    p_default_value
@@ -16,34 +16,34 @@ node_parameters
    AiMetaDataSetBool(mds, "msg_name", "linkable", false);
 }
 
-struct ReadMsgFltData
+struct ReadMsgFData
 {
    const char *msgName;
 };
 
 node_initialize
 {
-   ReadMsgFltData *data = (ReadMsgFltData*) AiMalloc(sizeof(ReadMsgFltData));
+   ReadMsgFData *data = (ReadMsgFData*) AiMalloc(sizeof(ReadMsgFData));
    
    AiNodeSetLocalData(node, data);
 }
 
 node_update
 {
-   ReadMsgFltData *data = (ReadMsgFltData*) AiNodeGetLocalData(node);
+   ReadMsgFData *data = (ReadMsgFData*) AiNodeGetLocalData(node);
    
    data->msgName = AiNodeGetStr(node, "msg_name");
 }
 
 node_finish
 {
-   ReadMsgFltData *data = (ReadMsgFltData*) AiNodeGetLocalData(node);
+   ReadMsgFData *data = (ReadMsgFData*) AiNodeGetLocalData(node);
    AiFree(data);
 }
 
 shader_evaluate
 {
-   ReadMsgFltData *data = (ReadMsgFltData*) AiNodeGetLocalData(node);
+   ReadMsgFData *data = (ReadMsgFData*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgFlt(data->msgName, &(sg->out.FLT)))
    {

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RangeSelectFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RangeSwitchFMtd);
 
-enum RangeSelectFloatParams
+enum RangeSwitchFParams
 {
    p_value = 0,
    p_lower_bound,

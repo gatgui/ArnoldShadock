@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(FloorColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(FloorC3Mtd);
 
-enum FloorColorParams
+enum FloorC3Params
 {
    p_input = 0
 };

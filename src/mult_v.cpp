@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MultiplyVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MultVMtd);
 
-enum MultiplyVectorParams
+enum MultVParams
 {
    p_input1 = 0,
    p_input2

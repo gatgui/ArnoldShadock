@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ReadAOVFltMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ReadAOVFMtd);
 
-enum ReadAOVFltParams
+enum ReadAOVFParams
 {
    p_aov_name = 0,
    p_default_value
@@ -16,34 +16,34 @@ node_parameters
    AiMetaDataSetBool(mds, "aov_name", "linkable", false);
 }
 
-struct ReadAOVFltData
+struct ReadAOVFData
 {
    const char *aovName;
 };
 
 node_initialize
 {
-   ReadAOVFltData *data = (ReadAOVFltData*) AiMalloc(sizeof(ReadAOVFltData));
+   ReadAOVFData *data = (ReadAOVFData*) AiMalloc(sizeof(ReadAOVFData));
    
    AiNodeSetLocalData(node, data);
 }
 
 node_update
 {
-   ReadAOVFltData *data = (ReadAOVFltData*) AiNodeGetLocalData(node);
+   ReadAOVFData *data = (ReadAOVFData*) AiNodeGetLocalData(node);
    
    data->aovName = AiNodeGetStr(node, "aov_name");
 }
 
 node_finish
 {
-   ReadAOVFltData *data = (ReadAOVFltData*) AiNodeGetLocalData(node);
+   ReadAOVFData *data = (ReadAOVFData*) AiNodeGetLocalData(node);
    AiFree(data);
 }
 
 shader_evaluate
 {
-   ReadAOVFltData *data = (ReadAOVFltData*) AiNodeGetLocalData(node);
+   ReadAOVFData *data = (ReadAOVFData*) AiNodeGetLocalData(node);
    
    if (!AiAOVGetFlt(sg, data->aovName, sg->out.FLT))
    {

@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(LogColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(LogC3Mtd);
 
-enum LogColorParams
+enum LogC3Params
 {
    p_input = 0
 };

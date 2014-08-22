@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MixFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MixFMtd);
 
-enum MixFloatParams
+enum MixFParams
 {
    p_mix = 0,
    p_input1,

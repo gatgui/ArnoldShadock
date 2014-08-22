@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MinColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MinC3Mtd);
 
-enum MinColorParams
+enum MinC3Params
 {
    p_input1 = 0,
    p_input2

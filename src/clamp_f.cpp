@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ClampFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ClampFMtd);
 
-enum ClampFloatParams
+enum ClampFParams
 {
    p_input = 0,
    p_input_min,

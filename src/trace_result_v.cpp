@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(TraceStateVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(TraceResultVMtd);
 
-enum TraceStateVectorParams
+enum TraceResultVParams
 {
    p_state = 0,
    p_trace,

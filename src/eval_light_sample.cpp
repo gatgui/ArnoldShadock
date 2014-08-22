@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(EvaluateLightSampleMtd);
+AI_SHADER_NODE_EXPORT_METHODS(EvalLightSampleMtd);
 
-enum EvaluateLightSampleParams
+enum EvalLightSampleParams
 {
    p_brdf = 0,
    p_surface_color,
@@ -38,7 +38,7 @@ node_parameters
    AiMetaDataSetBool(mds, "light_weight", "linkable", false);
 }
 
-struct EvaluateLightSampleData
+struct EvalLightSampleData
 {
    bool surface_color_is_linked;
    AtColor surface_color;
@@ -51,12 +51,12 @@ struct EvaluateLightSampleData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(EvaluateLightSampleData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(EvalLightSampleData)));
 }
 
 node_update
 {
-   EvaluateLightSampleData *data = (EvaluateLightSampleData*) AiNodeGetLocalData(node);
+   EvalLightSampleData *data = (EvalLightSampleData*) AiNodeGetLocalData(node);
    
    data->surface_color_is_linked = AiNodeIsLinked(node, "surface_color");
    if (!data->surface_color_is_linked)
@@ -80,7 +80,7 @@ node_finish
 
 shader_evaluate
 {
-   EvaluateLightSampleData *data = (EvaluateLightSampleData*) AiNodeGetLocalData(node);
+   EvalLightSampleData *data = (EvalLightSampleData*) AiNodeGetLocalData(node);
    
    BRDFData *brdf = 0;
    

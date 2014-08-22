@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SubtractFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SubFMtd);
 
-enum SubtractFloatParams
+enum SubFParams
 {
    p_input1 = 0,
    p_input2

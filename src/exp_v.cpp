@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ExpVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ExpVMtd);
 
-enum ExpVectorParams
+enum ExpVParams
 {
    p_input = 0
 };

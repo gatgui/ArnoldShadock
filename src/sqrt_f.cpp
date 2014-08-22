@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SqrtFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SqrtFMtd);
 
-enum SqrtFloatParams
+enum SqrtFParams
 {
    p_input = 0
 };

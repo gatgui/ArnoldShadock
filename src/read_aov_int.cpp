@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ReadAOVIntMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ReadAOVIMtd);
 
-enum ReadAOVIntParams
+enum ReadAOVIParams
 {
    p_aov_name = 0,
    p_default_value
@@ -16,34 +16,34 @@ node_parameters
    AiMetaDataSetBool(mds, "aov_name", "linkable", false);
 }
 
-struct ReadAOVIntData
+struct ReadAOVIData
 {
    const char *aovName;
 };
 
 node_initialize
 {
-   ReadAOVIntData *data = (ReadAOVIntData*) AiMalloc(sizeof(ReadAOVIntData));
+   ReadAOVIData *data = (ReadAOVIData*) AiMalloc(sizeof(ReadAOVIData));
    
    AiNodeSetLocalData(node, data);
 }
 
 node_update
 {
-   ReadAOVIntData *data = (ReadAOVIntData*) AiNodeGetLocalData(node);
+   ReadAOVIData *data = (ReadAOVIData*) AiNodeGetLocalData(node);
    
    data->aovName = AiNodeGetStr(node, "aov_name");
 }
 
 node_finish
 {
-   ReadAOVIntData *data = (ReadAOVIntData*) AiNodeGetLocalData(node);
+   ReadAOVIData *data = (ReadAOVIData*) AiNodeGetLocalData(node);
    AiFree(data);
 }
 
 shader_evaluate
 {
-   ReadAOVIntData *data = (ReadAOVIntData*) AiNodeGetLocalData(node);
+   ReadAOVIData *data = (ReadAOVIData*) AiNodeGetLocalData(node);
    
    if (!AiAOVGetInt(sg, data->aovName, sg->out.INT))
    {

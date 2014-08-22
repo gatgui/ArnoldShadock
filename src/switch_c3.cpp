@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SelectColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SwitchC3Mtd);
 
-enum SelectColorParams
+enum SwitchC3Params
 {
    p_condition = 0,
    p_if_true,

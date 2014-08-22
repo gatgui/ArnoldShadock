@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RoundColorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(RoundC3Mtd);
 
-enum RoundColorParams
+enum RoundC3Params
 {
    p_input = 0
 };

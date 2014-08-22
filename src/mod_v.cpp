@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ModuloVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(ModVMtd);
 
-enum ModuloVectorParams
+enum MoVParams
 {
    p_input1 = 0,
    p_input2

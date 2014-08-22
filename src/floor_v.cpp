@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(FloorVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(FloorVMtd);
 
-enum FloorVectorParams
+enum FloorVParams
 {
    p_input = 0
 };

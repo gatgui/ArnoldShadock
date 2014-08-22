@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ShaderGlobalsTweakMtd);
+AI_SHADER_NODE_EXPORT_METHODS(TweakGlobalsMtd);
 
-enum IlluminanceLoopParams
+enum TweakGlobalsParams
 {
    p_input = 0,
    p_P,
@@ -55,7 +55,7 @@ node_parameters
    AiMetaDataSetBool(mds, "inclusive_traceset", "linkable", false);
 }
 
-struct ShaderGlobalsTweakData
+struct TweakGlobalsData
 {
    bool P_is_linked;
    CoordinateSpace P_space;
@@ -73,12 +73,12 @@ struct ShaderGlobalsTweakData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(ShaderGlobalsTweakData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(TweakGlobalsData)));
 }
 
 node_update
 {
-   ShaderGlobalsTweakData *data = (ShaderGlobalsTweakData*) AiNodeGetLocalData(node);
+   TweakGlobalsData *data = (TweakGlobalsData*) AiNodeGetLocalData(node);
    
    data->P_is_linked = AiNodeIsLinked(node, "P");
    data->P_space = (CoordinateSpace) AiNodeGetInt(node, "P_space");
@@ -114,7 +114,7 @@ node_finish
 
 shader_evaluate
 {
-   ShaderGlobalsTweakData *data = (ShaderGlobalsTweakData*) AiNodeGetLocalData(node);
+   TweakGlobalsData *data = (TweakGlobalsData*) AiNodeGetLocalData(node);
    
    AtPoint old_P = sg->P;
    AtPoint old_Po = sg->Po;

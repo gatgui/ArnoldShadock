@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SelectVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(SwitchVMtd);
 
-enum SelectVectorParams
+enum SwitchVParams
 {
    p_condition = 0,
    p_if_true,
