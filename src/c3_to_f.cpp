@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RGBToFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(C3ToFMtd);
 
-enum RGBToFloatParams
+enum C3ToFParams
 {
    p_input = 0,
    p_mode

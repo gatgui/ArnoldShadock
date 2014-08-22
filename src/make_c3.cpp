@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MakeRGBMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MakeC3Mtd);
 
-enum MakeRGBParams
+enum MakeC3Params
 {
    p_r = 0,
    p_g,

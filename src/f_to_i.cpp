@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(FloatToIntMtd);
+AI_SHADER_NODE_EXPORT_METHODS(FToIMtd);
 
-enum FloatToIntParams
+enum FToIParams
 {
    p_input = 0,
    p_mode

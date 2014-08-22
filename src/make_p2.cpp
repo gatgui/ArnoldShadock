@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MakePoint2Mtd);
+AI_SHADER_NODE_EXPORT_METHODS(MakeP2Mtd);
 
-enum MakePoint2Params
+enum MakeP2Params
 {
    p_x = 0,
    p_y

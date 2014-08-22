@@ -34,15 +34,15 @@
    maya.classification STRING "utility/vector"
    maya.id INT 0x0011655E
 
-[node bias_and_gain_f]
+[node bias_gain_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x0011655F
 
-[node bias_and_gain_c3]
+[node bias_gain_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x00116560
 
-[node bias_and_gain_v]
+[node bias_gain_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x00116561
 
@@ -82,43 +82,43 @@
    maya.classification STRING "utility/vector"
    maya.id INT 0x0011656A
 
-[node float_to_bool]
+[node f_to_b]
    maya.classification STRING "utility/convert"
    maya.id INT 0x0011656B
 
-[node float_to_int]
+[node f_to_i]
    maya.classification STRING "utility/convert"
    maya.id INT 0x0011656C
 
-[node vector_to_rgb]
+[node v_to_c3]
    maya.classification STRING "utility/convert"
    maya.id INT 0x0011656D
 
-[node rgb_to_vector]
+[node c3_to_v]
    maya.classification STRING "utility/convert"
    maya.id INT 0x0011656E
 
-[node rgb_to_float]
+[node c3_to_f]
    maya.classification STRING "utility/convert"
    maya.id INT 0x0011656F
 
-[node float_to_vector]
+[node f_to_v]
    maya.classification STRING "utility/convert"
    maya.id INT 0x00116570
 
-[node float_to_rgb]
+[node f_to_c3]
    maya.classification STRING "utility/convert"
    maya.id INT 0x00116571
 
-[node float_to_rgba]
+[node f_to_c4]
    maya.classification STRING "utility/convert"
    maya.id INT 0x00116572
 
-[node bool_to_int]
+[node b_to_i]
    maya.classification STRING "utility/convert"
    maya.id INT 0x00116573
 
-[node bool_to_float]
+[node b_to_f]
    maya.classification STRING "utility/convert"
    maya.id INT 0x00116574
 
@@ -350,15 +350,15 @@
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165AD
 
-[node smoothstep_f]
+[node smooth_step_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x001165AE
 
-[node smoothstep_c3]
+[node smooth_step_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x001165AF
 
-[node smoothstep_v]
+[node smooth_step_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165B0
 
@@ -434,7 +434,7 @@
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165C2
 
-[node make_matrix]
+[node make_m]
    maya.classification STRING "utility/matrix"
    maya.id INT 0x001165C3
 
@@ -558,19 +558,19 @@
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165E1
 
-[node make_point2]
+[node make_p2]
    maya.classification STRING "utility/general"
    maya.id INT 0x001165E2
 
-[node make_vector]
+[node make_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165E3
 
-[node make_rgb]
+[node make_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x001165E4
 
-[node make_rgba]
+[node make_c4]
    maya.classification STRING "utility/color"
    maya.id INT 0x001165E5
 
@@ -606,17 +606,13 @@
    maya.classification STRING "utility/general"
    maya.id INT 0x001165ED
 
-[node camera_matrix]
+[node camera_transform]
    maya.classification STRING "utility/state"
    maya.id INT 0x001165EE
 
-[node image_resolution]
+[node resolution]
    maya.classification STRING "utility/state"
    maya.id INT 0x001165EF
-
-[node render_resolution]
-   maya.classification STRING "utility/state"
-   maya.id INT 0x001165F0
 
 [node token_path]
    maya.classification STRING "utility/general"

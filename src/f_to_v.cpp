@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(FloatToVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(FToVMtd);
 
-enum FloatToVectorParams
+enum FToVParams
 {
    p_input = 0
 };

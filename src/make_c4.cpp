@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MakeRGBAMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MakeC4Mtd);
 
-enum MakeRGBAParams
+enum MakeC4Params
 {
    p_r = 0,
    p_g,

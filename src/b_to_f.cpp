@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(BoolToFloatMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BToFMtd);
 
-enum BoolToFloatParams
+enum BToFParams
 {
    p_input = 0
 };

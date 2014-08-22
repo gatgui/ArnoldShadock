@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(FloatToBoolMtd);
+AI_SHADER_NODE_EXPORT_METHODS(FToBMtd);
 
-enum FloatToBoolParams
+enum FToBParams
 {
    p_input = 0,
    p_threshold

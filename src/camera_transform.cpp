@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(CameraMatrixMtd);
+AI_SHADER_NODE_EXPORT_METHODS(CameraTransformMtd);
 
-enum CameraMatrixParams
+enum CameraTransformParams
 {
    p_camera = 0, // node? or by name
    p_camera_name,
@@ -32,7 +32,7 @@ static const char* MatrixModeNames[] =
    NULL
 };
 
-struct CameraMatrixData
+struct CameraTransformData
 {
    AtNode *camera;
    MatrixMode mode;
@@ -50,12 +50,12 @@ node_parameters
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(CameraMatrixData)));
+   AiNodeSetLocalData(node, AiMalloc(sizeof(CameraTransformData)));
 }
 
 node_update
 {
-   CameraMatrixData *data = (CameraMatrixData*) AiNodeGetLocalData(node);
+   CameraTransformData *data = (CameraTransformData*) AiNodeGetLocalData(node);
    
    data->mode = (MatrixMode) AiNodeGetInt(node, "mode");
    
@@ -130,7 +130,7 @@ node_finish
 
 shader_evaluate
 {
-   CameraMatrixData *data = (CameraMatrixData*) AiNodeGetLocalData(node);
+   CameraTransformData *data = (CameraTransformData*) AiNodeGetLocalData(node);
    
    sg->out.pMTX = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
    

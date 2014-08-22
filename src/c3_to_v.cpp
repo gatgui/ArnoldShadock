@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(RGBToVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(C3ToVMtd);
 
-enum RGBToVectorParams
+enum C3ToVParams
 {
    p_input = 0,
    p_mode

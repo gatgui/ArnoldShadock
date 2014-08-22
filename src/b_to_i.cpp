@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(BoolToIntMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BToIMtd);
 
-enum BoolToIntParams
+enum BToIParams
 {
    p_input = 0
 };

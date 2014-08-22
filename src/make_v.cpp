@@ -1,8 +1,8 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MakeVectorMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MakeVMtd);
 
-enum MakeVectorParams
+enum MakeVParams
 {
    p_x = 0,
    p_y,
