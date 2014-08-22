@@ -52,7 +52,7 @@ static int gsShaderCount = 0;
 DECLARE_FCV_SHADER(Abs);
 DECLARE_FCV_SHADER(Add);
 DECLARE_FCV_SHADER(Bias);
-DECLARE_FCV_SHADER(BiasAndGain);
+DECLARE_FCV_SHADER(BiasGain);
 DECLARE_FCV_SHADER(Ceil);
 DECLARE_FCV_SHADER(Clamp);
 DECLARE_SHADER(CompareF);
@@ -231,7 +231,7 @@ node_loader
    REGISTER_FCV_SHADER(Abs, abs)
    REGISTER_FCV_SHADER(Add, add)
    REGISTER_FCV_SHADER(Bias, bias)
-   REGISTER_FCV_SHADER(BiasAndGain, bias_and_gain)
+   REGISTER_FCV_SHADER(BiasGain, bias_gain)
    REGISTER_FCV_SHADER(Ceil, ceil)
    REGISTER_FCV_SHADER(Clamp, clamp)
    REGISTER_SHADER(CompareF, compare_f, AI_TYPE_BOOLEAN)
