@@ -1,29 +1,29 @@
 [node set_opacity]
-   maya.classification STRING "utility/general"
+   maya.classification STRING "utility/shade"
    maya.id INT 0x00116517
 
 [node brdf_eval_sample]
-   maya.classification STRING "utility/general"
+   maya.classification STRING "utility/shade"
    maya.id INT 0x00116518
 
 [node brdf_eval_pdf]
-   maya.classification STRING "utility/general"
+   maya.classification STRING "utility/shade"
    maya.id INT 0x00116519
 
 [node brdf_eval]
-   maya.classification STRING "utility/general"
+   maya.classification STRING "utility/shade"
    maya.id INT 0x0011651A
 
 [node lerp_f]
-   maya.classification STRING "utility/general"
+   maya.classification STRING "utility/float"
    maya.id INT 0x0011651B
 
 [node lerp_v]
-   maya.classification STRING "utility/general"
+   maya.classification STRING "utility/vector"
    maya.id INT 0x0011651C
 
 [node lerp_c3]
-   maya.classification STRING "utility/general"
+   maya.classification STRING "utility/color"
    maya.id INT 0x0011651D
 
 [node get_node]
@@ -35,7 +35,7 @@
    maya.id INT 0x0011651F
 
 [node brdf_stretched_phong]
-   maya.classification STRING "utility/shader"
+   maya.classification STRING "utility/shade"
    maya.id INT 0x00116520
 
 [node btdf_microfacet_integrate]
@@ -43,7 +43,7 @@
    maya.id INT 0x00116521
 
 [node cache_ray]
-   maya.classification STRING "utility/trace"
+   maya.classification STRING "utility/cache"
    maya.id INT 0x00116522
 
 [node sample_loop_f]
