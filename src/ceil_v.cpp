@@ -28,7 +28,7 @@ shader_evaluate
 {
    AtVector input = AiShaderEvalParamVec(p_input);
    
-   sg->out.VEC.x = CEIL(input.x);
-   sg->out.VEC.y = CEIL(input.y);
-   sg->out.VEC.z = CEIL(input.z);
+   sg->out.VEC.x = float(CEIL(input.x));
+   sg->out.VEC.y = float(CEIL(input.y));
+   sg->out.VEC.z = float(CEIL(input.z));
 }

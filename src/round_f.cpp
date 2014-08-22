@@ -28,5 +28,5 @@ shader_evaluate
 {
    float input = AiShaderEvalParamFlt(p_input);
    
-   sg->out.FLT = ROUND(input);
+   sg->out.FLT = float(ROUND(input));
 }
