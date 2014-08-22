@@ -67,11 +67,12 @@ def make_mtd():
   
   if withState:
     df.write("\n")
-    append_file_content("agState/src/agState.mtd", remap={"vector_state": "shader_globals_vector",
-                                                          "float_state": "shader_globals_float",
-                                                          "color_state": "shader_globals_color",
-                                                          "integer_state": "shader_globals_int",
-                                                          "matrix_state": "shader_globals_matrix"})
+    append_file_content("agState/src/agState.mtd", remap={"vector_state": "globals_v",
+                                                          "float_state": "globals_f",
+                                                          "color_state": "globals_c3",
+                                                          "integer_state": "globals_i",
+                                                          "matrix_state": "globals_m",
+                                                          "node_state": "globals_n"})
   
   if withNoises:
     df.write("\n")
@@ -89,9 +90,9 @@ def make_mtd():
   
   if withUserDataRamp:
     df.write("\n")
-    append_file_content("agUserDataRamp/src/agUserDataRamp.mtd", remap={"userDataFloatRamp": "shape_attr_ramp_float",
-                                                                        "userDataColorRamp": "shape_attr_ramp_color",
-                                                                        "userDataVectorRamp": "shape_attr_ramp_vector"})
+    append_file_content("agUserDataRamp/src/agUserDataRamp.mtd", remap={"userDataFloatRamp": "shape_attr_ramp_f",
+                                                                        "userDataColorRamp": "shape_attr_ramp_c3",
+                                                                        "userDataVectorRamp": "shape_attr_ramp_v"})
   
   df.write("\n")
   df.close()

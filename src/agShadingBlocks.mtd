@@ -546,15 +546,15 @@
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165DE
 
-[node smooth_switch_select_f]
+[node smooth_switch_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x001165DF
 
-[node smooth_switch_select_c3]
+[node smooth_switch_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x001165E0
 
-[node smooth_switch_select_v]
+[node smooth_switch_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165E1
 
