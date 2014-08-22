@@ -1,3 +1,253 @@
+[node set_opacity]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x00116517
+
+[node brdf_eval_sample]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x00116518
+
+[node brdf_eval_pdf]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x00116519
+
+[node brdf_eval]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x0011651A
+
+[node lerp_f]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x0011651B
+
+[node lerp_v]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x0011651C
+
+[node lerp_c3]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x0011651D
+
+[node get_node]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x0011651E
+
+[node compare_n]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x0011651F
+
+[node brdf_stretched_phong]
+   maya.classification STRING "utility/shader"
+   maya.id INT 0x00116520
+
+[node btdf_microfacet_integrate]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x00116521
+
+[node cache_ray]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x00116522
+
+[node sample_loop_f]
+   maya.classification STRING "utility/sampling"
+   maya.id INT 0x00116523
+
+[node sample_loop_c3]
+   maya.classification STRING "utility/sampling"
+   maya.id INT 0x00116524
+
+[node sample_loop_v]
+   maya.classification STRING "utility/sampling"
+   maya.id INT 0x00116525
+
+[node sss_single]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x00116526
+
+[node sss_multi]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x00116527
+
+[node trace_result_c3]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x00116528
+
+[node trace_result_v]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x00116529
+
+[node probe_result_v]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x0011652A
+
+[node sampler]
+   maya.classification STRING "utility/sampling"
+   maya.id INT 0x0011652B
+
+[node sample_value]
+   maya.classification STRING "utility/sampling"
+   maya.id INT 0x0011652C
+
+[node ray_state_i]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x0011652D
+
+[node ray_state_f]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x0011652E
+
+[node ray_state_v]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x0011652F
+
+[node trace]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x00116530
+
+[node trace_result_f]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x00116531
+
+[node wireframe]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x00116532
+
+[node shadow_matte]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x00116533
+
+[node make_ray]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x00116534
+
+[node reflect_ray]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x00116535
+
+[node refract_ray]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x00116536
+
+[node cache_brdf]
+   maya.classification STRING "utility/cache"
+   maya.id INT 0x00116537
+
+[node cache_m]
+   maya.classification STRING "utility/cache"
+   maya.id INT 0x00116538
+
+[node cache_v]
+   maya.classification STRING "utility/cache"
+   maya.id INT 0x00116539
+
+[node cache_c3]
+   maya.classification STRING "utility/cache"
+   maya.id INT 0x0011653A
+
+[node cache_f]
+   maya.classification STRING "utility/cache"
+   maya.id INT 0x0011653B
+
+[node brdf_integrate]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x0011653C
+
+[node make_frame]
+   maya.classification STRING "utility/matrix"
+   maya.id INT 0x0011653D
+
+[node rotate]
+   maya.classification STRING "utility/vector"
+   maya.id INT 0x0011653E
+
+[node scale]
+   maya.classification STRING "utility/vector"
+   maya.id INT 0x0011653F
+
+[node tweak_globals]
+   maya.classification STRING "utility/state"
+   maya.id INT 0x00116540
+
+[node brdf_oren_nayar]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x00116541
+
+[node brdf_cook_torrance]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x00116542
+
+[node brdf_ward_duer]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x00116543
+
+[node brdf_ashikhmin_shirley]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x00116544
+
+[node eval_light_sample]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x00116545
+
+[node fresnel_f]
+   maya.classification STRING "utility/float"
+   maya.id INT 0x00116546
+
+[node fresnel_c3]
+   maya.classification STRING "utility/color"
+   maya.id INT 0x00116547
+
+[node refract_v]
+   maya.classification STRING "utility/vector"
+   maya.id INT 0x00116548
+
+[node reflect_v]
+   maya.classification STRING "utility/vector"
+   maya.id INT 0x00116549
+
+[node light_weight]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x0011654A
+
+[node illuminance_loop]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x0011654B
+
+[node write_msgs]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x0011654C
+
+[node read_msg_b]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x0011654D
+
+[node read_msg_i]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x0011654E
+
+[node read_msg_f]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x0011654F
+
+[node read_msg_p2]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x00116550
+
+[node read_msg_p3]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x00116551
+
+[node read_msg_v]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x00116552
+
+[node read_msg_c3]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x00116553
+
+[node read_msg_c4]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x00116554
+
+# 0x00116555: agState/node_state
+
 [node abs_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x00116556
@@ -447,7 +697,7 @@
    maya.id INT 0x001165C5
 
 [node shade]
-   maya.classification STRING "utility/general"
+   maya.classification STRING "utility/shade"
    maya.id INT 0x001165C6
 
 [node holdout]
@@ -546,15 +796,15 @@
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165DE
 
-[node smooth_switch_f]
+[node smooth_range_switch_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x001165DF
 
-[node smooth_switch_c3]
+[node smooth_range_switch_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x001165E0
 
-[node smooth_switch_v]
+[node smooth_range_switch_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165E1
 
@@ -614,6 +864,8 @@
    maya.classification STRING "utility/state"
    maya.id INT 0x001165EF
 
+# 0x001165F0: Was allocated to image_resolution (merged with render_resolution in resolution that take old render_resolution ID)
+
 [node token_path]
    maya.classification STRING "utility/general"
    maya.id INT 0x001165F1
@@ -622,62 +874,16 @@
    maya.classification STRING "utility/texture"
    maya.id INT 0x001165F2
 
-[node write_msgs]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x0011654C
-
-[node read_msg_b]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x0011654D
-
-[node read_msg_i]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x0011654E
-
-[node read_msg_f]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x0011654F
-
-[node read_msg_p2]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x00116550
-
-[node read_msg_p3]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x00116551
-
-[node read_msg_v]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x00116552
-
-[node read_msg_c3]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x00116553
-
-[node read_msg_c4]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x00116554
-
-[node illuminance_loop]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x0011654B
-
-[node light_weight]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x0011654A
-
-[node reflect_v]
-   maya.classification STRING "utility/vector"
-   maya.id INT 0x00116549
-
-[node refract_v]
-   maya.classification STRING "utility/vector"
-   maya.id INT 0x00116548
-
-[node fresnel_c3]
-   maya.classification STRING "utility/color"
-   maya.id INT 0x00116547
-
-[node fresnel_f]
-   maya.classification STRING "utility/float"
-   maya.id INT 0x00116546
+# 0x001165F3: agUserDataRamp/userDataVectorRamp
+# 0x001165F4: agUserDataRamp/userDataVectorRamp
+# 0x001165F5: agUserDataRamp/userDataVectorRamp
+# 0x001165F6: agAnimCurve/anim_curve
+# 0x001165F7: agState/vector_state
+# 0x001165F8: agState/float_state
+# 0x001165F9: agState/color_state
+# 0x001165FA: agState/integer_state
+# 0x001165FB: agState/matrix_state
+# 0x001165FC: agNoises/ln_factal
+# 0x001165FD: agNoises/ln_distort_point
+# 0x001165FE: agNoises/ln_voronoi
+# 0x001165FF: agSeExpr/seexpr
