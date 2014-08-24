@@ -45,16 +45,17 @@ shader_evaluate
                         AiShaderEvalParamFlt(p_n1),
                         AiShaderEvalParamFlt(p_n2), sg))
       {
-         sg->out.VEC = AI_V3_ZERO;
-         AiStateSetMsgPtr("agsb_ray", 0);
+         AiStateSetMsgBool("agsb_tir", true);
       }
       else
       {
-         sg->out.VEC = ray->dir;
+         AiStateSetMsgBool("agsb_tir", false);
       }
+      sg->out.VEC = ray->dir;
    }
    else
    {
+      AiStateSetMsgBool("agsb_tir", false);
       sg->out.VEC = AI_V3_ZERO;
    }
 }

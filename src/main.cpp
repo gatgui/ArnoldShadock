@@ -222,6 +222,8 @@ DECLARE_SHADER(BrdfEvalPdf);
 DECLARE_SHADER(BrdfEval);
 DECLARE_FCV_SHADER(Lerp);
 DECLARE_SHADER(SetRayDir);
+DECLARE_SHADER(IsValidRay);
+DECLARE_SHADER(IsTirRay);
 
 node_loader
 {
@@ -402,6 +404,8 @@ node_loader
    REGISTER_SHADER(BrdfEval, brdf_eval, AI_TYPE_RGB)
    REGISTER_FCV_SHADER(Lerp, lerp)
    REGISTER_SHADER(SetRayDir, set_ray_dir, AI_TYPE_VECTOR)
+   REGISTER_SHADER(IsValidRay, is_valid_ray, AI_TYPE_BOOLEAN)
+   REGISTER_SHADER(IsTirRay, is_tir_ray, AI_TYPE_BOOLEAN)
    
    return false;
 }
