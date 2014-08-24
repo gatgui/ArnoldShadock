@@ -221,6 +221,7 @@ DECLARE_SHADER(BrdfEvalSample);
 DECLARE_SHADER(BrdfEvalPdf);
 DECLARE_SHADER(BrdfEval);
 DECLARE_FCV_SHADER(Lerp);
+DECLARE_SHADER(SetRayDir);
 
 node_loader
 {
@@ -400,6 +401,7 @@ node_loader
    REGISTER_SHADER(BrdfEvalPdf, brdf_eval_pdf, AI_TYPE_FLOAT)
    REGISTER_SHADER(BrdfEval, brdf_eval, AI_TYPE_RGB)
    REGISTER_FCV_SHADER(Lerp, lerp)
+   REGISTER_SHADER(SetRayDir, set_ray_dir, AI_TYPE_VECTOR)
    
    return false;
 }
