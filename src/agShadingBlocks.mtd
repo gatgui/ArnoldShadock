@@ -1,3 +1,11 @@
+[node sample_dir]
+   maya.classification STRING "utility/sampling"
+   maya.id INT 0x00116512
+
+[node microfacet_normal]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x00116513
+
 [node is_tir_ray]
    maya.classification STRING "utility/trace"
    maya.id INT 0x00116514

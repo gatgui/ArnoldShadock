@@ -224,6 +224,8 @@ DECLARE_FCV_SHADER(Lerp);
 DECLARE_SHADER(SetRayDir);
 DECLARE_SHADER(IsValidRay);
 DECLARE_SHADER(IsTirRay);
+DECLARE_SHADER(SampleDir);
+DECLARE_SHADER(MicrofacetNormal);
 
 node_loader
 {
@@ -406,6 +408,8 @@ node_loader
    REGISTER_SHADER(SetRayDir, set_ray_dir, AI_TYPE_VECTOR)
    REGISTER_SHADER(IsValidRay, is_valid_ray, AI_TYPE_BOOLEAN)
    REGISTER_SHADER(IsTirRay, is_tir_ray, AI_TYPE_BOOLEAN)
+   REGISTER_SHADER(SampleDir, sample_dir, AI_TYPE_VECTOR)
+   REGISTER_SHADER(MicrofacetNormal, microfacet_normal, AI_TYPE_VECTOR)
    
    return false;
 }
