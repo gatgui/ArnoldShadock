@@ -226,6 +226,9 @@ DECLARE_SHADER(IsValidRay);
 DECLARE_SHADER(IsTirRay);
 DECLARE_SHADER(SampleDir);
 DECLARE_SHADER(MicrofacetNormal);
+DECLARE_SHADER(SwitchRayF);
+DECLARE_SHADER(SwitchRayC3);
+DECLARE_SHADER(SwitchRayC4);
 
 node_loader
 {
@@ -410,7 +413,9 @@ node_loader
    REGISTER_SHADER(IsTirRay, is_tir_ray, AI_TYPE_BOOLEAN)
    REGISTER_SHADER(SampleDir, sample_dir, AI_TYPE_VECTOR)
    REGISTER_SHADER(MicrofacetNormal, microfacet_normal, AI_TYPE_VECTOR)
-   
+   REGISTER_SHADER(SwitchRayF, switch_ray_f, AI_TYPE_FLOAT)
+   REGISTER_SHADER(SwitchRayC3, switch_ray_c3, AI_TYPE_RGB)
+   REGISTER_SHADER(SwitchRayC4, switch_ray_c4, AI_TYPE_RGBA)
    return false;
 }
 
