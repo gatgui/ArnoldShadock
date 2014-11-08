@@ -8,12 +8,12 @@ from excons.tools import arnold
 
 env = excons.MakeBaseEnv()
 
-withState = (int(ARGUMENTS.get("with-state", "1")) != 0)
-withNoises = (int(ARGUMENTS.get("with-noises", "1")) != 0)
-withSeExpr = (int(ARGUMENTS.get("with-seexpr", "1")) != 0)
-withAnimCurve = (int(ARGUMENTS.get("with-animcurve", "1")) != 0)
-withUserDataRamp = (int(ARGUMENTS.get("with-userdataramp", "1")) != 0)
-shdprefix = ARGUMENTS.get("shaders-prefix", "gas_")
+withState = (excons.GetArgument("with-state", 1, int) != 0)
+withNoises = (excons.GetArgument("with-noises", 1, int) != 0)
+withSeExpr = (excons.GetArgument("with-seexpr", 1, int) != 0)
+withAnimCurve = (excons.GetArgument("with-animcurve", 1, int) != 0)
+withUserDataRamp = (excons.GetArgument("with-userdataramp", 1, int) != 0)
+shdprefix = excons.GetArgument("shaders-prefix", "gas_")
 
 def check_symbols(*args, **kwargs):
   import subprocess
@@ -116,7 +116,7 @@ if withNoises:
                 glob.glob("agNoises/src/stegu/*.cpp")
 
 if withSeExpr:
-  ARGUMENTS["static"] = "1"
+  excons.SetArgument("static", 1)
   SConscript("agSeExpr/SeExpr/SConstruct")
   defs.append("USE_AGSEEXPR")
   incs.append("agSeExpr")

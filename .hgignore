@@ -8,4 +8,5 @@ debug/
 .cproject
 .project
 .settings/
+excons.cache
 agShadingBlocks.mtd
