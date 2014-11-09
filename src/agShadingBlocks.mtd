@@ -1,3 +1,27 @@
+[node sample_volume_f]
+   maya.classification STRING "utility/sampling"
+   maya.id INT 0x00116508
+
+[node sample_volume_p2]
+   maya.classification STRING "utility/sampling"
+   maya.id INT 0x00116509
+
+[node sample_volume_p3]
+   maya.classification STRING "utility/sampling"
+   maya.id INT 0x0011650A
+
+[node sample_volume_v]
+   maya.classification STRING "utility/sampling"
+   maya.id INT 0x0011650B
+
+[node sample_volume_c3]
+   maya.classification STRING "utility/sampling"
+   maya.id INT 0x0011650C
+
+[node sample_volume_c4]
+   maya.classification STRING "utility/sampling"
+   maya.id INT 0x0011650D
+
 [node volume]
    maya.classification STRING "utility/shade"
    maya.id INT 0x0011650E
