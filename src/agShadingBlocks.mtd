@@ -1,3 +1,7 @@
+[node volume]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x0011650E
+
 [node switch_ray_f]
    maya.classification STRING "utility/trace"
    maya.id INT 0x0011650F

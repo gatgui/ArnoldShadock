@@ -7,14 +7,26 @@
 #include <cmath>
 #include <cstring>
 
-#if AI_VERSION_ARCH_NUM > 4 || (AI_VERSION_ARCH_NUM == 4 && AI_VERSION_MAJOR_NUM >= 1)
-#  define ARNOLD_4_1_AND_ABOVE
-#  if AI_VERSION_MAJOR_NUM > 1 || AI_VERSION_MINOR_NUM >= 1
-#     define HAS_START_CHANNEL
-#  endif
-#  if AI_VERSION_MAJOR_NUM > 2 || (AI_VERSION_MAJOR_NUM == 2 && AI_VERSION_MINOR_NUM >= 2)
-#     define HAS_SS_RAY
-#  endif
+#if AI_VERSION_ARCH_NUM >= 4
+#   if AI_VERSION_ARCH_NUM > 4
+#      define ARNOLD_4_1_AND_ABOVE
+#      define ARNOLD_4_2_AND_ABOVE
+#      define HAS_START_CHANNEL
+#      define HAS_SS_RAY
+#   else
+#      if AI_VERSION_MAJOR_NUM >= 1
+#         define ARNOLD_4_1_AND_ABOVE
+#         if AI_VERSION_MAJOR_NUM > 1 || AI_VERSION_MINOR_NUM >= 1
+#            define HAS_START_CHANNEL
+#         endif
+#      endif
+#      if AI_VERSION_MAJOR_NUM >= 2
+#         define ARNOLD_4_2_AND_ABOVE
+#         if AI_VERSION_MAJOR_NUM > 2 || AI_VERSION_MINOR_NUM >= 2
+#            define HAS_SS_RAY
+#         endif
+#      endif
+#   endif
 #endif
 
 extern const char* CompareOperatorNames[];
