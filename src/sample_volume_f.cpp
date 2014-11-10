@@ -6,7 +6,7 @@ AI_SHADER_NODE_EXPORT_METHODS(SampleVolumeFMtd);
 
 enum SampleVolumeFParams
 {
-   p_field = 0
+   p_field = 0,
    p_interpolation,
    p_default
 };

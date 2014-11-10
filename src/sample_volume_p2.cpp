@@ -6,7 +6,7 @@ AI_SHADER_NODE_EXPORT_METHODS(SampleVolumeP2Mtd);
 
 enum SampleVolumeP2Params
 {
-   p_field = 0
+   p_field = 0,
    p_interpolation,
    p_default
 };
