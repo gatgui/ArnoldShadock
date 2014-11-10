@@ -1,4 +1,6 @@
 #include "common.h"
+#include <vector>
+#include <string>
 
 AI_SHADER_NODE_EXPORT_METHODS(CameraTransformMtd);
 
@@ -66,58 +68,99 @@ node_update
    else
    {
       const char *name = AiNodeGetStr(node, "camera_name");
+      
       if (!name || strlen(name) == 0)
       {
          data->camera = AiUniverseGetCamera();
       }
       else
       {
-         // search for named camera
-         AtNode *n = AiNodeLookUpByName(name);
-         if (n)
+         std::vector<std::string> names;
+         std::string pattern = name;
+         
+         size_t p0 = pattern.find_first_not_of(" \t");
+         size_t p1 = pattern.find_first_of(" \t", p0);
+         
+         while (p1 != std::string::npos)
          {
-            data->camera = n;
+            names.push_back(pattern.substr(p0, p1 - p0));
+            
+            p0 = pattern.find_first_not_of(" \t", p1);
+            p1 = pattern.find_first_of(" \t", p0);
          }
-         else
+         
+         names.push_back(pattern.substr(p0));
+         
+         size_t nnames = names.size();
+         
+         bool multi = false;
+         data->camera = 0;
+         
+         // search for named camera
+         for (size_t i=0; i<nnames; ++i)
          {
-            bool multi = false;
-            data->camera = 0;
+            name = names[i].c_str();
             
-            AtNodeIterator *nit = AiUniverseGetNodeIterator(AI_NODE_CAMERA);
-            while (!AiNodeIteratorFinished(nit))
+            AtNode *n = AiNodeLookUpByName(name);
+            
+            if (n)
             {
-               n = AiNodeIteratorGetNext(nit);
-               
-               const char *curname = AiNodeGetName(n);
-               if (!curname || strlen(curname) == 0)
+               if (data->camera != 0)
                {
-                  continue;
+                  multi = true;
+                  break;
                }
-               
-               if (strstr(curname, name) != 0)
+               else
                {
-                  if (data->camera != 0)
-                  {
-                     multi = true;
-                     break;
-                  }
-                  else
-                  {
-                     data->camera = n;
-                  }
+                  data->camera = n;
                }
             }
-            AiNodeIteratorDestroy(nit);
-            
-            if (!data->camera)
+            else
             {
-               AiMsgWarning("[camera_matrix] No camera matching \"%s\" was found. Use render camera", name);
-               data->camera = AiUniverseGetCamera();
+               AtNodeIterator *nit = AiUniverseGetNodeIterator(AI_NODE_CAMERA);
+               
+               while (!AiNodeIteratorFinished(nit))
+               {
+                  n = AiNodeIteratorGetNext(nit);
+                  
+                  const char *curname = AiNodeGetName(n);
+                  
+                  if (!curname || strlen(curname) == 0)
+                  {
+                     continue;
+                  }
+                  
+                  if (strstr(curname, name) != 0)
+                  {
+                     if (data->camera != 0)
+                     {
+                        multi = true;
+                        break;
+                     }
+                     else
+                     {
+                        data->camera = n;
+                     }
+                  }
+               }
+               
+               AiNodeIteratorDestroy(nit);
+               
+               if (multi)
+               {
+                  break;
+               }
             }
-            else if (multi)
-            {
-               AiMsgWarning("[camera_matrix] Found several cameras matching \"%s\". Use first found: \"%s\"", name, AiNodeGetName(data->camera));
-            }
+         }
+         
+         if (!data->camera)
+         {
+            AiMsgWarning("[camera_transform] No camera matching \"%s\" was found. Use render camera", name);
+            data->camera = AiUniverseGetCamera();
+         }
+         else if (multi)
+         {
+            AiMsgWarning("[camera_transform] Found several cameras matching \"%s\". Use first found: \"%s\"", name, AiNodeGetName(data->camera));
          }
       }
    }
