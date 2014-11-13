@@ -1,6 +1,7 @@
 #include <ai.h>
 #include <cstring>
 #include <cstdlib>
+#include "common.h"
 
 // ---
 
