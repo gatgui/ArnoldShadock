@@ -124,8 +124,6 @@ def make_mtd():
               # Get comparison operator
               op = m.group(2)
               
-              print("%s %s %s" % (arnold_ver, op, ver))
-              
               if op == "<=":
                 ignore_lines = not (arnold_ver <= ver)
               
