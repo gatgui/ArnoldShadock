@@ -1,3 +1,7 @@
+[node is_matte]
+   maya.classification STRING "utility/state"
+   maya.id INT 0x00116507
+
 [node sample_volume_f]
    maya.classification STRING "utility/sampling"
    maya.id INT 0x00116508

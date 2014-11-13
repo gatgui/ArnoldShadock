@@ -13,6 +13,7 @@
 #      define ARNOLD_4_2_AND_ABOVE
 #      define HAS_START_CHANNEL
 #      define HAS_SS_RAY
+#      define HAS_OBJECT_MATTE
 #   else
 #      if AI_VERSION_MAJOR_NUM >= 1
 #         define ARNOLD_4_1_AND_ABOVE
@@ -24,6 +25,7 @@
 #         define ARNOLD_4_2_AND_ABOVE
 #         if AI_VERSION_MAJOR_NUM > 2 || AI_VERSION_MINOR_NUM >= 2
 #            define HAS_SS_RAY
+#            define HAS_OBJECT_MATTE
 #         endif
 #      endif
 #   endif

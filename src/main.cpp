@@ -239,6 +239,9 @@ DECLARE_SHADER(SampleVolumeV);
 DECLARE_SHADER(SampleVolumeC3);
 DECLARE_SHADER(SampleVolumeC4);
 #endif
+#ifdef HAS_OBJECT_MATTE
+DECLARE_SHADER(IsMatte);
+#endif
 
 node_loader
 {
@@ -434,6 +437,9 @@ node_loader
    REGISTER_SHADER(SampleVolumeV, sample_volume_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(SampleVolumeC3, sample_volume_c3, AI_TYPE_RGB)
    REGISTER_SHADER(SampleVolumeC4, sample_volume_c4, AI_TYPE_RGBA)
+#endif
+#ifdef HAS_OBJECT_MATTE
+   REGISTER_SHADER(IsMatte, is_matte, AI_TYPE_BOOLEAN)
 #endif
    return false;
 }
