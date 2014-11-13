@@ -1,4 +1,6 @@
-#include <ai.h>
+#include "common.h"
+
+#ifdef HAS_VOLUME
 
 AI_SHADER_NODE_EXPORT_METHODS(VolumeMtd);
 
@@ -193,4 +195,4 @@ shader_evaluate
    }
 }
 
-
+#endif

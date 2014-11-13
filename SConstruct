@@ -47,20 +47,125 @@ def check_symbols(*args, **kwargs):
     
     sys.exit(1)
 
+def get_arnold_version():
+  arnoldinc, _ = excons.GetDirs("arnold", libdirname=("bin" if sys.platform != "win32" else "lib"))
+  
+  ai_version = os.path.join(arnoldinc, "ai_version.h")
+  
+  varch, vmaj, vmin, vpatch = 0, 0, 0, 0
+  
+  if os.path.isfile(ai_version):
+    defexp = re.compile(r"^\s*#define\s+AI_VERSION_(ARCH_NUM|MAJOR_NUM|MINOR_NUM|FIX)\s+([^\s]+)")
+    f = open(ai_version, "r")
+    for line in f.readlines():
+      m = defexp.match(line)
+      if m:
+        which = m.group(1)
+        if which == "ARCH_NUM":
+          varch = int(m.group(2))
+        elif which == "MAJOR_NUM":
+          vmaj = int(m.group(2))
+        elif which == "MINOR_NUM":
+          vmin = int(m.group(2))
+        elif which == "FIX":
+          vpatch = int(m.group(2)[1:-1])
+    f.close()
+  
+  return (varch, vmaj, vmin, vpatch)
+
+# arnold_ver is a 4 tuple (4, 2, 2, 0)
 def make_mtd():
   nodeexp = re.compile(r"^(\s*\[\s*node\s+)([^]]+)(\s*\]\s*)$")
+  ppexp = re.compile(r"^\s*#(.*)\s*$")
+  ifexp = re.compile(r"^if\s+([^\s]+)\s+([<>=!]+)\s+([^\s]+)$")
+  verexp = re.compile(r"^(\d+)(.(\d+)(.(\d+)(.(\d+))?)?)?$")
+  
+  arnold_ver = get_arnold_version()
+  
   df = open("agShadingBlocks.mtd", "w")
+  
+  def parse_version(s):
+    vm = verexp.match(s)
+    if vm:
+      varch = int(vm.group(1))
+      vmaj, vmin, vpatch = 0, 0, 0 
+      if vm.group(2):
+        vmaj = int(vm.group(3))
+        if vm.group(4):
+          vmin = int(vm.group(5))
+          if vm.group(6):
+            vpatch = vm.group(7)
+      return (varch, vmaj, vmin, vpatch)
+    else:
+      return None
   
   def append_file_content(path, remap={}):
     if not os.path.isfile(path):
       return
+    
     sf = open(path, "r")
+    
+    ignore_lines = False
+    
     for line in sf.readlines():
-      m = nodeexp.match(line)
+      # Check for pre-processor line
+      m = ppexp.match(line)
       if m:
-        df.write("%s%s%s%s" % (m.group(1), shdprefix, remap.get(m.group(2), m.group(2)), m.group(3)))
-      else:
-        df.write(line)
+        # Is it a conditional?
+        pp = m.group(1)
+        m = ifexp.match(pp)
+        if m:
+          # Check conditional variable (only 'arnold' supported for now)
+          if m.group(1) == "arnold":
+            # Parse required arnold version
+            ver = parse_version(m.group(3))
+            
+            if ver:
+              # Get comparison operator
+              op = m.group(2)
+              
+              print("%s %s %s" % (arnold_ver, op, ver))
+              
+              if op == "<=":
+                ignore_lines = not (arnold_ver <= ver)
+              
+              elif op == ">=":
+                ignore_lines = not (arnold_ver >= ver)
+              
+              elif op == "<":
+                ignore_lines = not (arnold_ver < ver)
+              
+              elif op == ">":
+                ignore_lines = not (arnold_ver > ver)
+              
+              elif op == "==":
+                ignore_lines = not (arnold_ver == ver)
+              
+              elif op == "!=":
+                ignore_lines = not (arnold_ver != ver)
+              
+              else:
+                # unknown operator: evaluate condition to false
+                ignore_lines = True
+            else:
+              # invalid version specification: evaluate condition to false
+              ignore_lines = True
+          else:
+            # unknown condition variable: evaluates to false
+            ignore_lines = True
+        
+        elif pp == "endif":
+          # reset ignore state
+          ignore_lines = False
+      
+      elif not ignore_lines:
+        # Replace node name
+        m = nodeexp.match(line)
+        if m:
+          df.write("%s%s%s%s" % (m.group(1), shdprefix, remap.get(m.group(2), m.group(2)), m.group(3)))
+        else:
+          df.write(line)
+    
     sf.close()
   
   append_file_content("src/agShadingBlocks.mtd")
