@@ -58,6 +58,8 @@ node_initialize
    SssMultiData *data = (SssMultiData*) AiMalloc(sizeof(SssMultiData));
    data->method = SM_Cubic;
    data->num_layers = 0;
+   
+   AiNodeSetLocalData(node, data);
 }
 
 node_update
