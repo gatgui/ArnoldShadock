@@ -42,7 +42,7 @@ shader_evaluate
    
    D.x = sinTheta * cosf(phi);
    D.y = sinTheta * sinf(phi);
-   D.z = cosf(phi);
+   D.z = cosTheta;
    
    sg->out.VEC = D;
 }
