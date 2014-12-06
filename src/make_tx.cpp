@@ -11,6 +11,7 @@
 #define WIN32_LEAN_AND_MEAN
 #else
 #include <sys/wait.h>
+#include <unistd.h>
 #include <errno.h>
 #endif
 

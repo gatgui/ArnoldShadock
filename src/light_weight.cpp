@@ -35,7 +35,7 @@ node_initialize
 
 node_update
 {
-   AiNodeSetLocalData(node, (void*) AiNodeGetInt(node, "weight"));
+   AiNodeSetLocalData(node, reinterpret_cast<void*>(AiNodeGetInt(node, "weight")));
 }
 
 node_finish

@@ -32,7 +32,7 @@ node_initialize
 
 node_update
 {
-   AiNodeSetLocalData(node, (void*)AiNodeGetInt(node, "brdf_type"));
+   AiNodeSetLocalData(node, reinterpret_cast<void*>(AiNodeGetInt(node, "brdf_type")));
 }
 
 node_finish

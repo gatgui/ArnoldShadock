@@ -34,7 +34,7 @@ node_initialize
 
 node_update
 {
-   AiNodeSetLocalData(node, (void*) AiNodeGetInt(node, "target_node"));
+   AiNodeSetLocalData(node, reinterpret_cast<void*>(AiNodeGetInt(node, "target_node")));
 }
 
 node_finish
