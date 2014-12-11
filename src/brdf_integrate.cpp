@@ -43,7 +43,7 @@ node_update
 {
    BrdfIntegrateData *data = (BrdfIntegrateData*) AiNodeGetLocalData(node);
    
-   data->brdf_type = (BrdfType) AiNodeGetBool(node, "brdf_type");
+   data->brdf_type = (BrdfType) AiNodeGetInt(node, "brdf_type");
    data->mis_ray_type = AiNodeGetInt(node, "mis_ray_type");
 }
 
