@@ -68,7 +68,8 @@ def get_arnold_version():
         elif which == "MINOR_NUM":
           vmin = int(m.group(2))
         elif which == "FIX":
-          vpatch = int(m.group(2)[1:-1])
+          m = re.search(r"\d+", m.group(2))
+          vpatch = (0 if m is None else int(m.group(0)))
     f.close()
   
   return (varch, vmaj, vmin, vpatch)
