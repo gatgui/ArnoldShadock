@@ -152,7 +152,7 @@ inline T MaxComponent(const T *val)
    return maxval;
 }
 
-bool SortRampPositions(AtArray *a, unsigned int *shuffle);
+void SortRampPositions(AtArray *a, unsigned int *shuffle);
 
 void FloatRamp(AtArray *p, AtArray *v, AtArray *i, RampInterpolation defi, unsigned int *s, float t, float &out);
 void VectorRamp(AtArray *p, AtArray *v, AtArray *i, RampInterpolation defi, unsigned int *s, float t, AtVector &out);
