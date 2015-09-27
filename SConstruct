@@ -186,7 +186,7 @@ def make_mtd():
   
   if withSeExpr:
     df.write("\n")
-    append_file_content("agSeExpr/src/agSeExpr.mtd")
+    append_file_content("agSeExpr/src/seexpr.mtd")
   
   if withAnimCurve:
     df.write("\n")
@@ -225,7 +225,7 @@ if withSeExpr:
   defs.append("USE_AGSEEXPR")
   incs.append("agSeExpr")
   libs.append("SeExpr")
-  extra_srcs += ["agSeExpr/src/agSeExpr.cpp"]
+  extra_srcs += ["agSeExpr/src/seexpr.cpp"]
 
 if withAnimCurve:
   defs.extend(["USE_AGANIMCURVE", "GMATH_STATIC"])
