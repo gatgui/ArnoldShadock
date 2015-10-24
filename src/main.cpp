@@ -244,6 +244,7 @@ DECLARE_SHADER(SampleVolumeC4);
 #ifdef HAS_OBJECT_MATTE
 DECLARE_SHADER(IsMatte);
 #endif
+DECLARE_SHADER(MakeF);
 
 node_loader
 {
@@ -445,6 +446,7 @@ node_loader
 #ifdef HAS_OBJECT_MATTE
    REGISTER_SHADER(IsMatte, is_matte, AI_TYPE_BOOLEAN)
 #endif
+   REGISTER_SHADER(MakeF, make_f, AI_TYPE_FLOAT)
    return false;
 }
 

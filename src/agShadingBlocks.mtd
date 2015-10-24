@@ -1,3 +1,7 @@
+[node make_f]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x00116506
+
 #if arnold >= 4.2.2
 [node is_matte]
    maya.classification STRING "utility/state"
