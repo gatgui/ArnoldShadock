@@ -27,9 +27,8 @@ def check_symbols(*args, **kwargs):
     if not arnilib in os.environ.get(envvar, ""):
       os.environ[envvar] = os.environ.get(envvar, "") + os.pathsep + arnilib
     
-    cmd = "python -c \"import ctypes; ctypes.cdll.LoadLibrary('%s')\"" % kwargs["target"][0]
-    
-    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    cmd = ["python", "-c", "import ctypes; ctypes.cdll.LoadLibrary('%s')" % kwargs["target"][0]]
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = p.communicate()
     
     if p.returncode != 0:
