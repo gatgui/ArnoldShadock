@@ -245,6 +245,7 @@ DECLARE_SHADER(SampleVolumeC4);
 DECLARE_SHADER(IsMatte);
 #endif
 DECLARE_SHADER(MakeF);
+DECLARE_SHADER(C3ToC4);
 
 node_loader
 {
@@ -447,6 +448,6 @@ node_loader
    REGISTER_SHADER(IsMatte, is_matte, AI_TYPE_BOOLEAN)
 #endif
    REGISTER_SHADER(MakeF, make_f, AI_TYPE_FLOAT)
+   REGISTER_SHADER(C3ToC4, c3_to_c4, AI_TYPE_RGBA)
    return false;
 }
-
