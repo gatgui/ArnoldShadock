@@ -1,4 +1,5 @@
 excons = [git]git://github.com/gatgui/excons.git
+gmath = [git]git://github.com/gatgui/gmath.git
 agState = [hg]https://bitbucket.org/gatgui/agState
 agNoises = [hg]https://bitbucket.org/gatgui/agNoises
 agSeExpr = [hg]https://bitbucket.org/gatgui/agSeExpr
