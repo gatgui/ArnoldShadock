@@ -1,0 +1,52 @@
+options
+{
+   texture_gamma 1
+   xres 797
+   yres 595
+}
+
+persp_camera
+{
+   name cam1
+   near_clip 1
+   far_clip 100
+   fov 56
+}
+
+plane
+{
+   name plane1
+   point 0 0 -5
+   normal 0 0 1
+   shader uvproj1
+}
+
+gas_uv_project
+{
+   name uvproj1
+   input gamma1
+   lookup_vector P
+   mode perspective
+   offset_matrix camtr1
+   recompute_surface_uv_derivs on
+}
+
+gas_gamma
+{
+   name gamma1
+   input img1
+   mode expand
+}
+
+image
+{
+   name img1
+   filename "dog.tiff"
+}
+
+gas_camera_transform
+{
+   name camtr1
+   camera cam1
+   mode world_to_screen
+}
