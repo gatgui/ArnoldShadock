@@ -227,12 +227,8 @@ if withSeExpr:
   extra_srcs += ["agSeExpr/src/seexpr.cpp"]
 
 if withAnimCurve:
-  defs.extend(["USE_AGANIMCURVE", "GMATH_STATIC"])
-  incs.append("agAnimCurve/gmath/include")
-  extra_srcs += ["agAnimCurve/src/agAnimCurve.cpp",
-                 "agAnimCurve/gmath/src/lib/curve.cpp",
-                 "agAnimCurve/gmath/src/lib/polynomial.cpp",
-                 "agAnimCurve/gmath/src/lib/vector.cpp"]
+  defs.extend(["USE_AGANIMCURVE"])
+  extra_srcs += ["agAnimCurve/src/agAnimCurve.cpp"]
 
 if withUserDataRamp:
   defs.append("USE_AGUSERDATARAMP")
