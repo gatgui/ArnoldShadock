@@ -246,6 +246,7 @@ DECLARE_SHADER(IsMatte);
 #endif
 DECLARE_SHADER(MakeF);
 DECLARE_SHADER(C3ToC4);
+DECLARE_SHADER(Gamma);
 
 node_loader
 {
@@ -449,5 +450,6 @@ node_loader
 #endif
    REGISTER_SHADER(MakeF, make_f, AI_TYPE_FLOAT)
    REGISTER_SHADER(C3ToC4, c3_to_c4, AI_TYPE_RGBA)
+   REGISTER_SHADER(Gamma, gamma, AI_TYPE_RGB)
    return false;
 }

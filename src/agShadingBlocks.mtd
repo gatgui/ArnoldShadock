@@ -1,3 +1,7 @@
+[node gamma]
+   maya.classification STRING "utility/color"
+   maya.id INT 0x00116504
+
 [node c3_to_c4]
    maya.classification STRING "utility/convert"
    maya.id INT 0x00116505
