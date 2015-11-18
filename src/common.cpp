@@ -59,7 +59,7 @@ const char* CombineModeNames[] =
    NULL
 };
 
-const char* RayTypeNames[] = 
+const char* RayTypeNames[] =
 {
    "camera",
    "shadow",
@@ -86,6 +86,77 @@ AtUInt16 RayTypeValues[] =
    AI_RAY_DIFFUSE,
    AI_RAY_GLOSSY,
    AI_RAY_GENERIC
+};
+
+const char* GammaModeNames[] =
+{
+   "expand",
+   "compress",
+   NULL
+};
+
+const char* GammaTransformNames[] =
+{
+   "2.2",
+   "2.4",
+   "sRGB",
+   "Rec. 709",
+   "LogC",
+   "Cineon",
+   NULL
+};
+
+const char* GammaExposureLevelNames[] =
+{
+   "160",
+   "200",
+   "250",
+   "320",
+   "400",
+   "500",
+   "640",
+   "800",
+   "1000",
+   "1280",
+   "1600",
+   NULL
+};
+
+const char* ColorSpaceNames[] =
+{
+   gmath::ColorSpace::Rec709.getName().c_str(),
+   gmath::ColorSpace::NTSC.getName().c_str(),
+   gmath::ColorSpace::SMPTE.getName().c_str(),
+   gmath::ColorSpace::CIE.getName().c_str(),
+   gmath::ColorSpace::UHDTV.getName().c_str(),
+   gmath::ColorSpace::DCIP3.getName().c_str(),
+   gmath::ColorSpace::AdobeRGB.getName().c_str(),
+   gmath::ColorSpace::AdobeWide.getName().c_str(),
+   gmath::ColorSpace::AlexaWide.getName().c_str()
+};
+
+const gmath::ColorSpace* ColorSpaces[] =
+{
+   &gmath::ColorSpace::Rec709,
+   &gmath::ColorSpace::NTSC,
+   &gmath::ColorSpace::SMPTE,
+   &gmath::ColorSpace::CIE,
+   &gmath::ColorSpace::UHDTV,
+   &gmath::ColorSpace::DCIP3,
+   &gmath::ColorSpace::AdobeRGB,
+   &gmath::ColorSpace::AdobeWide,
+   &gmath::ColorSpace::AlexaWide
+};
+
+const char* ChromaticAdaptationTransformNames[] =
+{
+   "VonKries",
+   "Bradford",
+   "Sharp",
+   "CMCCAT2000",
+   "CAT02",
+   "XYZ",
+   NULL
 };
 
 static void GetArrayElement(AtArray *a, unsigned int i, float &e)
@@ -124,7 +195,7 @@ static void RampT(AtArray *p, AtArray *v, AtArray *it, RampInterpolation defi, u
    }
 
    int iprev = inext - 1;
-   
+
    if (iprev < 0)
    {
       GetArrayElement(v, shuffle[0], result);
@@ -182,7 +253,7 @@ static void RampT(AtArray *p, AtArray *v, AtArray *it, RampInterpolation defi, u
          float b = -2.0f * u3 + 3.0f * u2; // p2
          float c = u3 - 2.0f * u2 + u; // t1
          float d = u3 - u2; // t2
-         
+
          // Catmull-rom type tangents:
          float p0, p3, sx;
          T v0, v3, sy;
@@ -205,7 +276,7 @@ static void RampT(AtArray *p, AtArray *v, AtArray *it, RampInterpolation defi, u
          }
          sy = v2 - v0;
          t1 = sy / sx;
-         
+
          // Compute end tangent
          if (inext+1 >= p->nelements)
          {
@@ -224,7 +295,7 @@ static void RampT(AtArray *p, AtArray *v, AtArray *it, RampInterpolation defi, u
          }
          sy = v3 - v1;
          t2 = sy / sx;
-         
+
          t1 *= dp;
          t2 *= dp;
 
@@ -240,19 +311,19 @@ static void RampT(AtArray *p, AtArray *v, AtArray *it, RampInterpolation defi, u
 class ComparePositions
 {
 public:
-   
+
    inline ComparePositions(AtArray *a)
       : _a(a)
    {
    }
-   
+
    inline bool operator()(unsigned int i0, unsigned int i1) const
    {
       return (AiArrayGetFlt(_a, i0) < AiArrayGetFlt(_a, i1));
    }
-   
+
 private:
-   
+
    AtArray *_a;
 };
 
@@ -261,14 +332,14 @@ void SortRampPositions(AtArray *a, unsigned int *shuffle)
    if (a && shuffle && a->nelements > 0)
    {
       unsigned int n = a->nelements;
-      
+
       for (unsigned int i=0; i<n; ++i)
       {
          shuffle[i] = i;
       }
-      
+
       ComparePositions cmp(a);
-      
+
       std::sort(shuffle, shuffle + n, cmp);
    }
 }
@@ -332,7 +403,7 @@ void ComputeSurfaceUVDerivatives(AtShaderGlobals *sg, const AtVector &dPdx, cons
 
    // Note 1: sg's dPdu and dPdv are left unchanged when the system cannot be solved
    // Note 2: Could scale all equations to gain precision
-   
+
    float rv[6];
    LinearSystem<6> lsys;
 
@@ -357,4 +428,3 @@ void ComputeSurfaceUVDerivatives(AtShaderGlobals *sg, const AtVector &dPdx, cons
       AiMsgWarning("Could no re-compute dPdu and dPdv");
    }
 }
-

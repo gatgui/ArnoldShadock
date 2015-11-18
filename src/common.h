@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <cmath>
 #include <cstring>
+#include <gmath/color.h>
 
 #if AI_VERSION_ARCH_NUM >= 4
 #   if AI_VERSION_ARCH_NUM > 4
@@ -113,6 +114,62 @@ enum RayType
 extern const char* RayTypeNames[];
 extern AtUInt16 RayTypeValues[];
 
+enum GammaMode
+{
+   GM_Expand = 0,
+   GM_Compress
+};
+
+extern const char* GammaModeNames[];
+
+enum GammaTransform
+{
+   GT_Gamma22 = 0,
+   GT_Gamma24,
+   GT_sRGB,
+   GT_Rec709,
+   GT_LogC,
+   GT_Cineon
+};
+
+extern const char* GammaTransformNames[];
+
+enum GammaExposureLevel
+{
+   GL_160 = 0,
+   GL_200,
+   GL_250,
+   GL_320,
+   GL_400,
+   GL_500,
+   GL_640,
+   GL_800,
+   GL_1000,
+   GL_1280,
+   GL_1600
+};
+
+extern const char* GammaExposureLevelNames[];
+
+enum ColorSpace
+{
+   CS_Rec790 = 0,
+   CS_NTSC,
+   CS_SMPTE,
+   CS_CIE,
+   CS_UHDTV,
+   CS_DCIP3,
+   CS_AdobeRGB,
+   CS_AdobeWide,
+   CS_AlexaWide
+};
+
+extern const char* ColorSpaceNames[];
+extern const gmath::ColorSpace* ColorSpaces[];
+
+// gmath::ChromaticAdaptationTransform
+extern const char* ChromaticAdaptationTransformNames[];
+
 // ---
 
 struct BRDFData
@@ -188,11 +245,11 @@ inline float NormalizeToRange(float in, float range_min, float range_max)
 inline AtVector NormalizeToRange(const AtVector &in, const AtVector &range_min, const AtVector &range_max)
 {
    AtVector rv;
-   
+
    rv.x = CLAMP((in.x - range_min.x) / (range_max.x - range_min.x), 0.0f, 1.0f);
    rv.y = CLAMP((in.y - range_min.y) / (range_max.y - range_min.y), 0.0f, 1.0f);
    rv.z = CLAMP((in.z - range_min.z) / (range_max.z - range_min.z), 0.0f, 1.0f);
-   
+
    return rv;
 }
 
@@ -200,22 +257,22 @@ inline AtVector NormalizeToRange(const AtVector &in, float range_min, float rang
 {
    AtVector rv;
    float tmp = 1.0f / (range_max - range_min);
-   
+
    rv.x = CLAMP((in.x - range_min) * tmp, 0.0f, 1.0f);
    rv.y = CLAMP((in.y - range_min) * tmp, 0.0f, 1.0f);
    rv.z = CLAMP((in.z - range_min) * tmp, 0.0f, 1.0f);
-   
+
    return rv;
 }
 
 inline AtRGB NormalizeToRange(const AtRGB &in, const AtRGB &range_min, const AtRGB &range_max)
 {
    AtRGB rv;
-   
+
    rv.r = CLAMP((in.r - range_min.r) / (range_max.r - range_min.r), 0.0f, 1.0f);
    rv.g = CLAMP((in.g - range_min.g) / (range_max.g - range_min.g), 0.0f, 1.0f);
    rv.b = CLAMP((in.b - range_min.b) / (range_max.b - range_min.b), 0.0f, 1.0f);
-   
+
    return rv;
 }
 
@@ -223,11 +280,11 @@ inline AtRGB NormalizeToRange(const AtRGB &in, float range_min, float range_max)
 {
    AtRGB rv;
    float tmp = 1.0f / (range_max - range_min);
-   
+
    rv.r = CLAMP((in.r - range_min) * tmp, 0.0f, 1.0f);
    rv.g = CLAMP((in.g - range_min) * tmp, 0.0f, 1.0f);
    rv.b = CLAMP((in.b - range_min) * tmp, 0.0f, 1.0f);
-   
+
    return rv;
 }
 
@@ -239,44 +296,44 @@ inline float ExpandToRange(float in, float range_min, float range_max)
 inline AtVector ExpandToRange(const AtVector &in, float range_min, float range_max)
 {
    AtVector rv;
-   
+
    rv.x = range_min + in.x * (range_max - range_min);
    rv.y = range_min + in.y * (range_max - range_min);
    rv.z = range_min + in.z * (range_max - range_min);
-   
+
    return rv;
 }
 
 inline AtVector ExpandToRange(const AtVector &in, const AtVector &range_min, const AtVector &range_max)
 {
    AtVector rv;
-   
+
    rv.x = range_min.x + in.x * (range_max.x - range_min.x);
    rv.y = range_min.y + in.y * (range_max.y - range_min.y);
    rv.z = range_min.z + in.z * (range_max.z - range_min.z);
-   
+
    return rv;
 }
 
 inline AtRGB ExpandToRange(const AtRGB &in, float range_min, float range_max)
 {
    AtRGB rv;
-   
+
    rv.r = range_min + in.r * (range_max - range_min);
    rv.g = range_min + in.g * (range_max - range_min);
    rv.b = range_min + in.b * (range_max - range_min);
-   
+
    return rv;
 }
 
 inline AtRGB ExpandToRange(const AtRGB &in, const AtRGB &range_min, const AtRGB &range_max)
 {
    AtRGB rv;
-   
+
    rv.r = range_min.r + in.r * (range_max.r - range_min.r);
    rv.g = range_min.g + in.g * (range_max.g - range_min.g);
    rv.b = range_min.b + in.b * (range_max.b - range_min.b);
-   
+
    return rv;
 }
 
@@ -288,9 +345,9 @@ struct UVData
    float dudx, dudy;
    float dvdx, dvdy;
    AtVector dPdu, dPdv;
-   
+
    UVData(AtShaderGlobals *sg);
-   
+
    void store(AtShaderGlobals *sg);
    void restore(AtShaderGlobals *sg);
 };
@@ -306,7 +363,7 @@ inline void ScaleUV(const AtPoint2 &pivot, const AtPoint2 &s, AtPoint2 &uv)
 inline void RotateUV(const AtPoint2 &pivot, float cosA, float sinA, AtPoint2 &uv)
 {
    AtPoint2 tmp = uv - pivot;
-   
+
    uv.x = pivot.x + cosA * tmp.x - sinA * tmp.y;
    uv.y = pivot.y + cosA * tmp.y + sinA * tmp.x;
 }

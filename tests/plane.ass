@@ -24,11 +24,18 @@ plane
 gas_uv_project
 {
    name uvproj1
-   input gamma1
+   input cat1
    lookup_vector P
    mode perspective
    offset_matrix camtr1
    recompute_surface_uv_derivs on
+}
+
+gas_adapt_chromaticity
+{
+   name cat1
+   input gamma1
+   source 0.76 0.6 0.3
 }
 
 gas_gamma

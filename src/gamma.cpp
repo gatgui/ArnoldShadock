@@ -1,5 +1,4 @@
 #include "common.h"
-#include <gmath/color.h>
 
 AI_SHADER_NODE_EXPORT_METHODS(GammaMtd);
 
@@ -9,68 +8,6 @@ enum GammaParams
    p_mode,
    p_transform,
    p_logc_el
-};
-
-enum GammaMode
-{
-   GM_Expand = 0,
-   GM_Compress
-};
-
-static const char* GammaModeNames[] = {
-   "expand",
-   "compress",
-   NULL
-};
-
-enum GammaTransform
-{
-   GT_Gamma22 = 0,
-   GT_Gamma24,
-   GT_sRGB,
-   GT_Rec709,
-   GT_LogC,
-   GT_Cineon
-};
-
-static const char* GammaTransformNames[] = {
-   "2.2",
-   "2.4",
-   "sRGB",
-   "Rec. 709",
-   "LogC",
-   "Cineon",
-   NULL
-};
-
-enum GammaExposureLevel
-{
-   GL_160 = 0,
-   GL_200,
-   GL_250,
-   GL_320,
-   GL_400,
-   GL_500,
-   GL_640,
-   GL_800,
-   GL_1000,
-   GL_1280,
-   GL_1600
-};
-
-static const char* GammaExposureLevelNames[] = {
-   "160",
-   "200",
-   "250",
-   "320",
-   "400",
-   "500",
-   "640",
-   "800",
-   "1000",
-   "1280",
-   "1600",
-   NULL
 };
 
 node_parameters
