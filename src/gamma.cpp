@@ -26,7 +26,7 @@ struct NodeData
 {
    bool valid;
    bool expand;
-   gmath::NonLinearTransform nlt;
+   gmath::Gamma::NonLinearTransform nlt;
 };
 
 node_initialize
@@ -44,22 +44,22 @@ node_update
    switch (AiNodeGetInt(node, "transform"))
    {
    case GT_Gamma22:
-      data->nlt = gmath::NLT_Gamma22;
+      data->nlt = gmath::Gamma::NLT_Gamma22;
       break;
    case GT_Gamma24:
-      data->nlt = gmath::NLT_Gamma24;
+      data->nlt = gmath::Gamma::NLT_Gamma24;
       break;
    case GT_sRGB:
-      data->nlt = gmath::NLT_sRGB;
+      data->nlt = gmath::Gamma::NLT_sRGB;
       break;
    case GT_Rec709:
-      data->nlt = gmath::NLT_Rec709;
+      data->nlt = gmath::Gamma::NLT_Rec709;
       break;
    case GT_LogC:
-      data->nlt = (gmath::NonLinearTransform) (int(gmath::NLT_LogCv3) + (AiNodeGetInt(node, "logc_exposure_level") - 7));
+      data->nlt = (gmath::Gamma::NonLinearTransform) (int(gmath::Gamma::NLT_LogCv3) + (AiNodeGetInt(node, "logc_exposure_level") - 7));
       break;
    case GT_Cineon:
-      data->nlt = gmath::NLT_Cineon;
+      data->nlt = gmath::Gamma::NLT_Cineon;
       break;
    default:
       data->valid = false;
@@ -89,11 +89,11 @@ shader_evaluate
 
       if (data->expand)
       {
-         out = gmath::Linearize(in, data->nlt);
+         out = gmath::Gamma::Linearize(in, data->nlt);
       }
       else
       {
-         out = gmath::Unlinearize(in, data->nlt);
+         out = gmath::Gamma::Unlinearize(in, data->nlt);
       }
 
       sg->out.RGB.r = out.r;
