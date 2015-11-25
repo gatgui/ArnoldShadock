@@ -1,7 +1,7 @@
 Shader Building Blocks
 
-agAnimCurve    v2.0.2
-agNoises       v1.1.1b
+agAnimCurve    v2.0.3
+agNoises       v1.1.2
 agSeExpr       v1.2.1
-agState        v1.1.2
-agUserDataRamp v1.0.1b
+agState        v1.1.1
+agUserDataRamp v1.0.2
