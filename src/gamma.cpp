@@ -14,19 +14,19 @@ node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
    AiParameterEnum("mode", GM_Expand, GammaModeNames);
-   AiParameterEnum("transform", GT_sRGB, GammaTransformNames);
-   AiParameterEnum("logc_exposure_level", GL_800, GammaExposureLevelNames);
+   AiParameterEnum("transform", GF_sRGB, GammaFunctionNames);
+   AiParameterEnum("logc_exposure", EL_800, LogCExposureLevelNames);
 
    AiMetaDataSetBool(mds, "mode", "linkable", false);
    AiMetaDataSetBool(mds, "transform", "linkable", false);
-   AiMetaDataSetBool(mds, "logc_exposure_level", "linkable", false);
+   AiMetaDataSetBool(mds, "logc_exposure", "linkable", false);
 }
 
 struct NodeData
 {
    bool valid;
    bool expand;
-   gmath::Gamma::NonLinearTransform nlt;
+   gmath::Gamma::Function gf;
 };
 
 node_initialize
@@ -43,23 +43,23 @@ node_update
 
    switch (AiNodeGetInt(node, "transform"))
    {
-   case GT_Gamma22:
-      data->nlt = gmath::Gamma::NLT_Gamma22;
+   case GF_Power22:
+      data->gf = gmath::Gamma::Power22;
       break;
-   case GT_Gamma24:
-      data->nlt = gmath::Gamma::NLT_Gamma24;
+   case GF_Power24:
+      data->gf = gmath::Gamma::Power24;
       break;
-   case GT_sRGB:
-      data->nlt = gmath::Gamma::NLT_sRGB;
+   case GF_sRGB:
+      data->gf = gmath::Gamma::sRGB;
       break;
-   case GT_Rec709:
-      data->nlt = gmath::Gamma::NLT_Rec709;
+   case GF_Rec709:
+      data->gf = gmath::Gamma::Rec709;
       break;
-   case GT_LogC:
-      data->nlt = (gmath::Gamma::NonLinearTransform) (int(gmath::Gamma::NLT_LogCv3) + (AiNodeGetInt(node, "logc_exposure_level") - 7));
+   case GF_LogC:
+      data->gf = (gmath::Gamma::Function) (int(gmath::Gamma::LogCv3) + (AiNodeGetInt(node, "logc_exposure") - 7));
       break;
-   case GT_Cineon:
-      data->nlt = gmath::Gamma::NLT_Cineon;
+   case GF_Cineon:
+      data->gf = gmath::Gamma::Cineon;
       break;
    default:
       data->valid = false;
@@ -89,11 +89,11 @@ shader_evaluate
 
       if (data->expand)
       {
-         out = gmath::Gamma::Linearize(in, data->nlt);
+         out = gmath::Gamma::Linearize(in, data->gf);
       }
       else
       {
-         out = gmath::Gamma::Unlinearize(in, data->nlt);
+         out = gmath::Gamma::Unlinearize(in, data->gf);
       }
 
       sg->out.RGB.r = out.r;

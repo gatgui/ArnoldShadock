@@ -95,18 +95,18 @@ const char* GammaModeNames[] =
    NULL
 };
 
-const char* GammaTransformNames[] =
+const char* GammaFunctionNames[] =
 {
-   "2.2",
-   "2.4",
+   "power2.2",
+   "power2.4",
    "sRGB",
-   "Rec. 709",
+   "Rec709",
    "LogC",
    "Cineon",
    NULL
 };
 
-const char* GammaExposureLevelNames[] =
+const char* LogCExposureLevelNames[] =
 {
    "160",
    "200",
