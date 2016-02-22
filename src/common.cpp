@@ -132,7 +132,8 @@ const char* ColorSpaceNames[] =
    gmath::ColorSpace::DCIP3.getName().c_str(),
    gmath::ColorSpace::AdobeRGB.getName().c_str(),
    gmath::ColorSpace::AdobeWide.getName().c_str(),
-   gmath::ColorSpace::AlexaWide.getName().c_str()
+   gmath::ColorSpace::AlexaWide.getName().c_str(),
+   NULL
 };
 
 const gmath::ColorSpace* ColorSpaces[] =
