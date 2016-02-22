@@ -122,34 +122,34 @@ enum GammaMode
 
 extern const char* GammaModeNames[];
 
-enum GammaTransform
+enum GammaFunction
 {
-   GT_Gamma22 = 0,
-   GT_Gamma24,
-   GT_sRGB,
-   GT_Rec709,
-   GT_LogC,
-   GT_Cineon
+   GF_Power22 = 0,
+   GF_Power24,
+   GF_sRGB,
+   GF_Rec709,
+   GF_LogC,
+   GF_Cineon
 };
 
-extern const char* GammaTransformNames[];
+extern const char* GammaFunctionNames[];
 
-enum GammaExposureLevel
+enum LogCExposureLevel
 {
-   GL_160 = 0,
-   GL_200,
-   GL_250,
-   GL_320,
-   GL_400,
-   GL_500,
-   GL_640,
-   GL_800,
-   GL_1000,
-   GL_1280,
-   GL_1600
+   EL_160 = 0,
+   EL_200,
+   EL_250,
+   EL_320,
+   EL_400,
+   EL_500,
+   EL_640,
+   EL_800,
+   EL_1000,
+   EL_1280,
+   EL_1600
 };
 
-extern const char* GammaExposureLevelNames[];
+extern const char* LogCExposureLevelNames[];
 
 enum ColorSpace
 {

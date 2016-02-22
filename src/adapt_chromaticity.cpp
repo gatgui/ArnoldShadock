@@ -8,12 +8,10 @@ enum AdaptChromaticityParams
    p_input = 0,
    p_source,
    p_source_cs,
-   p_destination,
-   p_destination_cs,
+   p_target,
+   p_target_cs,
    p_cat
 };
-
-//GMATH_API Matrix3 ChromaticAdaptationMatrix(const XYZ &from, const XYZ &to, ChromaticAdaptationTransform cat=CAT_VonKries);
 
 node_parameters
 {
@@ -21,14 +19,14 @@ node_parameters
 
    AiParameterRGB("source", 1.0f, 1.0f, 1.0f);
    AiParameterEnum("source_color_space", CS_Rec790, ColorSpaceNames);
-   AiParameterRGB("destination", 1.0f, 1.0f, 1.0f);
-   AiParameterEnum("destination_color_space", CS_Rec790, ColorSpaceNames);
+   AiParameterRGB("target", 1.0f, 1.0f, 1.0f);
+   AiParameterEnum("target_color_space", CS_Rec790, ColorSpaceNames);
    AiParameterEnum("transform", gmath::CAT_VonKries, ChromaticAdaptationTransformNames);
 
    AiMetaDataSetBool(mds, "source", "linkable", false);
    AiMetaDataSetBool(mds, "source_color_space", "linkable", false);
-   AiMetaDataSetBool(mds, "destination", "linkable", false);
-   AiMetaDataSetBool(mds, "destination_color_space", "linkable", false);
+   AiMetaDataSetBool(mds, "target", "linkable", false);
+   AiMetaDataSetBool(mds, "target_color_space", "linkable", false);
    AiMetaDataSetBool(mds, "transform", "linkable", false);
 }
 
@@ -48,14 +46,14 @@ node_update
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
 
    AtRGB src = AiNodeGetRGB(node, "source");
-   AtRGB dst = AiNodeGetRGB(node, "destination");
+   AtRGB tgt = AiNodeGetRGB(node, "target");
    const gmath::ColorSpace *srcCS = ColorSpaces[AiNodeGetInt(node, "source_color_space")];
-   const gmath::ColorSpace *dstCS = ColorSpaces[AiNodeGetInt(node, "destination_color_space")];
+   const gmath::ColorSpace *tgtCS = ColorSpaces[AiNodeGetInt(node, "target_color_space")];
    gmath::ChromaticAdaptationTransform cat = (gmath::ChromaticAdaptationTransform) AiNodeGetInt(node, "transform");
 
    gmath::XYZ _src = srcCS->RGBtoXYZ(gmath::RGB(src.r, src.g, src.b));
-   gmath::XYZ _dst = dstCS->RGBtoXYZ(gmath::RGB(dst.r, dst.g, dst.b));
-   data->M = dstCS->getXYZtoRGBMatrix() * gmath::ChromaticAdaptationMatrix(_src, _dst, cat) * srcCS->getRGBtoXYZMatrix();
+   gmath::XYZ _tgt = tgtCS->RGBtoXYZ(gmath::RGB(tgt.r, tgt.g, tgt.b));
+   data->M = tgtCS->getXYZtoRGBMatrix() * gmath::ChromaticAdaptationMatrix(_src, _tgt, cat) * srcCS->getRGBtoXYZMatrix();
 }
 
 node_finish
