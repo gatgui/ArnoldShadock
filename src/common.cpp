@@ -124,15 +124,15 @@ const char* LogCExposureLevelNames[] =
 
 const char* ColorSpaceNames[] =
 {
-   gmath::ColorSpace::Rec709.getName().c_str(),
-   gmath::ColorSpace::NTSC.getName().c_str(),
-   gmath::ColorSpace::SMPTE.getName().c_str(),
-   gmath::ColorSpace::CIE.getName().c_str(),
-   gmath::ColorSpace::UHDTV.getName().c_str(),
-   gmath::ColorSpace::DCIP3.getName().c_str(),
-   gmath::ColorSpace::AdobeRGB.getName().c_str(),
-   gmath::ColorSpace::AdobeWide.getName().c_str(),
-   gmath::ColorSpace::AlexaWide.getName().c_str(),
+   "Rec709",
+   "NTSC1953",
+   "SMPTEC",
+   "CIE",
+   "UHDTV",
+   "DCIP3",
+   "Adobe",
+   "AdobeWide",
+   "AlexaWide",
    NULL
 };
 
