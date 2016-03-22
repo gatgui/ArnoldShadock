@@ -103,6 +103,7 @@ const char* GammaFunctionNames[] =
    "Rec709",
    "LogC",
    "Cineon",
+   "Rec2020",
    NULL
 };
 

@@ -61,6 +61,9 @@ node_update
    case GF_Cineon:
       data->gf = gmath::Gamma::Cineon;
       break;
+   case GF_Rec2020:
+      data->gf = gmath::Gamma::Rec2020;
+      break;
    default:
       data->valid = false;
       break;

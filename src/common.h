@@ -129,7 +129,8 @@ enum GammaFunction
    GF_sRGB,
    GF_Rec709,
    GF_LogC,
-   GF_Cineon
+   GF_Cineon,
+   GF_Rec2020
 };
 
 extern const char* GammaFunctionNames[];
