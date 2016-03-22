@@ -248,6 +248,7 @@ DECLARE_SHADER(MakeF);
 DECLARE_SHADER(C3ToC4);
 DECLARE_SHADER(Gamma);
 DECLARE_SHADER(AdaptChromaticity);
+DECLARE_SHADER(Blackbody);
 
 node_loader
 {
@@ -453,5 +454,6 @@ node_loader
    REGISTER_SHADER(C3ToC4, c3_to_c4, AI_TYPE_RGBA)
    REGISTER_SHADER(Gamma, gamma, AI_TYPE_RGB)
    REGISTER_SHADER(AdaptChromaticity, adapt_chromaticity, AI_TYPE_RGB);
+   REGISTER_SHADER(Blackbody, blackbody, AI_TYPE_RGB);
    return false;
 }

@@ -1,3 +1,7 @@
+[node blackbody]
+   maya.classification STRING "utility/color"
+   maya.id INT 0x00116502
+
 [node adapt_chromaticity]
    maya.classification STRING "utility/color"
    maya.id INT 0x00116503
