@@ -48,7 +48,7 @@ node_parameters
    AiParameterEnum("ca_transform", gmath::CAT_VonKries, ChromaticAdaptationTransformNames);
    AiParameterFlt("ca_max_temperature", 5000.0f);
    AiParameterRGB("ca_white_point", 1.0f, 1.0f, 1.0f);
-   AiParameterFlt("exposure", 1.0f);
+   AiParameterFlt("exposure", 0.0f);
    AiParameterEnum("color_space", CS_Rec790, ColorSpaceNames);
 
    AiMetaDataSetBool(mds, "output_mode", "linkable", false);
@@ -67,12 +67,13 @@ struct NodeData
    const gmath::ColorSpace *CS;
    gmath::ToneMappingOperator *TM;
    gmath::Matrix3 CAT;
-   
 };
 
 node_initialize
 {
    NodeData *data = new NodeData();
+   data->CS = 0;
+   data->TM = 0;
    AiNodeSetLocalData(node, (void*)data);
 }
 
@@ -145,7 +146,6 @@ shader_evaluate
       break;
    case OM_raw:
       out = gmath::Blackbody::GetRGB(temperature, *(data->CS), false);
-      scale = 1.0f;
       break;
    case OM_tone_mapping:
       out = data->CS->XYZtoRGB((*data->TM)(gmath::Blackbody::GetXYZ(temperature)));
@@ -172,4 +172,9 @@ shader_evaluate
    sg->out.RGB.r = scale * out.r;
    sg->out.RGB.g = scale * out.g;
    sg->out.RGB.b = scale * out.b;
+   
+   if (AiColorCorrupted(sg->out.RGB))
+   {
+      sg->out.RGB = AI_RGB_BLACK;
+   }
 }
