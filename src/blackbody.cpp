@@ -50,6 +50,8 @@ node_parameters
    AiParameterRGB("ca_white_point", 1.0f, 1.0f, 1.0f);
    AiParameterFlt("exposure", 0.0f);
    AiParameterEnum("color_space", CS_Rec790, ColorSpaceNames);
+   AiParameterBool("fix_nans", false);
+   AiParameterRGB("nan_color", 0.0f, 0.0f, 0.0f);
 
    AiMetaDataSetBool(mds, "output_mode", "linkable", false);
    AiMetaDataSetBool(mds, "tm_key", "linkable", false);
@@ -59,6 +61,8 @@ node_parameters
    AiMetaDataSetBool(mds, "ca_max_temperature", "linkable", false);
    AiMetaDataSetBool(mds, "ca_white_point", "linkable", false);
    AiMetaDataSetBool(mds, "color_space", "linkable", false);
+   AiMetaDataSetBool(mds, "fix_nans", "linkable", false);
+   AiMetaDataSetBool(mds, "nan_color", "linkable", false);
 }
 
 struct NodeData
@@ -67,6 +71,8 @@ struct NodeData
    const gmath::ColorSpace *CS;
    gmath::ToneMappingOperator *TM;
    gmath::Matrix3 CAT;
+   bool fixNans;
+   AtColor nanColor;
 };
 
 node_initialize
@@ -89,6 +95,8 @@ node_update
 
    data->mode = (OutputMode) AiNodeGetInt(node, "output_mode");
    data->CS = ColorSpaces[AiNodeGetInt(node, "color_space")];
+   data->fixNans = AiNodeGetBool(node, "fix_nans");
+   data->nanColor = AiNodeGetRGB(node, "nan_color");
 
    if (data->mode == OM_tone_mapping)
    {
@@ -173,8 +181,11 @@ shader_evaluate
    sg->out.RGB.g = scale * out.g;
    sg->out.RGB.b = scale * out.b;
    
-   if (AiColorCorrupted(sg->out.RGB))
+   if (data->fixNans)
    {
-      sg->out.RGB = AI_RGB_BLACK;
+      if (AiColorCorrupted(sg->out.RGB))
+      {
+         sg->out.RGB = data->nanColor;
+      }
    }
 }
