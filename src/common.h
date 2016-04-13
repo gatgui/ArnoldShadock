@@ -154,7 +154,7 @@ extern const char* LogCExposureLevelNames[];
 
 enum ColorSpace
 {
-   CS_Rec790 = 0,
+   CS_Rec709 = 0,
    CS_NTSC,
    CS_SMPTE,
    CS_CIE,

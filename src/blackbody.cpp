@@ -49,7 +49,7 @@ node_parameters
    AiParameterFlt("ca_max_temperature", 5000.0f);
    AiParameterRGB("ca_white_point", 1.0f, 1.0f, 1.0f);
    AiParameterFlt("exposure", 0.0f);
-   AiParameterEnum("color_space", CS_Rec790, ColorSpaceNames);
+   AiParameterEnum("color_space", CS_Rec709, ColorSpaceNames);
    AiParameterBool("fix_nans", false);
    AiParameterRGB("nan_color", 0.0f, 0.0f, 0.0f);
 

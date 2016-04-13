@@ -18,9 +18,9 @@ node_parameters
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
 
    AiParameterRGB("source", 1.0f, 1.0f, 1.0f);
-   AiParameterEnum("source_color_space", CS_Rec790, ColorSpaceNames);
+   AiParameterEnum("source_color_space", CS_Rec709, ColorSpaceNames);
    AiParameterRGB("target", 1.0f, 1.0f, 1.0f);
-   AiParameterEnum("target_color_space", CS_Rec790, ColorSpaceNames);
+   AiParameterEnum("target_color_space", CS_Rec709, ColorSpaceNames);
    AiParameterEnum("transform", gmath::CAT_VonKries, ChromaticAdaptationTransformNames);
 
    AiMetaDataSetBool(mds, "source", "linkable", false);
