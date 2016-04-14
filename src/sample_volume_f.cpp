@@ -1,7 +1,5 @@
 #include "common.h"
 
-#ifdef ARNOLD_4_2_AND_ABOVE
-
 AI_SHADER_NODE_EXPORT_METHODS(SampleVolumeFMtd);
 
 enum SampleVolumeFParams
@@ -70,5 +68,3 @@ shader_evaluate
       sg->out.FLT = (data->default_linked ? AiShaderEvalParamFlt(p_default) : data->_default);
    }
 }
-
-#endif

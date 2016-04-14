@@ -46,41 +46,18 @@ def check_symbols(*args, **kwargs):
 
     sys.exit(1)
 
-def get_arnold_version():
-  arnoldinc, _ = excons.GetDirs("arnold", libdirname=("bin" if sys.platform != "win32" else "lib"))
 
-  ai_version = os.path.join(arnoldinc, "ai_version.h")
-
-  varch, vmaj, vmin, vpatch = 0, 0, 0, 0
-
-  if os.path.isfile(ai_version):
-    defexp = re.compile(r"^\s*#define\s+AI_VERSION_(ARCH_NUM|MAJOR_NUM|MINOR_NUM|FIX)\s+([^\s]+)")
-    f = open(ai_version, "r")
-    for line in f.readlines():
-      m = defexp.match(line)
-      if m:
-        which = m.group(1)
-        if which == "ARCH_NUM":
-          varch = int(m.group(2))
-        elif which == "MAJOR_NUM":
-          vmaj = int(m.group(2))
-        elif which == "MINOR_NUM":
-          vmin = int(m.group(2))
-        elif which == "FIX":
-          m = re.search(r"\d+", m.group(2))
-          vpatch = (0 if m is None else int(m.group(0)))
-    f.close()
-
-  return (varch, vmaj, vmin, vpatch)
-
-# arnold_ver is a 4 tuple (4, 2, 2, 0)
 def make_mtd():
+  # Can use pre-processor like directive to check for arnold version:
+  #   #if arnold >= 4.2
+  #   ...
+  #   #endif
   nodeexp = re.compile(r"^(\s*\[\s*node\s+)([^]]+)(\s*\]\s*)$")
   ppexp = re.compile(r"^\s*#(.*)\s*$")
   ifexp = re.compile(r"^if\s+([^\s]+)\s+([<>=!]+)\s+([^\s]+)$")
   verexp = re.compile(r"^(\d+)(.(\d+)(.(\d+)(.(\d+))?)?)?$")
 
-  arnold_ver = get_arnold_version()
+  arnold_ver = arnold.Version(asString=False)
 
   df = open("agShadingBlocks.mtd", "w")
 
@@ -200,6 +177,11 @@ def make_mtd():
   df.write("\n")
   df.close()
 
+
+arniver = arnold.Version(asString=False)
+if arniver[0] < 4 or (arniver[0] == 4 and (arniver[1] < 2 or (arniver[1] == 2 and arniver[2] < 12))):
+  print("agShadingBlocks requires at least Arnold 4.2.12.0")
+  sys.exit(1)
 
 defs = []
 incs = []

@@ -41,28 +41,28 @@ const char* OutputModeNames[] =
 node_parameters
 {
    AiParameterFlt("temperature", 3000.0f);
-   AiParameterEnum("output_mode", OM_physical_intensity, OutputModeNames);
-   AiParameterFlt("tm_key", 0.18f);
-   AiParameterFlt("tm_Lavg", 1.0f);
-   AiParameterFlt("tm_Lwht", 0.0f);
-   AiParameterEnum("ca_transform", gmath::CAT_VonKries, ChromaticAdaptationTransformNames);
-   AiParameterFlt("ca_max_temperature", 5000.0f);
-   AiParameterRGB("ca_white_point", 1.0f, 1.0f, 1.0f);
+   AiParameterEnum(SSTR::output_mode, OM_physical_intensity, OutputModeNames);
+   AiParameterFlt(SSTR::tm_key, 0.18f);
+   AiParameterFlt(SSTR::tm_Lavg, 1.0f);
+   AiParameterFlt(SSTR::tm_Lwht, 0.0f);
+   AiParameterEnum(SSTR::ca_transform, gmath::CAT_VonKries, ChromaticAdaptationTransformNames);
+   AiParameterFlt(SSTR::ca_max_temperature, 5000.0f);
+   AiParameterRGB(SSTR::ca_white_point, 1.0f, 1.0f, 1.0f);
    AiParameterFlt("exposure", 0.0f);
-   AiParameterEnum("color_space", CS_Rec709, ColorSpaceNames);
-   AiParameterBool("fix_nans", false);
-   AiParameterRGB("nan_color", 0.0f, 0.0f, 0.0f);
+   AiParameterEnum(SSTR::color_space, CS_Rec709, ColorSpaceNames);
+   AiParameterBool(SSTR::fix_nans, false);
+   AiParameterRGB(SSTR::nan_color, 0.0f, 0.0f, 0.0f);
 
-   AiMetaDataSetBool(mds, "output_mode", "linkable", false);
-   AiMetaDataSetBool(mds, "tm_key", "linkable", false);
-   AiMetaDataSetBool(mds, "tm_Lavg", "linkable", false);
-   AiMetaDataSetBool(mds, "tm_Lwht", "linkable", false);
-   AiMetaDataSetBool(mds, "ca_transform", "linkable", false);
-   AiMetaDataSetBool(mds, "ca_max_temperature", "linkable", false);
-   AiMetaDataSetBool(mds, "ca_white_point", "linkable", false);
-   AiMetaDataSetBool(mds, "color_space", "linkable", false);
-   AiMetaDataSetBool(mds, "fix_nans", "linkable", false);
-   AiMetaDataSetBool(mds, "nan_color", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::output_mode, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::tm_key, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::tm_Lavg, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::tm_Lwht, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::ca_transform, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::ca_max_temperature, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::ca_white_point, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::color_space, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::fix_nans, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::nan_color, SSTR::linkable, false);
 }
 
 struct NodeData
@@ -93,18 +93,18 @@ node_update
       data->TM = 0;
    }
 
-   data->mode = (OutputMode) AiNodeGetInt(node, "output_mode");
-   data->CS = ColorSpaces[AiNodeGetInt(node, "color_space")];
-   data->fixNans = AiNodeGetBool(node, "fix_nans");
-   data->nanColor = AiNodeGetRGB(node, "nan_color");
+   data->mode = (OutputMode) AiNodeGetInt(node, SSTR::output_mode);
+   data->CS = ColorSpaces[AiNodeGetInt(node, SSTR::color_space)];
+   data->fixNans = AiNodeGetBool(node, SSTR::fix_nans);
+   data->nanColor = AiNodeGetRGB(node, SSTR::nan_color);
 
    if (data->mode == OM_tone_mapping)
    {
       gmath::Params rhp;
       
-      rhp.set("key", AiNodeGetFlt(node, "tm_key"));
-      rhp.set("Lavg", AiNodeGetFlt(node, "tm_Lavg"));
-      rhp.set("Lwht", AiNodeGetFlt(node, "tm_Lwht"));
+      rhp.set("key", AiNodeGetFlt(node, SSTR::tm_key));
+      rhp.set("Lavg", AiNodeGetFlt(node, SSTR::tm_Lavg));
+      rhp.set("Lwht", AiNodeGetFlt(node, SSTR::tm_Lwht));
       
       data->TM = new gmath::ToneMappingOperator(*(data->CS));
       data->TM->setMethod(gmath::ToneMappingOperator::Reinhard, rhp);
@@ -116,9 +116,9 @@ node_update
    }
    else if (data->mode == OM_chromatic_adaptation)
    {
-      gmath::ChromaticAdaptationTransform CAT = (gmath::ChromaticAdaptationTransform) AiNodeGetInt(node, "ca_transform");
-      float Kmax = AiNodeGetFlt(node, "ca_max_temperature");
-      AtColor Wp = AiNodeGetRGB(node, "ca_white_point");
+      gmath::ChromaticAdaptationTransform CAT = (gmath::ChromaticAdaptationTransform) AiNodeGetInt(node, SSTR::ca_transform);
+      float Kmax = AiNodeGetFlt(node, SSTR::ca_max_temperature);
+      AtColor Wp = AiNodeGetRGB(node, SSTR::ca_white_point);
       
       gmath::XYZ from = gmath::Blackbody::GetXYZ(Kmax);
       gmath::XYZ to = data->CS->RGBtoXYZ(gmath::RGB(Wp.r, Wp.g, Wp.b));

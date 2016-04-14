@@ -12,10 +12,8 @@ enum SwitchRayC3Params
    p_reflected_use_default,
    p_refracted,
    p_refracted_use_default,
-   #ifdef HAS_SS_RAY
    p_subsurface,
    p_subsurface_use_default,
-   #endif
    p_diffuse,
    p_diffuse_use_default,
    p_glossy,
@@ -34,10 +32,8 @@ node_parameters
    AiParameterBool("reflected_use_default", true);
    AiParameterRGB("refracted", 0.0f, 0.0f, 0.0f);
    AiParameterBool("refracted_use_default", true);
-   #ifdef HAS_SS_RAY
    AiParameterRGB("subsurface", 0.0f, 0.0f, 0.0f);
    AiParameterBool("subsurface_use_default", true);
-   #endif
    AiParameterRGB("diffuse", 0.0f, 0.0f, 0.0f);
    AiParameterBool("diffuse_use_default", true);
    AiParameterRGB("glossy", 0.0f, 0.0f, 0.0f);
@@ -49,9 +45,7 @@ node_parameters
    AiMetaDataSetBool(mds, "shadow_use_default", "linkable", false);
    AiMetaDataSetBool(mds, "reflected_use_default", "linkable", false);
    AiMetaDataSetBool(mds, "refracted_use_default", "linkable", false);
-   #ifdef HAS_SS_RAY
    AiMetaDataSetBool(mds, "subsurface_use_default", "linkable", false);
-   #endif
    AiMetaDataSetBool(mds, "diffuse_use_default", "linkable", false);
    AiMetaDataSetBool(mds, "glossy_use_default", "linkable", false);
    
@@ -67,10 +61,8 @@ struct NodeData
    bool reflected_use_default;
    bool refracted_linked;
    bool refracted_use_default;
-   #ifdef HAS_SS_RAY
    bool subsurface_linked;
    bool subsurface_use_default;
-   #endif
    bool diffuse_linked;
    bool diffuse_use_default;
    bool glossy_linked;
@@ -98,10 +90,8 @@ node_update
    data->refracted_linked = AiNodeIsLinked(node, "refracted");
    data->refracted_use_default = AiNodeGetBool(node, "refracted_use_default");
    
-   #ifdef HAS_SS_RAY
    data->subsurface_linked = AiNodeIsLinked(node, "subsurface");
    data->subsurface_use_default = AiNodeGetBool(node, "subsurface_use_default");
-   #endif
    
    data->diffuse_linked = AiNodeIsLinked(node, "diffuse");
    data->diffuse_use_default = AiNodeGetBool(node, "diffuse_use_default");
@@ -135,12 +125,10 @@ shader_evaluate
    {
       sg->out.RGB = AiShaderEvalParamRGB((data->refracted_linked || !data->refracted_use_default) ? p_refracted : p_default);
    }
-   #ifdef HAS_SS_RAY
    else if ((sg->Rt & AI_RAY_SUBSURFACE) != 0)
    {
       sg->out.RGB = AiShaderEvalParamRGB((data->subsurface_linked || !data->subsurface_use_default) ? p_subsurface : p_default);
    }
-   #endif
    else if ((sg->Rt & AI_RAY_DIFFUSE) != 0)
    {
       sg->out.RGB = AiShaderEvalParamRGB((data->diffuse_linked || !data->diffuse_use_default) ? p_diffuse : p_default);

@@ -65,9 +65,7 @@ const char* RayTypeNames[] =
    "shadow",
    "reflected",
    "refracted",
-   #ifdef HAS_SS_RAY
    "subsurface",
-   #endif
    "diffuse",
    "glossy",
    "generic",
@@ -80,9 +78,7 @@ AtUInt16 RayTypeValues[] =
    AI_RAY_SHADOW,
    AI_RAY_REFLECTED,
    AI_RAY_REFRACTED,
-   #ifdef HAS_SS_RAY
    AI_RAY_SUBSURFACE,
-   #endif
    AI_RAY_DIFFUSE,
    AI_RAY_GLOSSY,
    AI_RAY_GENERIC

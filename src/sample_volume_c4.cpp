@@ -1,7 +1,5 @@
 #include "common.h"
 
-#ifdef ARNOLD_4_2_AND_ABOVE
-
 AI_SHADER_NODE_EXPORT_METHODS(SampleVolumeC4Mtd);
 
 enum SampleVolumeC4Params
@@ -70,5 +68,3 @@ shader_evaluate
       sg->out.RGBA = (data->default_linked ? AiShaderEvalParamRGBA(p_default) : data->_default);
    }
 }
-
-#endif

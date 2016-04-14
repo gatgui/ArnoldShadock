@@ -230,20 +230,14 @@ DECLARE_SHADER(MicrofacetNormal);
 DECLARE_SHADER(SwitchRayF);
 DECLARE_SHADER(SwitchRayC3);
 DECLARE_SHADER(SwitchRayC4);
-#ifdef HAS_VOLUME
 DECLARE_SHADER(Volume);
-#endif
-#ifdef ARNOLD_4_2_AND_ABOVE
 DECLARE_SHADER(SampleVolumeF);
 DECLARE_SHADER(SampleVolumeP2);
 DECLARE_SHADER(SampleVolumeP3);
 DECLARE_SHADER(SampleVolumeV);
 DECLARE_SHADER(SampleVolumeC3);
 DECLARE_SHADER(SampleVolumeC4);
-#endif
-#ifdef HAS_OBJECT_MATTE
 DECLARE_SHADER(IsMatte);
-#endif
 DECLARE_SHADER(MakeF);
 DECLARE_SHADER(C3ToC4);
 DECLARE_SHADER(Gamma);
@@ -436,20 +430,14 @@ node_loader
    REGISTER_SHADER(SwitchRayF, switch_ray_f, AI_TYPE_FLOAT)
    REGISTER_SHADER(SwitchRayC3, switch_ray_c3, AI_TYPE_RGB)
    REGISTER_SHADER(SwitchRayC4, switch_ray_c4, AI_TYPE_RGBA)
-#ifdef HAS_VOLUME
    REGISTER_SHADER(Volume, volume, AI_TYPE_RGB)
-#endif
-#ifdef ARNOLD_4_2_AND_ABOVE
    REGISTER_SHADER(SampleVolumeF, sample_volume_f, AI_TYPE_FLOAT)
    REGISTER_SHADER(SampleVolumeP2, sample_volume_p2, AI_TYPE_POINT2)
    REGISTER_SHADER(SampleVolumeP3, sample_volume_p3, AI_TYPE_POINT)
    REGISTER_SHADER(SampleVolumeV, sample_volume_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(SampleVolumeC3, sample_volume_c3, AI_TYPE_RGB)
    REGISTER_SHADER(SampleVolumeC4, sample_volume_c4, AI_TYPE_RGBA)
-#endif
-#ifdef HAS_OBJECT_MATTE
    REGISTER_SHADER(IsMatte, is_matte, AI_TYPE_BOOLEAN)
-#endif
    REGISTER_SHADER(MakeF, make_f, AI_TYPE_FLOAT)
    REGISTER_SHADER(C3ToC4, c3_to_c4, AI_TYPE_RGBA)
    REGISTER_SHADER(Gamma, gamma, AI_TYPE_RGB)

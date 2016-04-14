@@ -1,7 +1,5 @@
 #include "common.h"
 
-#ifdef ARNOLD_4_2_AND_ABOVE
-
 AI_SHADER_NODE_EXPORT_METHODS(SampleVolumeVMtd);
 
 enum SampleVolumeVParams
@@ -70,5 +68,3 @@ shader_evaluate
       sg->out.VEC = (data->default_linked ? AiShaderEvalParamVec(p_default) : data->_default);
    }
 }
-
-#endif

@@ -1,7 +1,5 @@
 #include "common.h"
 
-#ifdef ARNOLD_4_2_AND_ABOVE
-
 AI_SHADER_NODE_EXPORT_METHODS(SampleVolumeC3Mtd);
 
 enum SampleVolumeC3Params
@@ -70,5 +68,3 @@ shader_evaluate
       sg->out.RGB = (data->default_linked ? AiShaderEvalParamRGB(p_default) : data->_default);
    }
 }
-
-#endif

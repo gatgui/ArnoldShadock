@@ -18,13 +18,10 @@
    maya.classification STRING "utility/general"
    maya.id INT 0x00116506
 
-#if arnold >= 4.2.2
 [node is_matte]
    maya.classification STRING "utility/state"
    maya.id INT 0x00116507
-#endif
 
-#if arnold >= 4.2
 [node sample_volume_f]
    maya.classification STRING "utility/sampling"
    maya.id INT 0x00116508
@@ -48,13 +45,10 @@
 [node sample_volume_c4]
    maya.classification STRING "utility/sampling"
    maya.id INT 0x0011650D
-#endif
 
-#if arnold >= 4.0.12
 [node volume]
    maya.classification STRING "utility/shade"
    maya.id INT 0x0011650E
-#endif
 
 [node switch_ray_f]
    maya.classification STRING "utility/trace"

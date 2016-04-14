@@ -1,7 +1,5 @@
 #include "common.h"
 
-#ifdef HAS_VOLUME
-
 AI_SHADER_NODE_EXPORT_METHODS(VolumeMtd);
 
 enum VolumeParams
@@ -194,5 +192,3 @@ shader_evaluate
       AiShaderGlobalsSetVolumeEmission(sg, emission);
    }
 }
-
-#endif

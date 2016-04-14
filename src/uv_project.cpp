@@ -176,12 +176,9 @@ shader_evaluate
       else
       {
          AiV4CreateVector(d, sg->N);
-         #ifdef ARNOLD_4_1_AND_ABOVE
          AiV4Create(ddx, sg->N.x + sg->dNdx.x, sg->N.y + sg->dNdx.y, sg->N.z + sg->dNdx.z, 0.0f);
          AiV4Create(ddy, sg->N.x + sg->dNdy.x, sg->N.y + sg->dNdy.y, sg->N.z + sg->dNdy.z, 0.0f);
-         #else
          withDerivatives = false;
-         #endif
       }
       
       if (data->space == LVS_object)

@@ -1,7 +1,5 @@
 #include "common.h"
 
-#ifdef HAS_OBJECT_MATTE
-
 AI_SHADER_NODE_EXPORT_METHODS(IsMatteMtd);
 
 node_parameters
@@ -24,5 +22,3 @@ shader_evaluate
 {
    sg->out.BOOL = AiShaderGlobalsIsObjectMatte(sg);
 }
-
-#endif

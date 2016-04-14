@@ -1,7 +1,5 @@
 #include "common.h"
 
-#ifdef ARNOLD_4_2_AND_ABOVE
-
 AI_SHADER_NODE_EXPORT_METHODS(SampleVolumeP2Mtd);
 
 enum SampleVolumeP2Params
@@ -70,5 +68,3 @@ shader_evaluate
       sg->out.PNT2 = (data->default_linked ? AiShaderEvalParamPnt2(p_default) : data->_default);
    }
 }
-
-#endif

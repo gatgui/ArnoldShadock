@@ -17,17 +17,17 @@ node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
 
-   AiParameterRGB("source", 1.0f, 1.0f, 1.0f);
-   AiParameterEnum("source_color_space", CS_Rec709, ColorSpaceNames);
-   AiParameterRGB("target", 1.0f, 1.0f, 1.0f);
-   AiParameterEnum("target_color_space", CS_Rec709, ColorSpaceNames);
-   AiParameterEnum("transform", gmath::CAT_VonKries, ChromaticAdaptationTransformNames);
+   AiParameterRGB(SSTR::source, 1.0f, 1.0f, 1.0f);
+   AiParameterEnum(SSTR::source_color_space, CS_Rec709, ColorSpaceNames);
+   AiParameterRGB(SSTR::target, 1.0f, 1.0f, 1.0f);
+   AiParameterEnum(SSTR::target_color_space, CS_Rec709, ColorSpaceNames);
+   AiParameterEnum(SSTR::transform, gmath::CAT_VonKries, ChromaticAdaptationTransformNames);
 
-   AiMetaDataSetBool(mds, "source", "linkable", false);
-   AiMetaDataSetBool(mds, "source_color_space", "linkable", false);
-   AiMetaDataSetBool(mds, "target", "linkable", false);
-   AiMetaDataSetBool(mds, "target_color_space", "linkable", false);
-   AiMetaDataSetBool(mds, "transform", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::source, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::source_color_space, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::target, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::target_color_space, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::transform, SSTR::linkable, false);
 }
 
 struct NodeData
@@ -45,11 +45,11 @@ node_update
 {
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
 
-   AtRGB src = AiNodeGetRGB(node, "source");
-   AtRGB tgt = AiNodeGetRGB(node, "target");
-   const gmath::ColorSpace *srcCS = ColorSpaces[AiNodeGetInt(node, "source_color_space")];
-   const gmath::ColorSpace *tgtCS = ColorSpaces[AiNodeGetInt(node, "target_color_space")];
-   gmath::ChromaticAdaptationTransform cat = (gmath::ChromaticAdaptationTransform) AiNodeGetInt(node, "transform");
+   AtRGB src = AiNodeGetRGB(node, SSTR::source);
+   AtRGB tgt = AiNodeGetRGB(node, SSTR::target);
+   const gmath::ColorSpace *srcCS = ColorSpaces[AiNodeGetInt(node, SSTR::source_color_space)];
+   const gmath::ColorSpace *tgtCS = ColorSpaces[AiNodeGetInt(node, SSTR::target_color_space)];
+   gmath::ChromaticAdaptationTransform cat = (gmath::ChromaticAdaptationTransform) AiNodeGetInt(node, SSTR::transform);
 
    gmath::XYZ _src = srcCS->RGBtoXYZ(gmath::RGB(src.r, src.g, src.b));
    gmath::XYZ _tgt = tgtCS->RGBtoXYZ(gmath::RGB(tgt.r, tgt.g, tgt.b));
