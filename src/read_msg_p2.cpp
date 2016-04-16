@@ -10,40 +10,40 @@ enum ReadMsgP2Params
 
 node_parameters
 {
-   AiParameterStr("msg_name", "");
+   AiParameterStr(SSTR::msg_name, "");
    AiParameterPnt2("default_value", 0.0f, 0.0f);
    
-   AiMetaDataSetBool(mds, "msg_name", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::msg_name, SSTR::linkable, false);
 }
 
-struct ReadMsgP2Data
+struct NodeData
 {
-   const char *msgName;
+   AtString msgName;
 };
 
 node_initialize
 {
-   ReadMsgP2Data *data = (ReadMsgP2Data*) AiMalloc(sizeof(ReadMsgP2Data));
-   
-   AiNodeSetLocalData(node, data);
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   ReadMsgP2Data *data = (ReadMsgP2Data*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->msgName = AiNodeGetStr(node, "msg_name");
+   data->msgName = AiNodeGetStr(node, SSTR::msg_name);
 }
 
 node_finish
 {
-   ReadMsgP2Data *data = (ReadMsgP2Data*) AiNodeGetLocalData(node);
-   AiFree(data);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   ReadMsgP2Data *data = (ReadMsgP2Data*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgPnt2(data->msgName, &(sg->out.PNT2)))
    {

@@ -28,11 +28,11 @@ shader_evaluate
 {
    AtRay *ray = 0;
    
-   if (AiStateGetMsgPtr("agsb_ray", (void**)&ray) && ray != 0)
+   if (AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) && ray != 0)
    {
       // Only check agsb_tir if we have a valid ray
       bool tir = false;
-      sg->out.BOOL = (AiStateGetMsgBool("agsb_tir", &tir) && tir);
+      sg->out.BOOL = (AiStateGetMsgBool(SSTR::agsb_tir, &tir) && tir);
    }
    else
    {

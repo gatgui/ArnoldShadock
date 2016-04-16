@@ -34,40 +34,41 @@ static const char* MatrixModeNames[] =
    NULL
 };
 
-struct CameraTransformData
+node_parameters
+{
+   AiParameterNode(SSTR::camera, NULL);
+   AiParameterStr(SSTR::camera_name, "");
+   AiParameterEnum(SSTR::mode, MM_world_to_camera, MatrixModeNames);
+   
+   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::camera_name, SSTR::linkable, false);
+}
+
+struct NodeData
 {
    AtNode *camera;
    MatrixMode mode;
 };
 
-node_parameters
-{
-   AiParameterNode("camera", NULL);
-   AiParameterStr("camera_name", "");
-   AiParameterEnum("mode", MM_world_to_camera, MatrixModeNames);
-   
-   AiMetaDataSetBool(mds, "mode", "linkable", false);
-   AiMetaDataSetBool(mds, "camera_name", "linkable", false);
-}
-
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(CameraTransformData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   CameraTransformData *data = (CameraTransformData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->mode = (MatrixMode) AiNodeGetInt(node, "mode");
+   data->mode = (MatrixMode) AiNodeGetInt(node, SSTR::mode);
    
-   if (AiNodeIsLinked(node, "camera"))
+   if (AiNodeIsLinked(node, SSTR::camera))
    {
-      data->camera = (AtNode*) AiNodeGetPtr(node, "camera");
+      data->camera = (AtNode*) AiNodeGetPtr(node, SSTR::camera);
    }
    else
    {
-      const char *name = AiNodeGetStr(node, "camera_name");
+      const char *name = AiNodeGetStr(node, SSTR::camera_name);
       
       if (!name || strlen(name) == 0)
       {
@@ -168,12 +169,14 @@ node_update
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   CameraTransformData *data = (CameraTransformData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    sg->out.pMTX = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
    

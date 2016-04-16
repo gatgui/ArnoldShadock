@@ -13,19 +13,27 @@ node_parameters
 {
    AiParameterRGB("sampler", 0.0f, 0.0f, 0.0f);
    AiParameterFlt("input", 0.0f);
-   AiParameterEnum("combine", CM_Add, CombineModeNames);
+   AiParameterEnum(SSTR::combine, CM_Add, CombineModeNames);
+   
+   AiMetaDataSetBool(mds, SSTR::combine, SSTR::linkable, false);
 }
 
 node_initialize
 {
+   AiNodeSetLocalData(node, AiMalloc(sizeof(int)));
+   AddMemUsage<int>();
 }
 
 node_update
 {
+   int *data = (int*) AiNodeGetLocalData(node);
+   *data = AiNodeGetInt(node, SSTR::combine);
 }
 
 node_finish
 {
+   AiFree(AiNodeGetLocalData(node));
+   SubMemUsage<int>();
 }
 
 shader_evaluate
@@ -34,7 +42,7 @@ shader_evaluate
    
    AiShaderEvalParamRGB(p_sampler);
    
-   if (!AiStateGetMsgPtr("agsb_sampler", (void**)&sampler) || !sampler)
+   if (!AiStateGetMsgPtr(SSTR::agsb_sampler, (void**)&sampler) || !sampler)
    {
       sg->out.RGB = AI_RGB_BLACK;
    }
@@ -42,7 +50,7 @@ shader_evaluate
    {
       AtPoint2 sample;
       
-      CombineMode combine = (CombineMode) AiShaderEvalParamInt(p_combine);
+      CombineMode combine = (CombineMode) *((int*) AiNodeGetLocalData(node));
       
       sg->out.FLT = 0.0f;
       
@@ -50,7 +58,7 @@ shader_evaluate
       
       while (AiSamplerGetSample(it, &(sample.x)))
       {
-         AiStateSetMsgPnt2("agsb_sample_value", sample);
+         AiStateSetMsgPnt2(SSTR::agsb_sample_value, sample);
          
          float input = AiShaderEvalParamFlt(p_input);
          

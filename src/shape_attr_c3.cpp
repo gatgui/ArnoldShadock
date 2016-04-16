@@ -10,30 +10,44 @@ enum ShapeAttrC3Params
 
 node_parameters
 {
-   AiParameterStr("attribute", "");
-   AiParameterRGB("default", 0.0f, 0.0f, 0.0f);
+   AiParameterStr(SSTR::attribute, "");
+   AiParameterRGB(SSTR::_default, 0.0f, 0.0f, 0.0f);
    
-   AiMetaDataSetBool(mds, "attribute", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::attribute, SSTR::linkable, false);
 }
+
+struct NodeData
+{
+   AtString attribute;
+};
 
 node_initialize
 {
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   data->attribute = AiNodeGetStr(node, SSTR::attribute);
 }
 
 node_finish
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   const char *attr_name = AiShaderEvalParamStr(p_attribute);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   if (!AiUDataGetRGB(attr_name, &(sg->out.RGB)) &&
-       !AiUDataGetRGBA(attr_name, &(sg->out.RGBA)))
+   sg->out.RGB = AI_RGB_BLACK;
+
+   if (!AiUDataGetRGB(data->attribute, &(sg->out.RGB)) &&
+       !AiUDataGetRGBA(data->attribute, &(sg->out.RGBA)))
    {
       sg->out.RGB = AiShaderEvalParamRGB(p_default);
    }

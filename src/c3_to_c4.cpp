@@ -11,7 +11,7 @@ enum C3ToC4Params
 node_parameters
 {
    AiParameterRGB("color", 0.0f, 0.0f, 0.0f);
-   AiParameterFlt("alpah", 1.0f);
+   AiParameterFlt("alpha", 1.0f);
 }
 
 node_initialize

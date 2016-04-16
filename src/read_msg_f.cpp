@@ -10,40 +10,40 @@ enum ReadMsgFParams
 
 node_parameters
 {
-   AiParameterStr("msg_name", "");
+   AiParameterStr(SSTR::msg_name, "");
    AiParameterFlt("default_value", 0.0f);
    
-   AiMetaDataSetBool(mds, "msg_name", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::msg_name, SSTR::linkable, false);
 }
 
-struct ReadMsgFData
+struct NodeData
 {
-   const char *msgName;
+   AtString msgName;
 };
 
 node_initialize
 {
-   ReadMsgFData *data = (ReadMsgFData*) AiMalloc(sizeof(ReadMsgFData));
-   
-   AiNodeSetLocalData(node, data);
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   ReadMsgFData *data = (ReadMsgFData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->msgName = AiNodeGetStr(node, "msg_name");
+   data->msgName = AiNodeGetStr(node, SSTR::msg_name);
 }
 
 node_finish
 {
-   ReadMsgFData *data = (ReadMsgFData*) AiNodeGetLocalData(node);
-   AiFree(data);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   ReadMsgFData *data = (ReadMsgFData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgFlt(data->msgName, &(sg->out.FLT)))
    {

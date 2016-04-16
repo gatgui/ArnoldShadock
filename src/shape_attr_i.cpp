@@ -10,37 +10,52 @@ enum ShapeAttrIParams
 
 node_parameters
 {
-   AiParameterStr("attribute", "");
-   AiParameterInt("default", 0);
+   AiParameterStr(SSTR::attribute, "");
+   AiParameterInt(SSTR::_default, 0);
    
-   AiMetaDataSetBool(mds, "attribute", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::attribute, SSTR::linkable, false);
 }
+
+struct NodeData
+{
+   AtString attribute;
+};
 
 node_initialize
 {
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   data->attribute = AiNodeGetStr(node, SSTR::attribute);
 }
 
 node_finish
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   const char *attr_name = AiShaderEvalParamStr(p_attribute);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   if (!AiUDataGetInt(attr_name, &(sg->out.INT)))
+   if (!AiUDataGetInt(data->attribute, &(sg->out.INT)))
    {
-      if (AiUDataGetByte(attr_name, &(sg->out.BYTE)))
+      AtByte b = 0;
+      unsigned int ui = 0;
+
+      if (AiUDataGetByte(data->attribute, &b))
       {
-         sg->out.INT = int(sg->out.BYTE);
+         sg->out.INT = int(b);
       }
-      else if (AiUDataGetUInt(attr_name, &(sg->out.UINT)))
+      else if (AiUDataGetUInt(data->attribute, &ui))
       {
-         sg->out.INT = int(sg->out.UINT);
+         sg->out.INT = int(ui);
       }
       else
       {

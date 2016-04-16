@@ -10,40 +10,40 @@ enum ReadMsgBParams
 
 node_parameters
 {
-   AiParameterStr("msg_name", "");
+   AiParameterStr(SSTR::msg_name, "");
    AiParameterBool("default_value", false);
    
-   AiMetaDataSetBool(mds, "msg_name", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::msg_name, SSTR::linkable, false);
 }
 
-struct ReadMsgBData
+struct NodeData
 {
-   const char *msgName;
+   AtString msgName;
 };
 
 node_initialize
 {
-   ReadMsgBData *data = (ReadMsgBData*) AiMalloc(sizeof(ReadMsgBData));
-   
-   AiNodeSetLocalData(node, data);
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   ReadMsgBData *data = (ReadMsgBData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->msgName = AiNodeGetStr(node, "msg_name");
+   data->msgName = AiNodeGetStr(node, SSTR::msg_name);
 }
 
 node_finish
 {
-   ReadMsgBData *data = (ReadMsgBData*) AiNodeGetLocalData(node);
-   AiFree(data);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   ReadMsgBData *data = (ReadMsgBData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgBool(data->msgName, &(sg->out.BOOL)))
    {

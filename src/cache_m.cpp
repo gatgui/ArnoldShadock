@@ -22,7 +22,6 @@ node_initialize
 node_update
 {
    MatrixCache *cache = (MatrixCache*) AiNodeGetLocalData(node);
-   
    ReAllocCache(cache, GetRenderThreadsCount());
    EmptyCache(cache);
 }
@@ -30,7 +29,6 @@ node_update
 node_finish
 {
    MatrixCache *cache = (MatrixCache*) AiNodeGetLocalData(node);
-   
    FreeCache(cache);
 }
 

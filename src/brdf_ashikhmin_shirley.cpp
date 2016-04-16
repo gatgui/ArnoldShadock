@@ -12,97 +12,89 @@ enum BrdfAshikhminShirleyParams
    p_angle_units,
 };
 
-enum LocalFrame
-{
-   LF_Nf_dPdu = 0,
-   LF_Nf_dPdv,
-   LF_polar,
-   LF_shirley,
-   LF_custom
-};
-
-static const char* LocalFrameNames[] = { "Nf_dPdu", "Nf_dPdv", "polar", "shirley", "custom", NULL };
-
 node_parameters
 {
-   AiParameterFlt("glossiness_x", 0.467f);
-   AiParameterFlt("glossiness_y", 0.467f);
-   AiParameterEnum("local_frame", LF_Nf_dPdu, LocalFrameNames);
-   AiParameterMtx("custom_frame", AI_M4_IDENTITY);
-   AiParameterFlt("frame_rotation", 0.0f);
-   AiParameterEnum("angle_units", AU_Degrees, AngleUnitsNames);
+   AiParameterFlt(SSTR::glossiness_x, 0.467f);
+   AiParameterFlt(SSTR::glossiness_y, 0.467f);
+   AiParameterEnum(SSTR::local_frame, LF_Nf_dPdu, LocalFrameNames);
+   AiParameterMtx(SSTR::custom_frame, AI_M4_IDENTITY);
+   AiParameterFlt(SSTR::frame_rotation, 0.0f);
+   AiParameterEnum(SSTR::angle_units, AU_Degrees, AngleUnitsNames);
    
-   AiMetaDataSetBool(mds, "local_frame", "linkable", false);
-   AiMetaDataSetBool(mds, "angle_units", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::local_frame, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::angle_units, SSTR::linkable, false);
 }
 
-struct AshikhminShirleyData
+struct NodeData
 {
-   bool glossiness_x_is_linked;
-   float glossiness_x;
-   bool glossiness_y_is_linked;
-   float glossiness_y;
-   LocalFrame local_frame;
-   bool custom_frame_is_linked;
-   AtMatrix custom_frame;
-   bool frame_rotation_is_linked;
-   float frame_rotation;
-   float angle_scale;
+   bool evalGlossinessX;
+   float glossinessX;
+   bool evalGLossinessY;
+   float glossinessY;
+   LocalFrame localFrame;
+   bool evalCustomFrame;
+   AtMatrix customFrame;
+   bool evalFrameRotation;
+   float frameRotation;
+   float angleScale;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(AshikhminShirleyData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   AshikhminShirleyData *data = (AshikhminShirleyData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->glossiness_x_is_linked = AiNodeIsLinked(node, "glossiness_x");
-   data->glossiness_y_is_linked = AiNodeIsLinked(node, "glossiness_y");
-   data->custom_frame_is_linked = AiNodeIsLinked(node, "custom_frame");
-   data->frame_rotation_is_linked = AiNodeIsLinked(node, "frame_rotation");
+   data->evalGlossinessX = AiNodeIsLinked(node, SSTR::glossiness_x);
+   data->evalGLossinessY = AiNodeIsLinked(node, SSTR::glossiness_y);
+   data->evalCustomFrame = AiNodeIsLinked(node, SSTR::custom_frame);
+   data->evalFrameRotation = AiNodeIsLinked(node, SSTR::frame_rotation);
    
-   data->local_frame = (LocalFrame) AiNodeGetInt(node, "local_frame");
-   data->angle_scale = (AiNodeGetInt(node, "angle_units") == AU_Degrees ? AI_DTOR : 1.0f);
+   data->localFrame = (LocalFrame) AiNodeGetInt(node, SSTR::local_frame);
+   data->angleScale = (AiNodeGetInt(node, SSTR::angle_units) == AU_Degrees ? AI_DTOR : 1.0f);
    
-   if (!data->glossiness_x_is_linked)
+   if (!data->evalGlossinessX)
    {
-      data->glossiness_x = AiNodeGetFlt(node, "glossiness_x");
+      data->glossinessX = AiNodeGetFlt(node, SSTR::glossiness_x);
    }
    
-   if (!data->glossiness_y_is_linked)
+   if (!data->evalGLossinessY)
    {
-      data->glossiness_y = AiNodeGetFlt(node, "glossiness_y");
+      data->glossinessY = AiNodeGetFlt(node, SSTR::glossiness_y);
    }
    
-   if (!data->custom_frame_is_linked)
+   if (!data->evalCustomFrame)
    {
-      AiNodeGetMatrix(node, "custom_frame", data->custom_frame);
+      AiNodeGetMatrix(node, SSTR::custom_frame, data->customFrame);
    }
    
-   if (!data->frame_rotation_is_linked)
+   if (!data->evalFrameRotation)
    {
-      data->frame_rotation = AiNodeGetFlt(node, "frame_rotation");
+      data->frameRotation = AiNodeGetFlt(node, SSTR::frame_rotation);
    }
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   AshikhminShirleyData *data = (AshikhminShirleyData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   float gx = (data->glossiness_x_is_linked ? AiShaderEvalParamFlt(p_glossiness_x) : data->glossiness_x);
-   float gy = (data->glossiness_y_is_linked ? AiShaderEvalParamFlt(p_glossiness_y) : data->glossiness_y);
+   float gx = (data->evalGlossinessX ? AiShaderEvalParamFlt(p_glossiness_x) : data->glossinessX);
+   float gy = (data->evalGLossinessY ? AiShaderEvalParamFlt(p_glossiness_y) : data->glossinessY);
    
    AtVector U, V;
    
-   if (data->local_frame == LF_Nf_dPdu)
+   if (data->localFrame == LF_Nf_dPdu)
    {
       if (!AiV3IsZero(sg->dPdu))
       {
@@ -115,7 +107,7 @@ shader_evaluate
          AiBuildLocalFramePolar(&U, &V, &(sg->Nf));
       }
    }
-   else if (data->local_frame == LF_Nf_dPdv)
+   else if (data->localFrame == LF_Nf_dPdv)
    {
       if (!AiV3IsZero(sg->dPdv))
       {
@@ -128,17 +120,17 @@ shader_evaluate
          AiBuildLocalFramePolar(&U, &V, &(sg->Nf));
       }
    }
-   else if (data->local_frame == LF_polar)
+   else if (data->localFrame == LF_polar)
    {
       AiBuildLocalFramePolar(&U, &V, &(sg->Nf));
    }
-   else if (data->local_frame == LF_shirley)
+   else if (data->localFrame == LF_shirley)
    {
       AiBuildLocalFrameShirley(&U, &V, &(sg->Nf));
    }
    else
    {
-      AtMatrix *frame = (data->custom_frame_is_linked ? AiShaderEvalParamMtx(p_custom_frame) : &(data->custom_frame));
+      AtMatrix *frame = (data->evalCustomFrame ? AiShaderEvalParamMtx(p_custom_frame) : &(data->customFrame));
       
       U.x = (*frame)[0][0];
       U.y = (*frame)[0][1];
@@ -149,7 +141,7 @@ shader_evaluate
       V.z = (*frame)[1][2];
    }
    
-   float a = data->angle_scale * (data->frame_rotation_is_linked ? AiShaderEvalParamFlt(p_frame_rotation) : data->frame_rotation);
+   float a = data->angleScale * (data->evalFrameRotation ? AiShaderEvalParamFlt(p_frame_rotation) : data->frameRotation);
    if (fabs(a) > AI_EPSILON)
    {
       float cosa = cosf(a);
@@ -160,14 +152,14 @@ shader_evaluate
       V = cosa * v - sina * u;
    }
    
-   BRDFData *brdf_data = (BRDFData*) AiShaderGlobalsQuickAlloc(sg, sizeof(BRDFData));
+   BRDFData *brdfData = (BRDFData*) AiShaderGlobalsQuickAlloc(sg, sizeof(BRDFData));
    
-   brdf_data->evalSample = AiAshikhminShirleyMISSample;
-   brdf_data->evalBrdf = AiAshikhminShirleyMISBRDF;
-   brdf_data->evalPdf = AiAshikhminShirleyMISPDF;
-   brdf_data->data = AiAshikhminShirleyMISCreateData(sg, &U, &V, gx, gy);
+   brdfData->evalSample = AiAshikhminShirleyMISSample;
+   brdfData->evalBrdf = AiAshikhminShirleyMISBRDF;
+   brdfData->evalPdf = AiAshikhminShirleyMISPDF;
+   brdfData->data = AiAshikhminShirleyMISCreateData(sg, &U, &V, gx, gy);
    
-   AiStateSetMsgPtr("agsb_brdf", brdf_data);
+   AiStateSetMsgPtr(SSTR::agsb_brdf, brdfData);
    
    sg->out.RGB = AI_RGB_BLACK;
 }

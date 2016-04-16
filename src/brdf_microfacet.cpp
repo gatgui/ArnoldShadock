@@ -1,11 +1,13 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(BrdfWardDuerMtd);
+AI_SHADER_NODE_EXPORT_METHODS(BrdfMicrofacetMtd);
 
-enum BrdfWardDuerParams
+enum BrdfMicrofacetParams
 {
-   p_roughness_x = 0,
+   p_distribution = 0,
+   p_roughness_x,
    p_roughness_y,
+   p_ior,
    p_local_frame,
    p_custom_frame,
    p_frame_rotation,
@@ -14,24 +16,29 @@ enum BrdfWardDuerParams
 
 node_parameters
 {
-   // better use roughness + anisotropy?
+   AiParameterEnum(SSTR::distribution, MD_Beckmann, MicrofacetDistributionNames);
    AiParameterFlt(SSTR::roughness_x, 0.467f);
    AiParameterFlt(SSTR::roughness_y, 0.467f);
+   AiParameterFlt(SSTR::ior, 1.0f);
    AiParameterEnum(SSTR::local_frame, LF_Nf_dPdu, LocalFrameNames);
    AiParameterMtx(SSTR::custom_frame, AI_M4_IDENTITY);
    AiParameterFlt(SSTR::frame_rotation, 0.0f);
    AiParameterEnum(SSTR::angle_units, AU_Degrees, AngleUnitsNames);
    
+   AiMetaDataSetBool(mds, SSTR::distribution, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::local_frame, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::angle_units, SSTR::linkable, false);
 }
 
 struct NodeData
 {
+   int distribution;
    bool evalRoughnessX;
    float roughnessX;
    bool evalRoughnessY;
    float roughnessY;
+   bool evalIor;
+   float ior;
    LocalFrame localFrame;
    bool evalCustomFrame;
    AtMatrix customFrame;
@@ -52,9 +59,11 @@ node_update
    
    data->evalRoughnessX = AiNodeIsLinked(node, SSTR::roughness_x);
    data->evalRoughnessY = AiNodeIsLinked(node, SSTR::roughness_y);
+   data->evalIor = AiNodeIsLinked(node, SSTR::ior);
    data->evalCustomFrame = AiNodeIsLinked(node, SSTR::custom_frame);
    data->evalFrameRotation = AiNodeIsLinked(node, SSTR::frame_rotation);
    
+   data->distribution = AiNodeGetInt(node, SSTR::distribution);
    data->localFrame = (LocalFrame) AiNodeGetInt(node, SSTR::local_frame);
    data->angleScale = (AiNodeGetInt(node, SSTR::angle_units) == AU_Degrees ? AI_DTOR : 1.0f);
    
@@ -66,6 +75,11 @@ node_update
    if (!data->evalRoughnessY)
    {
       data->roughnessY = AiNodeGetFlt(node, SSTR::roughness_y);
+   }
+   
+   if (!data->evalIor)
+   {
+      data->ior = AiNodeGetFlt(node, SSTR::ior);
    }
    
    if (!data->evalCustomFrame)
@@ -92,6 +106,7 @@ shader_evaluate
    
    float rx = (data->evalRoughnessX ? AiShaderEvalParamFlt(p_roughness_x) : data->roughnessX);
    float ry = (data->evalRoughnessY ? AiShaderEvalParamFlt(p_roughness_y) : data->roughnessY);
+   float ior = (data->evalIor ? AiShaderEvalParamFlt(p_ior) : data->ior);
    
    AtVector U, V;
    
@@ -155,10 +170,10 @@ shader_evaluate
    
    BRDFData *brdfData = (BRDFData*) AiShaderGlobalsQuickAlloc(sg, sizeof(BRDFData));
    
-   brdfData->evalSample = AiWardDuerMISSample;
-   brdfData->evalBrdf = AiWardDuerMISBRDF;
-   brdfData->evalPdf = AiWardDuerMISPDF;
-   brdfData->data = AiWardDuerMISCreateData(sg, &U, &V, rx, ry);
+   brdfData->evalSample = AiMicrofacetMISSample;
+   brdfData->evalBrdf = AiMicrofacetMISBRDF;
+   brdfData->evalPdf = AiMicrofacetMISPDF;
+   brdfData->data = AiMicrofacetMISCreateData(sg, data->distribution, &U, ior, rx, ry);
    
    AiStateSetMsgPtr(SSTR::agsb_brdf, brdfData);
    

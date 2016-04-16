@@ -24,33 +24,47 @@ static const char* ShadeModeNames[] =
 
 node_parameters
 {
-   AiParameterEnum("mode", SM_DirectDiffuse, ShadeModeNames);
-   AiParameterBool("override_normal", false);
-   AiParameterVec("normal", 1.0f, 0.0f, 0.0f);
+   AiParameterEnum(SSTR::mode, SM_DirectDiffuse, ShadeModeNames);
+   AiParameterBool(SSTR::override_normal, false);
+   AiParameterVec(SSTR::normal, 1.0f, 0.0f, 0.0f);
    
-   AiMetaDataSetBool(mds, "mode", "linkable", false);
-   AiMetaDataSetBool(mds, "override_normal", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::override_normal, SSTR::linkable, false);
 }
+
+struct NodeData
+{
+   int mode;
+   bool overrideNormal;
+};
 
 node_initialize
 {
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   data->mode = AiNodeGetInt(node, SSTR::mode);
+   data->overrideNormal = AiNodeGetBool(node, SSTR::override_normal);
 }
 
 node_finish
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   ShadeMode mode = (ShadeMode) AiShaderEvalParamInt(p_mode);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   AtVector N = (AiShaderEvalParamBool(p_override_normal) ? AiShaderEvalParamVec(p_normal) : sg->N);
+   AtVector N = (data->overrideNormal ? AiShaderEvalParamVec(p_normal) : sg->N);
    
-   switch (mode)
+   switch (data->mode)
    {
    case SM_DirectDiffuse:
       sg->out.RGB = AiDirectDiffuse(&N, sg);

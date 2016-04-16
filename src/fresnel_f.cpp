@@ -11,45 +11,48 @@ enum FresnelFParams
 
 node_parameters
 {
-   AiParameterVec("view_vector", 0.0f, 0.0f, 0.0f);
-   AiParameterVec("normal", 0.0f, 0.0f, 0.0f);
-   AiParameterFlt("reflectance", 1.0f);
+   AiParameterVec(SSTR::view_vector, 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::normal, 0.0f, 0.0f, 0.0f);
+   AiParameterFlt(SSTR::reflectance, 1.0f);
    
-   AiMetaDataSetBool(mds, "reflectance", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::reflectance, SSTR::linkable, false);
 }
 
-struct FresnelFData
+struct NodeData
 {
-   bool V_is_linked;
-   bool N_is_linked;
+   bool evalV;
+   bool evalN;
    float reflectance;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(FresnelFData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   FresnelFData *data = (FresnelFData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->V_is_linked = AiNodeIsLinked(node, "view_vector");
-   data->N_is_linked = AiNodeIsLinked(node, "normal");
-   data->reflectance = AiNodeGetFlt(node, "reflectance");
+   data->evalV = AiNodeIsLinked(node, SSTR::view_vector);
+   data->evalN = AiNodeIsLinked(node, SSTR::normal);
+   data->reflectance = AiNodeGetFlt(node, SSTR::reflectance);
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   FresnelFData *data = (FresnelFData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   AtVector V = (data->V_is_linked ? AiShaderEvalParamVec(p_view_vector) : sg->Rd);
-   AtVector N = (data->N_is_linked ? AiShaderEvalParamVec(p_normal) : sg->N);
+   AtVector V = (data->evalV ? AiShaderEvalParamVec(p_view_vector) : sg->Rd);
+   AtVector N = (data->evalN ? AiShaderEvalParamVec(p_normal) : sg->N);
    
    sg->out.FLT = AiFresnelWeight(N, V, data->reflectance);
 }

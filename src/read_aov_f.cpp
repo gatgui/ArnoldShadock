@@ -10,21 +10,21 @@ enum ReadAOVFParams
 
 node_parameters
 {
-   AiParameterStr("aov_name", "");
+   AiParameterStr(SSTR::aov_name, "");
    AiParameterFlt("default_value", 0.0f);
    
-   AiMetaDataSetBool(mds, "aov_name", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::aov_name, SSTR::linkable, false);
 }
 
 struct ReadAOVFData
 {
-   const char *aovName;
+   AtString aovName;
 };
 
 node_initialize
 {
    ReadAOVFData *data = (ReadAOVFData*) AiMalloc(sizeof(ReadAOVFData));
-   
+   AiAddMemUsage(AtInt64(sizeof(ReadAOVFData)), "shading_blocks");
    AiNodeSetLocalData(node, data);
 }
 
@@ -32,13 +32,14 @@ node_update
 {
    ReadAOVFData *data = (ReadAOVFData*) AiNodeGetLocalData(node);
    
-   data->aovName = AiNodeGetStr(node, "aov_name");
+   data->aovName = AiNodeGetStr(node, SSTR::aov_name);
 }
 
 node_finish
 {
    ReadAOVFData *data = (ReadAOVFData*) AiNodeGetLocalData(node);
    AiFree(data);
+   AiAddMemUsage(-AtInt64(sizeof(ReadAOVFData)), "shading_blocks");
 }
 
 shader_evaluate

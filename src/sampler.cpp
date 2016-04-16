@@ -11,13 +11,13 @@ enum SamplerParams
 
 node_parameters
 {
-   AiParameterInt("samples", 1);
-   AiParameterBool("seeded", false);
-   AiParameterInt("seed", 0);
+   AiParameterInt(SSTR::samples, 1);
+   AiParameterBool(SSTR::seeded, false);
+   AiParameterInt(SSTR::seed, 0);
    
-   AiMetaDataSetBool(mds, "samples", "linkable", false);
-   AiMetaDataSetBool(mds, "seeded", "linkable", false);
-   AiMetaDataSetBool(mds, "seed", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::samples, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::seeded, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::seed, SSTR::linkable, false);
 }
 
 node_initialize
@@ -34,13 +34,13 @@ node_update
       AiSamplerDestroy(sampler);
    }
    
-   if (AiNodeGetBool(node, "seeded"))
+   if (AiNodeGetBool(node, SSTR::seeded))
    {
-      sampler = AiSamplerSeeded(AiNodeGetInt(node, "seed"), AiNodeGetInt(node, "samples"), 2);
+      sampler = AiSamplerSeeded(AiNodeGetInt(node, SSTR::seed), AiNodeGetInt(node, SSTR::samples), 2);
    }
    else
    {
-      sampler = AiSampler(AiNodeGetInt(node, "samples"), 2);
+      sampler = AiSampler(AiNodeGetInt(node, SSTR::samples), 2);
    }
    
    AiNodeSetLocalData(node, sampler);
@@ -58,6 +58,6 @@ node_finish
 
 shader_evaluate
 {
-   AiStateSetMsgPtr("agsb_sampler", AiNodeGetLocalData(node));
+   AiStateSetMsgPtr(SSTR::agsb_sampler, AiNodeGetLocalData(node));
    sg->out.RGB = AI_RGB_BLACK;
 }

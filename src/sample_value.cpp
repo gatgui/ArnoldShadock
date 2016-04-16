@@ -28,7 +28,7 @@ shader_evaluate
 {
    AtPoint2 sample;
    
-   if (!AiStateGetMsgPnt2("agsb_sample_value", &sample))
+   if (!AiStateGetMsgPnt2(SSTR::agsb_sample_value, &sample))
    {
       sg->out.PNT2 = AiShaderEvalParamPnt2(p_default);
    }

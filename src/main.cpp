@@ -243,6 +243,8 @@ DECLARE_SHADER(C3ToC4);
 DECLARE_SHADER(Gamma);
 DECLARE_SHADER(AdaptChromaticity);
 DECLARE_SHADER(Blackbody);
+DECLARE_SHADER(BrdfMicrofacet);
+DECLARE_SHADER(MicrofacetFresnel);
 
 node_loader
 {
@@ -441,7 +443,9 @@ node_loader
    REGISTER_SHADER(MakeF, make_f, AI_TYPE_FLOAT)
    REGISTER_SHADER(C3ToC4, c3_to_c4, AI_TYPE_RGBA)
    REGISTER_SHADER(Gamma, gamma, AI_TYPE_RGB)
-   REGISTER_SHADER(AdaptChromaticity, adapt_chromaticity, AI_TYPE_RGB);
-   REGISTER_SHADER(Blackbody, blackbody, AI_TYPE_RGB);
+   REGISTER_SHADER(AdaptChromaticity, adapt_chromaticity, AI_TYPE_RGB)
+   REGISTER_SHADER(Blackbody, blackbody, AI_TYPE_RGB)
+   REGISTER_SHADER(BrdfMicrofacet, brdf_microfacet, AI_TYPE_RGB)
+   REGISTER_SHADER(MicrofacetFresnel, microfacet_fresnel, AI_TYPE_RGB)
    return false;
 }

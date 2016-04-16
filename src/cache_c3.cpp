@@ -22,7 +22,6 @@ node_initialize
 node_update
 {
    ColorCache *cache = (ColorCache*) AiNodeGetLocalData(node);
-   
    ReAllocCache(cache, GetRenderThreadsCount());
    EmptyCache(cache);
 }
@@ -30,7 +29,6 @@ node_update
 node_finish
 {
    ColorCache *cache = (ColorCache*) AiNodeGetLocalData(node);
-   
    FreeCache(cache);
 }
 

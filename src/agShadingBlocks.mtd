@@ -1,3 +1,11 @@
+[node microfacet_fresnel]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x00116500
+
+[node brdf_microfacet]
+   maya.classification STRING "utility/shade"
+   maya.id INT 0x00116501
+
 [node blackbody]
    maya.classification STRING "utility/color"
    maya.id INT 0x00116502

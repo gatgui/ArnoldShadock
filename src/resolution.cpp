@@ -18,50 +18,51 @@ static const char* TargetResolutionNames[] = {"render", "image", NULL};
 
 node_parameters
 {
-   AiParameterEnum("target", TR_Render, TargetResolutionNames);
-   AiParameterStr("filename", "");
+   AiParameterEnum(SSTR::target, TR_Render, TargetResolutionNames);
+   AiParameterStr(SSTR::filename, "");
    
-   AiMetaDataSetBool(mds, "target", "linkable", false);
-   AiMetaDataSetBool(mds, "filename", "filepath", true);
+   AiMetaDataSetBool(mds, SSTR::target, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::filename, SSTR::filepath, true);
    
-   AiMetaDataSetStr(mds, "filename", "houdini.type", "file:image");
+   AiMetaDataSetStr(mds, SSTR::filename, "houdini.type", "file:image");
 }
 
-struct ResolutionData
+struct NodeData
 {
    TargetResolution target;
    bool valid;
    float w;
    float h;
-   bool filename_is_linked;
+   bool evalFilename;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(ResolutionData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   ResolutionData *data = (ResolutionData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    AtNode *opts = AiUniverseGetOptions();
    
-   data->target = (TargetResolution) AiNodeGetInt(node, "target");
+   data->target = (TargetResolution) AiNodeGetInt(node, SSTR::target);
    
    if (data->target == TR_Render)
    {
-      data->w = float(AiNodeGetInt(opts, "xres"));
-      data->h = float(AiNodeGetInt(opts, "yres"));
+      data->w = float(AiNodeGetInt(opts, SSTR::xres));
+      data->h = float(AiNodeGetInt(opts, SSTR::yres));
       data->valid = true;
    }
    else
    {
-      data->filename_is_linked = AiNodeIsLinked(node, "filename");
+      data->evalFilename = AiNodeIsLinked(node, SSTR::filename);
       
-      if (!data->filename_is_linked)
+      if (!data->evalFilename)
       {
-         const char *filename = AiNodeGetStr(node, "filename");
+         const char *filename = AiNodeGetStr(node, SSTR::filename);
          unsigned int w, h;
          
          data->valid = (filename && filename[0] != '\0' && AiTextureGetResolution(filename, &w, &h));
@@ -77,12 +78,14 @@ node_update
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   ResolutionData *data = (ResolutionData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    if (data->valid)
    {
@@ -93,7 +96,7 @@ shader_evaluate
       }
       else
       {
-         if (data->filename_is_linked)
+         if (data->evalFilename)
          {
             unsigned int w, h;
             const char *filename = AiShaderEvalParamStr(p_filename);

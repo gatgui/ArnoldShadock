@@ -10,40 +10,40 @@ enum ReadAOVP3Params
 
 node_parameters
 {
-   AiParameterStr("aov_name", "");
+   AiParameterStr(SSTR::aov_name, "");
    AiParameterPnt("default_value", 0.0f, 0.0f, 0.0f);
    
-   AiMetaDataSetBool(mds, "aov_name", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::aov_name, SSTR::linkable, false);
 }
 
-struct ReadAOVP3Data
+struct NodeData
 {
-   const char *aovName;
+   AtString aovName;
 };
 
 node_initialize
 {
-   ReadAOVP3Data *data = (ReadAOVP3Data*) AiMalloc(sizeof(ReadAOVP3Data));
-   
-   AiNodeSetLocalData(node, data);
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   ReadAOVP3Data *data = (ReadAOVP3Data*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->aovName = AiNodeGetStr(node, "aov_name");
+   data->aovName = AiNodeGetStr(node, SSTR::aov_name);
 }
 
 node_finish
 {
-   ReadAOVP3Data *data = (ReadAOVP3Data*) AiNodeGetLocalData(node);
-   AiFree(data);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   ReadAOVP3Data *data = (ReadAOVP3Data*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    if (!AiAOVGetPnt(sg, data->aovName, sg->out.PNT))
    {

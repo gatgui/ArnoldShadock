@@ -12,47 +12,50 @@ enum RefractVParams
 
 node_parameters
 {
-   AiParameterVec("direction", 0.0f, 0.0f, 0.0f);
-   AiParameterVec("normal", 0.0f, 0.0f, 0.0f);
-   AiParameterFlt("ior1", 1.0f);
-   AiParameterFlt("ior2", 1.0f);
+   AiParameterVec(SSTR::direction, 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::normal, 0.0f, 0.0f, 0.0f);
+   AiParameterFlt(SSTR::ior1, 1.0f);
+   AiParameterFlt(SSTR::ior2, 1.0f);
    
-   AiMetaDataSetBool(mds, "ior1", "linkable", false);
-   AiMetaDataSetBool(mds, "ior2", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::ior1, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::ior2, SSTR::linkable, false);
 }
 
-struct RefractVData
+struct NodeData
 {
-   bool N_is_linked;
+   bool evalN;
    float ior1;
    float ior2;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(RefractVData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   RefractVData *data = (RefractVData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->N_is_linked = AiNodeIsLinked(node, "normal");
-   data->ior1 = AiNodeGetFlt(node, "ior1");
-   data->ior2 = AiNodeGetFlt(node, "ior1");
+   data->evalN = AiNodeIsLinked(node, SSTR::normal);
+   data->ior1 = AiNodeGetFlt(node, SSTR::ior1);
+   data->ior2 = AiNodeGetFlt(node, SSTR::ior2);
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   RefractVData *data = (RefractVData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    AtVector D = AiShaderEvalParamVec(p_direction);
-   AtVector N = (data->N_is_linked ? AiShaderEvalParamVec(p_normal) : sg->N);
+   AtVector N = (data->evalN ? AiShaderEvalParamVec(p_normal) : sg->N);
    
    if (!AiRefract(&D, &N, &(sg->out.VEC), data->ior1, data->ior2))
    {

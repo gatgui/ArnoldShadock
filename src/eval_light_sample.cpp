@@ -31,76 +31,79 @@ static const char* LightWeightNames[] =
 node_parameters
 {
    AiParameterRGB("brdf", 0.0f, 0.0f, 0.0f);
-   AiParameterRGB("surface_color", 1.0f, 1.0f, 1.0f);
-   AiParameterFlt("surface_color_weight", 1.0f);
-   AiParameterEnum("light_weight", LW_none, LightWeightNames);
+   AiParameterRGB(SSTR::surface_color, 1.0f, 1.0f, 1.0f);
+   AiParameterFlt(SSTR::surface_color_weight, 1.0f);
+   AiParameterEnum(SSTR::light_weight, LW_none, LightWeightNames);
    
-   AiMetaDataSetBool(mds, "light_weight", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::light_weight, SSTR::linkable, false);
 }
 
-struct EvalLightSampleData
+struct NodeData
 {
-   bool surface_color_is_linked;
-   AtColor surface_color;
+   bool evalSurfaceColor;
+   AtColor surfaceColor;
    
-   bool surface_color_weight_is_linked;
-   float surface_color_weight;
+   bool evalSurfaceColorWeight;
+   float surfaceColorWeight;
    
-   LightWeight light_weight;
+   LightWeight lightWeight;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(EvalLightSampleData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   EvalLightSampleData *data = (EvalLightSampleData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->surface_color_is_linked = AiNodeIsLinked(node, "surface_color");
-   if (!data->surface_color_is_linked)
+   data->evalSurfaceColor = AiNodeIsLinked(node, SSTR::surface_color);
+   if (!data->evalSurfaceColor)
    {
-      data->surface_color = AiNodeGetRGB(node, "surface_color");
+      data->surfaceColor = AiNodeGetRGB(node, SSTR::surface_color);
    }
    
-   data->surface_color_weight_is_linked = AiNodeIsLinked(node, "surface_color_weight");
-   if (!data->surface_color_weight_is_linked)
+   data->evalSurfaceColorWeight = AiNodeIsLinked(node, SSTR::surface_color_weight);
+   if (!data->evalSurfaceColorWeight)
    {
-      data->surface_color_weight = AiNodeGetFlt(node, "surface_color_weight");
+      data->surfaceColorWeight = AiNodeGetFlt(node, SSTR::surface_color_weight);
    }
    
-   data->light_weight = (LightWeight) AiNodeGetInt(node, "light_weight");
+   data->lightWeight = (LightWeight) AiNodeGetInt(node, SSTR::light_weight);
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   EvalLightSampleData *data = (EvalLightSampleData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    BRDFData *brdf = 0;
    
-   AiStateSetMsgPtr("agsb_brdf", 0);
+   AiStateSetMsgPtr(SSTR::agsb_brdf, 0);
    
    AiShaderEvalParamRGB(p_brdf);
    
-   if (!AiStateGetMsgPtr("agsb_brdf", (void**)&brdf) || !brdf)
+   if (!AiStateGetMsgPtr(SSTR::agsb_brdf, (void**)&brdf) || !brdf)
    {
       sg->out.RGB = AI_RGB_BLACK;
    }
    else
    {
-      if (!data->surface_color_is_linked && AiColorIsZero(data->surface_color))
+      if (!data->evalSurfaceColor && AiColorIsZero(data->surfaceColor))
       {
          sg->out.RGB = AI_RGB_BLACK;
          return;
       }
       
-      if (!data->surface_color_weight_is_linked && data->surface_color_weight <= 0.0f)
+      if (!data->evalSurfaceColorWeight && data->surfaceColorWeight <= 0.0f)
       {
          sg->out.RGB = AI_RGB_BLACK;
          return;
@@ -110,7 +113,7 @@ shader_evaluate
       
       if (sg->Lp)
       {
-         switch (data->light_weight)
+         switch (data->lightWeight)
          {
          case LW_diffuse:
             if (AiLightGetAffectDiffuse(sg->Lp))
@@ -140,7 +143,7 @@ shader_evaluate
          return;
       }
       
-      float cw = (data->surface_color_weight_is_linked ? AiShaderEvalParamFlt(p_surface_color_weight) : data->surface_color_weight);
+      float cw = (data->evalSurfaceColorWeight ? AiShaderEvalParamFlt(p_surface_color_weight) : data->surfaceColorWeight);
       
       if (cw <= 0.0f)
       {
@@ -157,7 +160,7 @@ shader_evaluate
       }
       
       AtColor c1;
-      if (data->surface_color_is_linked)
+      if (data->evalSurfaceColor)
       {
          c1 = AiShaderEvalParamRGB(p_surface_color);
          if (AiColorIsZero(c1))
@@ -168,7 +171,7 @@ shader_evaluate
       }
       else
       {
-         c1 = data->surface_color;
+         c1 = data->surfaceColor;
       }
       
       sg->out.RGB = lw * cw * c0 * c1;

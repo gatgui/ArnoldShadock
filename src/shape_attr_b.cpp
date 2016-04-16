@@ -10,29 +10,41 @@ enum ShapeAttrBParams
 
 node_parameters
 {
-   AiParameterStr("attribute", "");
-   AiParameterBool("default", false);
+   AiParameterStr(SSTR::attribute, "");
+   AiParameterBool(SSTR::_default, false);
    
-   AiMetaDataSetBool(mds, "attribute", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::attribute, SSTR::linkable, false);
 }
+
+struct NodeData
+{
+   AtString attribute;
+};
 
 node_initialize
 {
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   data->attribute = AiNodeGetStr(node, SSTR::attribute);
 }
 
 node_finish
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   const char *attr_name = AiShaderEvalParamStr(p_attribute);
-   
-   if (!AiUDataGetBool(attr_name, &(sg->out.BOOL)))
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+
+   if (!AiUDataGetBool(data->attribute, &(sg->out.BOOL)))
    {
       sg->out.BOOL = AiShaderEvalParamBool(p_default);
    }

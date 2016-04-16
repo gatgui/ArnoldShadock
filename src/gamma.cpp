@@ -13,13 +13,13 @@ enum GammaParams
 node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("mode", GM_Expand, GammaModeNames);
-   AiParameterEnum("transform", GF_sRGB, GammaFunctionNames);
-   AiParameterEnum("logc_exposure", EL_800, LogCExposureLevelNames);
+   AiParameterEnum(SSTR::mode, GM_Expand, GammaModeNames);
+   AiParameterEnum(SSTR::transform, GF_sRGB, GammaFunctionNames);
+   AiParameterEnum(SSTR::logc_exposure, EL_800, LogCExposureLevelNames);
 
-   AiMetaDataSetBool(mds, "mode", "linkable", false);
-   AiMetaDataSetBool(mds, "transform", "linkable", false);
-   AiMetaDataSetBool(mds, "logc_exposure", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::transform, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::logc_exposure, SSTR::linkable, false);
 }
 
 struct NodeData
@@ -31,7 +31,8 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(NodeData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
@@ -39,9 +40,9 @@ node_update
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
 
    data->valid = true;
-   data->expand = (AiNodeGetInt(node, "mode") == GM_Expand);
+   data->expand = (AiNodeGetInt(node, SSTR::mode) == GM_Expand);
 
-   switch (AiNodeGetInt(node, "transform"))
+   switch (AiNodeGetInt(node, SSTR::transform))
    {
    case GF_Power22:
       data->gf = gmath::Gamma::Power22;
@@ -56,7 +57,7 @@ node_update
       data->gf = gmath::Gamma::Rec709;
       break;
    case GF_LogC:
-      data->gf = (gmath::Gamma::Function) (int(gmath::Gamma::LogCv3) + (AiNodeGetInt(node, "logc_exposure") - 7));
+      data->gf = (gmath::Gamma::Function) (int(gmath::Gamma::LogCv3) + (AiNodeGetInt(node, SSTR::logc_exposure) - 7));
       break;
    case GF_Cineon:
       data->gf = gmath::Gamma::Cineon;
@@ -72,7 +73,9 @@ node_update
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate

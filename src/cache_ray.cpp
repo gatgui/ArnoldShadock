@@ -22,7 +22,6 @@ node_initialize
 node_update
 {
    RayCache *cache = (RayCache*) AiNodeGetLocalData(node);
-   
    ReAllocCache(cache, GetRenderThreadsCount());
    EmptyCache(cache);
 }
@@ -30,7 +29,6 @@ node_update
 node_finish
 {
    RayCache *cache = (RayCache*) AiNodeGetLocalData(node);
-   
    FreeCache(cache);
 }
 
@@ -43,13 +41,13 @@ shader_evaluate
    if (!GetCacheValue(sg, cache, ray))
    {
       AiShaderEvalParamVec(p_input);
-      AiStateGetMsgPtr("agsb_ray", (void**)&ray);
+      AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray);
       
       SetCacheValue(sg, cache, ray);
    }
    else
    {
-      AiStateSetMsgPtr("agsb_ray", ray);
+      AiStateSetMsgPtr(SSTR::agsb_ray, ray);
    }
    
    sg->out.RGB = AI_RGB_BLACK;

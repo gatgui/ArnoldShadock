@@ -4,137 +4,147 @@ AI_SHADER_NODE_EXPORT_METHODS(BtdfMicrofacetIntegrateMtd);
 
 enum BtdfMicrofacetIntegrateParams
 {
-   p_roughness_x = 0,
+   p_weight = 0,
+   p_distribution,
+   p_roughness_x,
    p_roughness_y,
    p_local_frame,
    p_custom_frame,
    p_frame_rotation,
    p_angle_units,
-   p_eta_i,
-   p_eta_o,
+   p_ior,
+   p_dispersion,
+   p_fresnel,
    p_transmittance
 };
 
-enum LocalFrame
-{
-   LF_Nf_dPdu = 0,
-   LF_Nf_dPdv,
-   LF_polar,
-   LF_shirley,
-   LF_custom
-};
-
-static const char* LocalFrameNames[] = { "Nf_dPdu", "Nf_dPdv", "polar", "shirley", "custom", NULL };
-
 node_parameters
 {
-   AiParameterFlt("roughness_x", 0.467f);
-   AiParameterFlt("roughness_y", 0.467f);
-   AiParameterEnum("local_frame", LF_Nf_dPdu, LocalFrameNames);
-   AiParameterMtx("custom_frame", AI_M4_IDENTITY);
-   AiParameterFlt("frame_rotation", 0.0f);
-   AiParameterEnum("angle_units", AU_Degrees, AngleUnitsNames);
-   AiParameterFlt("eta_i", 1.0);
-   AiParameterFlt("eta_o", 1.0);
-   AiParameterRGB("transmittance", 1.0f, 1.0f, 1.0f);
+   AiParameterRGB(SSTR::weight, 1.0f, 1.0f, 1.0f);
+   AiParameterEnum(SSTR::distribution, MD_Beckmann, MicrofacetDistributionNames);
+   AiParameterFlt(SSTR::roughness_x, 0.467f);
+   AiParameterFlt(SSTR::roughness_y, 0.467f);
+   AiParameterEnum(SSTR::local_frame, LF_Nf_dPdu, LocalFrameNames);
+   AiParameterMtx(SSTR::custom_frame, AI_M4_IDENTITY);
+   AiParameterFlt(SSTR::frame_rotation, 0.0f);
+   AiParameterEnum(SSTR::angle_units, AU_Degrees, AngleUnitsNames);
+   AiParameterFlt(SSTR::ior, 1.0f);
+   AiParameterFlt(SSTR::dispersion, 0.0f);
+   AiParameterBool(SSTR::fresnel, false);
+   AiParameterRGB(SSTR::transmittance, 1.0f, 1.0f, 1.0f);
    
-   AiMetaDataSetBool(mds, "local_frame", "linkable", false);
-   AiMetaDataSetBool(mds, "angle_units", "linkable", false);
-   //AiMetaDataSetFlt(mds, "eta_i", "min", 1.0f);
-   //AiMetaDataSetFlt(mds, "eta_o", "min", 1.0f);
+   AiMetaDataSetBool(mds, SSTR::distribution, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::local_frame, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::angle_units, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::fresnel, SSTR::linkable, false);
 }
 
-struct CookTorranceData
+struct NodeData
 {
-   bool roughness_x_is_linked;
-   float roughness_x;
-   bool roughness_y_is_linked;
-   float roughness_y;
-   LocalFrame local_frame;
-   bool custom_frame_is_linked;
-   AtMatrix custom_frame;
-   bool frame_rotation_is_linked;
-   float frame_rotation;
-   float angle_scale;
-   bool eta_i_is_linked;
-   float eta_i;
-   bool eta_o_is_linked;
-   float eta_o;
-   bool transmittance_is_linked;
+   int distribution;
+   bool evalRoughnessX;
+   float roughnessX;
+   bool evalRoughnessY;
+   float roughnessY;
+   LocalFrame localFrame;
+   bool evalCustomFrame;
+   AtMatrix customFrame;
+   bool evalFrameRotation;
+   float frameRotation;
+   float angleScale;
+   bool evalIor;
+   float ior;
+   bool evalDispersion;
+   float dispersion;
+   bool fresnel;
+   bool evalTransmittance;
    AtColor transmittance;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(CookTorranceData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   CookTorranceData *data = (CookTorranceData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->roughness_x_is_linked = AiNodeIsLinked(node, "roughness_x");
-   data->roughness_y_is_linked = AiNodeIsLinked(node, "roughness_y");
-   data->custom_frame_is_linked = AiNodeIsLinked(node, "custom_frame");
-   data->frame_rotation_is_linked = AiNodeIsLinked(node, "frame_rotation");
-   data->eta_i_is_linked = AiNodeIsLinked(node, "eta_i");
-   data->eta_o_is_linked = AiNodeIsLinked(node, "eta_o");
-   data->transmittance_is_linked = AiNodeIsLinked(node, "transmittance");
+   data->evalRoughnessX = AiNodeIsLinked(node, SSTR::roughness_x);
+   data->evalRoughnessY = AiNodeIsLinked(node, SSTR::roughness_y);
+   data->evalCustomFrame = AiNodeIsLinked(node, SSTR::custom_frame);
+   data->evalFrameRotation = AiNodeIsLinked(node, SSTR::frame_rotation);
+   data->evalIor = AiNodeIsLinked(node, SSTR::ior);
+   data->evalDispersion = AiNodeIsLinked(node, SSTR::dispersion);
+   data->evalTransmittance = AiNodeIsLinked(node, SSTR::transmittance);
    
-   data->local_frame = (LocalFrame) AiNodeGetInt(node, "local_frame");
-   data->angle_scale = (AiNodeGetInt(node, "angle_units") == AU_Degrees ? AI_DTOR : 1.0f);
+   data->distribution = AiNodeGetInt(node, SSTR::distribution);
+   data->localFrame = (LocalFrame) AiNodeGetInt(node, SSTR::local_frame);
+   data->angleScale = (AiNodeGetInt(node, SSTR::angle_units) == AU_Degrees ? AI_DTOR : 1.0f);
+   data->fresnel = AiNodeGetBool(node, SSTR::fresnel);
    
-   if (!data->roughness_x_is_linked)
+   if (!data->evalRoughnessX)
    {
-      data->roughness_x = AiNodeGetFlt(node, "roughness_x");
+      data->roughnessX = AiNodeGetFlt(node, SSTR::roughness_x);
    }
    
-   if (!data->roughness_y_is_linked)
+   if (!data->evalRoughnessY)
    {
-      data->roughness_y = AiNodeGetFlt(node, "roughness_y");
+      data->roughnessY = AiNodeGetFlt(node, SSTR::roughness_y);
    }
    
-   if (!data->custom_frame_is_linked)
+   if (!data->evalCustomFrame)
    {
-      AiNodeGetMatrix(node, "custom_frame", data->custom_frame);
+      AiNodeGetMatrix(node, SSTR::custom_frame, data->customFrame);
    }
    
-   if (!data->frame_rotation_is_linked)
+   if (!data->evalFrameRotation)
    {
-      data->frame_rotation = AiNodeGetFlt(node, "frame_rotation");
+      data->frameRotation = AiNodeGetFlt(node, SSTR::frame_rotation);
    }
    
-   if (!data->eta_i_is_linked)
+   if (!data->evalIor)
    {
-      data->eta_i = AiNodeGetFlt(node, "eta_i");
+      data->ior = AiNodeGetFlt(node, SSTR::ior);
    }
    
-   if (!data->eta_o_is_linked)
+   if (!data->evalDispersion)
    {
-      data->eta_o = AiNodeGetFlt(node, "eta_o");
+      data->dispersion = AiNodeGetFlt(node, SSTR::dispersion);
    }
    
-   if (!data->transmittance_is_linked)
+   if (!data->evalTransmittance)
    {
-      data->transmittance = AiNodeGetRGB(node, "transmittance");
+      data->transmittance = AiNodeGetRGB(node, SSTR::transmittance);
    }
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   CookTorranceData *data = (CookTorranceData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   float rx = (data->roughness_x_is_linked ? AiShaderEvalParamFlt(p_roughness_x) : data->roughness_x);
-   float ry = (data->roughness_y_is_linked ? AiShaderEvalParamFlt(p_roughness_y) : data->roughness_y);
+   AtColor weight = AiShaderEvalParamRGB(p_weight);
+   
+   if (AiColorIsZero(weight))
+   {
+      sg->out.RGB = AI_RGB_BLACK;
+      return;
+   }
+   
+   float rx = (data->evalRoughnessX ? AiShaderEvalParamFlt(p_roughness_x) : data->roughnessX);
+   float ry = (data->evalRoughnessY ? AiShaderEvalParamFlt(p_roughness_y) : data->roughnessY);
    
    AtVector U, V;
    
-   if (data->local_frame == LF_Nf_dPdu)
+   if (data->localFrame == LF_Nf_dPdu)
    {
       if (!AiV3IsZero(sg->dPdu))
       {
@@ -147,7 +157,7 @@ shader_evaluate
          AiBuildLocalFramePolar(&U, &V, &(sg->Nf));
       }
    }
-   else if (data->local_frame == LF_Nf_dPdv)
+   else if (data->localFrame == LF_Nf_dPdv)
    {
       if (!AiV3IsZero(sg->dPdv))
       {
@@ -160,17 +170,17 @@ shader_evaluate
          AiBuildLocalFramePolar(&U, &V, &(sg->Nf));
       }
    }
-   else if (data->local_frame == LF_polar)
+   else if (data->localFrame == LF_polar)
    {
       AiBuildLocalFramePolar(&U, &V, &(sg->Nf));
    }
-   else if (data->local_frame == LF_shirley)
+   else if (data->localFrame == LF_shirley)
    {
       AiBuildLocalFrameShirley(&U, &V, &(sg->Nf));
    }
    else
    {
-      AtMatrix *frame = (data->custom_frame_is_linked ? AiShaderEvalParamMtx(p_custom_frame) : &(data->custom_frame));
+      AtMatrix *frame = (data->evalCustomFrame ? AiShaderEvalParamMtx(p_custom_frame) : &(data->customFrame));
       
       U.x = (*frame)[0][0];
       U.y = (*frame)[0][1];
@@ -181,7 +191,7 @@ shader_evaluate
       V.z = (*frame)[1][2];
    }
    
-   float a = data->angle_scale * (data->frame_rotation_is_linked ? AiShaderEvalParamFlt(p_frame_rotation) : data->frame_rotation);
+   float a = data->angleScale * (data->evalFrameRotation ? AiShaderEvalParamFlt(p_frame_rotation) : data->frameRotation);
    if (fabs(a) > AI_EPSILON)
    {
       float cosa = cosf(a);
@@ -192,11 +202,13 @@ shader_evaluate
       V = cosa * v - sina * u;
    }
    
-   float eta_i = (data->eta_i_is_linked ? AiShaderEvalParamFlt(p_eta_i) : data->eta_i);
+   float ior = (data->evalIor ? AiShaderEvalParamFlt(p_ior) : data->ior);
    
-   float eta_o = (data->eta_o_is_linked ? AiShaderEvalParamFlt(p_eta_o) : data->eta_o);
+   AtColor transmittance = (data->evalTransmittance ? AiShaderEvalParamRGB(p_transmittance) : data->transmittance);
    
-   AtColor transmittance = (data->transmittance_is_linked ? AiShaderEvalParamRGB(p_transmittance) : data->transmittance);
+   float dispersion = (data->evalDispersion ? AiShaderEvalParamFlt(p_dispersion) : data->dispersion);
    
-   sg->out.RGB = AiMicrofacetBTDFIntegrate(&(sg->N), sg, &U, &V, rx, ry, eta_i, eta_o, transmittance);
+   bool entering = (AiV3Dot(sg->N, sg->Rd) < 0.0f);
+   
+   sg->out.RGB = AiMicrofacetBTDFIntegrate(&(sg->N), sg, data->distribution, &U, rx, ry, ior, entering, dispersion, data->fresnel, transmittance, weight);
 }

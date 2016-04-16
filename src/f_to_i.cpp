@@ -28,26 +28,32 @@ enum FloatToIntMode
 node_parameters
 {
    AiParameterFlt("input", 0.0f);
-   AiParameterEnum("mode", 0, FloatToIntModeNames);
+   AiParameterEnum(SSTR::mode, 0, FloatToIntModeNames);
    
-   AiMetaDataSetBool(mds, "mode", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
 }
 
 node_initialize
 {
+   AiNodeSetLocalData(node, AiMalloc(sizeof(int)));
+   AddMemUsage<int>();
 }
 
 node_update
 {
+   int *data = (int*) AiNodeGetLocalData(node);
+   *data = AiNodeGetInt(node, SSTR::mode);
 }
 
 node_finish
 {
+   AiFree(AiNodeGetLocalData(node));
+   SubMemUsage<int>();
 }
 
 shader_evaluate
 {
-   FloatToIntMode mode = (FloatToIntMode) AiShaderEvalParamInt(p_mode);
+   FloatToIntMode mode = (FloatToIntMode) *((int*) AiNodeGetLocalData(node));
    float input = AiShaderEvalParamFlt(p_input);
    
    switch (mode)

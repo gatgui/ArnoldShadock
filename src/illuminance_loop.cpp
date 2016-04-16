@@ -12,42 +12,45 @@ enum IlluminanceLoopParams
 node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("combine", CM_Add, CombineModeNames);
-   AiParameterBool("reset_lights_cache", false);
+   AiParameterEnum(SSTR::combine, CM_Add, CombineModeNames);
+   AiParameterBool(SSTR::reset_lights_cache, false);
    
-   AiMetaDataSetBool(mds, "combine", "linkable", false);
-   AiMetaDataSetBool(mds, "reset_lights_cache", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::combine, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::reset_lights_cache, SSTR::linkable, false);
 }
 
-struct IlluminanceLoopData
+struct NodeData
 {
    CombineMode combine;
-   bool reset_lights_cache;
+   bool resetLightsCache;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(IlluminanceLoopData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   IlluminanceLoopData *data = (IlluminanceLoopData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->combine = (CombineMode) AiNodeGetInt(node, "combine");
-   data->reset_lights_cache = AiNodeGetBool(node, "reset_lights_cache");
+   data->combine = (CombineMode) AiNodeGetInt(node, SSTR::combine);
+   data->resetLightsCache = AiNodeGetBool(node, SSTR::reset_lights_cache);
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   IlluminanceLoopData *data = (IlluminanceLoopData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   if (data->reset_lights_cache)
+   if (data->resetLightsCache)
    {
       AiLightsResetCache(sg);
    }
@@ -56,36 +59,36 @@ shader_evaluate
    
    sg->out.RGB = AI_RGB_BLACK;
    
-   float sample_count = 0.0f;
-   AtColor sample_value;
+   float sampleCount = 0.0f;
+   AtColor sampleValue;
    
    while (AiLightsGetSample(sg))
    {
-      sample_value = AiShaderEvalParamRGB(p_input);
+      sampleValue = AiShaderEvalParamRGB(p_input);
       switch (data->combine)
       {
       case CM_Max:
-         sg->out.RGB.r = MAX(sample_value.r, sg->out.RGB.r);
-         sg->out.RGB.g = MAX(sample_value.g, sg->out.RGB.g);
-         sg->out.RGB.b = MAX(sample_value.b, sg->out.RGB.b);
+         sg->out.RGB.r = MAX(sampleValue.r, sg->out.RGB.r);
+         sg->out.RGB.g = MAX(sampleValue.g, sg->out.RGB.g);
+         sg->out.RGB.b = MAX(sampleValue.b, sg->out.RGB.b);
          break;
       case CM_Min:
-         sg->out.RGB.r = MIN(sample_value.r, sg->out.RGB.r);
-         sg->out.RGB.g = MIN(sample_value.g, sg->out.RGB.g);
-         sg->out.RGB.b = MIN(sample_value.b, sg->out.RGB.b);
+         sg->out.RGB.r = MIN(sampleValue.r, sg->out.RGB.r);
+         sg->out.RGB.g = MIN(sampleValue.g, sg->out.RGB.g);
+         sg->out.RGB.b = MIN(sampleValue.b, sg->out.RGB.b);
          break;
       case CM_Add:
       case CM_Avg:
       default:
-         sg->out.RGB += sample_value;
+         sg->out.RGB += sampleValue;
       }
       
-      sample_count += 1.0f;
+      sampleCount += 1.0f;
    }
    
-   if (data->combine == CM_Avg && sample_count > 0.0f)
+   if (data->combine == CM_Avg && sampleCount > 0.0f)
    {
-      sample_count = 1.0f / sample_count;
-      sg->out.RGB *= sample_count;
+      sampleCount = 1.0f / sampleCount;
+      sg->out.RGB *= sampleCount;
    }
 }

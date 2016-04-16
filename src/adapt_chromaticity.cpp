@@ -10,7 +10,7 @@ enum AdaptChromaticityParams
    p_source_cs,
    p_target,
    p_target_cs,
-   p_cat
+   p_transform
 };
 
 node_parameters
@@ -37,8 +37,8 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = new NodeData();
-   AiNodeSetLocalData(node, (void*)data);
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
@@ -60,6 +60,7 @@ node_finish
 {
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate

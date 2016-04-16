@@ -40,62 +40,65 @@ static const char* MethodNames[] = { "polar", "shirley", "x_along_dPdu", "x_alon
 
 node_parameters
 {
-   AiParameterEnum("method", M_x_along_dPdu, MethodNames);
-   AiParameterEnum("origin", O_P, OriginNames);
-   AiParameterPnt("custom_origin", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("z_axis", ZA_Nf, ZAxisNames);
-   AiParameterVec("custom_axis", 0.0f, 0.0f, 0.0f);
+   AiParameterEnum(SSTR::method, M_x_along_dPdu, MethodNames);
+   AiParameterEnum(SSTR::origin, O_P, OriginNames);
+   AiParameterPnt(SSTR::custom_origin, 0.0f, 0.0f, 0.0f);
+   AiParameterEnum(SSTR::z_axis, ZA_Nf, ZAxisNames);
+   AiParameterVec(SSTR::custom_axis, 0.0f, 0.0f, 0.0f);
    
-   AiMetaDataSetBool(mds, "method", "linkable", false);
-   AiMetaDataSetBool(mds, "origin", "linkable", false);
-   AiMetaDataSetBool(mds, "z_axis", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::method, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::origin, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::z_axis, SSTR::linkable, false);
 }
 
-struct MakeFrameData
+struct NodeData
 {
    Method method;
    Origin origin;
-   bool custom_origin_is_linked;
-   AtVector custom_origin;
-   ZAxis z_axis;
-   bool custom_axis_is_linked;
-   AtVector custom_axis;
+   bool evalCustomOrigin;
+   AtVector customOrigin;
+   ZAxis zAxis;
+   bool evalCustomAxis;
+   AtVector customAxis;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(MakeFrameData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   MakeFrameData *data = (MakeFrameData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->method = (Method) AiNodeGetInt(node, "method");
-   data->origin = (Origin) AiNodeGetInt(node, "origin");
-   data->custom_origin_is_linked = AiNodeIsLinked(node, "custom_origin");
-   data->z_axis = (ZAxis) AiNodeGetInt(node, "z_axis");
-   data->custom_axis_is_linked = AiNodeIsLinked(node, "custom_axis");
+   data->method = (Method) AiNodeGetInt(node, SSTR::method);
+   data->origin = (Origin) AiNodeGetInt(node, SSTR::origin);
+   data->evalCustomOrigin = AiNodeIsLinked(node, SSTR::custom_origin);
+   data->zAxis = (ZAxis) AiNodeGetInt(node, SSTR::z_axis);
+   data->evalCustomAxis = AiNodeIsLinked(node, SSTR::custom_axis);
    
-   if (data->origin == O_custom && !data->custom_origin_is_linked)
+   if (data->origin == O_custom && !data->evalCustomOrigin)
    {
-      data->custom_origin = AiNodeGetPnt(node, "custom_origin");
+      data->customOrigin = AiNodeGetPnt(node, SSTR::custom_origin);
    }
    
-   if (data->z_axis == ZA_custom && !data->custom_axis_is_linked)
+   if (data->zAxis == ZA_custom && !data->evalCustomAxis)
    {
-      data->custom_axis = AiV3Normalize(AiNodeGetVec(node, "custom_axis"));
+      data->customAxis = AiV3Normalize(AiNodeGetVec(node, SSTR::custom_axis));
    }
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   MakeFrameData *data = (MakeFrameData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    AtVector O, X, Y, Z;
    
@@ -104,9 +107,9 @@ shader_evaluate
    {
       O = sg->P;
    }
-   else if (!data->custom_origin_is_linked)
+   else if (!data->evalCustomOrigin)
    {
-      O = data->custom_origin;
+      O = data->customOrigin;
    }
    else
    {
@@ -114,17 +117,17 @@ shader_evaluate
    }
    
    // Read Z axis
-   if (data->z_axis == ZA_N)
+   if (data->zAxis == ZA_N)
    {
       Z = sg->N;
    }
-   else if (data->z_axis == ZA_Nf)
+   else if (data->zAxis == ZA_Nf)
    {
       Z = sg->Nf;
    }
-   else if (!data->custom_axis_is_linked)
+   else if (!data->evalCustomAxis)
    {
-      Z = data->custom_axis;
+      Z = data->customAxis;
    }
    else
    {

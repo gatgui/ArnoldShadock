@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <errno.h>
 #endif
+#include "strings.h"
 
 AI_SHADER_NODE_EXPORT_METHODS(MakeTxMtd);
 
@@ -85,12 +86,12 @@ static const char* MakeTxModeNames[] = {"if_newer", "always", "reuse", "disable"
 
 typedef std::map<std::string, bool> ConvertedMap;
 
-struct MakeTxData
+struct NodeData
 {
-   bool process_in_eval;
+   bool processInEval;
 
-   char **tx_filenames;
-   int num_tx_filenames;
+   char **txFilenames;
+   int numTxFilenames;
 
    AtCritSec mutex;
    ConvertedMap converted;
@@ -197,22 +198,22 @@ static int ExecuteCommand(int argc, char **argv)
    #endif
 }
 
-static bool GetTxName(const char *in_filename, char *tx_filename, size_t sz)
+static bool GetTxName(const char *inFilename, char *txFilename, size_t sz)
 {
-   size_t inlen = strlen(in_filename);
+   size_t inlen = strlen(inFilename);
 
-   const char *p0 = strrchr(in_filename, '.');
+   const char *p0 = strrchr(inFilename, '.');
 
    if (p0 && !strcmp(p0, ".tx"))
    {
       if (inlen < sz)
       {
-         strcpy(tx_filename, in_filename);
+         strcpy(txFilename, inFilename);
          return true;
       }
       else
       {
-         tx_filename[0] = '\0';
+         txFilename[0] = '\0';
          return false;
       }
    }
@@ -221,23 +222,23 @@ static bool GetTxName(const char *in_filename, char *tx_filename, size_t sz)
 
    if (p0)
    {
-      size_t extlen = (in_filename + inlen) - p0;
+      size_t extlen = (inFilename + inlen) - p0;
       if (inlen - extlen + 3 >= sz)
       {
-         tx_filename[0] = '\0';
+         txFilename[0] = '\0';
          return false;
       }
-      strcpy(tx_filename, in_filename);
-      dst = tx_filename + (p0 - in_filename);
+      strcpy(txFilename, inFilename);
+      dst = txFilename + (p0 - inFilename);
    }
    else
    {
       if (inlen + 3 >= sz)
       {
-         tx_filename[0] = '\0';
+         txFilename[0] = '\0';
          return false;
       }
-      dst = tx_filename + inlen;
+      dst = txFilename + inlen;
    }
 
    dst[0] = '.';
@@ -248,24 +249,24 @@ static bool GetTxName(const char *in_filename, char *tx_filename, size_t sz)
    return true;
 }
 
-static bool MakeTx(MakeTxData *data, const char *in_filename, const char *outfilename)
+static bool MakeTx(NodeData *data, const char *inFilename, const char *outFilename)
 {
    struct stat st0, st1;
 
-   if (stat(in_filename, &st0) == 0)
+   if (stat(inFilename, &st0) == 0)
    {
-      bool txExists = (stat(outfilename, &st1) == 0);
+      bool txExists = (stat(outFilename, &st1) == 0);
 
       if (!txExists || st0.st_mtime > st1.st_mtime || data->mode == Mode_always)
       {
          //std::string cmd = "maketx -o ";
-         //cmd += outfilename;
+         //cmd += outFilename;
 
          std::vector<std::string> args;
 
          args.push_back("maketx");
          args.push_back("-o");
-         args.push_back(outfilename);
+         args.push_back(outFilename);
 
          if (data->wrapt == Wrap_s)
          {
@@ -344,8 +345,8 @@ static bool MakeTx(MakeTxData *data, const char *in_filename, const char *outfil
          }
 
          //cmd += " ";
-         //cmd += in_filename;
-         args.push_back(in_filename);
+         //cmd += inFilename;
+         args.push_back(inFilename);
          
 
          //AiMsgInfo("[MakeTx]   %s", cmd.c_str());
@@ -370,12 +371,12 @@ static bool MakeTx(MakeTxData *data, const char *in_filename, const char *outfil
          if (data->stripxmp)
          {
             //cmd = "exiftool -XMP:all= ";
-            //cmd += outfilename;
+            //cmd += outFilename;
 
             // There are at least 3 arguments already for maketx command line
             argv[0] = (char*) "exiftool";
             argv[1] = (char*) "-XMP:all=";
-            argv[2] = (char*) outfilename;
+            argv[2] = (char*) outFilename;
             argv[3] = 0;
 
             AiMsgInfo("[MakeTx]   %s", GetCommandLine(3, argv).c_str());
@@ -388,7 +389,7 @@ static bool MakeTx(MakeTxData *data, const char *in_filename, const char *outfil
             }
             else
             {
-               std::string tmp = outfilename;
+               std::string tmp = outFilename;
                tmp += "_original";
                remove(tmp.c_str());
             }
@@ -410,21 +411,30 @@ static bool MakeTx(MakeTxData *data, const char *in_filename, const char *outfil
 
 node_parameters
 {
-   AiParameterSTR("filename", "");
-   AiParameterENUM("format", Format_input, MakeTxFormatNames);
-   AiParameterENUM("wraps", Wrap_default, MakeTxWrapNames);
-   AiParameterENUM("wrapt", Wrap_s, MakeTxWrapNames);
-   AiParameterINT("tile", 0);
-   AiParameterBOOL("resize", false);
-   AiParameterBOOL("mipmap", true);
-   AiParameterENUM("filter", Filter_box, MakeTxFilterNames);
-   AiParameterBOOL("stripxmp", true);
-   AiParameterBOOL("oiioopt", true);
-   AiParameterENUM("mode", Mode_if_newer, MakeTxModeNames);
+   AiParameterSTR(SSTR::filename, "");
+   AiParameterENUM(SSTR::format, Format_input, MakeTxFormatNames);
+   AiParameterENUM(SSTR::wraps, Wrap_default, MakeTxWrapNames);
+   AiParameterENUM(SSTR::wrapt, Wrap_s, MakeTxWrapNames);
+   AiParameterINT(SSTR::tile, 0);
+   AiParameterBOOL(SSTR::resize, false);
+   AiParameterBOOL(SSTR::mipmap, true);
+   AiParameterENUM(SSTR::filter, Filter_box, MakeTxFilterNames);
+   AiParameterBOOL(SSTR::stripxmp, true);
+   AiParameterBOOL(SSTR::oiioopt, true);
+   AiParameterENUM(SSTR::mode, Mode_if_newer, MakeTxModeNames);
    
-   AiMetaDataSetBool(mds, "filename", "filepath", true);
-   
-   AiMetaDataSetStr(mds, "filename", "houdini.type", "file:image");
+   AiMetaDataSetBool(mds, SSTR::filename, SSTR::filepath, true);
+   AiMetaDataSetStr(mds, SSTR::filename, "houdini.type", "file:image");
+   AiMetaDataSetBool(mds, SSTR::format, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::wraps, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::wrapt, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::tile, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::resize, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::mipmap, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::filter, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::stripxmp, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::oiioopt, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
 }
 
 node_initialize
@@ -435,50 +445,48 @@ node_update
 {
    Finish(node);
 
-   MakeTxData *data = (MakeTxData*) AiMalloc(sizeof(MakeTxData));
-
-   new (&(data->converted)) ConvertedMap();
+   NodeData *data = new NodeData();
 
    AiCritSecInit(&(data->mutex));
 
-   data->format = AiNodeGetInt(node, "format");
-   data->resize = AiNodeGetBool(node, "resize");
-   data->mipmap = AiNodeGetBool(node, "mipmap");
-   data->tile = AiNodeGetInt(node, "tile");
-   data->filter = AiNodeGetInt(node, "filter");
-   data->wraps = AiNodeGetInt(node, "wraps");
-   data->wrapt = AiNodeGetInt(node, "wrapt");
-   data->stripxmp = AiNodeGetBool(node, "stripxmp");
-   data->oiioopt = AiNodeGetBool(node, "oiioopt");
-   data->mode = AiNodeGetInt(node, "mode");
+   data->format = AiNodeGetInt(node, SSTR::format);
+   data->resize = AiNodeGetBool(node, SSTR::resize);
+   data->mipmap = AiNodeGetBool(node, SSTR::mipmap);
+   data->tile = AiNodeGetInt(node, SSTR::tile);
+   data->filter = AiNodeGetInt(node, SSTR::filter);
+   data->wraps = AiNodeGetInt(node, SSTR::wraps);
+   data->wrapt = AiNodeGetInt(node, SSTR::wrapt);
+   data->stripxmp = AiNodeGetBool(node, SSTR::stripxmp);
+   data->oiioopt = AiNodeGetBool(node, SSTR::oiioopt);
+   data->mode = AiNodeGetInt(node, SSTR::mode);
 
-   if (!AiNodeGetLink(node, "filename"))
+   if (!AiNodeGetLink(node, SSTR::filename))
    {
-      data->process_in_eval = false;
+      data->processInEval = false;
       
-      data->num_tx_filenames = 1;
-      data->tx_filenames = (char**) AiMalloc(data->num_tx_filenames * sizeof(char*));
-      data->tx_filenames[0] = (char*) AiMalloc(MAX_FILENAME * sizeof(char));
+      data->numTxFilenames = 1;
+      data->txFilenames = (char**) AiMalloc(data->numTxFilenames * sizeof(char*));
+      data->txFilenames[0] = (char*) AiMalloc(MAX_FILENAME * sizeof(char));
       
       bool useinput = true;
       
-      const char *in_filename = AiNodeGetStr(node, "filename");
+      const char *inFilename = AiNodeGetStr(node, SSTR::filename);
       
-      if (data->mode != Mode_disable && GetTxName(in_filename, data->tx_filenames[0], MAX_FILENAME))
+      if (data->mode != Mode_disable && GetTxName(inFilename, data->txFilenames[0], MAX_FILENAME))
       {
          if (data->mode == Mode_reuse)
          {
-            AiMsgInfo("[MakeTx] %s: Reuse %s", AiNodeGetName(node), data->tx_filenames[0]);
+            AiMsgInfo("[MakeTx] %s: Reuse %s", AiNodeGetName(node), data->txFilenames[0]);
             struct stat inst, txst;
-            if (stat(in_filename, &inst) == 0 && stat(data->tx_filenames[0], &txst) == 0)
+            if (stat(inFilename, &inst) == 0 && stat(data->txFilenames[0], &txst) == 0)
             {
                useinput = (inst.st_mtime > txst.st_mtime);
             }
          }
          else
          {
-            AiMsgInfo("[MakeTx] %s: Convert input %s", AiNodeGetName(node), in_filename);
-            useinput = !MakeTx(data, in_filename, data->tx_filenames[0]);
+            AiMsgInfo("[MakeTx] %s: Convert input %s", AiNodeGetName(node), inFilename);
+            useinput = !MakeTx(data, inFilename, data->txFilenames[0]);
          }
       }
       else
@@ -495,7 +503,7 @@ node_update
       
       if (useinput)
       {
-         strncpy(data->tx_filenames[0], in_filename, MAX_FILENAME);
+         strncpy(data->txFilenames[0], inFilename, MAX_FILENAME);
       }
    }
    else
@@ -504,15 +512,15 @@ node_update
       {
          AiMsgInfo("[MakeTx] %s: Convertion delayed to shader evaluation time.", AiNodeGetName(node));
       }
-      data->process_in_eval = true;
+      data->processInEval = true;
       
       AtNode *opts = AiUniverseGetOptions();
-      data->num_tx_filenames = AiNodeGetInt(opts, "threads");
-      data->tx_filenames = (char**) AiMalloc(data->num_tx_filenames * sizeof(char*));
+      data->numTxFilenames = AiNodeGetInt(opts, SSTR::threads);
+      data->txFilenames = (char**) AiMalloc(data->numTxFilenames * sizeof(char*));
       
-      for (int i=0; i<data->num_tx_filenames; ++i)
+      for (int i=0; i<data->numTxFilenames; ++i)
       {
-         data->tx_filenames[i] = (char*) AiMalloc(MAX_FILENAME * sizeof(char));
+         data->txFilenames[i] = (char*) AiMalloc(MAX_FILENAME * sizeof(char));
       }
    }
 
@@ -521,39 +529,39 @@ node_update
 
 node_finish
 {
-   MakeTxData *data = (MakeTxData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
 
    if (data != NULL)
    {
       data->converted.clear();
-      data->converted.~ConvertedMap();
 
-      for (int i=0; i<data->num_tx_filenames; ++i)
+      for (int i=0; i<data->numTxFilenames; ++i)
       {
-         AiFree(data->tx_filenames[i]);
+         AiFree(data->txFilenames[i]);
       }
-      AiFree(data->tx_filenames);
-      AiFree(data);
-
+      AiFree(data->txFilenames);
+      
       AiCritSecClose(&(data->mutex));
+
+      delete data;
    }
 }
 
 shader_evaluate
 {
-   MakeTxData *data = (MakeTxData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
 
-   if (data->process_in_eval)
+   if (data->processInEval)
    {
-      const char *in_filename = AiShaderEvalParamStr(p_filename);
+      const char *inFilename = AiShaderEvalParamStr(p_filename);
       
-      if (data->mode != Mode_disable && GetTxName(in_filename, data->tx_filenames[sg->tid], MAX_FILENAME))
+      if (data->mode != Mode_disable && GetTxName(inFilename, data->txFilenames[sg->tid], MAX_FILENAME))
       {
          bool success = false;
          
          AiCritSecEnter(&(data->mutex));
          
-         ConvertedMap::iterator it = data->converted.find(in_filename);
+         ConvertedMap::iterator it = data->converted.find(inFilename);
          
          if (it != data->converted.end())
          {
@@ -564,31 +572,31 @@ shader_evaluate
             if (data->mode == Mode_reuse)
             {
                struct stat inst, txst;
-               if (stat(in_filename, &inst) == 0 && stat(data->tx_filenames[sg->tid], &txst) == 0)
+               if (stat(inFilename, &inst) == 0 && stat(data->txFilenames[sg->tid], &txst) == 0)
                {
                   success = (inst.st_mtime <= txst.st_mtime);
                }
             }
             else
             {
-               AiMsgInfo("[MakeTx] %s: Convert input %s", AiNodeGetName(node), in_filename);
-               success = MakeTx(data, in_filename, data->tx_filenames[sg->tid]);
+               AiMsgInfo("[MakeTx] %s: Convert input %s", AiNodeGetName(node), inFilename);
+               success = MakeTx(data, inFilename, data->txFilenames[sg->tid]);
             }
-            data->converted[in_filename] = success;
+            data->converted[inFilename] = success;
          }
          
          AiCritSecLeave(&(data->mutex));
          
-         sg->out.STR = (success ? data->tx_filenames[sg->tid] : in_filename);
+         sg->out.STR = (success ? data->txFilenames[sg->tid] : inFilename);
       }
       else
       {
          //AiMsgInfo("[MakeTx] %s: Disabled", AiNodeGetName(node));
-         sg->out.STR = in_filename;
+         sg->out.STR = inFilename;
       }
    }
    else
    {
-      sg->out.STR = data->tx_filenames[0];
+      sg->out.STR = data->txFilenames[0];
    }
 }

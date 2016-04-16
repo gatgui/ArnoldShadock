@@ -25,7 +25,7 @@ node_parameters
    AiMetaDataSetBool(mds, "type", "linkable", false);
 }
 
-struct TraceData
+struct NodeData
 {
    TraceType type;
    int count;
@@ -34,7 +34,9 @@ struct TraceData
 
 node_initialize
 {
-   TraceData *data = (TraceData*) AiMalloc(sizeof(TraceData));
+   NodeData *data = new NodeData();
+   AddMemUsage<NodeData>();
+   
    data->type = TT_standard;
    data->count = 0;
    data->hits = 0;
@@ -44,7 +46,7 @@ node_initialize
 
 node_update
 {
-   TraceData *data = (TraceData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    TraceType type = (TraceType) AiNodeGetInt(node, "type");
    
@@ -124,7 +126,7 @@ node_update
 
 node_finish
 {
-   TraceData *data = (TraceData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    if (data->count > 0)
    {
@@ -146,12 +148,13 @@ node_finish
       AiFree(data->hits);
    }
    
-   AiFree(data);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   TraceData *data = (TraceData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    AtRay *ray = 0;
    HitData *hit = 0;

@@ -24,24 +24,29 @@ static const char* ProbeStateNames[] =
 
 node_parameters
 {
-   AiParameterEnum("state", PS_position, ProbeStateNames);
+   AiParameterEnum(SSTR::state, PS_position, ProbeStateNames);
    AiParameterBool("trace", false);
    AiParameterVec("default", 0.0f, 0.0f, 0.0f);
    
-   AiMetaDataSetBool(mds, "state", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::state, SSTR::linkable, false);
 }
 
 node_initialize
 {
+   AiNodeSetLocalData(node, AiMalloc(sizeof(int)));
+   AddMemUsage<int>();
 }
 
 node_update
 {
-   AiNodeSetLocalData(node, reinterpret_cast<void*>(AiNodeGetInt(node, "state")));
+   int *data = (int*) AiNodeGetLocalData(node);
+   *data = AiNodeGetInt(node, SSTR::state);
 }
 
 node_finish
 {
+   AiFree(AiNodeGetLocalData(node));
+   SubMemUsage<int>();
 }
 
 shader_evaluate
@@ -50,7 +55,7 @@ shader_evaluate
    HitData *hit = 0;
    
    if (!AiShaderEvalParamBool(p_trace) ||
-       !AiStateGetMsgPtr("agsb_trace_hit", (void**)&hit) ||
+       !AiStateGetMsgPtr(SSTR::agsb_trace_hit, (void**)&hit) ||
        !hit ||
        !hit->isSG)
    {
@@ -62,8 +67,7 @@ shader_evaluate
    }
    else
    {
-      void *data = AiNodeGetLocalData(node);
-      ProbeState state = (ProbeState) size_t(data);
+      ProbeState state = (ProbeState) *((int*) AiNodeGetLocalData(node));
       
       hitsg = (AtShaderGlobals*) hit->ptr;
       

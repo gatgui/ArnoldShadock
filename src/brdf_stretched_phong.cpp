@@ -33,7 +33,7 @@ shader_evaluate
    data->evalPdf = AiStretchedPhongMISPDF;
    data->data = AiStretchedPhongMISCreateData(sg, AiShaderEvalParamFlt(p_exponent));
    
-   AiStateSetMsgPtr("agsb_brdf", data);
+   AiStateSetMsgPtr(SSTR::agsb_brdf, data);
    
    sg->out.RGB = AI_RGB_BLACK;
 }

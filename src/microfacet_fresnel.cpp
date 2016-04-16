@@ -1,17 +1,15 @@
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(BrdfEvalMtd);
+AI_SHADER_NODE_EXPORT_METHODS(MicrofacetFresnelMtd);
 
-enum BrdfEvalParams
+enum MicrofacetNormalParams
 {
-   p_brdf = 0,
-   p_dir
+   p_brdf = 0
 };
 
 node_parameters
 {
    AiParameterRGB("brdf", 0.0f, 0.0f, 0.0f);
-   AiParameterVec("dir", 0.0f, 0.0f, 0.0f);
 }
 
 node_initialize
@@ -40,7 +38,9 @@ shader_evaluate
    }
    else
    {
-      AtVector dir = AiShaderEvalParamVec(p_dir);
-      sg->out.RGB = brdf->evalBrdf(brdf->data, &dir);
+      sg->out.RGB = AiMicrofacetMISAverageFresnel(sg, brdf->data);
    }
+
+   // Should I unset?
+   //AiStateUnserMsgPtr(SSTR::agsb_brdf);
 }

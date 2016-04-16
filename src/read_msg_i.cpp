@@ -10,40 +10,40 @@ enum ReadMsgIParams
 
 node_parameters
 {
-   AiParameterStr("msg_name", "");
+   AiParameterStr(SSTR::msg_name, "");
    AiParameterInt("default_value", 0);
    
-   AiMetaDataSetBool(mds, "msg_name", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::msg_name, SSTR::linkable, false);
 }
 
-struct ReadMsgIData
+struct NodeData
 {
-   const char *msgName;
+   AtString msgName;
 };
 
 node_initialize
 {
-   ReadMsgIData *data = (ReadMsgIData*) AiMalloc(sizeof(ReadMsgIData));
-   
-   AiNodeSetLocalData(node, data);
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   ReadMsgIData *data = (ReadMsgIData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->msgName = AiNodeGetStr(node, "msg_name");
+   data->msgName = AiNodeGetStr(node, SSTR::msg_name);
 }
 
 node_finish
 {
-   ReadMsgIData *data = (ReadMsgIData*) AiNodeGetLocalData(node);
-   AiFree(data);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   ReadMsgIData *data = (ReadMsgIData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgInt(data->msgName, &(sg->out.INT)))
    {

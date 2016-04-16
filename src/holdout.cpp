@@ -14,82 +14,79 @@ enum HoldoutParams
 node_parameters
 {
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
-   AiParameterStr("enable_attr", "");
-   AiParameterBool("default_enable", true);
-   AiParameterStr("color_attr", "");
-   AiParameterRGBA("default_color", 0.0f, 0.0f, 0.0f, 0.0f);
+   AiParameterStr(SSTR::enable_attr, "");
+   AiParameterBool(SSTR::default_enable, true);
+   AiParameterStr(SSTR::color_attr, "");
+   AiParameterRGBA(SSTR::default_color, 0.0f, 0.0f, 0.0f, 0.0f);
    
-   AiMetaDataSetBool(mds, "enable_attr", "linkable", false);
-   AiMetaDataSetBool(mds, "color_attr", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::enable_attr, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::color_attr, SSTR::linkable, false);
 }
 
-struct HoldoutData
+struct NodeData
 {
-   const char *enable_attr;
-   bool default_enable_is_linked;
-   bool default_enable;
+   AtString enableAttr;
+   bool evalDefaultEnable;
+   bool defaultEnable;
    
-   const char *color_attr;
-   bool default_color_is_linked;
-   AtRGBA default_color;
+   AtString colorAttr;
+   bool evalDefaultColor;
+   AtRGBA defaultColor;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(HoldoutData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   HoldoutData *data = (HoldoutData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   const char *attr_name;
+   data->enableAttr = AiNodeGetStr(node, SSTR::enable_attr);
    
-   attr_name = AiNodeGetStr(node, "enable_attr");
-   data->enable_attr = (strlen(attr_name) > 0 ? attr_name : 0);
-   
-   data->default_enable_is_linked = AiNodeIsLinked(node, "default_enable");
-   if (!data->default_enable_is_linked)
+   data->evalDefaultEnable = AiNodeIsLinked(node, SSTR::default_enable);
+   if (!data->evalDefaultEnable)
    {
-      data->default_enable = AiNodeGetBool(node, "default_enable");
+      data->defaultEnable = AiNodeGetBool(node, SSTR::default_enable);
    }
    
-   attr_name = AiNodeGetStr(node, "color_attr");
-   data->color_attr = (strlen(attr_name) > 0 ? attr_name : 0);
+   data->colorAttr = AiNodeGetStr(node, SSTR::color_attr);
    
-   data->default_color_is_linked = AiNodeIsLinked(node, "default_color");
-   if (!data->default_color_is_linked)
+   data->evalDefaultColor = AiNodeIsLinked(node, SSTR::default_color);
+   if (!data->evalDefaultColor)
    {
-      data->default_color = AiNodeGetRGBA(node, "default_color");
+      data->defaultColor = AiNodeGetRGBA(node, SSTR::default_color);
    }
-   
-   AiNodeSetLocalData(node, data);
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   HoldoutData *data = (HoldoutData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    bool holdout = false;
    
    if ((sg->Rt & AI_RAY_CAMERA) != 0)
    {
-      if (!data->enable_attr || !AiUDataGetBool(data->enable_attr, &holdout))
+      if (data->enableAttr.empty() || !AiUDataGetBool(data->enableAttr, &holdout))
       {
-         holdout = (data->default_enable_is_linked ? AiShaderEvalParamBool(p_default_enable) : data->default_enable);
+         holdout = (data->evalDefaultEnable ? AiShaderEvalParamBool(p_default_enable) : data->defaultEnable);
       }
    }
    
    if (holdout)
    {
-      if (!data->color_attr || !AiUDataGetRGBA(data->color_attr, &(sg->out.RGBA)))
+      if (data->colorAttr.empty() || !AiUDataGetRGBA(data->colorAttr, &(sg->out.RGBA)))
       {
-         sg->out.RGBA = (data->default_color_is_linked ? AiShaderEvalParamRGBA(p_default_color) : data->default_color);
+         sg->out.RGBA = (data->evalDefaultColor ? AiShaderEvalParamRGBA(p_default_color) : data->defaultColor);
       }
    }
    else

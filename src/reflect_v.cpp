@@ -12,50 +12,53 @@ enum ReflectVParams
 
 node_parameters
 {
-   AiParameterVec("direction", 0.0f, 0.0f, 0.0f);
-   AiParameterVec("normal", 0.0f, 0.0f, 0.0f);
-   AiParameterBool("safe", false);
-   AiParameterVec("geometric_normal", 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::direction, 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::normal, 0.0f, 0.0f, 0.0f);
+   AiParameterBool(SSTR::safe, false);
+   AiParameterVec(SSTR::geometric_normal, 0.0f, 0.0f, 0.0f);
    
-   AiMetaDataSetBool(mds, "safe", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::safe, SSTR::linkable, false);
 }
 
-struct ReflectVData
+struct NodeData
 {
-   bool N_is_linked;
+   bool evalN;
    bool safe;
-   bool Ng_is_linked;
+   bool evalNg;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(ReflectVData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   ReflectVData *data = (ReflectVData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->N_is_linked = AiNodeIsLinked(node, "normal");
-   data->Ng_is_linked = AiNodeIsLinked(node, "geometric_normal");
-   data->safe = AiNodeGetBool(node, "safe");
+   data->evalN = AiNodeIsLinked(node, SSTR::normal);
+   data->evalNg = AiNodeIsLinked(node, SSTR::geometric_normal);
+   data->safe = AiNodeGetBool(node, SSTR::safe);
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   ReflectVData *data = (ReflectVData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    AtVector D = AiShaderEvalParamVec(p_direction);
-   AtVector N = (data->N_is_linked ? AiShaderEvalParamVec(p_normal) : sg->N);
+   AtVector N = (data->evalN ? AiShaderEvalParamVec(p_normal) : sg->N);
    
    if (data->safe)
    {
-      AtVector Ng = (data->Ng_is_linked ? AiShaderEvalParamVec(p_geometric_normal) : sg->Ng);
+      AtVector Ng = (data->evalNg ? AiShaderEvalParamVec(p_geometric_normal) : sg->Ng);
       AiReflectSafe(&D, &N, &Ng, &(sg->out.VEC));
    }
    else

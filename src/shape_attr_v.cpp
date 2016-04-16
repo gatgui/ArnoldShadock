@@ -10,30 +10,44 @@ enum ShapeAttrVParams
 
 node_parameters
 {
-   AiParameterStr("attribute", "");
-   AiParameterVec("default", 0.0f, 0.0f, 0.0f);
+   AiParameterStr(SSTR::attribute, "");
+   AiParameterVec(SSTR::_default, 0.0f, 0.0f, 0.0f);
    
-   AiMetaDataSetBool(mds, "attribute", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::attribute, SSTR::linkable, false);
 }
+
+struct NodeData
+{
+   AtString attribute;
+};
 
 node_initialize
 {
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   data->attribute = AiNodeGetStr(node, SSTR::attribute);
 }
 
 node_finish
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   const char *attr_name = AiShaderEvalParamStr(p_attribute);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   if (!AiUDataGetVec(attr_name, &(sg->out.VEC)) &&
-       !AiUDataGetPnt(attr_name, &(sg->out.PNT)))
+   sg->out.VEC = AI_V3_ZERO;
+
+   if (!AiUDataGetVec(data->attribute, &(sg->out.VEC)) &&
+       !AiUDataGetPnt(data->attribute, &(sg->out.PNT)))
    {
       sg->out.VEC = AiShaderEvalParamVec(p_default);
    }

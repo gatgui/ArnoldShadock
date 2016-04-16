@@ -144,6 +144,34 @@ extern const gmath::ColorSpace* ColorSpaces[];
 // gmath::ChromaticAdaptationTransform
 extern const char* ChromaticAdaptationTransformNames[];
 
+enum LocalFrame
+{
+   LF_Nf_dPdu = 0,
+   LF_Nf_dPdv,
+   LF_polar,
+   LF_shirley,
+   LF_custom
+};
+
+extern const char* LocalFrameNames[];
+
+enum MicrofacetDistribution
+{
+   MD_Beckmann = 0,
+   MD_GGX
+};
+
+extern const char* MicrofacetDistributionNames[];
+
+enum VolumeInterp
+{
+   VI_closest = 0,
+   VI_linear,
+   VI_cubic
+};
+
+extern const char* VolumeInterpNames[];
+
 // ---
 
 struct BRDFData
@@ -164,9 +192,21 @@ struct HitData
 
 // ---
 
+template <typename T>
+inline void AddMemUsage()
+{
+   AiAddMemUsage(AtInt64(sizeof(T)), "shading_blocks");
+}
+
+template <typename T>
+inline void SubMemUsage()
+{
+   AiAddMemUsage(-AtInt64(sizeof(T)), "shading_blocks");
+}
+
 inline int GetRenderThreadsCount()
 {
-   return AiNodeGetInt(AiUniverseGetOptions(), "threads");
+   return AiNodeGetInt(AiUniverseGetOptions(), SSTR::threads);
 }
 
 template <unsigned int DIM, typename T>

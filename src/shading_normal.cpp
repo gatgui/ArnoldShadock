@@ -46,74 +46,77 @@ node_parameters
    AtMatrix id;
    AiM4Identity(id);
    
-   AiParameterFlt("time", 0.0f);
-   AiParameterEnum("mode", SNM_Default, ShadingNormalModeNames);
-   AiParameterBool("faceforward", false);
-   AiParameterEnum("space", SNS_World, ShadingNormalSpaceNames);
-   AiParameterMtx("custom_space", id);
+   AiParameterFlt(SSTR::time, 0.0f);
+   AiParameterEnum(SSTR::mode, SNM_Default, ShadingNormalModeNames);
+   AiParameterBool(SSTR::faceforward, false);
+   AiParameterEnum(SSTR::space, SNS_World, ShadingNormalSpaceNames);
+   AiParameterMtx(SSTR::custom_space, id);
    
-   AiMetaDataSetBool(mds, "mode", "linkable", false);
-   AiMetaDataSetBool(mds, "faceforward", "linkable", false);
-   AiMetaDataSetBool(mds, "space", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::faceforward, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::space, SSTR::linkable, false);
 }
 
-struct ShadingNormalData
+struct NodeData
 {
-   bool time_is_linked;
+   bool evalTime;
    float time;
    ShadingNormalMode mode;
    bool faceforward;
    ShadingNormalSpace space;
-   bool custom_space_is_linked;
-   AtMatrix custom_space;
+   bool evalCustomSpace;
+   AtMatrix customSpace;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(ShadingNormalData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   ShadingNormalData *data = (ShadingNormalData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->time_is_linked = AiNodeIsLinked(node, "time");
+   data->evalTime = AiNodeIsLinked(node, SSTR::time);
    
-   if (!data->time_is_linked)
+   if (!data->evalTime)
    {
-      data->time = AiNodeGetFlt(node, "time");
+      data->time = AiNodeGetFlt(node, SSTR::time);
    }
    
-   data->mode = (ShadingNormalMode) AiNodeGetInt(node, "mode");
+   data->mode = (ShadingNormalMode) AiNodeGetInt(node, SSTR::mode);
    
-   data->faceforward = AiNodeGetBool(node, "faceforward");
+   data->faceforward = AiNodeGetBool(node, SSTR::faceforward);
    
-   data->space = (ShadingNormalSpace) AiNodeGetInt(node, "space");
+   data->space = (ShadingNormalSpace) AiNodeGetInt(node, SSTR::space);
    
-   data->custom_space_is_linked = AiNodeIsLinked(node, "custom_space");
+   data->evalCustomSpace = AiNodeIsLinked(node, SSTR::custom_space);
    
-   if (data->space == SNS_Custom && !data->custom_space_is_linked)
+   if (data->space == SNS_Custom && !data->evalCustomSpace)
    {
       // custom space -> world matrix
       AtMatrix tmp;
-      AiNodeGetMatrix(node, "custom_space", tmp);
+      AiNodeGetMatrix(node, SSTR::custom_space, tmp);
       // world -> custom space matrix
-      AiM4Invert(data->custom_space, tmp);
+      AiM4Invert(data->customSpace, tmp);
    }
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   ShadingNormalData *data = (ShadingNormalData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    AtPoint P, N, Ns, Ng, outN;
    
-   AiShaderGlobalsGetPositionAtTime(sg, (data->time_is_linked ? AiShaderEvalParamFlt(p_time) : data->time), &P, &N, &Ng, &Ns);
+   AiShaderGlobalsGetPositionAtTime(sg, (data->evalTime ? AiShaderEvalParamFlt(p_time) : data->time), &P, &N, &Ng, &Ns);
    
    switch (data->mode)
    {
@@ -144,19 +147,19 @@ shader_evaluate
       {
          AtVector csN;
          
-         if (data->custom_space_is_linked)
+         if (data->evalCustomSpace)
          {
             // custom space -> world matrix 
             AtMatrix *tmp = AiShaderEvalParamMtx(p_custom_space);
             // world -> custom space matrix
-            AtMatrix custom_space;
-            AiM4Invert(custom_space, *tmp);
+            AtMatrix customSpace;
+            AiM4Invert(customSpace, *tmp);
             
-            AiM4VectorByMatrixMult(&csN, custom_space, &outN);
+            AiM4VectorByMatrixMult(&csN, customSpace, &outN);
          }
          else
          {
-            AiM4VectorByMatrixMult(&csN, data->custom_space, &outN);
+            AiM4VectorByMatrixMult(&csN, data->customSpace, &outN);
          }
          
          sg->out.VEC = AiV3Normalize(csN);

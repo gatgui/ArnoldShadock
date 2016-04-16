@@ -81,6 +81,7 @@ node_initialize
    data->CS = 0;
    data->TM = 0;
    AiNodeSetLocalData(node, (void*)data);
+   AddMemUsage<NodeData>();
 }
 
 node_update
@@ -135,6 +136,7 @@ node_finish
       delete data->TM;
    }
    delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate

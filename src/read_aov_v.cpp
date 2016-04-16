@@ -10,40 +10,40 @@ enum ReadAOVVParams
 
 node_parameters
 {
-   AiParameterStr("aov_name", "");
+   AiParameterStr(SSTR::aov_name, "");
    AiParameterVec("default_value", 0.0f, 0.0f, 0.0f);
    
-   AiMetaDataSetBool(mds, "aov_name", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::aov_name, SSTR::linkable, false);
 }
 
-struct ReadAOVVData
+struct NodeData
 {
-   const char *aovName;
+   AtString aovName;
 };
 
 node_initialize
 {
-   ReadAOVVData *data = (ReadAOVVData*) AiMalloc(sizeof(ReadAOVVData));
-   
-   AiNodeSetLocalData(node, data);
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   ReadAOVVData *data = (ReadAOVVData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->aovName = AiNodeGetStr(node, "aov_name");
+   data->aovName = AiNodeGetStr(node, SSTR::aov_name);
 }
 
 node_finish
 {
-   ReadAOVVData *data = (ReadAOVVData*) AiNodeGetLocalData(node);
-   AiFree(data);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   ReadAOVVData *data = (ReadAOVVData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    if (!AiAOVGetVec(sg, data->aovName, sg->out.VEC))
    {

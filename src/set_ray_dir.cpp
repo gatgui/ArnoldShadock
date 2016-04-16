@@ -30,11 +30,11 @@ shader_evaluate
 {
    AtRay *ray = 0;
    
-   AiStateSetMsgPtr("agsb_ray", 0);
+   AiStateSetMsgPtr(SSTR::agsb_ray, 0);
    
    AiShaderEvalParamVec(p_ray);
    
-   if (AiStateGetMsgPtr("agsb_ray", (void**)&ray) && ray)
+   if (AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) && ray)
    {
       ray->dir = AiShaderEvalParamVec(p_dir);
       sg->out.VEC = ray->dir;

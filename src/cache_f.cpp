@@ -22,7 +22,6 @@ node_initialize
 node_update
 {
    FloatCache *cache = (FloatCache*) AiNodeGetLocalData(node);
-   
    ReAllocCache(cache, GetRenderThreadsCount());
    EmptyCache(cache);
 }
@@ -30,7 +29,6 @@ node_update
 node_finish
 {
    FloatCache *cache = (FloatCache*) AiNodeGetLocalData(node);
-   
    FreeCache(cache);
 }
 

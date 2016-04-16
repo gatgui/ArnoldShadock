@@ -36,24 +36,35 @@ static const char* RayStateNames[] =
 
 node_parameters
 {
-   AiParameterEnum("state", RS_type, RayStateNames);
+   AiParameterEnum(SSTR::state, RS_type, RayStateNames);
    AiParameterVec("ray", 0.0f, 0.0f, 0.0f);
    AiParameterInt("default", 0);
    
-   AiMetaDataSetBool(mds, "state", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::state, SSTR::linkable, false);
 }
+
+struct NodeData
+{
+   int state;
+};
 
 node_initialize
 {
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   AiNodeSetLocalData(node, reinterpret_cast<void*>(AiNodeGetInt(node, "state")));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   data->state = AiNodeGetInt(node, SSTR::state);
 }
 
 node_finish
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
@@ -62,16 +73,15 @@ shader_evaluate
    
    AiShaderEvalParamVec(p_ray);
    
-   if (!AiStateGetMsgPtr("agsb_ray", (void**)&ray) || !ray)
+   if (!AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) || !ray)
    {
       sg->out.INT = AiShaderEvalParamInt(p_default);
    }
    else
    {
-      void *data = AiNodeGetLocalData(node);
-      RayState state = (RayState) size_t(data);
+      NodeData *data = (NodeData*) AiNodeGetLocalData(node);
       
-      switch (state)
+      switch (data->state)
       {
       case RS_type:
          sg->out.INT = ray->type;

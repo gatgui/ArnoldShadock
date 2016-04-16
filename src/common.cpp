@@ -157,6 +157,31 @@ const char* ChromaticAdaptationTransformNames[] =
    NULL
 };
 
+const char* LocalFrameNames[] =
+{
+   "Nf_dPdu",
+   "Nf_dPdv",
+   "polar",
+   "shirley",
+   "custom",
+   NULL
+};
+
+const char* MicrofacetDistributionNames[] =
+{
+   "Beckmann",
+   "GGX",
+   NULL
+};
+
+const char* VolumeInterpNames[] =
+{
+   "closest",
+   "linear",
+   "cubic",
+   NULL
+};
+
 static void GetArrayElement(AtArray *a, unsigned int i, float &e)
 {
    e = AiArrayGetFlt(a, i);

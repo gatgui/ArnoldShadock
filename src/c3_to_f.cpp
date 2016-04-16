@@ -28,21 +28,27 @@ static const char* ColorToFloatModeNames[] =
 node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("mode", CTF_LUMINANCE, ColorToFloatModeNames);
+   AiParameterEnum(SSTR::mode, CTF_LUMINANCE, ColorToFloatModeNames);
    
-   AiMetaDataSetBool(mds, "mode", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
 }
 
 node_initialize
 {
+   AiNodeSetLocalData(node, AiMalloc(sizeof(int)));
+   AddMemUsage<int>();
 }
 
 node_update
 {
+   int *data = (int*) AiNodeGetLocalData(node);
+   *data = AiNodeGetInt(node, SSTR::mode);
 }
 
 node_finish
 {
+   AiFree(AiNodeGetLocalData(node));
+   SubMemUsage<int>();
 }
 
 shader_evaluate
@@ -50,7 +56,7 @@ shader_evaluate
    static float sOneThird = 1.0f / 3.0f;
    
    AtRGB input = AiShaderEvalParamRGB(p_input);
-   ColorToFloatMode mode = (ColorToFloatMode) AiShaderEvalParamInt(p_mode);
+   ColorToFloatMode mode = (ColorToFloatMode) *((int*) AiNodeGetLocalData(node));
    
    switch (mode)
    {

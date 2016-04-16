@@ -29,64 +29,67 @@ node_parameters
    AtMatrix id;
    AiM4Identity(id);
    
-   AiParameterFlt("time", 0.0f);
-   AiParameterEnum("space", SPS_World, ShadingPointSpaceNames);
-   AiParameterMtx("custom_space", id);
+   AiParameterFlt(SSTR::time, 0.0f);
+   AiParameterEnum(SSTR::space, SPS_World, ShadingPointSpaceNames);
+   AiParameterMtx(SSTR::custom_space, id);
    
-   AiMetaDataSetBool(mds, "space", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::space, SSTR::linkable, false);
 }
 
-struct ShadingPointData
+struct NodeData
 {
-   bool time_is_linked;
+   bool evalTime;
    float time;
    ShadingPointSpace space;
-   bool custom_space_is_linked;
-   AtMatrix custom_space;
+   bool evalCustomSpace;
+   AtMatrix customSpace;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(ShadingPointData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   ShadingPointData *data = (ShadingPointData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->time_is_linked = AiNodeIsLinked(node, "time");
+   data->evalTime = AiNodeIsLinked(node, SSTR::time);
    
-   if (!data->time_is_linked)
+   if (!data->evalTime)
    {
-      data->time = AiNodeGetFlt(node, "time");
+      data->time = AiNodeGetFlt(node, SSTR::time);
    }
    
-   data->space = (ShadingPointSpace) AiNodeGetInt(node, "space");
+   data->space = (ShadingPointSpace) AiNodeGetInt(node, SSTR::space);
    
-   data->custom_space_is_linked = AiNodeIsLinked(node, "custom_space");
+   data->evalCustomSpace = AiNodeIsLinked(node, SSTR::custom_space);
    
-   if (data->space == SPS_Custom && !data->custom_space_is_linked)
+   if (data->space == SPS_Custom && !data->evalCustomSpace)
    {
       // custom space -> world matrix
       AtMatrix tmp;
-      AiNodeGetMatrix(node, "custom_space", tmp);
+      AiNodeGetMatrix(node, SSTR::custom_space, tmp);
       // world -> custom space matrix
-      AiM4Invert(data->custom_space, tmp);
+      AiM4Invert(data->customSpace, tmp);
    }
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   ShadingPointData *data = (ShadingPointData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    AtPoint outP;
    
-   AiShaderGlobalsGetPositionAtTime(sg, (data->time_is_linked ? AiShaderEvalParamFlt(p_time) : data->time), &outP, 0, 0, 0);
+   AiShaderGlobalsGetPositionAtTime(sg, (data->evalTime ? AiShaderEvalParamFlt(p_time) : data->time), &outP, 0, 0, 0);
    
    switch (data->space)
    {
@@ -96,19 +99,19 @@ shader_evaluate
       
    case SPS_Custom:
       {
-         if (data->custom_space_is_linked)
+         if (data->evalCustomSpace)
          {
             // custom space -> world matrix
             AtMatrix *tmp = AiShaderEvalParamMtx(p_custom_space);
             // world -> custom space matrix
-            AtMatrix custom_space;
-            AiM4Invert(custom_space, *tmp);
+            AtMatrix customSpace;
+            AiM4Invert(customSpace, *tmp);
             
-            AiM4PointByMatrixMult(&(sg->out.PNT), custom_space, &outP);
+            AiM4PointByMatrixMult(&(sg->out.PNT), customSpace, &outP);
          }
          else
          {
-            AiM4PointByMatrixMult(&(sg->out.PNT), data->custom_space, &outP);
+            AiM4PointByMatrixMult(&(sg->out.PNT), data->customSpace, &outP);
          }
       }
       break;

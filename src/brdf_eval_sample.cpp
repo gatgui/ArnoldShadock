@@ -30,11 +30,11 @@ shader_evaluate
 {
    BRDFData *brdf = 0;
       
-   AiStateSetMsgPtr("agsb_brdf", 0);
+   AiStateSetMsgPtr(SSTR::agsb_brdf, 0);
    
    AiShaderEvalParamRGB(p_brdf);
    
-   if (!AiStateGetMsgPtr("agsb_brdf", (void**)&brdf) || !brdf)
+   if (!AiStateGetMsgPtr(SSTR::agsb_brdf, (void**)&brdf) || !brdf)
    {
       sg->out.VEC = AI_V3_ZERO;
    }

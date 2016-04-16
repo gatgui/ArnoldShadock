@@ -24,32 +24,38 @@ static const char* LightWeightNames[] =
 
 node_parameters
 {
-   AiParameterEnum("weight", LW_diffuse, LightWeightNames);
+   AiParameterEnum(SSTR::weight, LW_diffuse, LightWeightNames);
    
-   AiMetaDataSetBool(mds, "weight", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::weight, SSTR::linkable, false);
 }
 
 node_initialize
 {
+   AiNodeSetLocalData(node, AiMalloc(sizeof(int)));
+   AddMemUsage<int>();
 }
 
 node_update
 {
-   AiNodeSetLocalData(node, reinterpret_cast<void*>(AiNodeGetInt(node, "weight")));
+   int *pw = (int*) AiNodeGetLocalData(node);
+   *pw = AiNodeGetInt(node, SSTR::weight);
 }
 
 node_finish
 {
+   AiFree(AiNodeGetLocalData(node));
+   SubMemUsage<int>();
 }
 
 shader_evaluate
 {
-   void* weight = AiNodeGetLocalData(node);
+   int weight = *((int*) AiNodeGetLocalData(node));
    
    if (sg->Lp)
    {
-      if (weight == (void*)LW_diffuse)
+      switch (weight)
       {
+      case LW_diffuse:
          // Note: AiLightGetAffectDiffuse API is set deprecated
          //       but still in use by MtoA
          if (AiLightGetAffectDiffuse(sg->Lp))
@@ -61,9 +67,8 @@ shader_evaluate
             sg->out.FLT = 0.0f;
          }
          return;
-      }
-      else if (weight == (void*)LW_specular)
-      {
+      
+      case LW_specular:
          // Note: AiLightGetAffectSpecular is set deprecated
          //       but still in use by MtoA
          if (AiLightGetAffectSpecular(sg->Lp))
@@ -75,11 +80,13 @@ shader_evaluate
             sg->out.FLT = 0.0f;
          }
          return;
-      }
-      else if (weight == (void*)LW_sss)
-      {
+      
+      case LW_sss:
          sg->out.FLT = AiLightGetSSS(sg->Lp);
          return;
+      
+      default:
+         break;
       }
    }
    

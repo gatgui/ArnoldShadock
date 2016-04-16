@@ -34,28 +34,28 @@ shader_evaluate
 {
    AtRay *ray = 0;
    
-   AiStateSetMsgPtr("agsb_ray", 0);
+   AiStateSetMsgPtr(SSTR::agsb_ray, 0);
    
    AiShaderEvalParamVec(p_ray);
    
-   if (AiStateGetMsgPtr("agsb_ray", (void**)&ray) && ray)
+   if (AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) && ray)
    {
       AtVector N = AiShaderEvalParamVec(p_normal);
       if (!AiRefractRay(ray, (AiV3IsZero(N) ? &(sg->N) : &N),
                         AiShaderEvalParamFlt(p_n1),
                         AiShaderEvalParamFlt(p_n2), sg))
       {
-         AiStateSetMsgBool("agsb_tir", true);
+         AiStateSetMsgBool(SSTR::agsb_tir, true);
       }
       else
       {
-         AiStateSetMsgBool("agsb_tir", false);
+         AiStateSetMsgBool(SSTR::agsb_tir, false);
       }
       sg->out.VEC = ray->dir;
    }
    else
    {
-      AiStateSetMsgBool("agsb_tir", false);
+      AiStateSetMsgBool(SSTR::agsb_tir, false);
       sg->out.VEC = AI_V3_ZERO;
    }
 }

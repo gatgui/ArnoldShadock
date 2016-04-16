@@ -84,18 +84,9 @@ static const char* WrapNames[] =
    NULL
 };
 
-struct TextureData
-{
-   bool path_is_linked;
-   const char *filename;
-   AtTextureHandle *handle;
-   AtTextureParams params;
-   bool use_default_color;
-};
-
 node_parameters
 {
-   AiParameterStr("filename", "");
+   AiParameterStr(SSTR::filename, "");
    AiParameterEnum("filter", Filter_smart_bicubic, FilterNames);
    AiParameterEnum("mipmap_mode", Mip_default, MipNames);
    AiParameterInt("mipmap_bias", 0);
@@ -117,34 +108,45 @@ node_parameters
    AiParameterRGB("offset", 0.0f, 0.0f, 0.0f);
    AiParameterBool("cache_texture_handles", true);
    AiParameterBool("use_default_color", false);
-   AiParameterRGBA("default_color", 0.0f, 0.0f, 0.0f, 1.0f);
+   AiParameterRGBA(SSTR::default_color, 0.0f, 0.0f, 0.0f, 1.0f);
    
-   AiMetaDataSetBool(mds, "filter", "linkable", false);
-   AiMetaDataSetBool(mds, "mipmap_mode", "linkable", false);
-   AiMetaDataSetBool(mds, "mipmap_bias", "linkable", false);
-   AiMetaDataSetBool(mds, "single_channel", "linkable", false);
-   AiMetaDataSetBool(mds, "fill", "linkable", false);
-   AiMetaDataSetBool(mds, "swrap", "linkable", false);
-   AiMetaDataSetBool(mds, "twrap", "linkable", false);
-   //AiMetaDataSetBool(mds, "sscale", "linkable", false);
-   //AiMetaDataSetBool(mds, "tscale", "linkable", false);
-   AiMetaDataSetBool(mds, "sflip", "linkable", false);
-   AiMetaDataSetBool(mds, "tflip", "linkable", false);
-   AiMetaDataSetBool(mds, "swidth", "linkable", false);
-   AiMetaDataSetBool(mds, "twidth", "linkable", false);
-   AiMetaDataSetBool(mds, "sblur", "linkable", false);
-   AiMetaDataSetBool(mds, "tblur", "linkable", false);
-   AiMetaDataSetBool(mds, "swap_st", "linkable", false);
-   AiMetaDataSetBool(mds, "cache_texture_handles", "linkable", false);
-   AiMetaDataSetBool(mds, "use_default_color", "linkable", false);
+   AiMetaDataSetBool(mds, "filter", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "mipmap_mode", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "mipmap_bias", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "single_channel", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "fill", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "swrap", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "twrap", SSTR::linkable, false);
+   //AiMetaDataSetBool(mds, "sscale", SSTR::linkable, false);
+   //AiMetaDataSetBool(mds, "tscale", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "sflip", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "tflip", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "swidth", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "twidth", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "sblur", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "tblur", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "swap_st", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "cache_texture_handles", SSTR::linkable, false);
+   AiMetaDataSetBool(mds, "use_default_color", SSTR::linkable, false);
    
-   AiMetaDataSetBool(mds, "filename", "filepath", true);
-   AiMetaDataSetStr(mds, "filename", "houdini.type", "file:image");
+   AiMetaDataSetBool(mds, SSTR::filename, SSTR::filepath, true);
+   AiMetaDataSetStr(mds, SSTR::filename, "houdini.type", "file:image");
 }
+
+struct NodeData
+{
+   bool evalPath;
+   const char *filename;
+   AtTextureHandle *handle;
+   AtTextureParams params;
+   bool useDefaultColor;
+};
+
 
 node_initialize
 {
-   TextureData *data = (TextureData*) AiMalloc(sizeof(TextureData));
+   NodeData *data = new NodeData();
+   AddMemUsage<NodeData>();
    
    // initialize for first node_update call
    data->handle = 0;
@@ -154,16 +156,16 @@ node_initialize
 
 node_update
 {
-   TextureData *data = (TextureData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->path_is_linked = AiNodeIsLinked(node, "filename");
+   data->evalPath = AiNodeIsLinked(node, SSTR::filename);
    data->filename = 0;
    if (data->handle)
    {
       AiTextureHandleDestroy(data->handle);
    }
    data->handle = 0;
-   data->use_default_color = AiNodeGetBool(node, "use_default_color");
+   data->useDefaultColor = AiNodeGetBool(node, "use_default_color");
    AiTextureParamsSetDefaults(&(data->params));
    data->params.filter = AiNodeGetInt(node, "filter");
    data->params.mipmap_mode = AiNodeGetInt(node, "mipmap_mode");
@@ -180,9 +182,9 @@ node_update
    data->params.blur_s = AiNodeGetFlt(node, "sblur");
    data->params.blur_t = AiNodeGetFlt(node, "tblur");
    
-   if (!data->path_is_linked)
+   if (!data->evalPath)
    {
-      data->filename = AiNodeGetStr(node, "filename");
+      data->filename = AiNodeGetStr(node, SSTR::filename);
       
       if (AiNodeGetBool(node, "cache_texture_handles"))
       {
@@ -197,22 +199,23 @@ node_update
 
 node_finish
 {
-   TextureData *data = (TextureData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    if (data->handle)
    {
       AiTextureHandleDestroy(data->handle);
    }
    
-   AiFree(data);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   TextureData *data = (TextureData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    bool success = true;
-   bool *psuccess = (data->use_default_color ? &success : 0);
+   bool *psuccess = (data->useDefaultColor ? &success : 0);
    
    AtTextureParams params;
    memcpy(&params, &(data->params), sizeof(AtTextureParams));
@@ -228,7 +231,7 @@ shader_evaluate
    
    AtRGBA rv = AI_RGBA_BLACK;
    
-   if (data->path_is_linked)
+   if (data->evalPath)
    {
       rv = AiTextureAccess(sg, AiShaderEvalParamStr(p_filename), &params, psuccess);
    }
@@ -244,7 +247,7 @@ shader_evaluate
       }
    }
    
-   if (data->use_default_color && !success)
+   if (data->useDefaultColor && !success)
    {
       sg->out.RGBA = AiShaderEvalParamRGBA(p_default_color);
    }

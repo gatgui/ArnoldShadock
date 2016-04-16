@@ -26,21 +26,27 @@ static const char* ColorToVectorModeNames[] =
 node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("mode", CTV_RAW, ColorToVectorModeNames);
+   AiParameterEnum(SSTR::mode, CTV_RAW, ColorToVectorModeNames);
    
-   AiMetaDataSetBool(mds, "mode", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
 }
 
 node_initialize
 {
+   AiNodeSetLocalData(node, AiMalloc(sizeof(int)));
+   AddMemUsage<int>();
 }
 
 node_update
 {
+   int *data = (int*) AiNodeGetLocalData(node);
+   *data = AiNodeGetInt(node, SSTR::mode);
 }
 
 node_finish
 {
+   AiFree(AiNodeGetLocalData(node));
+   SubMemUsage<int>();
 }
 
 shader_evaluate
@@ -48,7 +54,7 @@ shader_evaluate
    static float sNormalizeHue = 60.0f / 360.0f;
    
    AtRGB input = AiShaderEvalParamRGB(p_input);
-   ColorToVectorMode mode = (ColorToVectorMode) AiShaderEvalParamInt(p_mode);
+   ColorToVectorMode mode = (ColorToVectorMode) *((int*) AiNodeGetLocalData(node));
    
    switch (mode)
    {

@@ -14,16 +14,16 @@ enum RotateParams
 node_parameters
 {
    AiParameterVec("input", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("rotation_order", RO_XYZ, RotationOrderNames);
-   AiParameterEnum("angle_units", AU_Degrees, AngleUnitsNames);
-   AiParameterVec("rotation", 0.0f, 0.0f, 0.0f);
-   AiParameterPnt("rotation_pivot", 0.0f, 0.0f, 0.0f);
+   AiParameterEnum(SSTR::rotation_order, RO_XYZ, RotationOrderNames);
+   AiParameterEnum(SSTR::angle_units, AU_Degrees, AngleUnitsNames);
+   AiParameterVec(SSTR::rotation, 0.0f, 0.0f, 0.0f);
+   AiParameterPnt(SSTR::rotation_pivot, 0.0f, 0.0f, 0.0f);
    
-   AiMetaDataSetBool(mds, "rotation_order", "linkable", false);
-   AiMetaDataSetBool(mds, "angle_units", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::rotation_order, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::angle_units, SSTR::linkable, false);
 }
 
-struct RotateData
+struct NodeData
 {
    AtMatrix Rx;
    AtMatrix Ry;
@@ -45,7 +45,8 @@ struct RotateData
 
 node_initialize
 {
-   RotateData *data = (RotateData*) AiMalloc(sizeof(RotateData));
+   NodeData *data = new NodeData();
+   AddMemUsage<NodeData>();
 
    data->Rx_set = false;
    data->Ry_set = false;
@@ -59,14 +60,14 @@ node_initialize
 
 node_update
 {
-   RotateData *data = (RotateData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->rotationOrder = (RotationOrder) AiNodeGetInt(node, "rotation_order");
-   data->angleScale = (AiNodeGetInt(node, "angle_units") == AU_Radians ? AI_RTOD : 1.0f);
+   data->rotationOrder = (RotationOrder) AiNodeGetInt(node, SSTR::rotation_order);
+   data->angleScale = (AiNodeGetInt(node, SSTR::angle_units) == AU_Radians ? AI_RTOD : 1.0f);
    
-   if (!AiNodeIsLinked(node, "rotation"))
+   if (!AiNodeIsLinked(node, SSTR::rotation))
    {
-      AtVector R = AiNodeGetVec(node, "rotation");
+      AtVector R = AiNodeGetVec(node, SSTR::rotation);
 
       data->Rx_set = true;
       data->Ry_set = true;
@@ -79,35 +80,35 @@ node_update
    else
    {
       data->Rx_set = false;
-      if (!AiNodeIsLinked(node, "rotation.x"))
+      if (!AiNodeIsLinked(node, SSTR::rotation_dot_x))
       {
          data->Rx_set = true;
-         AtVector R = AiNodeGetVec(node, "rotation");
+         AtVector R = AiNodeGetVec(node, SSTR::rotation);
          AiM4RotationX(data->Rx, data->angleScale * R.x);
       }
 
       data->Ry_set = false;
-      if (!AiNodeIsLinked(node, "rotation.y"))
+      if (!AiNodeIsLinked(node, SSTR::rotation_dot_y))
       {
          data->Ry_set = true;
-         AtVector R = AiNodeGetVec(node, "rotation");
+         AtVector R = AiNodeGetVec(node, SSTR::rotation);
          AiM4RotationY(data->Ry, data->angleScale * R.y);
       }
 
       data->Rz_set = false;
-      if (!AiNodeIsLinked(node, "rotation.z"))
+      if (!AiNodeIsLinked(node, SSTR::rotation_dot_z))
       {
          data->Rz_set = true;
-         AtVector R = AiNodeGetVec(node, "rotation");
+         AtVector R = AiNodeGetVec(node, SSTR::rotation);
          AiM4RotationZ(data->Rz, data->angleScale * R.z);
       }
    }
 
    data->Rp_set = false;
-   if (!AiNodeIsLinked(node, "rotation_pivot"))
+   if (!AiNodeIsLinked(node, SSTR::rotation_pivot))
    {
       data->Rp_set = true;
-      AtPoint P = AiNodeGetPnt(node, "rotation_pivot");
+      AtPoint P = AiNodeGetPnt(node, SSTR::rotation_pivot);
       AiM4Translation(data->Rp, &P);
       P = -P;
       AiM4Translation(data->iRp, &P);
@@ -155,13 +156,14 @@ node_update
 
 node_finish
 {
-   RotateData *data = (RotateData*) AiNodeGetLocalData(node);
-   AiFree(data);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   RotateData *data = (RotateData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    AtVector p, ip, r;
    AtMatrix R, Rx, Ry, Rz, P, iP, tmp;

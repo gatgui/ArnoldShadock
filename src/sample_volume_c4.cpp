@@ -9,54 +9,48 @@ enum SampleVolumeC4Params
    p_default
 };
 
-enum VolumeInterp
-{
-   VI_closest = 0,
-   VI_linear,
-   VI_cubic
-};
-
-static const char* VolumeInterpNames[] = {"closest", "linear", "cubic", 0};
-
 node_parameters
 {
-   AiParameterStr("field", "");
-   AiParameterEnum("interpolation", VI_linear, VolumeInterpNames);
-   AiParameterRGBA("default", 0.0f, 0.0f, 0.0f, 1.0f);
+   AiParameterStr(SSTR::field, "");
+   AiParameterEnum(SSTR::interpolation, VI_linear, VolumeInterpNames);
+   AiParameterRGBA(SSTR::_default, 0.0f, 0.0f, 0.0f, 1.0f);
    
-   AiMetaDataSetBool(mds, "field", "linkable", false);
-   AiMetaDataSetBool(mds, "interpolation", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::field, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::interpolation, SSTR::linkable, false);
 }
 
 struct NodeData
 {
-   const char *field;
+   AtString field;
    int interpolation;
-   bool default_linked;
+   bool evalDefault;
    AtRGBA _default;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(NodeData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->field = AiNodeGetStr(node, "field");
-   data->interpolation = AiNodeGetInt(node, "interpolation");
-   data->default_linked = AiNodeIsLinked(node, "default");
-   if (!data->default_linked)
+   data->field = AiNodeGetStr(node, SSTR::field);
+   data->interpolation = AiNodeGetInt(node, SSTR::interpolation);
+   data->evalDefault = AiNodeIsLinked(node, SSTR::_default);
+   if (!data->evalDefault)
    {
-      data->_default = AiNodeGetRGBA(node, "default");
+      data->_default = AiNodeGetRGBA(node, SSTR::_default);
    }
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
@@ -65,6 +59,6 @@ shader_evaluate
    
    if (!AiVolumeSampleRGBA(data->field, data->interpolation, &(sg->out.RGBA)))
    {
-      sg->out.RGBA = (data->default_linked ? AiShaderEvalParamRGBA(p_default) : data->_default);
+      sg->out.RGBA = (data->evalDefault ? AiShaderEvalParamRGBA(p_default) : data->_default);
    }
 }

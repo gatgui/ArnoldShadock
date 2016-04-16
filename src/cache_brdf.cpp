@@ -22,7 +22,6 @@ node_initialize
 node_update
 {
    BrdfCache *cache = (BrdfCache*) AiNodeGetLocalData(node);
-   
    ReAllocCache(cache, GetRenderThreadsCount());
    EmptyCache(cache);
 }
@@ -30,7 +29,6 @@ node_update
 node_finish
 {
    BrdfCache *cache = (BrdfCache*) AiNodeGetLocalData(node);
-   
    FreeCache(cache);
 }
 
@@ -43,13 +41,13 @@ shader_evaluate
    if (!GetCacheValue(sg, cache, brdf_data))
    {
       AiShaderEvalParamRGB(p_input);
-      AiStateGetMsgPtr("agsb_brdf", (void**)&brdf_data);
+      AiStateGetMsgPtr(SSTR::agsb_brdf, (void**)&brdf_data);
       
       SetCacheValue(sg, cache, brdf_data);
    }
    else
    {
-      AiStateSetMsgPtr("agsb_brdf", brdf_data);
+      AiStateSetMsgPtr(SSTR::agsb_brdf, brdf_data);
    }
    
    sg->out.RGB = AI_RGB_BLACK;

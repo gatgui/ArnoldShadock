@@ -20,51 +20,52 @@ node_parameters
    def = AiArrayAllocate(2, 1, AI_TYPE_FLOAT);
    AiArraySetFlt(def, 0, 0.0f);
    AiArraySetFlt(def, 1, 1.0f);
-   AiParameterArray("positions", def);
+   AiParameterArray(SSTR::positions, def);
    
    def = AiArrayAllocate(2, 1, AI_TYPE_VECTOR);
    AiArraySetVec(def, 0, AI_V3_ZERO);
    AiArraySetVec(def, 1, AI_V3_ONE);
-   AiParameterArray("values", def);
+   AiParameterArray(SSTR::values, def);
    
    def = AiArrayAllocate(2, 1, AI_TYPE_INT);
    AiArraySetInt(def, 0, RI_Linear);
    AiArraySetInt(def, 1, RI_Linear);
-   AiParameterArray("interpolations", def);
+   AiParameterArray(SSTR::interpolations, def);
    
    AiParameterVec("default_value", 0.0f, 0.0f, 0.0f);
    
-   //AiMetaDataSetStr(mds, NULL, "ramps", "values");
-   //AiMetaDataSetStr(mds, NULL, "ramps.values.positions", "positions");
-   //AiMetaDataSetStr(mds, NULL, "ramps.values.interpolations", "interpolations");
+   //AiMetaDataSetStr(mds, NULL, "ramps", SSTR::values);
+   //AiMetaDataSetStr(mds, NULL, "ramps.values.positions", SSTR::positions);
+   //AiMetaDataSetStr(mds, NULL, "ramps.values.interpolations", SSTR::interpolations);
 }
 
-struct RampVData
+struct NodeData
 {
    bool valid;
    unsigned int nkeys;
    AtArray *positions;
-   bool linked_positions;
+   bool evalPositions;
    AtArray *values;
-   bool linked_values;
+   bool evalValues;
    AtArray *interpolations;
-   bool linked_interpolations;
+   bool evalInterpolations;
    unsigned int nshuffles;
    unsigned int **shuffles;
 };
 
 node_initialize
 {
-   RampVData *data = (RampVData*) AiMalloc(sizeof(RampVData));
+   NodeData *data = (NodeData*) AiMalloc(sizeof(NodeData));
+   AddMemUsage<NodeData>();
    
    data->valid = false;
    data->nkeys = 0;
    data->positions = 0;
-   data->linked_positions = false;
+   data->evalPositions = false;
    data->values = 0;
-   data->linked_values = false;
+   data->evalValues = false;
    data->interpolations = 0;
-   data->linked_interpolations = false;
+   data->evalInterpolations = false;
    data->nshuffles = 0;
    data->shuffles = 0;
    
@@ -73,7 +74,7 @@ node_initialize
 
 node_update
 {
-   RampVData *data = (RampVData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    data->valid = false;
    data->nkeys = 0;
@@ -89,14 +90,14 @@ node_update
    }
    data->nshuffles = 0;
    
-   data->positions = AiNodeGetArray(node, "positions");
-   data->linked_positions = AiNodeIsLinked(node, "positions");
+   data->positions = AiNodeGetArray(node, SSTR::positions);
+   data->evalPositions = AiNodeIsLinked(node, SSTR::positions);
    
-   data->values = AiNodeGetArray(node, "values");
-   data->linked_values = AiNodeIsLinked(node, "values");
+   data->values = AiNodeGetArray(node, SSTR::values);
+   data->evalValues = AiNodeIsLinked(node, SSTR::values);
    
-   data->interpolations = AiNodeGetArray(node, "interpolations");
-   data->linked_interpolations = AiNodeIsLinked(node, "interpolations");
+   data->interpolations = AiNodeGetArray(node, SSTR::interpolations);
+   data->evalInterpolations = AiNodeIsLinked(node, SSTR::interpolations);
    
    if (data->positions->nelements > 0 ||
        data->positions->nelements == data->values->nelements ||
@@ -104,7 +105,7 @@ node_update
    {
       data->nkeys = data->positions->nelements;
       
-      data->nshuffles = (data->linked_positions ? GetRenderThreadsCount() : 1);
+      data->nshuffles = (data->evalPositions ? GetRenderThreadsCount() : 1);
       data->shuffles = (unsigned int **) AiMalloc(data->nshuffles * sizeof(unsigned int*));
       
       for (unsigned int i=0; i<data->nshuffles; ++i)
@@ -112,7 +113,7 @@ node_update
          data->shuffles[i] = (unsigned int*) AiMalloc(data->nkeys * sizeof(unsigned int));
       }
       
-      if (!data->linked_positions)
+      if (!data->evalPositions)
       {
          SortRampPositions(data->positions, data->shuffles[0]);
       }
@@ -127,7 +128,7 @@ node_update
 
 node_finish
 {
-   RampVData *data = (RampVData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    for (unsigned int i=0; i<data->nshuffles; ++i)
    {
@@ -135,12 +136,13 @@ node_finish
    }
    AiFree(data->shuffles);
    
-   AiFree(data);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   RampVData *data = (RampVData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    if (!data->valid)
    {
@@ -148,9 +150,9 @@ shader_evaluate
       return;
    }
    
-   AtArray *p = (data->linked_positions ? AiShaderEvalParamArray(p_values) : data->positions);
-   AtArray *v = (data->linked_values ? AiShaderEvalParamArray(p_values) : data->values);
-   AtArray *i = (data->linked_interpolations ? AiShaderEvalParamArray(p_values) : data->interpolations);
+   AtArray *p = (data->evalPositions ? AiShaderEvalParamArray(p_values) : data->positions);
+   AtArray *v = (data->evalValues ? AiShaderEvalParamArray(p_values) : data->values);
+   AtArray *i = (data->evalInterpolations ? AiShaderEvalParamArray(p_values) : data->interpolations);
    
    if (v->nelements != data->nkeys || p->nelements != data->nkeys || i->nelements != data->nkeys)
    {
@@ -162,7 +164,7 @@ shader_evaluate
       float input = AiShaderEvalParamFlt(p_input);
       int si = 0;
       
-      if (data->linked_positions)
+      if (data->evalPositions)
       {
          si = sg->tid;
          SortRampPositions(i, data->shuffles[si]);

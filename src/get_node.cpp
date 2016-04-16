@@ -22,38 +22,53 @@ static const char* TargetNodeNames[] = {"shaded", "shader", "proc", "light", "tr
 
 node_parameters
 {
-   AiParameterEnum("target_node", TN_Shaded, TargetNodeNames);
-   AiParameterInt("light_index", -1);
+   AiParameterEnum(SSTR::target_node, TN_Shaded, TargetNodeNames);
+   AiParameterInt(SSTR::light_index, -1);
    
-   AiMetaDataSetBool(mds, "target_node", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::target_node, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::light_index, SSTR::linkable, false);
 }
+
+struct NodeData
+{
+   int targetNode;
+   int lightIndex;
+};
 
 node_initialize
 {
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   AiNodeSetLocalData(node, reinterpret_cast<void*>(AiNodeGetInt(node, "target_node")));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   
+   data->targetNode = AiNodeGetInt(node, SSTR::target_node);
+   data->lightIndex = AiNodeGetInt(node, SSTR::light_index);
 }
 
 node_finish
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   TargetNode target_node = (TargetNode) size_t(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   switch (target_node)
+   switch (data->targetNode)
    {
    case TN_Probed:
    case TN_Traced:
       {
          HitData *hd = 0;
-         if (AiStateGetMsgPtr("agsb_trace_hit", (void**)&hd) && hd)
+         if (AiStateGetMsgPtr(SSTR::agsb_trace_hit, (void**)&hd) && hd)
          {
-            if (target_node == TN_Probed)
+            if (data->targetNode == TN_Probed)
             {
                sg->out.PTR = (void*) (hd->isSG ? ((AtShaderGlobals*)hd->ptr)->Op : 0);
             }
@@ -70,14 +85,13 @@ shader_evaluate
       break;
    case TN_Light:
       {
-         int index = AiShaderEvalParamInt(p_light_index);
-         if (index < 0)
+         if (data->lightIndex < 0)
          {
             sg->out.PTR = sg->Lp;
          }
-         else if (index < sg->nlights)
+         else if (data->lightIndex < sg->nlights)
          {
-            sg->out.PTR = sg->lights[index];
+            sg->out.PTR = sg->lights[data->lightIndex];
          }
          else
          {

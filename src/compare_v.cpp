@@ -13,32 +13,38 @@ enum CompareVParams
 
 node_parameters
 {
-   AiParameterEnum("operator", 0, CompareOperatorNames);
+   AiParameterEnum(SSTR::_operator, 0, CompareOperatorNames);
    AiParameterBool("invert", false);
    AiParameterVec("input1", 0.0f, 0.0f, 0.0f);
    AiParameterVec("input2", 0.0f, 0.0f, 0.0f);
    AiParameterFlt("precision", AI_EPSILON);
    
-   AiMetaDataSetBool(mds, "operator", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::_operator, SSTR::linkable, false);
 }
 
 node_initialize
 {
+   AiNodeSetLocalData(node, AiMalloc(sizeof(int)));
+   AddMemUsage<int>();
 }
 
 node_update
 {
+   int *data = (int*) AiNodeGetLocalData(node);
+   *data = AiNodeGetInt(node, SSTR::_operator);
 }
 
 node_finish
 {
+   AiFree(AiNodeGetLocalData(node));
+   SubMemUsage<int>();
 }
 
 shader_evaluate
 {
    bool rv = false;
    
-   CompareOperator op = (CompareOperator) AiShaderEvalParamInt(p_operator);
+   CompareOperator op = (CompareOperator) *((int*) AiNodeGetLocalData(node));
    
    float precision = AiShaderEvalParamFlt(p_precision);
    

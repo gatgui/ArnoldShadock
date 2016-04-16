@@ -12,11 +12,11 @@ enum ScaleParams
 node_parameters
 {
    AiParameterVec("input", 0.0f, 0.0f, 0.0f);
-   AiParameterVec("scale", 1.0f, 1.0f, 1.0f);
-   AiParameterPnt("scale_pivot", 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::scale, 1.0f, 1.0f, 1.0f);
+   AiParameterPnt(SSTR::scale_pivot, 0.0f, 0.0f, 0.0f);
 }
 
-struct ScaleData
+struct NodeData
 {
    AtMatrix S;
    AtMatrix Sp;
@@ -29,7 +29,8 @@ struct ScaleData
 
 node_initialize
 {
-   ScaleData *data = (ScaleData*) AiMalloc(sizeof(ScaleData));
+   NodeData *data = new NodeData();
+   AddMemUsage<NodeData>();
 
    data->S_set = false;
    data->Sp_set = false;
@@ -39,21 +40,21 @@ node_initialize
 
 node_update
 {
-   ScaleData *data = (ScaleData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    data->S_set = false;
-   if (!AiNodeIsLinked(node, "scale"))
+   if (!AiNodeIsLinked(node, SSTR::scale))
    {
       data->S_set = true;
-      AtVector S = AiNodeGetVec(node, "scale");
+      AtVector S = AiNodeGetVec(node, SSTR::scale);
       AiM4Scaling(data->S, &S);
    }
 
    data->Sp_set = false;
-   if (!AiNodeIsLinked(node, "scale_pivot"))
+   if (!AiNodeIsLinked(node, SSTR::scale_pivot))
    {
       data->Sp_set = true;
-      AtPoint P = AiNodeGetPnt(node, "scale_pivot");
+      AtPoint P = AiNodeGetPnt(node, SSTR::scale_pivot);
       AiM4Translation(data->Sp, &P);
       P = -P;
       AiM4Translation(data->iSp, &P);
@@ -69,13 +70,14 @@ node_update
 
 node_finish
 {
-   ScaleData *data = (ScaleData*) AiNodeGetLocalData(node);
-   AiFree(data);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   ScaleData *data = (ScaleData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    AtVector p, ip, s;
    AtMatrix S, P, iP, tmp;

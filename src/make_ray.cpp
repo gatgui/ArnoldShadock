@@ -12,9 +12,9 @@ enum MakeRayParams
 
 node_parameters
 {
-   AiParameterEnum("type", RT_Generic, RayTypeNames);
-   AiParameterPnt("origin", 0.0f, 0.0f, 0.0f);
-   AiParameterVec("direction", 0.0f, 0.0f, 0.0f);
+   AiParameterEnum(SSTR::type, RT_Generic, RayTypeNames);
+   AiParameterPnt(SSTR::origin, 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::direction, 0.0f, 0.0f, 0.0f);
    AiParameterFlt("maxdist", AI_BIG);
 }
 
@@ -40,7 +40,7 @@ shader_evaluate
    float maxdist = AiShaderEvalParamFlt(p_maxdist);
    
    AiMakeRay(ray, type, &origin, (AiV3IsZero(dir) ? NULL : &dir), maxdist, sg);
-   AiStateSetMsgPtr("agsb_ray", ray);
+   AiStateSetMsgPtr(SSTR::agsb_ray, ray);
    
    sg->out.VEC = ray->dir;
 }
