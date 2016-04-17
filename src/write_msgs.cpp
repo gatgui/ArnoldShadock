@@ -27,42 +27,41 @@ node_parameters
 {
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
    
-   AiParameterStr("bool_msg_name", "");
+   AiParameterStr(SSTR::bool_msg_name, "");
    AiParameterBool("bool_msg", false);
    
-   AiParameterStr("int_msg_name", "");
+   AiParameterStr(SSTR::int_msg_name, "");
    AiParameterInt("int_msg", 0);
    
-   AiParameterStr("float_msg_name", "");
+   AiParameterStr(SSTR::float_msg_name, "");
    AiParameterFlt("float_msg", 0.0f);
    
-   AiParameterStr("point2_msg_name", "");
+   AiParameterStr(SSTR::point2_msg_name, "");
    AiParameterPnt2("point2_msg", 0.0f, 0.0f);
    
-   AiParameterStr("point_msg_name", "");
+   AiParameterStr(SSTR::point_msg_name, "");
    AiParameterPnt("point_msg", 0.0f, 0.0f, 0.0f);
    
-   AiParameterStr("vector_msg_name", "");
+   AiParameterStr(SSTR::vector_msg_name, "");
    AiParameterVec("vector_msg", 0.0f, 0.0f, 0.0f);
    
-   AiParameterStr("rgb_msg_name", "");
+   AiParameterStr(SSTR::rgb_msg_name, "");
    AiParameterRGB("rgb_msg", 0.0f, 0.0f, 0.0f);
    
-   AiParameterStr("rgba_msg_name", "");
+   AiParameterStr(SSTR::rgba_msg_name, "");
    AiParameterRGBA("rgba_msg", 0.0f, 0.0f, 0.0f, 1.0f);
    
-   AiMetaDataSetBool(mds, "bool_msg_name", "linkable", false);
-   AiMetaDataSetBool(mds, "int_msg_name", "linkable", false);
-   AiMetaDataSetBool(mds, "float_msg_name", "linkable", false);
-   AiMetaDataSetBool(mds, "point2_msg_name", "linkable", false);
-   AiMetaDataSetBool(mds, "point_msg_name", "linkable", false);
-   AiMetaDataSetBool(mds, "vector_msg_name", "linkable", false);
-   AiMetaDataSetBool(mds, "rgb_msg_name", "linkable", false);
-   AiMetaDataSetBool(mds, "rgba_msg_name", "linkable", false);
-   AiMetaDataSetBool(mds, "blend_opacity", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::bool_msg_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::int_msg_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::float_msg_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::point2_msg_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::point_msg_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::vector_msg_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::rgb_msg_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::rgba_msg_name, SSTR::linkable, false);
 }
 
-struct WriteMsgsData
+struct NodeData
 {
    bool hasBool;
    bool hasInt;
@@ -72,19 +71,20 @@ struct WriteMsgsData
    bool hasVector;
    bool hasRGB;
    bool hasRGBA;
-   const char *boolName;
-   const char *intName;
-   const char *floatName;
-   const char *point2Name;
-   const char *pointName;
-   const char *vectorName;
-   const char *rgbName;
-   const char *rgbaName;
+   AtString boolName;
+   AtString intName;
+   AtString floatName;
+   AtString point2Name;
+   AtString pointName;
+   AtString vectorName;
+   AtString rgbName;
+   AtString rgbaName;
 };
 
 node_initialize
 {
-   WriteMsgsData *data = (WriteMsgsData*) AiMalloc(sizeof(WriteMsgsData));
+   NodeData *data = new NodeData();
+   AddMemUsage<NodeData>();
    
    data->hasBool = false;
    data->hasInt = false;
@@ -100,42 +100,43 @@ node_initialize
 
 node_update
 {
-   WriteMsgsData *data = (WriteMsgsData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->boolName = AiNodeGetStr(node, "bool_msg_name");
-   data->hasBool = (strlen(data->boolName) > 0);
+   data->boolName = AiNodeGetStr(node, SSTR::bool_msg_name);
+   data->hasBool = !data->boolName.empty();
    
-   data->intName = AiNodeGetStr(node, "int_msg_name");
-   data->hasInt = (strlen(data->intName) > 0);
+   data->intName = AiNodeGetStr(node, SSTR::int_msg_name);
+   data->hasInt = !data->intName.empty();
    
-   data->floatName = AiNodeGetStr(node, "float_msg_name");
-   data->hasFloat = (strlen(data->floatName) > 0);
+   data->floatName = AiNodeGetStr(node, SSTR::float_msg_name);
+   data->hasFloat = !data->floatName.empty();
    
-   data->point2Name = AiNodeGetStr(node, "point2_msg_name");
-   data->hasPoint2 = (strlen(data->point2Name) > 0);
+   data->point2Name = AiNodeGetStr(node, SSTR::point2_msg_name);
+   data->hasPoint2 = !data->point2Name.empty();
    
-   data->pointName = AiNodeGetStr(node, "point_msg_name");
-   data->hasPoint = (strlen(data->pointName) > 0);
+   data->pointName = AiNodeGetStr(node, SSTR::point_msg_name);
+   data->hasPoint = !data->pointName.empty();
    
-   data->vectorName = AiNodeGetStr(node, "vector_msg_name");
-   data->hasVector = (strlen(data->vectorName) > 0);
+   data->vectorName = AiNodeGetStr(node, SSTR::vector_msg_name);
+   data->hasVector = !data->vectorName.empty();
    
-   data->rgbName = AiNodeGetStr(node, "rgb_msg_name");
-   data->hasRGB = (strlen(data->rgbName) > 0);
+   data->rgbName = AiNodeGetStr(node, SSTR::rgb_msg_name);
+   data->hasRGB = !data->rgbName.empty();
    
-   data->rgbaName = AiNodeGetStr(node, "rgba_msg_name");
-   data->hasRGBA = (strlen(data->rgbaName) > 0);
+   data->rgbaName = AiNodeGetStr(node, SSTR::rgba_msg_name);
+   data->hasRGBA = !data->rgbaName.empty();
 }
 
 node_finish
 {
-   WriteMsgsData *data = (WriteMsgsData*) AiNodeGetLocalData(node);
-   AiFree(data);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   WriteMsgsData *data = (WriteMsgsData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    if (data->hasBool)
    {

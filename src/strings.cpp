@@ -160,4 +160,26 @@ namespace SSTR
    AtString diffuse_use_default("diffuse_use_default");
    AtString glossy("glossy");
    AtString glossy_use_default("glossy_use_default");
+
+   AtString units("units");
+   AtString edge_type("edge_type");
+
+   AtString bool_aov_name("bool_aov_name");
+   AtString int_aov_name("int_aov_name");
+   AtString float_aov_name("float_aov_name");
+   AtString point2_aov_name("point2_aov_name");
+   AtString point_aov_name("point_aov_name");
+   AtString vector_aov_name("vector_aov_name");
+   AtString rgb_aov_name("rgb_aov_name");
+   AtString rgba_aov_name("rgba_aov_name");
+   AtString blend_opacity("blend_opacity");
+
+   AtString bool_msg_name("bool_msg_name");
+   AtString int_msg_name("int_msg_name");
+   AtString float_msg_name("float_msg_name");
+   AtString point2_msg_name("point2_msg_name");
+   AtString point_msg_name("point_msg_name");
+   AtString vector_msg_name("vector_msg_name");
+   AtString rgb_msg_name("rgb_msg_name");
+   AtString rgba_msg_name("rgba_msg_name");
 }

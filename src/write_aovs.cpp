@@ -28,44 +28,44 @@ node_parameters
 {
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
    
-   AiParameterStr("bool_aov_name", "");
+   AiParameterStr(SSTR::bool_aov_name, "");
    AiParameterBool("bool_aov", false);
    
-   AiParameterStr("int_aov_name", "");
+   AiParameterStr(SSTR::int_aov_name, "");
    AiParameterInt("int_aov", 0);
    
-   AiParameterStr("float_aov_name", "");
+   AiParameterStr(SSTR::float_aov_name, "");
    AiParameterFlt("float_aov", 0.0f);
    
-   AiParameterStr("point2_aov_name", "");
+   AiParameterStr(SSTR::point2_aov_name, "");
    AiParameterPnt2("point2_aov", 0.0f, 0.0f);
    
-   AiParameterStr("point_aov_name", "");
+   AiParameterStr(SSTR::point_aov_name, "");
    AiParameterPnt("point_aov", 0.0f, 0.0f, 0.0f);
    
-   AiParameterStr("vector_aov_name", "");
+   AiParameterStr(SSTR::vector_aov_name, "");
    AiParameterVec("vector_aov", 0.0f, 0.0f, 0.0f);
    
-   AiParameterStr("rgb_aov_name", "");
+   AiParameterStr(SSTR::rgb_aov_name, "");
    AiParameterRGB("rgb_aov", 0.0f, 0.0f, 0.0f);
    
-   AiParameterStr("rgba_aov_name", "");
+   AiParameterStr(SSTR::rgba_aov_name, "");
    AiParameterRGBA("rgba_aov", 0.0f, 0.0f, 0.0f, 1.0f);
    
-   AiParameterBool("blend_opacity", true);
+   AiParameterBool(SSTR::blend_opacity, true);
    
-   AiMetaDataSetBool(mds, "bool_aov_name", "linkable", false);
-   AiMetaDataSetBool(mds, "int_aov_name", "linkable", false);
-   AiMetaDataSetBool(mds, "float_aov_name", "linkable", false);
-   AiMetaDataSetBool(mds, "point2_aov_name", "linkable", false);
-   AiMetaDataSetBool(mds, "point_aov_name", "linkable", false);
-   AiMetaDataSetBool(mds, "vector_aov_name", "linkable", false);
-   AiMetaDataSetBool(mds, "rgb_aov_name", "linkable", false);
-   AiMetaDataSetBool(mds, "rgba_aov_name", "linkable", false);
-   AiMetaDataSetBool(mds, "blend_opacity", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::bool_aov_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::int_aov_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::float_aov_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::point2_aov_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::point_aov_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::vector_aov_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::rgb_aov_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::rgba_aov_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::blend_opacity, SSTR::linkable, false);
 }
 
-struct WriteAOVsData
+struct NodeData
 {
    bool hasBool;
    bool hasInt;
@@ -75,19 +75,20 @@ struct WriteAOVsData
    bool hasVector;
    bool hasRGB;
    bool hasRGBA;
-   const char *boolName;
-   const char *intName;
-   const char *floatName;
-   const char *point2Name;
-   const char *pointName;
-   const char *vectorName;
-   const char *rgbName;
-   const char *rgbaName;
+   AtString boolName;
+   AtString intName;
+   AtString floatName;
+   AtString point2Name;
+   AtString pointName;
+   AtString vectorName;
+   AtString rgbName;
+   AtString rgbaName;
 };
 
 node_initialize
 {
-   WriteAOVsData *data = (WriteAOVsData*) AiMalloc(sizeof(WriteAOVsData));
+   NodeData *data = new NodeData();
+   AddMemUsage<NodeData>();
    
    data->hasBool = false;
    data->hasInt = false;
@@ -103,61 +104,61 @@ node_initialize
 
 node_update
 {
-   WriteAOVsData *data = (WriteAOVsData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   bool blend = AiNodeGetBool(node, "blend_opacity");
+   bool blend = AiNodeGetBool(node, SSTR::blend_opacity);
    
-   data->boolName = AiNodeGetStr(node, "bool_aov_name");
-   if (strlen(data->boolName) > 0)
+   data->boolName = AiNodeGetStr(node, SSTR::bool_aov_name);
+   if (!data->boolName.empty())
    {
       AiAOVRegister(data->boolName, AI_TYPE_BOOLEAN, (blend ? AI_AOV_BLEND_OPACITY : AI_AOV_BLEND_NONE));
       data->hasBool = true;
    }
    
-   data->intName = AiNodeGetStr(node, "int_aov_name");
-   if (strlen(data->intName) > 0)
+   data->intName = AiNodeGetStr(node, SSTR::int_aov_name);
+   if (!data->intName.empty())
    {
       AiAOVRegister(data->intName, AI_TYPE_INT, (blend ? AI_AOV_BLEND_OPACITY : AI_AOV_BLEND_NONE));
       data->hasInt = true;
    }
    
-   data->floatName = AiNodeGetStr(node, "float_aov_name");
-   if (strlen(data->floatName) > 0)
+   data->floatName = AiNodeGetStr(node, SSTR::float_aov_name);
+   if (!data->floatName.empty())
    {
       AiAOVRegister(data->floatName, AI_TYPE_FLOAT, (blend ? AI_AOV_BLEND_OPACITY : AI_AOV_BLEND_NONE));
       data->hasFloat = true;
    }
    
-   data->point2Name = AiNodeGetStr(node, "point2_aov_name");
-   if (strlen(data->point2Name) > 0)
+   data->point2Name = AiNodeGetStr(node, SSTR::point2_aov_name);
+   if (!data->point2Name.empty())
    {
       AiAOVRegister(data->point2Name, AI_TYPE_POINT2, (blend ? AI_AOV_BLEND_OPACITY : AI_AOV_BLEND_NONE));
       data->hasPoint2 = true;
    }
    
-   data->pointName = AiNodeGetStr(node, "point_aov_name");
-   if (strlen(data->pointName) > 0)
+   data->pointName = AiNodeGetStr(node, SSTR::point_aov_name);
+   if (!data->pointName.empty())
    {
       AiAOVRegister(data->pointName, AI_TYPE_POINT, (blend ? AI_AOV_BLEND_OPACITY : AI_AOV_BLEND_NONE));
       data->hasPoint = true;
    }
    
-   data->vectorName = AiNodeGetStr(node, "vector_aov_name");
-   if (strlen(data->vectorName) > 0)
+   data->vectorName = AiNodeGetStr(node, SSTR::vector_aov_name);
+   if (!data->vectorName.empty())
    {
       AiAOVRegister(data->vectorName, AI_TYPE_VECTOR, (blend ? AI_AOV_BLEND_OPACITY : AI_AOV_BLEND_NONE));
       data->hasVector = true;
    }
    
-   data->rgbName = AiNodeGetStr(node, "rgb_aov_name");
-   if (strlen(data->rgbName) > 0)
+   data->rgbName = AiNodeGetStr(node, SSTR::rgb_aov_name);
+   if (!data->rgbName.empty())
    {
       AiAOVRegister(data->rgbName, AI_TYPE_RGB, (blend ? AI_AOV_BLEND_OPACITY : AI_AOV_BLEND_NONE));
       data->hasRGB = true;
    }
    
-   data->rgbaName = AiNodeGetStr(node, "rgba_aov_name");
-   if (strlen(data->rgbaName) > 0)
+   data->rgbaName = AiNodeGetStr(node, SSTR::rgba_aov_name);
+   if (!data->rgbaName.empty())
    {
       AiAOVRegister(data->rgbaName, AI_TYPE_RGBA, (blend ? AI_AOV_BLEND_OPACITY : AI_AOV_BLEND_NONE));
       data->hasRGBA = true;
@@ -166,13 +167,14 @@ node_update
 
 node_finish
 {
-   WriteAOVsData *data = (WriteAOVsData*) AiNodeGetLocalData(node);
-   AiFree(data);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   WriteAOVsData *data = (WriteAOVsData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    if ((sg->Rt & AI_RAY_CAMERA))
    {

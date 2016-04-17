@@ -163,6 +163,28 @@ namespace SSTR
    extern AtString diffuse_use_default;
    extern AtString glossy;
    extern AtString glossy_use_default;
+
+   extern AtString units;
+   extern AtString edge_type;
+
+   extern AtString bool_aov_name;
+   extern AtString int_aov_name;
+   extern AtString float_aov_name;
+   extern AtString point2_aov_name;
+   extern AtString point_aov_name;
+   extern AtString vector_aov_name;
+   extern AtString rgb_aov_name;
+   extern AtString rgba_aov_name;
+   extern AtString blend_opacity;
+
+   extern AtString bool_msg_name;
+   extern AtString int_msg_name;
+   extern AtString float_msg_name;
+   extern AtString point2_msg_name;
+   extern AtString point_msg_name;
+   extern AtString vector_msg_name;
+   extern AtString rgb_msg_name;
+   extern AtString rgba_msg_name;
 }
 
 #endif
