@@ -14,8 +14,8 @@ enum TweakGlobalsParams
    p_N_world_matrix,
    p_fhemi,
    p_skip_shadow,
-   p_traceset,
-   p_inclusive_traceset
+   p_trace_set,
+   p_inclusive_trace_set
 
 };
 

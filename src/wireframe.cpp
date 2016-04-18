@@ -5,7 +5,7 @@ AI_SHADER_NODE_EXPORT_METHODS(WireframeMtd);
 enum WireframeParams
 {
    p_line_width = 0,
-   p_width_space,
+   p_units,
    p_edge_type
 };
 

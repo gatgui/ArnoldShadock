@@ -4,11 +4,7 @@ AI_SHADER_NODE_EXPORT_METHODS(SampleDirMtd);
 
 enum SampleDirParams
 {
-   p_sample = 0,
-   p_local_frame,
-   p_custom_frame,
-   p_frame_rotation,
-   p_angle_units
+   p_sample = 0
 };
 
 node_parameters

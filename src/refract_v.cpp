@@ -6,8 +6,8 @@ enum RefractVParams
 {
    p_direction = 0,
    p_normal,
-   p_ior_1,
-   p_ior_2
+   p_ior1,
+   p_ior2
 };
 
 node_parameters

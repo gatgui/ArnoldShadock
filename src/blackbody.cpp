@@ -15,6 +15,8 @@ enum BlackbodyParams
    p_ca_white_point,
    p_exposure,
    p_color_space,
+   p_fix_nans,
+   p_nan_color
    
    // remap ramp?
 };

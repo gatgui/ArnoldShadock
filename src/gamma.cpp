@@ -7,7 +7,7 @@ enum GammaParams
    p_input = 0,
    p_mode,
    p_transform,
-   p_logc_el
+   p_logc_exposure
 };
 
 node_parameters

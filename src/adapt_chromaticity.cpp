@@ -7,9 +7,9 @@ enum AdaptChromaticityParams
 {
    p_input = 0,
    p_source,
-   p_source_cs,
+   p_source_color_space,
    p_target,
-   p_target_cs,
+   p_target_color_space,
    p_transform
 };
 
