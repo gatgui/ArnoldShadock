@@ -13,31 +13,52 @@ node_parameters
 {
    AtMatrix id;
    AiM4Identity(id);
-   AiParameterMtx("matrix", id);
+   AiParameterMtx(SSTR::matrix, id);
    AiParameterVec("vector", 0.0f, 0.0f, 0.0f);
-   AiParameterBool("as_point", false);
+   AiParameterBool(SSTR::as_point, false);
    
-   AiMetaDataSetBool(mds, "as_point", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::as_point, SSTR::linkable, false);
 }
+
+struct NodeData
+{
+   bool evalMatrix;
+   AtMatrix matrix;
+   bool asPoint;
+};
 
 node_initialize
 {
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   data->asPoint = AiNodeGetBool(node, SSTR::as_point);
+   data->evalMatrix = AiNodeIsLinked(node, SSTR::matrix);
+   if (!data->evalMatrix)
+   {
+      AiNodeGetMatrix(node, SSTR::matrix, data->matrix);
+   }
 }
 
 node_finish
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   AtMatrix *mtx = AiShaderEvalParamMtx(p_matrix);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+
+   AtMatrix *mtx = (data->evalMatrix ? AiShaderEvalParamMtx(p_matrix) : &(data->matrix));
    AtVector vec = AiShaderEvalParamVec(p_vector);
 
-   if (AiShaderEvalParamBool(p_as_point))
+   if (data->asPoint)
    {
       AiM4PointByMatrixMult(&(sg->out.PNT), *mtx, &vec);
    }

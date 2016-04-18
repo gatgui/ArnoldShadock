@@ -27,23 +27,37 @@ node_parameters
 {
    AiParameterVec("input1", 0.0f, 0.0f, 0.0f);
    AiParameterVec("input2", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("operation", TO_COS, TrigonometryOperationNames);
-   AiParameterEnum("units", AU_Radians, AngleUnitsNames);
+   AiParameterEnum(SSTR::operation, TO_COS, TrigonometryOperationNames);
+   AiParameterEnum(SSTR::units, AU_Radians, AngleUnitsNames);
    
-   AiMetaDataSetBool(mds, "operation", "linkable", false);
-   AiMetaDataSetBool(mds, "units", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::operation, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::units, SSTR::linkable, false);
 }
+
+struct NodeData
+{
+   TrigonometryOperation operation;
+   AngleUnits units;
+};
 
 node_initialize
 {
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   data->operation = (TrigonometryOperation) AiNodeGetInt(node, SSTR::operation);
+   data->units = (AngleUnits) AiNodeGetInt(node, SSTR::units);
 }
 
 node_finish
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
@@ -51,15 +65,15 @@ shader_evaluate
    static float sDegToRad = AI_PI / 180.0f;
    static float sRadToDeg = 180.0f / AI_PI;
    
-   AtVector input = AiShaderEvalParamVec(p_input1);
-   AngleUnits units = (AngleUnits) AiShaderEvalParamInt(p_units);
-   TrigonometryOperation op = (TrigonometryOperation) AiShaderEvalParamInt(p_operation);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   switch (op)
+   AtVector input = AiShaderEvalParamVec(p_input1);
+   
+   switch (data->operation)
    {
    case TO_COS:
       {
-         float f = (units == AU_Degrees ? sDegToRad : 1.0f);
+         float f = (data->units == AU_Degrees ? sDegToRad : 1.0f);
          sg->out.VEC.x = cosf(f * input.x);
          sg->out.VEC.y = cosf(f * input.y);
          sg->out.VEC.z = cosf(f * input.z);
@@ -67,7 +81,7 @@ shader_evaluate
       break;
    case TO_SIN:
       {
-         float f = (units == AU_Degrees ? sDegToRad : 1.0f);
+         float f = (data->units == AU_Degrees ? sDegToRad : 1.0f);
          sg->out.VEC.x = sinf(f * input.x);
          sg->out.VEC.y = sinf(f * input.y);
          sg->out.VEC.z = sinf(f * input.z);
@@ -75,7 +89,7 @@ shader_evaluate
       break;
    case TO_TAN:
       {
-         float f = (units == AU_Degrees ? sDegToRad : 1.0f);
+         float f = (data->units == AU_Degrees ? sDegToRad : 1.0f);
          sg->out.VEC.x = tanf(f * input.x);
          sg->out.VEC.y = tanf(f * input.y);
          sg->out.VEC.z = tanf(f * input.z);
@@ -83,7 +97,7 @@ shader_evaluate
       break;
    case TO_ACOS:
       {
-         float f = (units == AU_Degrees ? sRadToDeg : 1.0f);
+         float f = (data->units == AU_Degrees ? sRadToDeg : 1.0f);
          sg->out.VEC.x = f * acosf(input.x);
          sg->out.VEC.y = f * acosf(input.y);
          sg->out.VEC.z = f * acosf(input.z);
@@ -91,7 +105,7 @@ shader_evaluate
       break;
    case TO_ASIN:
       {
-         float f = (units == AU_Degrees ? sRadToDeg : 1.0f);
+         float f = (data->units == AU_Degrees ? sRadToDeg : 1.0f);
          sg->out.VEC.x = f * asinf(input.x);
          sg->out.VEC.y = f * asinf(input.y);
          sg->out.VEC.z = f * asinf(input.z);
@@ -99,7 +113,7 @@ shader_evaluate
       break;
    case TO_ATAN:
       {
-         float f = (units == AU_Degrees ? sRadToDeg : 1.0f);
+         float f = (data->units == AU_Degrees ? sRadToDeg : 1.0f);
          sg->out.VEC.x = f * atanf(input.x);
          sg->out.VEC.y = f * atanf(input.y);
          sg->out.VEC.z = f * atanf(input.z);
@@ -108,7 +122,7 @@ shader_evaluate
    case TO_ATAN2:
       {
          AtVector input2 = AiShaderEvalParamVec(p_input2);
-         float f = (units == AU_Degrees ? sRadToDeg : 1.0f);
+         float f = (data->units == AU_Degrees ? sRadToDeg : 1.0f);
          sg->out.VEC.x = f * atan2f(input.x, input2.x);
          sg->out.VEC.y = f * atan2f(input.y, input2.y);
          sg->out.VEC.z = f * atan2f(input.z, input2.z);

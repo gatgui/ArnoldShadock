@@ -18,48 +18,63 @@ enum UVTransformParams
 node_parameters
 {
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
-   AiParameterEnum("order", TO_SRT, TransformOrderNames);
-   AiParameterPnt2("scale", 1.0f, 1.0f);
-   AiParameterPnt2("scale_pivot", 0.5f, 0.5f);
-   AiParameterFlt("rotation", 0.0f);
-   AiParameterPnt2("rotation_pivot", 0.5f, 0.5f);
-   AiParameterPnt2("translation", 0.0f, 0.0f);
-   AiParameterBool("transform_pivots", false);
-   AiParameterBool("recompute_surface_uv_derivs", false);
+   AiParameterEnum(SSTR::order, TO_SRT, TransformOrderNames);
+   AiParameterPnt2(SSTR::scale, 1.0f, 1.0f);
+   AiParameterPnt2(SSTR::scale_pivot, 0.5f, 0.5f);
+   AiParameterFlt(SSTR::rotation, 0.0f);
+   AiParameterPnt2(SSTR::rotation_pivot, 0.5f, 0.5f);
+   AiParameterPnt2(SSTR::translation, 0.0f, 0.0f);
+   AiParameterBool(SSTR::transform_pivots, false);
+   AiParameterBool(SSTR::recompute_surface_uv_derivs, false);
    
-   AiMetaDataSetBool(mds, "order", "linkable", false);
-   AiMetaDataSetBool(mds, "transform_pivots", "linkable", false);
-   AiMetaDataSetBool(mds, "recompute_surface_uv_derivs", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::order, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::transform_pivots, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::recompute_surface_uv_derivs, SSTR::linkable, false);
 }
+
+struct NodeData
+{
+   TransformOrder order;
+   bool transformPivots;
+   bool recomputeSurfaceUVDerivs;
+};
 
 node_initialize
 {
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   data->order = (TransformOrder) AiNodeGetInt(node, SSTR::order);
+   data->transformPivots = AiNodeGetBool(node, SSTR::transform_pivots);
+   data->recomputeSurfaceUVDerivs = AiNodeGetBool(node, SSTR::recompute_surface_uv_derivs);
 }
 
 node_finish
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   
    AtPoint2 uv, dx, dy;
    AtVector dPdx, dPdy;
    float cosA, sinA;
    
    UVData uvs(sg);
    
-   TransformOrder order = (TransformOrder) AiShaderEvalParamInt(p_order);
    AtPoint2 S = AiShaderEvalParamPnt2(p_scale);
    AtPoint2 Sp = AiShaderEvalParamPnt2(p_scale_pivot);
    float R = AiShaderEvalParamFlt(p_rotation);
    AtPoint2 Rp = AiShaderEvalParamPnt2(p_rotation_pivot);
    AtPoint2 T = AiShaderEvalParamPnt2(p_translation);
-   bool transform_pivots = AiShaderEvalParamBool(p_transform_pivots);
-   bool recompute_surface_uv_derivs = AiShaderEvalParamBool(p_recompute_surface_uv_derivs);
    
    // start by inverting values... we're modifying the uvs, be we visualize the resulting mapped texture
    // feels more natural to manipulate the result
@@ -68,7 +83,7 @@ shader_evaluate
    R = -R;
    T = -T;
    
-   if (recompute_surface_uv_derivs)
+   if (data->recomputeSurfaceUVDerivs)
    {
       ComputeSurfaceScreenDerivatives(sg, dPdx, dPdy);
    }
@@ -84,13 +99,13 @@ shader_evaluate
    cosA = cosf(R);
    sinA = sinf(R);
    
-   switch (order)
+   switch (data->order)
    {
    case TO_SRT:
       ScaleUV(Sp, S, uv);
       ScaleUV(Sp, S, dx);
       ScaleUV(Sp, S, dy);
-      if (transform_pivots) ScaleUV(Sp, S, Rp);
+      if (data->transformPivots) ScaleUV(Sp, S, Rp);
       RotateUV(Rp, cosA, sinA, uv);
       RotateUV(Rp, cosA, sinA, dx);
       RotateUV(Rp, cosA, sinA, dy);
@@ -102,11 +117,11 @@ shader_evaluate
       ScaleUV(Sp, S, uv);
       ScaleUV(Sp, S, dx);
       ScaleUV(Sp, S, dy);
-      if (transform_pivots) ScaleUV(Sp, S, Rp);
+      if (data->transformPivots) ScaleUV(Sp, S, Rp);
       TranslateUV(T, uv);
       TranslateUV(T, dx);
       TranslateUV(T, dy);
-      if (transform_pivots) TranslateUV(T, Rp);
+      if (data->transformPivots) TranslateUV(T, Rp);
       RotateUV(Rp, cosA, sinA, uv);
       RotateUV(Rp, cosA, sinA, dx);
       RotateUV(Rp, cosA, sinA, dy);
@@ -115,7 +130,7 @@ shader_evaluate
       RotateUV(Rp, cosA, sinA, uv);
       RotateUV(Rp, cosA, sinA, dx);
       RotateUV(Rp, cosA, sinA, dy);
-      if (transform_pivots) RotateUV(Rp, cosA, sinA, Sp);
+      if (data->transformPivots) RotateUV(Rp, cosA, sinA, Sp);
       ScaleUV(Sp, S, uv);
       ScaleUV(Sp, S, dx);
       ScaleUV(Sp, S, dy);
@@ -127,11 +142,11 @@ shader_evaluate
       RotateUV(Rp, cosA, sinA, uv);
       RotateUV(Rp, cosA, sinA, dx);
       RotateUV(Rp, cosA, sinA, dy);
-      if (transform_pivots) RotateUV(Rp, cosA, sinA, Sp);
+      if (data->transformPivots) RotateUV(Rp, cosA, sinA, Sp);
       TranslateUV(T, uv);
       TranslateUV(T, dx);
       TranslateUV(T, dy);
-      if (transform_pivots) TranslateUV(T, Sp);
+      if (data->transformPivots) TranslateUV(T, Sp);
       ScaleUV(Sp, S, uv);
       ScaleUV(Sp, S, dx);
       ScaleUV(Sp, S, dy);
@@ -140,11 +155,11 @@ shader_evaluate
       TranslateUV(T, uv);
       TranslateUV(T, dx);
       TranslateUV(T, dy);
-      if (transform_pivots) { TranslateUV(T, Sp); TranslateUV(T, Rp); }
+      if (data->transformPivots) { TranslateUV(T, Sp); TranslateUV(T, Rp); }
       ScaleUV(Sp, S, uv);
       ScaleUV(Sp, S, dx);
       ScaleUV(Sp, S, dy);
-      if (transform_pivots) ScaleUV(Sp, S, Rp);
+      if (data->transformPivots) ScaleUV(Sp, S, Rp);
       RotateUV(Rp, cosA, sinA, uv);
       RotateUV(Rp, cosA, sinA, dx);
       RotateUV(Rp, cosA, sinA, dy);
@@ -153,11 +168,11 @@ shader_evaluate
       TranslateUV(T, uv);
       TranslateUV(T, dx);
       TranslateUV(T, dy);
-      if (transform_pivots) { TranslateUV(T, Sp); TranslateUV(T, Rp); }
+      if (data->transformPivots) { TranslateUV(T, Sp); TranslateUV(T, Rp); }
       RotateUV(Rp, cosA, sinA, uv);
       RotateUV(Rp, cosA, sinA, dx);
       RotateUV(Rp, cosA, sinA, dy);
-      if (transform_pivots) RotateUV(Rp, cosA, sinA, Sp);
+      if (data->transformPivots) RotateUV(Rp, cosA, sinA, Sp);
       ScaleUV(Sp, S, uv);
       ScaleUV(Sp, S, dx);
       ScaleUV(Sp, S, dy);
@@ -173,7 +188,7 @@ shader_evaluate
    sg->dvdy = dy.x - uv.x;
    sg->dvdy = dy.y - uv.y;
    
-   if (recompute_surface_uv_derivs)
+   if (data->recomputeSurfaceUVDerivs)
    {
       // Re-compute dPdu and dPdv from dPdx, dPdy and new uv derivatives
       ComputeSurfaceUVDerivatives(sg, dPdx, dPdy);

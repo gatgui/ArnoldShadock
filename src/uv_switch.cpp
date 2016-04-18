@@ -9,44 +9,41 @@ enum UVSwitchParams
    p_recompute_surface_uv_derivs
 };
 
-struct UVSwitchData
-{
-   bool linked_uv_set_name;
-   const char *uv_set_name;
-   bool recompute_surface_uv_derivs;
-};
-
 node_parameters
 {
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
-   AiParameterStr("uv_set_name", "");
-   AiParameterBool("recompute_surface_uv_derivs", false);
+   AiParameterStr(SSTR::uv_set_name, "");
+   AiParameterBool(SSTR::recompute_surface_uv_derivs, false);
    
-   AiMetaDataSetBool(mds, "recompute_surface_uv_derivs", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::uv_set_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::recompute_surface_uv_derivs, SSTR::linkable, false);
 }
+
+struct NodeData
+{
+   AtString uvSetName;
+   bool recomputeSurfaceUVDerivs;
+};
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(UVSwitchData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   UVSwitchData *data = (UVSwitchData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->uv_set_name = 0;
-   data->linked_uv_set_name = AiNodeIsLinked(node, "uv_set_name");
-   data->recompute_surface_uv_derivs = AiNodeGetBool(node, "recompute_surface_uv_derivs");
-   
-   if (!data->linked_uv_set_name)
-   {
-      data->uv_set_name = AiNodeGetStr(node, "uv_set_name");
-   }
+   data->uvSetName = AiNodeGetStr(node, SSTR::uv_set_name);
+   data->recomputeSurfaceUVDerivs = AiNodeGetBool(node, SSTR::recompute_surface_uv_derivs);
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
@@ -56,29 +53,27 @@ shader_evaluate
    
    UVData uvs(sg);
    
-   UVSwitchData *data = (UVSwitchData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   if (data->recompute_surface_uv_derivs)
+   if (data->recomputeSurfaceUVDerivs)
    {
       // Compute acutal dPdx and dPdv from dudx, dudy, dvdx and dvdy
       ComputeSurfaceScreenDerivatives(sg, dPdx, dPdy);
    }
    
-   const char *uv_set_name = (data->linked_uv_set_name ? AiShaderEvalParamStr(p_uv_set_name) : data->uv_set_name);
-   
-   if (AiUDataGetPnt2(uv_set_name, &altuv))
+   if (AiUDataGetPnt2(data->uvSetName, &altuv))
    {
       sg->u = altuv.x;
       sg->v = altuv.y;
       
-      if (AiUDataGetDxyDerivativesPnt2(uv_set_name, &altuvDx, &altuvDy)) 
+      if (AiUDataGetDxyDerivativesPnt2(data->uvSetName, &altuvDx, &altuvDy)) 
       { 
          sg->dudx = altuvDx.x; 
          sg->dvdx = altuvDx.y; 
          sg->dudy = altuvDy.x; 
          sg->dvdy = altuvDy.y;
          
-         if (data->recompute_surface_uv_derivs)
+         if (data->recomputeSurfaceUVDerivs)
          {
             // Re-compute dPdu and dPdv from dPdx and dPdy (invariant)
             ComputeSurfaceUVDerivatives(sg, dPdx, dPdy);

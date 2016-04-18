@@ -20,9 +20,9 @@ static const char* TraceTypeNames[] = {"standard", "background", "probe", NULL};
 node_parameters
 {
    AiParameterVec("ray", 0.0f, 0.0f, 0.0f);
-   AiParameterEnum("type", TT_standard, TraceTypeNames);
+   AiParameterEnum(SSTR::type, TT_standard, TraceTypeNames);
    
-   AiMetaDataSetBool(mds, "type", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::type, SSTR::linkable, false);
 }
 
 struct NodeData
@@ -48,7 +48,7 @@ node_update
 {
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   TraceType type = (TraceType) AiNodeGetInt(node, "type");
+   TraceType type = (TraceType) AiNodeGetInt(node, SSTR::type);
    
    if (type != data->type)
    {
@@ -159,11 +159,11 @@ shader_evaluate
    AtRay *ray = 0;
    HitData *hit = 0;
    
-   AiStateSetMsgPtr("agsb_ray", 0);
+   AiStateSetMsgPtr(SSTR::agsb_ray, 0);
    
    AiShaderEvalParamVec(p_ray);
    
-   if (!AiStateGetMsgPtr("agsb_ray", (void**)&ray) || !ray)
+   if (!AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) || !ray)
    {
       sg->out.BOOL = false;
    }
@@ -186,5 +186,5 @@ shader_evaluate
       }
    }
    
-   AiStateSetMsgPtr("agsb_trace_hit", (sg->out.BOOL ? hit : 0));
+   AiStateSetMsgPtr(SSTR::agsb_trace_hit, (sg->out.BOOL ? hit : 0));
 }

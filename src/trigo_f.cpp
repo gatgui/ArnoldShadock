@@ -37,23 +37,37 @@ node_parameters
 {
    AiParameterFlt("input1", 0.0f);
    AiParameterFlt("input2", 0.0f);
-   AiParameterEnum("operation", TO_COS, TrigonometryOperationNames);
-   AiParameterEnum("units", AU_Radians, AngleUnitsNames);
+   AiParameterEnum(SSTR::operation, TO_COS, TrigonometryOperationNames);
+   AiParameterEnum(SSTR::units, AU_Radians, AngleUnitsNames);
    
-   AiMetaDataSetBool(mds, "operation", "linkable", false);
-   AiMetaDataSetBool(mds, "units", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::operation, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::units, SSTR::linkable, false);
 }
+
+struct NodeData
+{
+   TrigonometryOperation operation;
+   AngleUnits units;
+};
 
 node_initialize
 {
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   data->operation = (TrigonometryOperation) AiNodeGetInt(node, SSTR::operation);
+   data->units = (AngleUnits) AiNodeGetInt(node, SSTR::units);
 }
 
 node_finish
 {
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
@@ -61,32 +75,32 @@ shader_evaluate
    static float sDegToRad = AI_PI / 180.0f;
    static float sRadToDeg = 180.0f / AI_PI;
    
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+
    float input = AiShaderEvalParamFlt(p_input1);
-   AngleUnits units = (AngleUnits) AiShaderEvalParamInt(p_units);
-   TrigonometryOperation op = (TrigonometryOperation) AiShaderEvalParamInt(p_operation);
    
-   switch (op)
+   switch (data->operation)
    {
    case TO_COS:
-      sg->out.FLT = cosf((units == AU_Degrees ? sDegToRad : 1.0f) * input);
+      sg->out.FLT = cosf((data->units == AU_Degrees ? sDegToRad : 1.0f) * input);
       break;
    case TO_SIN:
-      sg->out.FLT = sinf((units == AU_Degrees ? sDegToRad : 1.0f) * input);
+      sg->out.FLT = sinf((data->units == AU_Degrees ? sDegToRad : 1.0f) * input);
       break;
    case TO_TAN:
-      sg->out.FLT = tanf((units == AU_Degrees ? sDegToRad : 1.0f) * input);
+      sg->out.FLT = tanf((data->units == AU_Degrees ? sDegToRad : 1.0f) * input);
       break;
    case TO_ACOS:
-      sg->out.FLT = (units == AU_Degrees ? sRadToDeg : 1.0f) * acosf(input);
+      sg->out.FLT = (data->units == AU_Degrees ? sRadToDeg : 1.0f) * acosf(input);
       break;
    case TO_ASIN:
-      sg->out.FLT = (units == AU_Degrees ? sRadToDeg : 1.0f) * asinf(input);
+      sg->out.FLT = (data->units == AU_Degrees ? sRadToDeg : 1.0f) * asinf(input);
       break;
    case TO_ATAN:
-      sg->out.FLT = (units == AU_Degrees ? sRadToDeg : 1.0f) * atanf(input);
+      sg->out.FLT = (data->units == AU_Degrees ? sRadToDeg : 1.0f) * atanf(input);
       break;
    case TO_ATAN2:
-      sg->out.FLT = (units == AU_Degrees ? sRadToDeg : 1.0f) * atan2f(input, AiShaderEvalParamFlt(p_input2));
+      sg->out.FLT = (data->units == AU_Degrees ? sRadToDeg : 1.0f) * atan2f(input, AiShaderEvalParamFlt(p_input2));
       break;
    default:
       sg->out.FLT = 0.0f;

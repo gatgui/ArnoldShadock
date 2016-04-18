@@ -4,7 +4,7 @@
 
 AI_SHADER_NODE_EXPORT_METHODS(TokenPathMtd);
 
-#define PATH_MAX_LENGTH 1024
+#define PATH_MAX_LENGTH 4096
 
 enum TokenPathParams
 {
@@ -29,7 +29,7 @@ enum TokenKey
 
 struct Part
 {
-   bool is_token;
+   bool isToken;
    TokenKey token;
    std::string sarg1; // for token, this will contain the token argument if any
    std::string sarg2;
@@ -39,83 +39,83 @@ struct Part
 
 typedef std::vector<Part> Parts;
 
-struct TokenPathData
+struct NodeData
 {
-   bool path_is_linked;
-   bool frame_is_linked;
+   bool evalPath;
+   bool evalFrame;
    float frame;
    Parts parts;
    
-   int num_out_paths;
-   char* *out_paths; // final path per thread
-   char const_path[PATH_MAX_LENGTH];
+   int numOutPaths;
+   char* *outPaths; // final path per thread
+   char constPath[PATH_MAX_LENGTH];
    
-   TokenPathData()
+   NodeData()
    {
-      path_is_linked = false;
-      frame_is_linked = false;
+      evalPath = false;
+      evalFrame = false;
       frame = 0.0f;
-      num_out_paths = 0;
-      out_paths = 0;
+      numOutPaths = 0;
+      outPaths = 0;
    }
    
-   ~TokenPathData()
+   ~NodeData()
    {
       clear();
    }
    
    void clear()
    {
-      for (int i=0; i<num_out_paths; ++i)
+      for (int i=0; i<numOutPaths; ++i)
       {
-         AiFree(out_paths[i]);
+         AiFree(outPaths[i]);
       }
-      AiFree(out_paths);
+      AiFree(outPaths);
       
       parts.clear();
       
-      path_is_linked = false;
-      frame_is_linked = false;
+      evalPath = false;
+      evalFrame = false;
       frame = 0.0f;
-      num_out_paths = 0;
-      out_paths = 0;
-      const_path[0] = '\0';
+      numOutPaths = 0;
+      outPaths = 0;
+      constPath[0] = '\0';
    }
 };
 
 node_parameters
 {
-   AiParameterStr("filename", "");
-   AiParameterFlt("frame", 0.0f);
+   AiParameterStr(SSTR::filename, "");
+   AiParameterFlt(SSTR::frame, 0.0f);
    
-   AiMetaDataSetBool(mds, "filename", "filepath", true);
-   AiMetaDataSetStr(mds, "filename", "houdini.type", "file:image");
+   AiMetaDataSetBool(mds, SSTR::filename, SSTR::filepath, true);
+   AiMetaDataSetStr(mds, SSTR::filename, "houdini.type", "file:image");
 }
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new TokenPathData());
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   TokenPathData *data = (TokenPathData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    data->clear();
    
-   data->path_is_linked = AiNodeIsLinked(node, "filename");
-   data->frame_is_linked = AiNodeIsLinked(node, "frame");
+   data->evalPath = AiNodeIsLinked(node, SSTR::filename);
+   data->evalFrame = AiNodeIsLinked(node, SSTR::frame);
    
-   if (!data->frame_is_linked)
+   if (!data->evalFrame)
    {
-      data->frame = AiNodeGetFlt(node, "frame");
+      data->frame = AiNodeGetFlt(node, SSTR::frame);
    }
    
-   if (!data->path_is_linked)
+   if (!data->evalPath)
    {
-      AtNode *opts = AiUniverseGetOptions();
-      int nthreads = AiNodeGetInt(opts, "threads");
-      std::string filename = AiNodeGetStr(node, "filename");
+      int nthreads = GetRenderThreadsCount();
+      std::string filename = AiNodeGetStr(node, SSTR::filename).c_str();
       
       bool invalid = false;
       std::string token;
@@ -130,7 +130,7 @@ node_update
          // add non-token part
          if (p1 > p0)
          {
-            part.is_token = false;
+            part.isToken = false;
             part.sarg1 = filename.substr(p0, p1 - p0);
             data->parts.push_back(part);
             
@@ -154,7 +154,7 @@ node_update
          }
          
          // token from p1+1 to p2-1
-         part.is_token = true;
+         part.isToken = true;
          part.sarg1 = filename.substr(p1 + 1, p2 - p1 - 1);
          
          p3 = part.sarg1.find(':');
@@ -292,7 +292,7 @@ node_update
       else
       {
          // add last part if any
-         part.is_token = false;
+         part.isToken = false;
          part.sarg1 = filename.substr(p0);
          
          if (part.sarg1.length() > 0)
@@ -301,29 +301,29 @@ node_update
             data->parts.push_back(part);
          }
          
-         if (data->parts.size() == 1 && data->parts[0].is_token == false)
+         if (data->parts.size() == 1 && data->parts[0].isToken == false)
          {
             AiMsgDebug("[token_path] Path is constant");
             if (data->parts[0].sarg1.length() + 1 >= PATH_MAX_LENGTH)
             {
                AiMsgWarning("[token_path] Input file path is too long.");
                // Path is too long
-               data->const_path[0] = '\0';
+               data->constPath[0] = '\0';
             }
             else
             {
-               strcpy(data->const_path, data->parts[0].sarg1.c_str());
+               strcpy(data->constPath, data->parts[0].sarg1.c_str());
             }
             data->parts.clear();
          }
          else
          {
             // allocate path buffer per thread
-            data->num_out_paths = nthreads;
-            data->out_paths = (char**) AiMalloc(nthreads * sizeof(char*));
+            data->numOutPaths = nthreads;
+            data->outPaths = (char**) AiMalloc(nthreads * sizeof(char*));
             for (int i=0; i<nthreads; ++i)
             {
-               data->out_paths[i] = (char*) AiMalloc(PATH_MAX_LENGTH * sizeof(char));
+               data->outPaths[i] = (char*) AiMalloc(PATH_MAX_LENGTH * sizeof(char));
             }
          }
       }
@@ -332,52 +332,53 @@ node_update
 
 node_finish
 {
-   TokenPathData *data = (TokenPathData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
 {
-   TokenPathData *data = (TokenPathData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
    if (data->parts.size() == 0)
    {
-      if (data->path_is_linked)
+      if (data->evalPath)
       {
          sg->out.STR = AiShaderEvalParamStr(p_filename);
       }
       else
       {
-         sg->out.STR = data->const_path;
+         sg->out.STR = data->constPath;
       }
    }
    else
    {
-      float frame = (data->frame_is_linked ? AiShaderEvalParamFlt(p_frame) : data->frame);
+      float frame = (data->evalFrame ? AiShaderEvalParamFlt(p_frame) : data->frame);
       
-      char* &out_path = data->out_paths[sg->tid];
+      char* &outPath = data->outPaths[sg->tid];
       
-      size_t total_len = 0, part_len = 0;
+      size_t totalLen = 0, partLen = 0;
       bool success = true;
       char buffer[256];
-      const char *part_str = 0;
+      const char *partStr = 0;
       
-      out_path[0] = '\0';
+      outPath[0] = '\0';
       
       for (Parts::const_iterator part = data->parts.begin(); part != data->parts.end(); ++part)
       {
-         if (!part->is_token)
+         if (!part->isToken)
          {
-            part_len = part->sarg1.length();
+            partLen = part->sarg1.length();
             
-            if (total_len + part_len + 1 >= PATH_MAX_LENGTH)
+            if (totalLen + partLen + 1 >= PATH_MAX_LENGTH)
             {
                //AiMsgWarning("[token_path] Expanded file path is longer than %d, stop processing.", PATH_MAX_LENGTH);
                success = false;
                break;
             }
             
-            memcpy(out_path + total_len, part->sarg1.c_str(), part_len * sizeof(char));
+            memcpy(outPath + totalLen, part->sarg1.c_str(), partLen * sizeof(char));
          }
          else
          {
@@ -385,16 +386,16 @@ shader_evaluate
             {
             case TK_attr_string:
                {
-                  if (AiUDataGetStr(part->sarg1.c_str(), &part_str))
+                  if (AiUDataGetStr(part->sarg1.c_str(), &partStr))
                   {
-                     part_len = strlen(part_str);
+                     partLen = strlen(partStr);
                   }
                   else
                   {
-                     part_len = part->sarg2.length();
-                     if (part_len > 0)
+                     partLen = part->sarg2.length();
+                     if (partLen > 0)
                      {
-                        part_str = part->sarg2.c_str();
+                        partStr = part->sarg2.c_str();
                      }
                      else
                      {
@@ -411,12 +412,12 @@ shader_evaluate
                   if (AiUDataGetInt(part->sarg1.c_str(), &attrval))
                   {
                      sprintf(buffer, "%d", attrval);
-                     part_len = strlen(buffer);
+                     partLen = strlen(buffer);
                   }
                   else if (part->sarg2.length() > 0)
                   {
                      sprintf(buffer, "%d", part->iarg2);
-                     part_len = strlen(buffer);
+                     partLen = strlen(buffer);
                   }
                   else
                   {
@@ -424,23 +425,23 @@ shader_evaluate
                      break;
                   }
                   
-                  part_str = buffer;
+                  partStr = buffer;
                }
                break;
             case TK_utile:
                {
                   int u = int(floorf(sg->u)) + part->iarg1;
                   sprintf(buffer, "u%d", u);
-                  part_len = strlen(buffer);
-                  part_str = buffer;
+                  partLen = strlen(buffer);
+                  partStr = buffer;
                }
                break;
             case TK_vtile:
                {
                   int v = int(floorf(sg->v)) + part->iarg1;
                   sprintf(buffer, "v%d", v);
-                  part_len = strlen(buffer);
-                  part_str = buffer;
+                  partLen = strlen(buffer);
+                  partStr = buffer;
                }
                break;
             case TK_tile:
@@ -448,8 +449,8 @@ shader_evaluate
                   int u = int(floorf(sg->u)) + part->iarg1;
                   int v = int(floorf(sg->v)) + part->iarg1;
                   sprintf(buffer, "u%d_v%d", u, v);
-                  part_len = strlen(buffer);
-                  part_str = buffer;
+                  partLen = strlen(buffer);
+                  partStr = buffer;
                }
                break;
             case TK_udim:
@@ -459,8 +460,8 @@ shader_evaluate
                   int d = (part->iarg1 <= 0 ? 1 : part->iarg1);
                   int udim = 1001 + (c + r * d);
                   sprintf(buffer, "%d", udim);
-                  part_len = strlen(buffer);
-                  part_str = buffer;
+                  partLen = strlen(buffer);
+                  partStr = buffer;
                }
                break;
             case TK_frame:
@@ -521,8 +522,8 @@ shader_evaluate
                      }
                   }
                   
-                  part_len = strlen(buffer);
-                  part_str = buffer;
+                  partLen = strlen(buffer);
+                  partStr = buffer;
                }
                break;
             default:
@@ -532,13 +533,13 @@ shader_evaluate
             
             if (success)
             {
-               if (total_len + part_len + 1 >= PATH_MAX_LENGTH)
+               if (totalLen + partLen + 1 >= PATH_MAX_LENGTH)
                {
                   //AiMsgWarning("[token_path] Expanded file path is longer than %d, stop processing.", PATH_MAX_LENGTH);
                   break;
                }
                
-               memcpy(out_path + total_len, part_str, part_len * sizeof(char));
+               memcpy(outPath + totalLen, partStr, partLen * sizeof(char));
             }
          }
          
@@ -547,16 +548,16 @@ shader_evaluate
             break;
          }
          
-         total_len += part_len;
-         out_path[total_len] = '\0';
+         totalLen += partLen;
+         outPath[totalLen] = '\0';
       }
       
       if (!success)
       {
          //AiMsgDebug("[token_path] Token replacement failed");
-         out_path[0] = '\0';
+         outPath[0] = '\0';
       }
       
-      sg->out.STR = out_path;
+      sg->out.STR = outPath;
    }
 }

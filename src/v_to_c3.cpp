@@ -34,21 +34,27 @@ node_parameters
 
 node_initialize
 {
+   AiNodeSetLocalData(node, AiMalloc(sizeof(int)));
+   AddMemUsage<int>();
 }
 
 node_update
 {
+   int *data = (int*) AiNodeGetLocalData(node);
+   *data = AiNodeGetInt(node, SSTR::mode);
 }
 
 node_finish
 {
+   AiFree(AiNodeGetLocalData(node));
+   SubMemUsage<int>();
 }
 
 shader_evaluate
 {
    AtVector input = AiShaderEvalParamVec(p_input);
    
-   VectorToColorMode mode = (VectorToColorMode) AiShaderEvalParamInt(p_mode);
+   VectorToColorMode mode = (VectorToColorMode) *((int*) AiNodeGetLocalData(node));
    
    switch (mode)
    {

@@ -67,17 +67,6 @@ static const char* UVModeNames[] =
 
 // ---
 
-struct UVProjectData
-{
-   LookupVector lookup_vector;
-   LookupVectorSpace space;
-   bool use_custom_vector;
-   bool custom_is_point;
-   //bool use_custom_space;
-   UVMode mode;
-   bool recompute_surface_uv_derivs;
-};
-
 node_parameters
 {
    AtMatrix id;
@@ -85,44 +74,56 @@ node_parameters
    AiM4Identity(id);
    
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
-   AiParameterEnum("lookup_vector", LV_N, LookupVectorNames);
-   AiParameterEnum("lookup_vector_space", LVS_world, LookupVectorSpaceNames);
-   AiParameterEnum("mode", UV_cubic_map, UVModeNames);
-   AiParameterVec("custom_vector", 0.0f, 0.0f, 1.0f);
-   AiParameterBool("custom_is_point", false);
+   AiParameterEnum(SSTR::lookup_vector, LV_N, LookupVectorNames);
+   AiParameterEnum(SSTR::lookup_vector_space, LVS_world, LookupVectorSpaceNames);
+   AiParameterEnum(SSTR::mode, UV_cubic_map, UVModeNames);
+   AiParameterVec(SSTR::custom_vector, 0.0f, 0.0f, 1.0f);
+   AiParameterBool(SSTR::custom_is_point, false);
    AiParameterVec("custom_vector_ddx", 0.0f, 0.0f, 0.0f);
    AiParameterVec("custom_vector_ddy", 0.0f, 0.0f, 0.0f);
    AiParameterMtx("offset_matrix", id);
-   AiParameterBool("recompute_surface_uv_derivs", false);
+   AiParameterBool(SSTR::recompute_surface_uv_derivs, false);
    
-   AiMetaDataSetBool(mds, "lookup_vector", "linkable", false);
-   AiMetaDataSetBool(mds, "lookup_vector_space", "linkable", false);
-   AiMetaDataSetBool(mds, "custom_is_point", "linkable", false);
-   AiMetaDataSetBool(mds, "mode", "linkable", false);
-   AiMetaDataSetBool(mds, "recompute_surface_uv_derivs", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::lookup_vector, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::lookup_vector_space, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::custom_is_point, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::recompute_surface_uv_derivs, SSTR::linkable, false);
 }
+
+struct NodeData
+{
+   LookupVector lookupVector;
+   LookupVectorSpace space;
+   bool useCustomVector;
+   bool customIsPoint;
+   UVMode mode;
+   bool recomputeSurfaceUVDerivs;
+};
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AiMalloc(sizeof(UVProjectData)));
+   AiNodeSetLocalData(node, new NodeData());
+   AddMemUsage<NodeData>();
 }
 
 node_update
 {
-   UVProjectData *data = (UVProjectData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->lookup_vector = (LookupVector) AiNodeGetInt(node, "lookup_vector");
-   data->space = (LookupVectorSpace) AiNodeGetInt(node, "lookup_vector_space");
-   data->use_custom_vector = AiNodeIsLinked(node, "custom_vector");
-   data->custom_is_point = AiNodeGetBool(node, "custom_is_point");
-   //data->use_custom_space = AiNodeIsLinked(node, "custom_space");
-   data->mode = (UVMode) AiNodeGetInt(node, "mode");
-   data->recompute_surface_uv_derivs = AiNodeGetBool(node, "recompute_surface_uv_derivs");
+   data->lookupVector = (LookupVector) AiNodeGetInt(node, SSTR::lookup_vector);
+   data->space = (LookupVectorSpace) AiNodeGetInt(node, SSTR::lookup_vector_space);
+   data->useCustomVector = AiNodeIsLinked(node, SSTR::custom_vector);
+   data->customIsPoint = AiNodeGetBool(node, SSTR::custom_is_point);
+   data->mode = (UVMode) AiNodeGetInt(node, SSTR::mode);
+   data->recomputeSurfaceUVDerivs = AiNodeGetBool(node, SSTR::recompute_surface_uv_derivs);
 }
 
 node_finish
 {
-   AiFree(AiNodeGetLocalData(node));
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<NodeData>();
 }
 
 shader_evaluate
@@ -134,9 +135,9 @@ shader_evaluate
    
    UVData uvs(sg);
    
-   UVProjectData *data = (UVProjectData*) AiNodeGetLocalData(node);
+   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   if (data->recompute_surface_uv_derivs)
+   if (data->recomputeSurfaceUVDerivs)
    {
       // Compute acutal dPdx and dPdv from dudx, dudy, dvdx and dvdy
       ComputeSurfaceScreenDerivatives(sg, dPdx, dPdy);
@@ -144,10 +145,10 @@ shader_evaluate
    
    Moff = AiShaderEvalParamMtx(p_offset_matrix);
    
-   if (data->use_custom_vector)
+   if (data->useCustomVector)
    {
       v0 = AiShaderEvalParamVec(p_custom_vector);
-      AiV4Create(d, v0.x, v0.y, v0.y, (data->custom_is_point ? 1.0f : 0.0f));
+      AiV4Create(d, v0.x, v0.y, v0.y, (data->customIsPoint ? 1.0f : 0.0f));
       
       v1 = AiShaderEvalParamVec(p_custom_vector_ddx);
       
@@ -167,7 +168,7 @@ shader_evaluate
    {
       withDerivatives = true;
       
-      if (data->lookup_vector == LV_P)
+      if (data->lookupVector == LV_P)
       {
          AiV4CreatePoint(d, sg->P);
          AiV4Create(ddx, sg->P.x + sg->dPdx.x, sg->P.y + sg->dPdx.y, sg->P.z + sg->dPdx.z, 1.0f);
@@ -348,7 +349,7 @@ shader_evaluate
       sg->dvdx = 0.0f;
       sg->dvdy = 0.0f;
    }
-   else if (data->recompute_surface_uv_derivs)
+   else if (data->recomputeSurfaceUVDerivs)
    {
       // Re-compute dPdu and dPdv from dPdx, dPdy, dudx, dudy, dvdx, dvdy (invariant)
       ComputeSurfaceUVDerivatives(sg, dPdx, dPdy);

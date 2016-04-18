@@ -24,24 +24,29 @@ static const char* TraceStateNames[] =
 
 node_parameters
 {
-   AiParameterEnum("state", TS_alpha, TraceStateNames);
+   AiParameterEnum(SSTR::state, TS_alpha, TraceStateNames);
    AiParameterBool("trace", false);
    AiParameterFlt("default", 0.0f);
    
-   AiMetaDataSetBool(mds, "state", "linkable", false);
+   AiMetaDataSetBool(mds, SSTR::state, SSTR::linkable, false);
 }
 
 node_initialize
 {
+   AiNodeSetLocalData(node, AiMalloc(sizeof(int)));
+   AddMemUsage<int>();
 }
 
 node_update
 {
-   AiNodeSetLocalData(node, reinterpret_cast<void*>(AiNodeGetInt(node, "state")));
+   int *data = (int*) AiNodeGetLocalData(node);
+   *data = AiNodeGetInt(node, SSTR::state);
 }
 
 node_finish
 {
+   AiFree(AiNodeGetLocalData(node));
+   SubMemUsage<int>();
 }
 
 shader_evaluate
@@ -62,8 +67,7 @@ shader_evaluate
    }
    else
    {
-      void *data = AiNodeGetLocalData(node);
-      TraceState state = (TraceState) size_t(data);
+      TraceState state = (TraceState) *((int*) AiNodeGetLocalData(node));
       
       sample = (AtScrSample*) hit->ptr;
       

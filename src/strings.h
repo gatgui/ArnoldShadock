@@ -98,7 +98,25 @@ namespace SSTR
    extern AtString oiioopt;
    extern AtString filepath;
    extern AtString threads;
+
+   extern AtString mipmap_mode;
+   extern AtString mipmap_bias;
+   extern AtString single_channel;
+   extern AtString fill;
+   extern AtString swrap;
+   extern AtString twrap;
+   extern AtString sflip;
+   extern AtString tflip;
+   extern AtString swidth;
+   extern AtString twidth;
+   extern AtString sblur;
+   extern AtString tblur;
+   extern AtString swap_st;
+   extern AtString cache_texture_handles;
+   extern AtString use_default_color;
    
+   extern AtString frame;
+
    extern AtString state;
    
    extern AtString positions;
@@ -164,6 +182,33 @@ namespace SSTR
    extern AtString glossy;
    extern AtString glossy_use_default;
 
+   extern AtString matrix;
+   extern AtString as_point;
+
+   extern AtString operation;
+
+   extern AtString P;
+   extern AtString P_space;
+   extern AtString P_world_matrix;
+   extern AtString P_is_offset;
+   extern AtString N;
+   extern AtString N_space;
+   extern AtString N_world_matrix;
+   extern AtString fhemi;
+   extern AtString skip_shadow;
+   extern AtString inclusive_trace_set;
+
+   extern AtString lookup_vector;
+   extern AtString lookup_vector_space;
+   extern AtString custom_vector;
+   extern AtString custom_is_point;
+
+   extern AtString uv_set_name;
+
+   extern AtString order;
+   extern AtString transform_pivots;
+   extern AtString recompute_surface_uv_derivs;
+
    extern AtString units;
    extern AtString edge_type;
 
@@ -185,6 +230,30 @@ namespace SSTR
    extern AtString vector_msg_name;
    extern AtString rgb_msg_name;
    extern AtString rgba_msg_name;
+
+   extern AtString bias;
+   extern AtString gain;
+   extern AtString multiply;
+   extern AtString offset;
+
+   extern AtString scattering_source;
+   extern AtString scattering_field;
+   extern AtString scattering;
+   extern AtString scattering_weight;
+   extern AtString scattering_color;
+   extern AtString anisotropy;
+   extern AtString attenuation_source;
+   extern AtString attenuation_field;
+   extern AtString attenuation_mode;
+   extern AtString attenuation;
+   extern AtString attenuation_weight;
+   extern AtString attenuation_color;
+   extern AtString preserve_energy;
+   extern AtString emission_source;
+   extern AtString emission_field;
+   extern AtString emission;
+   extern AtString emission_weight;
+   extern AtString emission_color;
 }
 
 #endif

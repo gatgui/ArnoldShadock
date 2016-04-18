@@ -161,6 +161,51 @@ namespace SSTR
    AtString glossy("glossy");
    AtString glossy_use_default("glossy_use_default");
 
+   AtString mipmap_mode("mipmap_mode");
+   AtString mipmap_bias("mipmap_bias");
+   AtString single_channel("single_channel");
+   AtString fill("fill");
+   AtString swrap("swrap");
+   AtString twrap("twrap");
+   AtString sflip("sflip");
+   AtString tflip("tflip");
+   AtString swidth("swidth");
+   AtString twidth("twidth");
+   AtString sblur("sblur");
+   AtString tblur("tblur");
+   AtString swap_st("swap_st");
+   AtString cache_texture_handles("cache_texture_handles");
+   AtString use_default_color("use_default_color");
+
+   AtString frame("frame");
+
+   AtString matrix("matrix");
+   AtString as_point("as_point");
+
+   AtString operation("operation");
+
+   AtString P("P");
+   AtString P_space("P_space");
+   AtString P_world_matrix("P_world_matrix");
+   AtString P_is_offset("P_is_offset");
+   AtString N("N");
+   AtString N_space("N_space");
+   AtString N_world_matrix("N_world_matrix");
+   AtString fhemi("fhemi");
+   AtString skip_shadow("skip_shadow");
+   AtString inclusive_trace_set("inclusive_trace_set");
+
+   AtString lookup_vector("lookup_vector");
+   AtString lookup_vector_space("lookup_vector_space");
+   AtString custom_vector("custom_vector");
+   AtString custom_is_point("custom_is_point");
+
+   AtString uv_set_name("uv_set_name");
+
+   AtString order("order");
+   AtString transform_pivots("transform_pivots");
+   AtString recompute_surface_uv_derivs("recompute_surface_uv_derivs");
+
    AtString units("units");
    AtString edge_type("edge_type");
 
@@ -182,4 +227,28 @@ namespace SSTR
    AtString vector_msg_name("vector_msg_name");
    AtString rgb_msg_name("rgb_msg_name");
    AtString rgba_msg_name("rgba_msg_name");
+
+   AtString bias("bias");
+   AtString gain("gain");
+   AtString multiply("multiply");
+   AtString offset("offset");
+
+   AtString scattering_source("scattering_source");
+   AtString scattering_field("scattering_field");
+   AtString scattering("scattering");
+   AtString scattering_weight("scattering_weight");
+   AtString scattering_color("scattering_color");
+   AtString anisotropy("anisotropy");
+   AtString attenuation_source("attenuation_source");
+   AtString attenuation_field("attenuation_field");
+   AtString attenuation_mode("attenuation_mode");
+   AtString attenuation("attenuation");
+   AtString attenuation_weight("attenuation_weight");
+   AtString attenuation_color("attenuation_color");
+   AtString preserve_energy("preserve_energy");
+   AtString emission_source("emission_source");
+   AtString emission_field("emission_field");
+   AtString emission("emission");
+   AtString emission_weight("emission_weight");
+   AtString emission_color("emission_color");
 }
