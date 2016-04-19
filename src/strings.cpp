@@ -261,6 +261,8 @@ namespace SSTR
    AtString shutter_end("shutter_end");
    AtString fps("fps");
 
+   AtString use_approximation("use_approximation");
+
 #ifdef USE_AGANIMCURVE
    AtString input_is_frame_offset("input_is_frame_offset");
    AtString motion_steps("motion_steps");

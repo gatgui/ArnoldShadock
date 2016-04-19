@@ -52,6 +52,7 @@ node_parameters
    AiParameterRGB(SSTR::ca_white_point, 1.0f, 1.0f, 1.0f);
    AiParameterFlt("exposure", 0.0f);
    AiParameterEnum(SSTR::color_space, CS_Rec709, ColorSpaceNames);
+   AiParameterBool(SSTR::use_approximation, false);
    AiParameterBool(SSTR::fix_nans, false);
    AiParameterRGB(SSTR::nan_color, 0.0f, 0.0f, 0.0f);
 
@@ -63,6 +64,7 @@ node_parameters
    AiMetaDataSetBool(mds, SSTR::ca_max_temperature, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::ca_white_point, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::color_space, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::use_approximation, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::fix_nans, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::nan_color, SSTR::linkable, false);
 }
@@ -73,6 +75,7 @@ struct NodeData
    const gmath::ColorSpace *CS;
    gmath::ToneMappingOperator *TM;
    gmath::Matrix3 CAT;
+   bool approx;
    bool fixNans;
    AtColor nanColor;
 };
@@ -100,6 +103,7 @@ node_update
    data->CS = ColorSpaces[AiNodeGetInt(node, SSTR::color_space)];
    data->fixNans = AiNodeGetBool(node, SSTR::fix_nans);
    data->nanColor = AiNodeGetRGB(node, SSTR::nan_color);
+   data->approx = AiNodeGetBool(node, SSTR::use_approximation);
 
    if (data->mode == OM_tone_mapping)
    {
@@ -149,28 +153,67 @@ shader_evaluate
    float exposure = AiShaderEvalParamFlt(p_exposure);
    float scale = powf(2.0f, exposure);
    
+   // Note: XYZ and non-normalized RGB differs vastly in scale between approximated and non-approximated Planckian Locus
+   bool useApprox = (data->approx && gmath::Blackbody::CanApprox(temperature));
+   
    gmath::RGB out(0.0f, 0.0f, 0.0f);
    
    switch (data->mode)
    {
    case OM_normalize:
-      out = gmath::Blackbody::GetRGB(temperature, *(data->CS), true);
+      if (useApprox)
+      {
+         out = gmath::Blackbody::GetRGBApprox(temperature, *(data->CS), true);
+      }
+      else
+      {
+         out = gmath::Blackbody::GetRGB(temperature, *(data->CS), true);
+      }
       break;
    case OM_raw:
-      out = gmath::Blackbody::GetRGB(temperature, *(data->CS), false);
+      if (useApprox)
+      {
+         out = gmath::Blackbody::GetRGBApprox(temperature, *(data->CS), false);
+      }
+      else
+      {
+         out = gmath::Blackbody::GetRGB(temperature, *(data->CS), false);
+      }
       break;
    case OM_tone_mapping:
-      out = data->CS->XYZtoRGB((*data->TM)(gmath::Blackbody::GetXYZ(temperature)));
+      if (useApprox)
+      {
+         out = data->CS->XYZtoRGB((*data->TM)(gmath::Blackbody::GetXYZApprox(temperature)));
+      }
+      else
+      {
+         out = data->CS->XYZtoRGB((*data->TM)(gmath::Blackbody::GetXYZ(temperature)));
+      }
       break;
    case OM_physical_intensity:
       // Use Stefan-Boltzman law to compute light intensity (W.m^-2) from temperature
       //   intensity = 5.670373e-8 * pow(temperature, 4)
-      out = gmath::Blackbody::GetRGB(temperature, *(data->CS), true);
+      if (useApprox)
+      {
+         out = gmath::Blackbody::GetRGBApprox(temperature, *(data->CS), true);
+      }
+      else
+      {
+         out = gmath::Blackbody::GetRGB(temperature, *(data->CS), true);
+      }
       scale *= 5.670373e-8 * powf(temperature, 4.0f);
       break;
    case OM_chromatic_adaptation:
       {
-         gmath::XYZ tmp = gmath::Blackbody::GetXYZ(temperature);
+         gmath::XYZ tmp;
+         if (useApprox)
+         {
+            tmp = gmath::Blackbody::GetXYZApprox(temperature);
+         }
+         else
+         {
+            tmp = gmath::Blackbody::GetXYZ(temperature);
+         }
          gmath::Vector3 v = data->CAT * gmath::Vector3(tmp.x, tmp.y, tmp.z);
          out.r = v.x;
          out.g = v.y;

@@ -254,6 +254,8 @@ namespace SSTR
    extern AtString emission;
    extern AtString emission_weight;
    extern AtString emission_color;
+   
+   extern AtString use_approximation;
 }
 
 #endif
