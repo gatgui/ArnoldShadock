@@ -251,4 +251,48 @@ namespace SSTR
    AtString emission("emission");
    AtString emission_weight("emission_weight");
    AtString emission_color("emission_color");
+
+   AtString input("input");
+   AtString motion_start_frame("motion_start_frame");
+   AtString motion_end_frame("motion_end_frame");
+   AtString relative_motion_frame("relative_motion_frame");
+   AtString default_interpolation("default_interpolation");
+   AtString shutter_start("shutter_start");
+   AtString shutter_end("shutter_end");
+   AtString fps("fps");
+
+#ifdef USE_AGANIMCURVE
+   AtString input_is_frame_offset("input_is_frame_offset");
+   AtString motion_steps("motion_steps");
+   AtString in_tangents("in_tangents");
+   AtString in_weights("in_weights");
+   AtString out_tangents("out_tangents");
+   AtString out_weights("out_weights");
+   AtString pre_infinity("pre_infinity");
+   AtString post_infinity("post_infinity");
+#endif
+
+#ifdef USE_AGNOISES
+   AtString Pref("Pref");
+   AtString distance_func("distance_func");
+   AtString custom_input("custom_input");
+   AtString base_noise("base_noise");
+#endif
+
+#ifdef USE_AGSTATE
+   AtString index("index");
+#endif
+
+#ifdef USE_AGUSERDATARAMP
+   AtString abort_on_error("abort_on_error");
+#endif
+
+#ifdef USE_AGSEEXPR
+   AtString expression("expression");
+   AtString fparam_name("fparam_name");
+   AtString fparam_value("fparam_value");
+   AtString vparam_name("vparam_name");
+   AtString vparam_value("vparam_value");
+   AtString stop_on_error("stop_on_error");
+#endif
 }
