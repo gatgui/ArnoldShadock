@@ -187,6 +187,7 @@ defs = []
 incs = []
 libs = []
 extra_srcs = []
+instfiles = {"": "agShadingBlocks.mtd"}
 
 if withState:
   defs.append("USE_AGSTATE")
@@ -207,6 +208,7 @@ if withSeExpr:
   incs.append("agSeExpr")
   libs.append("SeExpr")
   extra_srcs += ["agSeExpr/src/seexpr.cpp"]
+  instfiles["maya"] = instfiles.get("maya", []) + ["agSeExpr/maya/aiSeexprTemplate.py"]
 
 if withAnimCurve:
   defs.extend(["USE_AGANIMCURVE"])
@@ -231,7 +233,7 @@ prjs = [
    "ext": arnold.PluginExt(),
    "libs": libs,
    "srcs": glob.glob("src/*.cpp") + extra_srcs,
-   "install": {"": "agShadingBlocks.mtd"},
+   "install": instfiles,
    "custom": [RequireGmath(subdir="gmath"), arnold.Require],
    "post": [check_symbols]
   }
