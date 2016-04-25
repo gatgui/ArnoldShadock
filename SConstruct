@@ -6,7 +6,11 @@ import excons
 import shutil
 from excons.tools import arnold
 
+excons.SetArgument("no-arch", 1)
+
 env = excons.MakeBaseEnv()
+
+version = "0.5.0"
 
 withState = (excons.GetArgument("with-state", 1, int) != 0)
 withNoises = (excons.GetArgument("with-noises", 1, int) != 0)
@@ -178,6 +182,23 @@ def make_mtd():
   df.close()
 
 
+def make_eco():
+  with open("eco/agShadingBlocks.env", "r") as f:
+    lines = f.readlines()
+  
+  with open("agShadingBlocks_%s.env" % (version.replace(".", "_")), "w") as f:
+    insert = 0
+    for line in lines:
+      if insert == 0:
+        if line.startswith("   \"tool\":"):
+          insert = 1
+      elif insert > 0:
+        f.write("   \"version\": \"%s\",\n" % version)
+        insert = -1
+      f.write(line)
+
+
+
 arniver = arnold.Version(asString=False)
 if arniver[0] < 4 or (arniver[0] == 4 and (arniver[1] < 2 or (arniver[1] == 2 and arniver[2] < 12))):
   print("agShadingBlocks requires at least Arnold 4.2.12.0")
@@ -187,7 +208,7 @@ defs = []
 incs = []
 libs = []
 extra_srcs = []
-instfiles = {"": "agShadingBlocks.mtd"}
+instfiles = {"arnold": "agShadingBlocks.mtd"}
 
 if withState:
   defs.append("USE_AGSTATE")
@@ -220,6 +241,7 @@ if withUserDataRamp:
   extra_srcs += glob.glob("agUserDataRamp/src/agUserData*.cpp")
 
 make_mtd()
+make_eco()
 
 excons.SetArgument("static", 1)
 SConscript("gmath/SConstruct")
@@ -227,6 +249,7 @@ Import("RequireGmath")
 
 prjs = [
   {"name": "agShadingBlocks",
+   "prefix": "arnold",
    "type": "dynamicmodule",
    "defs": defs,
    "incdirs": incs,
