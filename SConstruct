@@ -186,7 +186,9 @@ def make_eco():
   with open("eco/agShadingBlocks.env", "r") as f:
     lines = f.readlines()
   
-  with open("agShadingBlocks_%s.env" % (version.replace(".", "_")), "w") as f:
+  eco_env = "agShadingBlocks_%s.env" % (version.replace(".", "_"))
+  
+  with open(eco_env, "w") as f:
     insert = 0
     for line in lines:
       if insert == 0:
@@ -196,6 +198,8 @@ def make_eco():
         f.write("   \"version\": \"%s\",\n" % version)
         insert = -1
       f.write(line)
+  
+  return eco_env
 
 
 
@@ -241,7 +245,7 @@ if withUserDataRamp:
   extra_srcs += glob.glob("agUserDataRamp/src/agUserData*.cpp")
 
 make_mtd()
-make_eco()
+eco_env = make_eco()
 
 excons.SetArgument("static", 1)
 SConscript("gmath/SConstruct")
@@ -266,6 +270,36 @@ env.Append(CPPFLAGS=" -DSHADERS_PREFIX=\"\\\"%s\\\"\"" % shdprefix)
 if sys.platform != "win32":
   env.Append(CPPFLAGS=" -Wno-unused-parameter")
 
-excons.DeclareTargets(env, prjs)
+targets = excons.DeclareTargets(env, prjs)
 
-Default("agShadingBlocks")
+# Add a 'dist' and 'cleandist' targets (Ecosytem distribution)
+#   agShadingBlocks/<version>/agShadingBlocks.so|dll|dylib
+#   agShadingBlocks/<version>/agShadingBlocks.mtd
+#   agShadingBlocks/<version>/ae/aiSeexprTemplate.py
+
+dist_env = env.Clone()
+
+dist_dir = excons.GetArgument("dist-dir", "dist")
+ver_dir = "%s/agShadingBlocks/%s" % (dist_dir, version)
+
+Alias("dist", dist_env.Install(dist_dir, eco_env))
+Alias("dist", dist_env.Install(ver_dir, "agShadingBlocks.mtd"))
+Alias("dist", dist_env.Install(ver_dir, targets["agShadingBlocks"][0]))
+dist_env.Clean("dist", ver_dir)
+
+if GetOption("clean"):
+  ntargets = len(COMMAND_LINE_TARGETS)
+  if ntargets == 0:
+    # Cleaning everyting rather than default
+    Default(["agShadingBlocks", "dist"])
+  
+  elif ntargets == 1 and COMMAND_LINE_TARGETS[0] == "dist":
+    # Cleaning dist only: do not clean agShadingBlocks
+    for item in excons.GetTargetOutputFiles(env, targets["agShadingBlocks"][0]):
+      env.NoClean(item)
+  
+  else:
+    Default(["agShadingBlocks"])
+
+else:
+  Default(["agShadingBlocks"])

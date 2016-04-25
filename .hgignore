@@ -4,6 +4,7 @@ syntax: glob
 *.pdb
 release/
 debug/
+dist/
 .build/
 .cproject
 .project
