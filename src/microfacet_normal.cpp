@@ -9,10 +9,25 @@ enum MicrofacetNormalParams
    p_distribution_param
 };
 
+enum NormalDistribution
+{
+   ND_Phong = 0,
+   ND_Beckmann,
+   ND_GGX
+};
+
+static const char* NormalDistributionNames[] = 
+{
+   "Phong",
+   "Beckmann",
+   "GGX",
+   NULL
+};
+
 node_parameters
 {
    AiParameterPnt2("sample", 0.0f, 0.0f);
-   AiParameterEnum(SSTR::distribution, MD_Beckmann, MicrofacetDistributionNames);
+   AiParameterEnum(SSTR::distribution, ND_Beckmann, NormalDistributionNames);
    AiParameterFlt(SSTR::distribution_param, 0.0f);
    
    AiMetaDataSetBool(mds, SSTR::distribution, SSTR::linkable, false);
@@ -20,7 +35,7 @@ node_parameters
 
 struct NodeData
 {
-   MicrofacetDistribution distribution;
+   NormalDistribution distribution;
    bool evalDistributionParam;
    float distributionParam;
 };
@@ -35,7 +50,7 @@ node_update
 {
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   data->distribution = (MicrofacetDistribution) AiNodeGetInt(node, SSTR::distribution);
+   data->distribution = (NormalDistribution) AiNodeGetInt(node, SSTR::distribution);
    data->evalDistributionParam = AiNodeIsLinked(node, SSTR::distribution_param);
    if (!data->evalDistributionParam)
    {
@@ -61,22 +76,26 @@ shader_evaluate
    float cosTheta, sinTheta;
    float phi = 2.0f * AI_PI * sample.y;
    
+   // Eurographics Symposium on Rendering (2007)
+   // Microfacet Models for Refraction through Rough Surfaces
+   // Bruce Walter, Stephan R. Marschner, Hongsong Li, Kenneth E. Torrance
+   
    switch (data->distribution)
    {
-   // case MD_Phong:
-   //    {
-   //       cosTheta = powf(sample.x, 1.0f / (param + 2.0f));
-   //       sinTheta = sqrtf(1.0f - cosTheta * cosTheta);
-   //    }
-   //    break;
-   case MD_GGX:
+   case ND_Phong:
+      {
+         cosTheta = powf(sample.x, 1.0f / (param + 2.0f));
+         sinTheta = sqrtf(1.0f - cosTheta * cosTheta);
+      }
+      break;
+   case ND_GGX:
       {
          float tanTheta = param * sqrtf(sample.x) / sqrtf(1.0f - sample.x);
          cosTheta = 1.0f / sqrtf(1.0f + tanTheta * tanTheta);
          sinTheta = cosTheta * tanTheta;
       }
       break;
-   case MD_Beckmann:
+   case ND_Beckmann:
    default:
       {
          float squaredTanTheta = -(param * param) * logf(1.0f - sample.x);
