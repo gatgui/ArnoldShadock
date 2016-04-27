@@ -285,6 +285,8 @@ ver_dir = "%s/agShadingBlocks/%s" % (dist_dir, version)
 Alias("dist", dist_env.Install(dist_dir, eco_env))
 Alias("dist", dist_env.Install(ver_dir, "agShadingBlocks.mtd"))
 Alias("dist", dist_env.Install(ver_dir, targets["agShadingBlocks"][0]))
+if withSeExpr:
+  Alias("dist", dist_env.Install(ver_dir+"/ae", "agSeExpr/maya/aiSeexprTemplate.py"))
 dist_env.Clean("dist", ver_dir)
 
 if GetOption("clean"):
