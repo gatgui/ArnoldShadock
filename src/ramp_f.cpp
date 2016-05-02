@@ -150,9 +150,9 @@ shader_evaluate
       return;
    }
    
-   AtArray *p = (data->evalPositions ? AiShaderEvalParamArray(p_values) : data->positions);
+   AtArray *p = (data->evalPositions ? AiShaderEvalParamArray(p_positions) : data->positions);
    AtArray *v = (data->evalValues ? AiShaderEvalParamArray(p_values) : data->values);
-   AtArray *i = (data->evalInterpolations ? AiShaderEvalParamArray(p_values) : data->interpolations);
+   AtArray *i = (data->evalInterpolations ? AiShaderEvalParamArray(p_interpolations) : data->interpolations);
    
    if (v->nelements != data->nkeys || p->nelements != data->nkeys || i->nelements != data->nkeys)
    {
