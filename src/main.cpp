@@ -245,6 +245,22 @@ DECLARE_SHADER(AdaptChromaticity);
 DECLARE_SHADER(Blackbody);
 DECLARE_SHADER(BrdfMicrofacet);
 DECLARE_SHADER(MicrofacetFresnel);
+DECLARE_SHADER(WriteAOVB);
+DECLARE_SHADER(WriteAOVI);
+DECLARE_SHADER(WriteAOVF);
+DECLARE_SHADER(WriteAOVP2);
+DECLARE_SHADER(WriteAOVP3);
+DECLARE_SHADER(WriteAOVV);
+DECLARE_SHADER(WriteAOVC3);
+DECLARE_SHADER(WriteAOVC4);
+DECLARE_SHADER(WriteMsgB);
+DECLARE_SHADER(WriteMsgI);
+DECLARE_SHADER(WriteMsgF);
+DECLARE_SHADER(WriteMsgP2);
+DECLARE_SHADER(WriteMsgP3);
+DECLARE_SHADER(WriteMsgV);
+DECLARE_SHADER(WriteMsgC3);
+DECLARE_SHADER(WriteMsgC4);
 
 node_loader
 {
@@ -447,5 +463,21 @@ node_loader
    REGISTER_SHADER(Blackbody, blackbody, AI_TYPE_RGB)
    REGISTER_SHADER(BrdfMicrofacet, brdf_microfacet, AI_TYPE_RGB)
    REGISTER_SHADER(MicrofacetFresnel, microfacet_fresnel, AI_TYPE_RGB)
+   REGISTER_SHADER(WriteAOVB, write_aov_b, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteAOVI, write_aov_i, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteAOVF, write_aov_f, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteAOVP2, write_aov_p2, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteAOVP3, write_aov_p3, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteAOVV, write_aov_v, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteAOVC3, write_aov_c3, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteAOVC4, write_aov_c4, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteMsgB, write_msg_b, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteMsgI, write_msg_i, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteMsgF, write_msg_f, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteMsgP2, write_msg_p2, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteMsgP3, write_msg_p3, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteMsgV, write_msg_v, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteMsgC3, write_msg_c3, AI_TYPE_RGBA)
+   REGISTER_SHADER(WriteMsgC4, write_msg_c4, AI_TYPE_RGBA)
    return false;
 }

@@ -172,6 +172,14 @@ enum VolumeInterp
 
 extern const char* VolumeInterpNames[];
 
+enum EvalOrder
+{
+   EO_input_first = 0,
+   EO_input_last
+};
+
+extern const char* EvalOrderNames[];
+
 // ---
 
 struct BRDFData

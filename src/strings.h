@@ -256,6 +256,10 @@ namespace SSTR
    extern AtString emission_color;
    
    extern AtString use_approximation;
+   
+   extern AtString aov_input;
+   extern AtString msg_input;
+   extern AtString eval_order;
 }
 
 #endif

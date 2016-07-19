@@ -1,3 +1,67 @@
+[node write_msg_c4]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x001164F0
+
+[node write_msg_c3]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x001164F1
+
+[node write_msg_v]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x001164F2
+
+[node write_msg_p3]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x001164F3
+
+[node write_msg_p2]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x001164F4
+
+[node write_msg_f]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x001164F5
+
+[node write_msg_i]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x001164F6
+
+[node write_msg_b]
+   maya.classification STRING "utility/general"
+   maya.id INT 0x001164F7
+
+[node write_aov_c4]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x001164F8
+
+[node write_aov_c3]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x001164F9
+
+[node write_aov_v]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x001164FA
+
+[node write_aov_p3]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x001164FB
+
+[node write_aov_p2]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x001164FC
+
+[node write_aov_f]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x001164FD
+
+[node write_aov_i]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x001164FE
+
+[node write_aov_b]
+   maya.classification STRING "utility/aov"
+   maya.id INT 0x001164FF
+
 [node microfacet_fresnel]
    maya.classification STRING "utility/shade"
    maya.id INT 0x00116500

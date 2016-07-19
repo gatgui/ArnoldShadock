@@ -20,7 +20,8 @@ enum WriteMsgsParams
    p_rgb_msg_name,
    p_rgb_msg,
    p_rgba_msg_name,
-   p_rgba_msg
+   p_rgba_msg,
+   p_eval_order
 };
 
 node_parameters
@@ -51,6 +52,8 @@ node_parameters
    AiParameterStr(SSTR::rgba_msg_name, "");
    AiParameterRGBA("rgba_msg", 0.0f, 0.0f, 0.0f, 1.0f);
    
+   AiParameterEnum(SSTR::eval_order, EO_input_last, EvalOrderNames);
+   
    AiMetaDataSetBool(mds, SSTR::bool_msg_name, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::int_msg_name, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::float_msg_name, SSTR::linkable, false);
@@ -59,6 +62,7 @@ node_parameters
    AiMetaDataSetBool(mds, SSTR::vector_msg_name, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::rgb_msg_name, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::rgba_msg_name, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::eval_order, SSTR::linkable, false);
 }
 
 struct NodeData
@@ -79,6 +83,7 @@ struct NodeData
    AtString vectorName;
    AtString rgbName;
    AtString rgbaName;
+   EvalOrder evalOrder;
 };
 
 node_initialize
@@ -94,6 +99,7 @@ node_initialize
    data->hasVector = false;
    data->hasRGB = false;
    data->hasRGBA = false;
+   data->evalOrder = EO_input_last;
    
    AiNodeSetLocalData(node, data);
 }
@@ -101,6 +107,8 @@ node_initialize
 node_update
 {
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   
+   data->evalOrder = (EvalOrder) AiNodeGetInt(node, SSTR::eval_order);
    
    data->boolName = AiNodeGetStr(node, SSTR::bool_msg_name);
    data->hasBool = !data->boolName.empty();
@@ -138,6 +146,11 @@ shader_evaluate
 {
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
+   if (data->evalOrder == EO_input_first)
+   {
+      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+   }
+   
    if (data->hasBool)
    {
       AiStateSetMsgBool(data->boolName, AiShaderEvalParamBool(p_bool_msg));
@@ -171,5 +184,8 @@ shader_evaluate
       AiStateSetMsgRGBA(data->rgbaName, AiShaderEvalParamRGBA(p_rgba_msg));
    }
    
-   sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+   if (data->evalOrder == EO_input_last)
+   {
+      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+   }
 }

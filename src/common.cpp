@@ -182,6 +182,13 @@ const char* VolumeInterpNames[] =
    NULL
 };
 
+const char* EvalOrderNames[] =
+{
+   "input_first",
+   "input_last",
+   NULL
+};
+
 static void GetArrayElement(AtArray *a, unsigned int i, float &e)
 {
    e = AiArrayGetFlt(a, i);

@@ -262,6 +262,10 @@ namespace SSTR
    AtString fps("fps");
 
    AtString use_approximation("use_approximation");
+   
+   AtString aov_input("aov_input");
+   AtString msg_input("msg_input");
+   AtString eval_order("eval_order");
 
 #ifdef USE_AGANIMCURVE
    AtString input_is_frame_offset("input_is_frame_offset");
