@@ -260,6 +260,8 @@ namespace SSTR
    extern AtString aov_input;
    extern AtString msg_input;
    extern AtString eval_order;
+   
+   extern AtString user_defined;
 }
 
 #endif

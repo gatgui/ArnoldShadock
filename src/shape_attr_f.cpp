@@ -51,6 +51,7 @@ shader_evaluate
    
    if (data->output_mode == AM_V)
    {
+      // Int, UInt, Byte?
       if (!AiUDataGetFlt(data->attribute, &(sg->out.FLT)))
       {
          sg->out.FLT = AiShaderEvalParamFlt(p_default);

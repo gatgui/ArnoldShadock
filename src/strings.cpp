@@ -267,6 +267,8 @@ namespace SSTR
    AtString msg_input("msg_input");
    AtString eval_order("eval_order");
 
+   AtString user_defined("user_defined");
+
 #ifdef USE_AGANIMCURVE
    AtString input_is_frame_offset("input_is_frame_offset");
    AtString motion_steps("motion_steps");

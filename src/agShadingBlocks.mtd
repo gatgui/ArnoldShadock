@@ -1,3 +1,35 @@
+[node node_attr_i]
+   maya.classification STRING "utility/userdata"
+   maya.id INT 0x001164E8
+
+[node node_attr_b]
+   maya.classification STRING "utility/userdata"
+   maya.id INT 0x001164E9
+
+[node node_attr_s]
+   maya.classification STRING "utility/userdata"
+   maya.id INT 0x001164EA
+
+[node node_attr_f]
+   maya.classification STRING "utility/userdata"
+   maya.id INT 0x001164EB
+
+[node node_attr_p2]
+   maya.classification STRING "utility/userdata"
+   maya.id INT 0x001164EC
+
+[node node_attr_v]
+   maya.classification STRING "utility/userdata"
+   maya.id INT 0x001164ED
+
+[node node_attr_c4]
+   maya.classification STRING "utility/userdata"
+   maya.id INT 0x001164EE
+
+[node node_attr_c3]
+   maya.classification STRING "utility/userdata"
+   maya.id INT 0x001164EF
+
 [node write_msg_c4]
    maya.classification STRING "utility/general"
    maya.id INT 0x001164F0

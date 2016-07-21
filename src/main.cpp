@@ -261,6 +261,14 @@ DECLARE_SHADER(WriteMsgP3);
 DECLARE_SHADER(WriteMsgV);
 DECLARE_SHADER(WriteMsgC3);
 DECLARE_SHADER(WriteMsgC4);
+DECLARE_SHADER(NodeAttrB);
+DECLARE_SHADER(NodeAttrI);
+DECLARE_SHADER(NodeAttrF);
+DECLARE_SHADER(NodeAttrP2);
+DECLARE_SHADER(NodeAttrV);
+DECLARE_SHADER(NodeAttrC3);
+DECLARE_SHADER(NodeAttrC4);
+DECLARE_SHADER(NodeAttrS);
 
 node_loader
 {
@@ -479,5 +487,13 @@ node_loader
    REGISTER_SHADER(WriteMsgV, write_msg_v, AI_TYPE_RGBA)
    REGISTER_SHADER(WriteMsgC3, write_msg_c3, AI_TYPE_RGBA)
    REGISTER_SHADER(WriteMsgC4, write_msg_c4, AI_TYPE_RGBA)
+   REGISTER_SHADER(NodeAttrB, node_attr_b, AI_TYPE_BOOLEAN)
+   REGISTER_SHADER(NodeAttrI, node_attr_i, AI_TYPE_INT)
+   REGISTER_SHADER(NodeAttrF, node_attr_f, AI_TYPE_FLOAT)
+   REGISTER_SHADER(NodeAttrP2, node_attr_p2, AI_TYPE_POINT2)
+   REGISTER_SHADER(NodeAttrV, node_attr_v, AI_TYPE_VECTOR)
+   REGISTER_SHADER(NodeAttrC3, node_attr_c3, AI_TYPE_RGB)
+   REGISTER_SHADER(NodeAttrC4, node_attr_c4, AI_TYPE_RGBA)
+   REGISTER_SHADER(NodeAttrS, node_attr_s, AI_TYPE_STRING)
    return false;
 }
