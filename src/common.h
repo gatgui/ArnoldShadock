@@ -180,6 +180,15 @@ enum EvalOrder
 
 extern const char* EvalOrderNames[];
 
+enum AttributeMode
+{
+   AM_V = 0,
+   AM_dVdx,
+   AM_dVdy
+};
+
+extern const char* AttributeModeNames[];
+
 // ---
 
 struct BRDFData

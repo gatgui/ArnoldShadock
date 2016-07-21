@@ -189,6 +189,14 @@ const char* EvalOrderNames[] =
    NULL
 };
 
+const char* AttributeModeNames[] =
+{
+   "V",
+   "dVdx",
+   "dVdy",
+   NULL
+};
+
 static void GetArrayElement(AtArray *a, unsigned int i, float &e)
 {
    e = AiArrayGetFlt(a, i);
