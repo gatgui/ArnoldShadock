@@ -60,6 +60,7 @@ def make_mtd():
   #   ...
   #   #endif
   nodeexp = re.compile(r"^(\s*\[\s*node\s+)([^]]+)(\s*\]\s*)$")
+  attrexp = re.compile(r"(\s*)([^\s]+)\s+([^\s]+)\s+([^\s]+)\s*$")
   ppexp = re.compile(r"^\s*#(.*)\s*$")
   ifexp = re.compile(r"^if\s+([^\s]+)\s+([<>=!]+)\s+([^\s]+)$")
   verexp = re.compile(r"^(\d+)(.(\d+)(.(\d+)(.(\d+))?)?)?$")
@@ -95,6 +96,9 @@ def make_mtd():
 
     sf = open(path, "r")
 
+    has_maya_name = False
+    maya_name = None
+    attr_heading = ""
     ignore_lines = False
 
     for line in sf.readlines():
@@ -149,8 +153,13 @@ def make_mtd():
       elif not ignore_lines:
         # Replace node name
         m = nodeexp.match(line)
+        
         if m:
-          dlines.append("%s%s%s%s" % (m.group(1), shdprefix, remap.get(m.group(2), m.group(2)), m.group(3)))
+          has_maya_name = False
+          base_name = remap.get(m.group(2), m.group(2))
+          node_name = shdprefix + base_name
+          maya_name = re.sub(r"_+$", "", shdprefix) + "".join(map(lambda x: x[0].upper() + x[1:], base_name.split("_")))
+          dlines.append("%s%s%s" % (m.group(1), node_name, m.group(3)))
         
         else:
           m = idexp.match(line)
@@ -173,6 +182,23 @@ def make_mtd():
               mayaIds[mid] = len(dlines)
             
             line = "%smaya.id INT 0x%s\n" % (m.group(1), m.group(2))
+          
+          else:
+            if len(line.strip()) == 0:
+              if not has_maya_name and maya_name is not None:
+                line = attr_heading + "maya.name STRING \"" + maya_name + "\"\n\n"
+            
+            else:
+              m = attrexp.match(line)
+              if m:
+                attr_heading = m.group(1)
+                attr_name = m.group(2)
+                attr_type = m.group(3)
+                if attr_name == "maya.name":
+                  has_maya_name = True
+                  if maya_name is not None:
+                    print("has name! %s" % maya_name)
+                    line = attr_heading + attr_name + " " + attr_type + " \"" + maya_name + "\"\n"
           
           dlines.append(line)
 
