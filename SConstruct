@@ -50,6 +50,9 @@ def check_symbols(*args, **kwargs):
 
     sys.exit(1)
 
+minMayaId = None
+maxMayaId = None
+mayaIds = {} # mayaId -> line number
 
 def make_mtd():
   # Can use pre-processor like directive to check for arnold version:
@@ -60,10 +63,14 @@ def make_mtd():
   ppexp = re.compile(r"^\s*#(.*)\s*$")
   ifexp = re.compile(r"^if\s+([^\s]+)\s+([<>=!]+)\s+([^\s]+)$")
   verexp = re.compile(r"^(\d+)(.(\d+)(.(\d+)(.(\d+))?)?)?$")
-
+  idexp = re.compile(r"^(\s*)maya.id\s+INT\s+0x([a-fA-F0-9]+)\s*$")
+  
   arnold_ver = arnold.Version(asString=False)
 
-  df = open("agShadingBlocks.mtd", "w")
+  dlines = []
+
+  def mayaIdStr(n):
+    return "0x" + ("%08x" % n).upper()
 
   def parse_version(s):
     vm = verexp.match(s)
@@ -81,6 +88,8 @@ def make_mtd():
       return None
 
   def append_file_content(path, remap={}):
+    global minMayaId, maxMayaId, mayaIds
+    
     if not os.path.isfile(path):
       return
 
@@ -141,16 +150,38 @@ def make_mtd():
         # Replace node name
         m = nodeexp.match(line)
         if m:
-          df.write("%s%s%s%s" % (m.group(1), shdprefix, remap.get(m.group(2), m.group(2)), m.group(3)))
+          dlines.append("%s%s%s%s" % (m.group(1), shdprefix, remap.get(m.group(2), m.group(2)), m.group(3)))
+        
         else:
-          df.write(line)
+          m = idexp.match(line)
+          if m:
+            mid = int(m.group(2), 16)
+            
+            if minMayaId is None:
+              minMayaId = mid
+            elif mid < minMayaId:
+              minMayaId = mid
+            
+            if maxMayaId is None:
+              maxMayaId = mid
+            elif mid > maxMayaId:
+              maxMayaId = mid
+            
+            if mid in mayaIds:
+              print("ID 0x%s already in use!" % m.group(2))
+            else:
+              mayaIds[mid] = len(dlines)
+            
+            line = "%smaya.id INT 0x%s\n" % (m.group(1), m.group(2))
+          
+          dlines.append(line)
 
     sf.close()
 
   append_file_content("src/agShadingBlocks.mtd")
 
   if withState:
-    df.write("\n")
+    dlines.append("\n")
     append_file_content("agState/src/agState.mtd", remap={"vector_state": "globals_v",
                                                           "float_state": "globals_f",
                                                           "color_state": "globals_c3",
@@ -159,25 +190,52 @@ def make_mtd():
                                                           "node_state": "globals_n"})
 
   if withNoises:
-    df.write("\n")
+    dlines.append("\n")
     append_file_content("agNoises/src/agNoises.mtd", remap={"ln_factal": "fractal_noise",
                                                             "ln_voronoi": "voronoi_noise",
                                                             "ln_distort_point": "distort_point"})
 
   if withSeExpr:
-    df.write("\n")
+    dlines.append("\n")
     append_file_content("agSeExpr/src/seexpr.mtd")
 
   if withAnimCurve:
-    df.write("\n")
+    dlines.append("\n")
     append_file_content("agAnimCurve/src/agAnimCurve.mtd", remap={"anim_curve": "curve"})
 
   if withUserDataRamp:
-    df.write("\n")
+    dlines.append("\n")
     append_file_content("agUserDataRamp/src/agUserDataRamp.mtd", remap={"userDataFloatRamp": "shape_attr_ramp_f",
                                                                         "userDataColorRamp": "shape_attr_ramp_c3",
                                                                         "userDataVectorRamp": "shape_attr_ramp_v"})
-
+  
+  # Modify maya node IDs
+  print("Maya Node ID range: %s - %s" % (mayaIdStr(minMayaId), mayaIdStr(maxMayaId)))
+  baseid = excons.GetArgument("maya-base-nodeid", None)
+  rev = False
+  
+  if baseid is not None:
+    if re.match(r"^(0x)?[a-fA-F0-9]+$", baseid):
+      baseid = int(baseid, 16)
+    elif re.match(r"^\d+$", baseid):
+      baseid = int(baseid)
+    else:
+      baseid = None
+    
+    rev = (excons.GetArgument("maya-increasing-nodeid", 0, int) == 0)
+    
+    if baseid:
+      for mid, lno in mayaIds.iteritems():
+        if rev:
+          nid = baseid - (maxMayaId - mid)
+        else:
+          nid = baseid + (mid - minMayaId)
+        heading = dlines[lno].split("maya.id")[0]
+        dlines[lno] = "%smaya.id INT %s\n" % (heading, mayaIdStr(nid))
+  
+  df = open("agShadingBlocks.mtd", "w")
+  for line in dlines:
+    df.write(line)
   df.write("\n")
   df.close()
 
