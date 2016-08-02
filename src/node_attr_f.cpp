@@ -90,21 +90,12 @@ shader_evaluate
             }
          }
          
-         switch (type)
+         if (type == AI_TYPE_FLOAT)
          {
-         case AI_TYPE_FLOAT:
-            // AiNodeGetLink doesn't have a AtString version yet
-            //AtNode *psrc = AiNodeGetLink(src, data->attribute);
-            //if (psrc) { AiShaderEvaluate(psrc, sg) } else
             sg->out.FLT = AiNodeGetFlt(src, data->attribute);
-            break;
-         case AI_TYPE_INT:
-            sg->out.FLT = (float) AiNodeGetInt(src, data->attribute);
-            break;
-         case AI_TYPE_UINT:
-            sg->out.FLT = (float) AiNodeGetUInt(src, data->attribute);
-            break;
-         default:
+         }
+         else
+         {
             sg->out.FLT = AiShaderEvalParamFlt(p_default);
          }
       }

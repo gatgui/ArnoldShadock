@@ -93,9 +93,6 @@ shader_evaluate
          switch (type)
          {
          case AI_TYPE_INT:
-            // AiNodeGetLink doesn't have a AtString version yet
-            //AtNode *psrc = AiNodeGetLink(src, data->attribute);
-            //if (psrc) { AiShaderEvaluate(psrc, sg) } else
             sg->out.INT = AiNodeGetInt(src, data->attribute);
             break;
          case AI_TYPE_BYTE:

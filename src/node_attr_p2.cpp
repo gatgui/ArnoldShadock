@@ -92,9 +92,6 @@ shader_evaluate
          
          if (type == AI_TYPE_POINT2)
          {
-            // AiNodeGetLink doesn't have a AtString version yet
-            //AtNode *psrc = AiNodeGetLink(src, data->attribute);
-            //if (psrc) { AiShaderEvaluate(psrc, sg) } else
             sg->out.PNT2 = AiNodeGetPnt2(src, data->attribute);
          }
          else

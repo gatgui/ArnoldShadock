@@ -90,9 +90,6 @@ shader_evaluate
          
          if (type == AI_TYPE_BOOLEAN)
          {
-            // AiNodeGetLink doesn't have a AtString version yet
-            //AtNode *psrc = AiNodeGetLink(src, data->attribute);
-            //if (psrc) { AiShaderEvaluate(psrc, sg) } else
             sg->out.BOOL = AiNodeGetBool(src, data->attribute);
          }
          else

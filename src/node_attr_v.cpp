@@ -93,15 +93,9 @@ shader_evaluate
          switch (type)
          {
          case AI_TYPE_POINT:
-            // AiNodeGetLink doesn't have a AtString version yet
-            //AtNode *psrc = AiNodeGetLink(src, data->attribute);
-            //if (psrc) { AiShaderEvaluate(psrc, sg) } else
             sg->out.VEC = AiNodeGetPnt(src, data->attribute);
             break;
          case AI_TYPE_VECTOR:
-            // AiNodeGetLink doesn't have a AtString version yet
-            //AtNode *psrc = AiNodeGetLink(src, data->attribute);
-            //if (psrc) { AiShaderEvaluate(psrc, sg) } else
             sg->out.VEC = AiNodeGetVec(src, data->attribute);
             break;
          default:
