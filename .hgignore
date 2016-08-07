@@ -2,9 +2,11 @@ syntax: glob
 *.pyc
 *.dblite
 *.pdb
+*.env.tmp
 release/
 debug/
 dist/
+eco/
 .build/
 .cproject
 .project

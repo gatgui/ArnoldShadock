@@ -266,26 +266,6 @@ def make_mtd():
   df.close()
 
 
-def make_eco():
-  with open("eco/agShadingBlocks.env", "r") as f:
-    lines = f.readlines()
-  
-  eco_env = "agShadingBlocks_%s.env" % (version.replace(".", "_"))
-  
-  with open(eco_env, "w") as f:
-    insert = 0
-    for line in lines:
-      if insert == 0:
-        if line.startswith("   \"tool\":"):
-          insert = 1
-      elif insert > 0:
-        f.write("   \"version\": \"%s\",\n" % version)
-        insert = -1
-      f.write(line)
-  
-  return eco_env
-
-
 
 arniver = arnold.Version(asString=False)
 if arniver[0] < 4 or (arniver[0] == 4 and (arniver[1] < 2 or (arniver[1] == 2 and arniver[2] < 12))):
@@ -296,7 +276,7 @@ defs = []
 incs = []
 libs = []
 extra_srcs = []
-instfiles = {"arnold": "agShadingBlocks.mtd"}
+instfiles = {"arnold": ["agShadingBlocks.mtd"]}
 
 if withState:
   defs.append("USE_AGSTATE")
@@ -329,7 +309,6 @@ if withUserDataRamp:
   extra_srcs += glob.glob("agUserDataRamp/src/agUserData*.cpp")
 
 make_mtd()
-eco_env = make_eco()
 
 excons.SetArgument("static", 1)
 SConscript("gmath/SConstruct")
@@ -354,38 +333,11 @@ env.Append(CPPFLAGS=" -DSHADERS_PREFIX=\"\\\"%s\\\"\"" % shdprefix)
 if sys.platform != "win32":
   env.Append(CPPFLAGS=" -Wno-unused-parameter")
 
-targets = excons.DeclareTargets(env, prjs)
+excons.DeclareTargets(env, prjs)
 
-# Add a 'dist' and 'cleandist' targets (Ecosytem distribution)
-#   agShadingBlocks/<version>/agShadingBlocks.so|dll|dylib
-#   agShadingBlocks/<version>/agShadingBlocks.mtd
-#   agShadingBlocks/<version>/ae/aiSeexprTemplate.py
-
-dist_env = env.Clone()
-
-dist_dir = excons.GetArgument("dist-dir", "dist")
-ver_dir = "%s/agShadingBlocks/%s" % (dist_dir, version)
-
-Alias("dist", dist_env.Install(dist_dir, eco_env))
-Alias("dist", dist_env.Install(ver_dir, "agShadingBlocks.mtd"))
-Alias("dist", dist_env.Install(ver_dir, targets["agShadingBlocks"][0]))
+dist_env, ver_dir = excons.EcosystemDist(env, "agShadingBlocks.env", {"agShadingBlocks": ""})
+dist_env.Install(ver_dir, "agShadingBlocks.mtd")
 if withSeExpr:
-  Alias("dist", dist_env.Install(ver_dir+"/ae", "agSeExpr/maya/aiSeexprTemplate.py"))
-dist_env.Clean("dist", ver_dir)
+  dist_env.Install(ver_dir+"/ae", "agSeExpr/maya/aiSeexprTemplate.py")
 
-if GetOption("clean"):
-  ntargets = len(COMMAND_LINE_TARGETS)
-  if ntargets == 0:
-    # Cleaning everyting rather than default
-    Default(["agShadingBlocks", "dist"])
-  
-  elif ntargets == 1 and COMMAND_LINE_TARGETS[0] == "dist":
-    # Cleaning dist only: do not clean agShadingBlocks
-    for item in excons.GetTargetOutputFiles(env, targets["agShadingBlocks"][0]):
-      env.NoClean(item)
-  
-  else:
-    Default(["agShadingBlocks"])
-
-else:
-  Default(["agShadingBlocks"])
+Default(["agShadingBlocks"])
