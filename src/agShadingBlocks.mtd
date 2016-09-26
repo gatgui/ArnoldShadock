@@ -1,3 +1,23 @@
+# Reminder: MtoA Third Party node ID range is 0x00116400 - 0x001165FF
+# 
+# 0x00116400: aaOcean
+# 0x00116401: aaPhysicalSky
+# 0x00116402: alSurface
+# 0x00116403: alHair
+# 0x00116404: alBlackbody
+# 0x00116405: alCombineColor
+# 0x00116406: alCombineFloat
+# 0x00116407: alLayer
+# 0x00116408: alCellNoise
+# 0x00116409: alFractal
+# 0x0011640A: alPattern
+# 0x0011640B: alPhotometric
+# 0x0011640C: alRemapFloat
+# 0x0011640D: alRemapColor
+# 0x0011640E: alInputVector
+#
+# agShadingBlocks is numbering down from the end of the range
+
 [node node_attr_i]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001164E8
@@ -1075,3 +1095,4 @@
 # 0x001165FD: agNoises/ln_distort_point
 # 0x001165FE: agNoises/ln_voronoi
 # 0x001165FF: agSeExpr/seexpr
+
