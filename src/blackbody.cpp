@@ -15,6 +15,7 @@ enum BlackbodyParams
    p_ca_white_point,
    p_exposure,
    p_color_space,
+   p_use_approximation,
    p_fix_nans,
    p_nan_color
    
