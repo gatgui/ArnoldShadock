@@ -55,6 +55,7 @@ struct NodeData
    AtString field;
    int interpolation;
    bool evalP;
+   bool ignoreP;
    AtPoint P;
    Space space;
    bool isOffset;
@@ -87,13 +88,18 @@ node_update
    data->gain = AiNodeGetFlt(node, SSTR::gain);
    data->multiply = AiNodeGetFlt(node, SSTR::multiply);
    data->offset = AiNodeGetFlt(node, SSTR::offset);
+   data->space = (Space) AiNodeGetInt(node, SSTR::P_space);
+   data->isOffset = AiNodeGetBool(node, SSTR::P_is_offset);
    data->evalP = AiNodeIsLinked(node, SSTR::P);
    if (!data->evalP)
    {
       data->P = AiNodeGetPnt(node, SSTR::P);
+      data->ignoreP = (data->isOffset && AiV3IsZero(data->P));
    }
-   data->space = (Space) AiNodeGetInt(node, SSTR::P_space);
-   data->isOffset = AiNodeGetBool(node, SSTR::P_is_offset);
+   else
+   {
+      data->ignoreP = false;
+   }
 }
 
 node_finish
@@ -110,20 +116,34 @@ shader_evaluate
    AtPoint oldP = sg->P;
    AtPoint oldPo = sg->Po;
    
-   AtPoint P = (data->evalP ? AiShaderEvalParamPnt(p_P) : data->P);
-
-   if (!data->isOffset || !AiV3IsZero(P))
+   if (!data->ignoreP)
    {
-      switch (data->space)
+      AtPoint P;
+      bool updateP = true;
+      
+      if (data->evalP)
       {
-      case S_object:
-         sg->Po = (data->isOffset ? (sg->Po + P) : P);
-         AiM4PointByMatrixMult(&(sg->P), sg->M, &(sg->Po));
-         break;
-      case S_world:
-      default:
-         sg->P = (data->isOffset ? (sg->P + P) : P);
-         AiM4PointByMatrixMult(&(sg->Po), sg->Minv, &(sg->P));
+         P = AiShaderEvalParamPnt(p_P);
+         updateP = (!data->isOffset || !AiV3IsZero(P));
+      }
+      else
+      {
+         P = data->P;
+      }
+
+      if (updateP)
+      {
+         switch (data->space)
+         {
+         case S_object:
+            sg->Po = (data->isOffset ? (sg->Po + P) : P);
+            AiM4PointByMatrixMult(&(sg->P), sg->M, &(sg->Po));
+            break;
+         case S_world:
+         default:
+            sg->P = (data->isOffset ? (sg->P + P) : P);
+            AiM4PointByMatrixMult(&(sg->Po), sg->Minv, &(sg->P));
+         }
       }
    }
 
