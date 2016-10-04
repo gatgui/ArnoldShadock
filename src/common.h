@@ -189,6 +189,17 @@ enum AttributeMode
 
 extern const char* AttributeModeNames[];
 
+enum NodeAttrTarget
+{
+   NAT_surface = 0,
+   NAT_shader,
+   NAT_light,
+   NAT_procedural,
+   NAT_custom
+};
+
+extern const char* NodeAttrTargetNames[];
+
 // ---
 
 struct BRDFData

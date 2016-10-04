@@ -197,6 +197,16 @@ const char* AttributeModeNames[] =
    NULL
 };
 
+const char* NodeAttrTargetNames[] =
+{
+   "surface",
+   "shader",
+   "light",
+   "procedural",
+   "custom",
+   NULL
+};
+
 static void GetArrayElement(AtArray *a, unsigned int i, float &e)
 {
    e = AiArrayGetFlt(a, i);

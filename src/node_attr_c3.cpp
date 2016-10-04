@@ -4,7 +4,9 @@ AI_SHADER_NODE_EXPORT_METHODS(NodeAttrC3Mtd);
 
 enum NodeAttrC3Params
 {
-   p_target_node = 0,
+   p_target = 0,
+   p_light_index,
+   p_target_node,
    p_attribute,
    p_user_defined,
    p_default
@@ -12,17 +14,23 @@ enum NodeAttrC3Params
 
 node_parameters
 {
+   AiParameterEnum(SSTR::target, NAT_surface, NodeAttrTargetNames);
+   AiParameterInt(SSTR::light_index, -1);
    AiParameterNode(SSTR::target_node, NULL);
    AiParameterStr(SSTR::attribute, "");
    AiParameterBool(SSTR::user_defined, true);
    AiParameterRGB(SSTR::_default, 0.0f, 0.0f, 0.0f);
    
+   AiMetaDataSetBool(mds, SSTR::target, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::light_index, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::attribute, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::user_defined, SSTR::linkable, false);
 }
 
 struct NodeData
 {
+   NodeAttrTarget target;
+   int light_index;
    AtString attribute;
    bool user_defined;
    bool linked;
@@ -37,6 +45,8 @@ node_initialize
 node_update
 {
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   data->target = (NodeAttrTarget) AiNodeGetInt(node, SSTR::target);
+   data->light_index = AiNodeGetInt(node, SSTR::light_index);
    data->attribute = AiNodeGetStr(node, SSTR::attribute);
    data->user_defined = AiNodeGetBool(node, SSTR::user_defined);
    data->linked = AiNodeIsLinked(node, SSTR::target_node);
@@ -53,54 +63,75 @@ shader_evaluate
 {
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
    
-   sg->out.RGB = AI_RGB_BLACK;
+   AtNode *src = NULL;
    
-   if (!data->linked)
+   switch (data->target)
+   {
+   case NAT_surface:
+      src = sg->Op;
+      break;
+   case NAT_shader:
+      src = sg->shader;
+      break;
+   case NAT_light:
+      if (data->light_index < 0)
+      {
+         src = sg->Lp;
+      }
+      else if (data->light_index < sg->nlights)
+      {
+         src = sg->lights[data->light_index];
+      }
+      break;
+   case NAT_procedural:
+      src = sg->proc;
+      break;
+   case NAT_custom:
+      if (data->linked)
+      {
+         src = (AtNode*) AiShaderEvalParamPtr(p_target_node);
+      }
+   default:
+      break;
+   }
+   
+   if (!src)
    {
       sg->out.RGB = AiShaderEvalParamRGB(p_default);
    }
    else
    {
-      AtNode *src = (AtNode*) AiShaderEvalParamPtr(p_target_node);
+      int type = AI_TYPE_UNDEFINED;
       
-      if (!src)
+      if (data->user_defined)
       {
-         sg->out.RGB = AiShaderEvalParamRGB(p_default);
+         const AtUserParamEntry *pe = AiNodeLookUpUserParameter(src, data->attribute);
+         
+         if (pe && AiUserParamGetCategory(pe) == AI_USERDEF_CONSTANT)
+         {
+            type = AiUserParamGetType(pe);
+         }
       }
       else
       {
-         int type = AI_TYPE_UNDEFINED;
+         const AtParamEntry *pe = AiNodeEntryLookUpParameter(AiNodeGetNodeEntry(src), data->attribute);
          
-         if (data->user_defined)
+         if (pe)
          {
-            const AtUserParamEntry *pe = AiNodeLookUpUserParameter(src, data->attribute);
-            
-            if (pe && AiUserParamGetCategory(pe) == AI_USERDEF_CONSTANT)
-            {
-               type = AiUserParamGetType(pe);
-            }
+            type = AiParamGetType(pe);
          }
-         else
-         {
-            const AtParamEntry *pe = AiNodeEntryLookUpParameter(AiNodeGetNodeEntry(src), data->attribute);
-            
-            if (pe)
-            {
-               type = AiParamGetType(pe);
-            }
-         }
-         
-         switch (type)
-         {
-         case AI_TYPE_RGB:
-            sg->out.RGB = AiNodeGetRGB(src, data->attribute);
-            break;
-         case AI_TYPE_RGBA:
-            sg->out.RGBA = AiNodeGetRGBA(src, data->attribute);
-            break;
-         default:
-            sg->out.RGB = AiShaderEvalParamRGB(p_default);
-         }
+      }
+      
+      switch (type)
+      {
+      case AI_TYPE_RGB:
+         sg->out.RGB = AiNodeGetRGB(src, data->attribute);
+         break;
+      case AI_TYPE_RGBA:
+         sg->out.RGBA = AiNodeGetRGBA(src, data->attribute);
+         break;
+      default:
+         sg->out.RGB = AiShaderEvalParamRGB(p_default);
       }
    }
 }
