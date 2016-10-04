@@ -276,9 +276,7 @@ namespace SSTR
    AtString clamp_min("clamp_min");
    AtString clamp_max("clamp_max");
    AtString pre_multiply("pre_multiply");
-   AtString pre_add("pre_add");
-   AtString post_multiply("post_multiply");
-   AtString post_add("post_add");
+   AtString pre_offset("pre_offset");
    AtString blend_mode("blend_mode");
    AtString blend("blend");
    AtString blend_min("blend_min");

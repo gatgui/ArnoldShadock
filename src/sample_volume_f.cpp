@@ -10,15 +10,15 @@ enum SampleVolumeFParams
    p_P_space,
    p_P_is_offset,
    p_pre_multiply,
-   p_pre_add,
+   p_pre_offset,
    p_blend_mode,
    p_blend,
    p_blend_min,
    p_blend_max,
    p_bias,
    p_gain,
-   p_post_multiply,
-   p_post_add,
+   p_multiply,
+   p_offset,
    p_default
 };
 
@@ -43,26 +43,26 @@ node_parameters
    AiParameterEnum(SSTR::P_space, S_world, SpaceNames);
    AiParameterBool(SSTR::P_is_offset, true);
    AiParameterFlt(SSTR::pre_multiply, 1.0f);
-   AiParameterFlt(SSTR::pre_add, 0.0f);
+   AiParameterFlt(SSTR::pre_offset, 0.0f);
    AiParameterEnum(SSTR::blend_mode, BM_none, BlendModeNames);
    AiParameterFlt(SSTR::blend, 1.0f);
    AiParameterFlt(SSTR::blend_min, 0.0f);
    AiParameterFlt(SSTR::blend_max, 1.0f);
    AiParameterFlt(SSTR::bias, 0.5f);
    AiParameterFlt(SSTR::gain, 0.5f);
-   AiParameterFlt(SSTR::post_multiply, 1.0f);
-   AiParameterFlt(SSTR::post_add, 0.0f);
+   AiParameterFlt(SSTR::multiply, 1.0f);
+   AiParameterFlt(SSTR::offset, 0.0f);
    AiParameterFlt(SSTR::_default, 0.0f);
    
    AiMetaDataSetBool(mds, SSTR::field, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::interpolation, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::pre_multiply, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::pre_add, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::pre_offset, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::blend_mode, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::bias, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::gain, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::post_multiply, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::post_add, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::multiply, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::offset, SSTR::linkable, false);
    
    AiMetaDataSetFlt(mds, SSTR::blend, "min", 0.0f);
    AiMetaDataSetFlt(mds, SSTR::blend, "max", 1.0f);
@@ -106,12 +106,12 @@ node_update
       data->_default = AiNodeGetFlt(node, SSTR::_default);
    }
    data->preMult = AiNodeGetFlt(node, SSTR::pre_multiply);
-   data->preAdd = AiNodeGetFlt(node, SSTR::pre_add);
+   data->preAdd = AiNodeGetFlt(node, SSTR::pre_offset);
    data->blendMode = (BlendMode) AiNodeGetInt(node, SSTR::blend_mode);
    data->bias = AiNodeGetFlt(node, SSTR::bias);
    data->gain = AiNodeGetFlt(node, SSTR::gain);
-   data->postMult = AiNodeGetFlt(node, SSTR::post_multiply);
-   data->postAdd = AiNodeGetFlt(node, SSTR::post_add);
+   data->postMult = AiNodeGetFlt(node, SSTR::multiply);
+   data->postAdd = AiNodeGetFlt(node, SSTR::offset);
    data->space = (Space) AiNodeGetInt(node, SSTR::P_space);
    data->isOffset = AiNodeGetBool(node, SSTR::P_is_offset);
    data->evalP = AiNodeIsLinked(node, SSTR::P);

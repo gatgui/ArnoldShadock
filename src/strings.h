@@ -270,9 +270,7 @@ namespace SSTR
    extern AtString clamp_min;
    extern AtString clamp_max;
    extern AtString pre_multiply;
-   extern AtString pre_add;
-   extern AtString post_multiply;
-   extern AtString post_add;
+   extern AtString pre_offset;
    extern AtString blend_mode;
    extern AtString blend;
    extern AtString blend_min;
