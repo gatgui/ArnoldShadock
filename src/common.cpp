@@ -207,6 +207,15 @@ const char* NodeAttrTargetNames[] =
    NULL
 };
 
+const char* BlendModeNames[] =
+{
+   "none",
+   "min_field",
+   "field_max",
+   "field_as_blender",
+   NULL
+};
+
 static void GetArrayElement(AtArray *a, unsigned int i, float &e)
 {
    e = AiArrayGetFlt(a, i);

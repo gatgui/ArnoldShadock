@@ -200,6 +200,16 @@ enum NodeAttrTarget
 
 extern const char* NodeAttrTargetNames[];
 
+enum BlendMode
+{
+   BM_none = 0,
+   BM_min_field,
+   BM_field_max,
+   BM_field_as_blender
+};
+
+extern const char* BlendModeNames[];
+
 // ---
 
 struct BRDFData

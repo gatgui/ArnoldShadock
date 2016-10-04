@@ -269,6 +269,21 @@ namespace SSTR
 
    AtString user_defined("user_defined");
 
+   AtString input_min("input_min");
+   AtString input_max("input_max");
+   AtString output_min("output_min");
+   AtString output_max("output_max");
+   AtString clamp_min("clamp_min");
+   AtString clamp_max("clamp_max");
+   AtString pre_multiply("pre_multiply");
+   AtString pre_add("pre_add");
+   AtString post_multiply("post_multiply");
+   AtString post_add("post_add");
+   AtString blend_mode("blend_mode");
+   AtString blend("blend");
+   AtString blend_min("blend_min");
+   AtString blend_max("blend_max");
+
 #ifdef USE_AGANIMCURVE
    AtString input_is_frame_offset("input_is_frame_offset");
    AtString motion_steps("motion_steps");

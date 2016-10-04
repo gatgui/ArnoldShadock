@@ -262,6 +262,21 @@ namespace SSTR
    extern AtString eval_order;
    
    extern AtString user_defined;
+   
+   extern AtString input_min;
+   extern AtString input_max;
+   extern AtString output_min;
+   extern AtString output_max;
+   extern AtString clamp_min;
+   extern AtString clamp_max;
+   extern AtString pre_multiply;
+   extern AtString pre_add;
+   extern AtString post_multiply;
+   extern AtString post_add;
+   extern AtString blend_mode;
+   extern AtString blend;
+   extern AtString blend_min;
+   extern AtString blend_max;
 }
 
 #endif

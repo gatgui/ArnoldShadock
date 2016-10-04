@@ -9,10 +9,16 @@ enum SampleVolumeFParams
    p_P,
    p_P_space,
    p_P_is_offset,
+   p_pre_multiply,
+   p_pre_add,
+   p_blend_mode,
+   p_blend,
+   p_blend_min,
+   p_blend_max,
    p_bias,
    p_gain,
-   p_multiply,
-   p_offset,
+   p_post_multiply,
+   p_post_add,
    p_default
 };
 
@@ -36,18 +42,30 @@ node_parameters
    AiParameterPnt(SSTR::P, 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::P_space, S_world, SpaceNames);
    AiParameterBool(SSTR::P_is_offset, true);
+   AiParameterFlt(SSTR::pre_multiply, 1.0f);
+   AiParameterFlt(SSTR::pre_add, 0.0f);
+   AiParameterEnum(SSTR::blend_mode, BM_none, BlendModeNames);
+   AiParameterFlt(SSTR::blend, 1.0f);
+   AiParameterFlt(SSTR::blend_min, 0.0f);
+   AiParameterFlt(SSTR::blend_max, 1.0f);
    AiParameterFlt(SSTR::bias, 0.5f);
    AiParameterFlt(SSTR::gain, 0.5f);
-   AiParameterFlt(SSTR::multiply, 1.0f);
-   AiParameterFlt(SSTR::offset, 0.0f);
+   AiParameterFlt(SSTR::post_multiply, 1.0f);
+   AiParameterFlt(SSTR::post_add, 0.0f);
    AiParameterFlt(SSTR::_default, 0.0f);
    
    AiMetaDataSetBool(mds, SSTR::field, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::interpolation, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::pre_multiply, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::pre_add, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::blend_mode, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::bias, SSTR::linkable, false);
    AiMetaDataSetBool(mds, SSTR::gain, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::multiply, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::offset, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::post_multiply, SSTR::linkable, false);
+   AiMetaDataSetBool(mds, SSTR::post_add, SSTR::linkable, false);
+   
+   AiMetaDataSetFlt(mds, SSTR::blend, "min", 0.0f);
+   AiMetaDataSetFlt(mds, SSTR::blend, "max", 1.0f);
 }
 
 struct NodeData
@@ -63,8 +81,11 @@ struct NodeData
    float _default;
    float bias;
    float gain;
-   float multiply;
-   float offset;
+   float preMult;
+   float preAdd;
+   BlendMode blendMode;
+   float postMult;
+   float postAdd;
 };
 
 node_initialize
@@ -84,10 +105,13 @@ node_update
    {
       data->_default = AiNodeGetFlt(node, SSTR::_default);
    }
+   data->preMult = AiNodeGetFlt(node, SSTR::pre_multiply);
+   data->preAdd = AiNodeGetFlt(node, SSTR::pre_add);
+   data->blendMode = (BlendMode) AiNodeGetInt(node, SSTR::blend_mode);
    data->bias = AiNodeGetFlt(node, SSTR::bias);
    data->gain = AiNodeGetFlt(node, SSTR::gain);
-   data->multiply = AiNodeGetFlt(node, SSTR::multiply);
-   data->offset = AiNodeGetFlt(node, SSTR::offset);
+   data->postMult = AiNodeGetFlt(node, SSTR::post_multiply);
+   data->postAdd = AiNodeGetFlt(node, SSTR::post_add);
    data->space = (Space) AiNodeGetInt(node, SSTR::P_space);
    data->isOffset = AiNodeGetBool(node, SSTR::P_is_offset);
    data->evalP = AiNodeIsLinked(node, SSTR::P);
@@ -155,7 +179,44 @@ shader_evaluate
    }
    else
    {
-      sg->out.FLT = data->offset + data->multiply * GAIN(BIAS(out, data->bias), data->gain);
+      // Pre mult/add
+      out = data->preAdd + data->preMult * out;
+      
+      // Blend
+      switch (data->blendMode)
+      {
+      case BM_min_field:
+         {
+            float blend = AiShaderEvalParamFlt(p_blend);
+            if (blend < 1.0f)
+            {
+               float bmin = AiShaderEvalParamFlt(p_blend_min);
+               out = bmin + blend * (out - bmin);
+            }
+         }
+         break;
+      case BM_field_max:
+         {
+            float blend = AiShaderEvalParamFlt(p_blend);
+            if (blend > 0.0f)
+            {
+               float bmax = AiShaderEvalParamFlt(p_blend_max);
+               out = out + blend * (bmax - out);
+            }
+         }
+         break;
+      case BM_field_as_blender:
+         {
+            float bmin = AiShaderEvalParamFlt(p_blend_min);
+            float bmax = AiShaderEvalParamFlt(p_blend_max);
+            out = bmin + out * (bmax - bmin);
+         }
+      default:
+         break;
+      }
+      
+      // Gain/Bias, Post mult/add
+      sg->out.FLT = data->postAdd + data->postMult * GAIN(BIAS(out, data->bias), data->gain);
    }
 
    sg->P = oldP;
