@@ -45,7 +45,7 @@ const char* OutputModeNames[] =
 
 node_parameters
 {
-   AiParameterFlt("temperature", 3000.0f);
+   AiParameterFlt(SSTR::temperature, 3000.0f);
    AiParameterEnum(SSTR::output_mode, OM_physical_intensity, OutputModeNames);
    AiParameterFlt(SSTR::tm_key, 0.18f);
    AiParameterFlt(SSTR::tm_Lavg, 1.0f);
@@ -53,7 +53,7 @@ node_parameters
    AiParameterEnum(SSTR::ca_transform, gmath::CAT_VonKries, ChromaticAdaptationTransformNames);
    AiParameterFlt(SSTR::ca_max_temperature, 5000.0f);
    AiParameterRGB(SSTR::ca_white_point, 1.0f, 1.0f, 1.0f);
-   AiParameterFlt("exposure", 0.0f);
+   AiParameterFlt(SSTR::exposure, 0.0f);
    AiParameterEnum(SSTR::color_space, CS_Rec709, ColorSpaceNames);
    AiParameterBool(SSTR::use_approximation, false);
    AiParameterBool(SSTR::fix_nans, false);
@@ -81,6 +81,8 @@ struct NodeData
    bool approx;
    bool fixNans;
    AtColor nanColor;
+   bool fixedExposure;
+   float scale;
 };
 
 node_initialize
@@ -107,6 +109,13 @@ node_update
    data->fixNans = AiNodeGetBool(node, SSTR::fix_nans);
    data->nanColor = AiNodeGetRGB(node, SSTR::nan_color);
    data->approx = AiNodeGetBool(node, SSTR::use_approximation);
+
+   data->scale = 1.0f;
+   data->fixedExposure = !AiNodeIsLinked(node, SSTR::exposure);
+   if (data->fixedExposure)
+   {
+      data->scale = powf(2.0f, AiNodeGetFlt(node, SSTR::exposure));
+   }
 
    if (data->mode == OM_tone_mapping)
    {
@@ -153,9 +162,12 @@ shader_evaluate
    NodeData *data = (NodeData*) AiNodeGetLocalData(node);
 
    float temperature = AiShaderEvalParamFlt(p_temperature);
-   float exposure = AiShaderEvalParamFlt(p_exposure);
    
-   float scale = powf(2.0f, exposure);
+   float scale = data->scale;
+   if (!data->fixedExposure)
+   {
+      scale = powf(2.0f, AiShaderEvalParamFlt(p_exposure));
+   }
    
    // Note: XYZ and non-normalized RGB differs vastly in scale between approximated and non-approximated Planckian Locus
    bool useApprox = (data->approx && gmath::Blackbody::CanApprox(temperature));

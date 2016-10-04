@@ -324,7 +324,7 @@ prjs = [
    "libs": libs,
    "srcs": glob.glob("src/*.cpp") + extra_srcs,
    "install": instfiles,
-   "custom": [RequireGmath(subdir="gmath"), arnold.Require],
+   "custom": [RequireGmath, arnold.Require],
    "post": [check_symbols]
   }
 ]
