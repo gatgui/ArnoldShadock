@@ -28,7 +28,8 @@ enum OutputMode
    OM_raw,
    OM_tone_mapping,
    OM_physical_intensity,
-   OM_chromatic_adaptation
+   OM_chromatic_adaptation,
+   OM_xyz
 };
 
 const char* OutputModeNames[] = 
@@ -38,6 +39,7 @@ const char* OutputModeNames[] =
    "tone_mapping",
    "physical_intensity",
    "chromatic_adaptation",
+   "xyz",
    NULL
 };
 
@@ -152,6 +154,7 @@ shader_evaluate
 
    float temperature = AiShaderEvalParamFlt(p_temperature);
    float exposure = AiShaderEvalParamFlt(p_exposure);
+   
    float scale = powf(2.0f, exposure);
    
    // Note: XYZ and non-normalized RGB differs vastly in scale between approximated and non-approximated Planckian Locus
@@ -221,6 +224,21 @@ shader_evaluate
          out.b = v.z;
       }
       break;
+   case OM_xyz:
+      {
+         gmath::XYZ tmp;
+         if (useApprox)
+         {
+            tmp = gmath::Blackbody::GetXYZApprox(temperature);
+         }
+         else
+         {
+            tmp = gmath::Blackbody::GetXYZ(temperature);
+         }
+         out.r = tmp.x;
+         out.g = tmp.y;
+         out.b = tmp.z;
+      }
    default:
       break;
    }
