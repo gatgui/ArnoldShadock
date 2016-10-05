@@ -155,6 +155,14 @@ def make_mtd():
         m = nodeexp.match(line)
         
         if m:
+          if not has_maya_name and maya_name is not None:
+            while len(dlines) > 0:
+              last = dlines.pop()
+              if len(last.strip()) > 0:
+                dlines.append(last)
+                break
+            dlines.append("\n" + attr_heading + "maya.name STRING \"" + maya_name + "\"\n\n")
+          
           has_maya_name = False
           base_name = remap.get(m.group(2), m.group(2))
           node_name = shdprefix + base_name
@@ -184,11 +192,7 @@ def make_mtd():
             line = "%smaya.id INT 0x%s\n" % (m.group(1), m.group(2))
           
           else:
-            if len(line.strip()) == 0:
-              if not has_maya_name and maya_name is not None:
-                line = attr_heading + "maya.name STRING \"" + maya_name + "\"\n\n"
-            
-            else:
+            if len(line.strip()) > 0:
               m = attrexp.match(line)
               if m:
                 attr_heading = m.group(1)
@@ -201,6 +205,14 @@ def make_mtd():
                     line = attr_heading + attr_name + " " + attr_type + " \"" + maya_name + "\"\n"
           
           dlines.append(line)
+
+    if not has_maya_name and maya_name is not None:
+      while len(dlines) > 0:
+        last = dlines.pop()
+        if len(last.strip()) > 0:
+          dlines.append(last)
+          break
+      dlines.append("\n" + attr_heading + "maya.name STRING \"" + maya_name + "\"\n\n")
 
     sf.close()
 
@@ -341,3 +353,4 @@ if withSeExpr:
   dist_env.Install(ver_dir+"/ae", "agSeExpr/maya/aiSeexprTemplate.py")
 
 Default(["agShadingBlocks"])
+
