@@ -21,98 +21,314 @@
 [node node_attr_i]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001164E8
+   
+   [attr target]
+      linkable BOOL false
+   
+   [attr light_index]
+      linkable BOOL false
+   
+   [attr attribute]
+      linkable BOOL false
+   
+   [attr user_defined]
+      linkable BOOL false
 
 [node node_attr_b]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001164E9
+   
+   [attr target]
+      linkable BOOL false
+   
+   [attr light_index]
+      linkable BOOL false
+   
+   [attr attribute]
+      linkable BOOL false
+   
+   [attr user_defined]
+      linkable BOOL false
 
 [node node_attr_s]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001164EA
+   
+   [attr target]
+      linkable BOOL false
+   
+   [attr light_index]
+      linkable BOOL false
+   
+   [attr attribute]
+      linkable BOOL false
+   
+   [attr user_defined]
+      linkable BOOL false
 
 [node node_attr_f]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001164EB
+   
+   [attr target]
+      linkable BOOL false
+   
+   [attr light_index]
+      linkable BOOL false
+   
+   [attr attribute]
+      linkable BOOL false
+   
+   [attr user_defined]
+      linkable BOOL false
 
 [node node_attr_p2]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001164EC
+   
+   [attr target]
+      linkable BOOL false
+   
+   [attr light_index]
+      linkable BOOL false
+   
+   [attr attribute]
+      linkable BOOL false
+   
+   [attr user_defined]
+      linkable BOOL false
 
 [node node_attr_v]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001164ED
+   
+   [attr target]
+      linkable BOOL false
+   
+   [attr light_index]
+      linkable BOOL false
+   
+   [attr attribute]
+      linkable BOOL false
+   
+   [attr user_defined]
+      linkable BOOL false
 
 [node node_attr_c4]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001164EE
+   
+   [attr target]
+      linkable BOOL false
+   
+   [attr light_index]
+      linkable BOOL false
+   
+   [attr attribute]
+      linkable BOOL false
+   
+   [attr user_defined]
+      linkable BOOL false
 
 [node node_attr_c3]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001164EF
+   
+   [attr target]
+      linkable BOOL false
+   
+   [attr light_index]
+      linkable BOOL false
+   
+   [attr attribute]
+      linkable BOOL false
+   
+   [attr user_defined]
+      linkable BOOL false
 
 [node write_msg_c4]
    maya.classification STRING "utility/general"
    maya.id INT 0x001164F0
 
+   [attr msg_name]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
+
 [node write_msg_c3]
    maya.classification STRING "utility/general"
    maya.id INT 0x001164F1
+
+   [attr msg_name]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
 
 [node write_msg_v]
    maya.classification STRING "utility/general"
    maya.id INT 0x001164F2
 
+   [attr msg_name]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
+
 [node write_msg_p3]
    maya.classification STRING "utility/general"
    maya.id INT 0x001164F3
+
+   [attr msg_name]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
 
 [node write_msg_p2]
    maya.classification STRING "utility/general"
    maya.id INT 0x001164F4
 
+   [attr msg_name]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
+
 [node write_msg_f]
    maya.classification STRING "utility/general"
    maya.id INT 0x001164F5
+
+   [attr msg_name]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
 
 [node write_msg_i]
    maya.classification STRING "utility/general"
    maya.id INT 0x001164F6
 
+   [attr msg_name]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
+
 [node write_msg_b]
    maya.classification STRING "utility/general"
    maya.id INT 0x001164F7
+
+   [attr msg_name]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
 
 [node write_aov_c4]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001164F8
 
+   [attr aov_name]
+      linkable BOOL false
+
+   [attr blend_opacity]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
+
 [node write_aov_c3]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001164F9
+
+   [attr aov_name]
+      linkable BOOL false
+
+   [attr blend_opacity]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
 
 [node write_aov_v]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001164FA
 
+   [attr aov_name]
+      linkable BOOL false
+
+   [attr blend_opacity]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
+
 [node write_aov_p3]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001164FB
+
+   [attr aov_name]
+      linkable BOOL false
+
+   [attr blend_opacity]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
 
 [node write_aov_p2]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001164FC
 
+   [attr aov_name]
+      linkable BOOL false
+
+   [attr blend_opacity]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
+
 [node write_aov_f]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001164FD
+
+   [attr aov_name]
+      linkable BOOL false
+
+   [attr blend_opacity]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
 
 [node write_aov_i]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001164FE
 
+   [attr aov_name]
+      linkable BOOL false
+
+   [attr blend_opacity]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
+
 [node write_aov_b]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001164FF
+
+   [attr aov_name]
+      linkable BOOL false
+
+   [attr blend_opacity]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
 
 [node microfacet_fresnel]
    maya.classification STRING "utility/shade"
@@ -421,6 +637,33 @@
 [node write_msgs]
    maya.classification STRING "utility/general"
    maya.id INT 0x0011654C
+
+   [attr bool_msg_name]
+      linkable BOOL false
+
+   [attr int_msg_name]
+      linkable BOOL false
+
+   [attr float_msg_name]
+      linkable BOOL false
+
+   [attr point2_msg_name]
+      linkable BOOL false
+
+   [attr point_msg_name]
+      linkable BOOL false
+
+   [attr vector_msg_name]
+      linkable BOOL false
+
+   [attr rgb_msg_name]
+      linkable BOOL false
+
+   [attr rgba_msg_name]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
 
 [node read_msg_b]
    maya.classification STRING "utility/general"
@@ -923,6 +1166,36 @@
 [node write_aovs]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001165CA
+   
+   [attr bool_aov_name]
+      linkable BOOL false
+
+   [attr int_aov_name]
+      linkable BOOL false
+
+   [attr float_aov_name]
+      linkable BOOL false
+
+   [attr point2_aov_name]
+      linkable BOOL false
+
+   [attr point_aov_name]
+      linkable BOOL false
+
+   [attr vector_aov_name]
+      linkable BOOL false
+
+   [attr rgb_aov_name]
+      linkable BOOL false
+
+   [attr rgba_aov_name]
+      linkable BOOL false
+
+   [attr blend_opacity]
+      linkable BOOL false
+
+   [attr eval_order]
+      linkable BOOL false
 
 [node read_aov_b]
    maya.classification STRING "utility/aov"

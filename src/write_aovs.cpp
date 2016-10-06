@@ -56,17 +56,6 @@ node_parameters
    AiParameterBool(SSTR::blend_opacity, true);
    
    AiParameterEnum(SSTR::eval_order, EO_input_last, EvalOrderNames);
-   
-   AiMetaDataSetBool(mds, SSTR::bool_aov_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::int_aov_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::float_aov_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::point2_aov_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::point_aov_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::vector_aov_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::rgb_aov_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::rgba_aov_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::blend_opacity, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::eval_order, SSTR::linkable, false);
 }
 
 struct NodeData

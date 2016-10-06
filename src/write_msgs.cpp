@@ -53,16 +53,6 @@ node_parameters
    AiParameterRGBA("rgba_msg", 0.0f, 0.0f, 0.0f, 1.0f);
    
    AiParameterEnum(SSTR::eval_order, EO_input_last, EvalOrderNames);
-   
-   AiMetaDataSetBool(mds, SSTR::bool_msg_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::int_msg_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::float_msg_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::point2_msg_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::point_msg_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::vector_msg_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::rgb_msg_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::rgba_msg_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::eval_order, SSTR::linkable, false);
 }
 
 struct NodeData

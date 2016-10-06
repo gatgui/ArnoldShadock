@@ -17,9 +17,6 @@ node_parameters
    AiParameterStr(SSTR::msg_name, "");
    AiParameterInt(SSTR::msg_input, 0);
    AiParameterEnum(SSTR::eval_order, EO_input_last, EvalOrderNames);
-   
-   AiMetaDataSetBool(mds, SSTR::msg_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::eval_order, SSTR::linkable, false);
 }
 
 struct NodeData

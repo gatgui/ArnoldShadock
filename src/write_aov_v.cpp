@@ -19,9 +19,6 @@ node_parameters
    AiParameterVec(SSTR::aov_input, 0.0f, 0.0f, 0.0f);
    AiParameterBool(SSTR::blend_opacity, true);
    AiParameterEnum(SSTR::eval_order, EO_input_first, EvalOrderNames);
-   
-   AiMetaDataSetBool(mds, SSTR::aov_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::eval_order, SSTR::linkable, false);
 }
 
 struct NodeData
