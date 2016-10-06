@@ -198,9 +198,7 @@ def make_mtd():
             else:
               mayaIds[mid] = len(dlines)
             
-            node_heading = m.group(1)
-            print("Node %s heading: '%s'" % (maya_name, node_heading))
-            line = "%smaya.id INT 0x%s\n" % (node_heading, m.group(2))
+            line = "%smaya.id INT 0x%s\n" % (m.group(1), m.group(2))
           
           else:
             if len(line.strip()) > 0:
@@ -212,6 +210,8 @@ def make_mtd():
                 m = mdexp.match(line)
                 if m:
                   attr_heading = m.group(1)
+                  if first_attr < 0:
+                    node_heading = attr_heading
                   attr_name = m.group(2)
                   attr_type = m.group(3)
                   if attr_name == "maya.name":
