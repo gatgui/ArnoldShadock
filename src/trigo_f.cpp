@@ -39,9 +39,6 @@ node_parameters
    AiParameterFlt("input2", 0.0f);
    AiParameterEnum(SSTR::operation, TO_COS, TrigonometryOperationNames);
    AiParameterEnum(SSTR::units, AU_Radians, AngleUnitsNames);
-   
-   AiMetaDataSetBool(mds, SSTR::operation, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::units, SSTR::linkable, false);
 }
 
 struct NodeData

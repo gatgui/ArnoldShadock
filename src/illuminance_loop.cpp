@@ -14,9 +14,6 @@ node_parameters
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::combine, CM_Add, CombineModeNames);
    AiParameterBool(SSTR::reset_lights_cache, false);
-   
-   AiMetaDataSetBool(mds, SSTR::combine, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::reset_lights_cache, SSTR::linkable, false);
 }
 
 struct NodeData

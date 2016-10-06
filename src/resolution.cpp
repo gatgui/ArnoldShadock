@@ -20,11 +20,6 @@ node_parameters
 {
    AiParameterEnum(SSTR::target, TR_Render, TargetResolutionNames);
    AiParameterStr(SSTR::filename, "");
-   
-   AiMetaDataSetBool(mds, SSTR::target, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::filename, SSTR::filepath, true);
-   
-   AiMetaDataSetStr(mds, SSTR::filename, "houdini.type", "file:image");
 }
 
 struct NodeData

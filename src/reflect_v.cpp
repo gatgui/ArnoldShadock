@@ -16,8 +16,6 @@ node_parameters
    AiParameterVec(SSTR::normal, 0.0f, 0.0f, 0.0f);
    AiParameterBool(SSTR::safe, false);
    AiParameterVec(SSTR::geometric_normal, 0.0f, 0.0f, 0.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::safe, SSTR::linkable, false);
 }
 
 struct NodeData

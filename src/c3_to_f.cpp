@@ -29,8 +29,6 @@ node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::mode, CTF_LUMINANCE, ColorToFloatModeNames);
-   
-   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
 }
 
 node_initialize

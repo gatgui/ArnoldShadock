@@ -18,8 +18,6 @@ node_parameters
    AiParameterRGB("input1", 0.0f, 0.0f, 0.0f);
    AiParameterRGB("input2", 0.0f, 0.0f, 0.0f);
    AiParameterFlt("precision", AI_EPSILON);
-   
-   AiMetaDataSetBool(mds, SSTR::_operator, SSTR::linkable, false);
 }
 
 node_initialize

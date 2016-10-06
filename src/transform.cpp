@@ -16,8 +16,6 @@ node_parameters
    AiParameterMtx(SSTR::matrix, id);
    AiParameterVec("vector", 0.0f, 0.0f, 0.0f);
    AiParameterBool(SSTR::as_point, false);
-   
-   AiMetaDataSetBool(mds, SSTR::as_point, SSTR::linkable, false);
 }
 
 struct NodeData

@@ -51,10 +51,6 @@ node_parameters
    AiParameterBool(SSTR::faceforward, false);
    AiParameterEnum(SSTR::space, SNS_World, ShadingNormalSpaceNames);
    AiParameterMtx(SSTR::custom_space, id);
-   
-   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::faceforward, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::space, SSTR::linkable, false);
 }
 
 struct NodeData

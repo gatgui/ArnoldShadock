@@ -27,9 +27,6 @@ node_parameters
    AiParameterEnum(SSTR::mode, SM_DirectDiffuse, ShadeModeNames);
    AiParameterBool(SSTR::override_normal, false);
    AiParameterVec(SSTR::normal, 1.0f, 0.0f, 0.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::override_normal, SSTR::linkable, false);
 }
 
 struct NodeData

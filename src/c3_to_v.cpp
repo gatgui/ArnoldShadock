@@ -27,8 +27,6 @@ node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::mode, CTV_RAW, ColorToVectorModeNames);
-   
-   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
 }
 
 node_initialize

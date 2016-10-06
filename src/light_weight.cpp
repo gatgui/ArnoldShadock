@@ -25,8 +25,6 @@ static const char* LightWeightNames[] =
 node_parameters
 {
    AiParameterEnum(SSTR::weight, LW_diffuse, LightWeightNames);
-   
-   AiMetaDataSetBool(mds, SSTR::weight, SSTR::linkable, false);
 }
 
 node_initialize

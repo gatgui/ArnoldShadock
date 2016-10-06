@@ -14,9 +14,6 @@ node_parameters
    AiParameterStr(SSTR::attribute, "");
    AiParameterFlt(SSTR::_default, 0.0f);
    AiParameterEnum(SSTR::output_mode, AM_V, AttributeModeNames);
-   
-   AiMetaDataSetBool(mds, SSTR::attribute, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::output_mode, SSTR::linkable, false);
 }
 
 struct NodeData

@@ -32,10 +32,6 @@ node_parameters
    AiArraySetInt(def, 1, RI_Linear);
    AiParameterArray(SSTR::interpolations, def);
    AiParameterRGB("default_value", 0.0f, 0.0f, 0.0f);
-   
-   AiMetaDataSetStr(mds, NULL, "ramps", SSTR::values);
-   AiMetaDataSetStr(mds, NULL, "ramps.values.positions", SSTR::positions);
-   AiMetaDataSetStr(mds, NULL, "ramps.values.interpolations", SSTR::interpolations);
 }
 
 struct NodeData

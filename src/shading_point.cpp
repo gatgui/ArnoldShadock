@@ -32,8 +32,6 @@ node_parameters
    AiParameterFlt(SSTR::time, 0.0f);
    AiParameterEnum(SSTR::space, SPS_World, ShadingPointSpaceNames);
    AiParameterMtx(SSTR::custom_space, id);
-   
-   AiMetaDataSetBool(mds, SSTR::space, SSTR::linkable, false);
 }
 
 struct NodeData

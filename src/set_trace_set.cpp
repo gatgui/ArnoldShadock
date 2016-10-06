@@ -14,9 +14,6 @@ node_parameters
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
    AiParameterStr(SSTR::trace_set, "");
    AiParameterBool(SSTR::inclusive, true);
-   
-   AiMetaDataSetBool(mds, SSTR::trace_set, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::inclusive, SSTR::linkable, false);
 }
 
 struct NodeData

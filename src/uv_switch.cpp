@@ -14,9 +14,6 @@ node_parameters
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
    AiParameterStr(SSTR::uv_set_name, "");
    AiParameterBool(SSTR::recompute_surface_uv_derivs, false);
-   
-   AiMetaDataSetBool(mds, SSTR::uv_set_name, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::recompute_surface_uv_derivs, SSTR::linkable, false);
 }
 
 struct NodeData

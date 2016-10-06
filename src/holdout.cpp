@@ -18,9 +18,6 @@ node_parameters
    AiParameterBool(SSTR::default_enable, true);
    AiParameterStr(SSTR::color_attr, "");
    AiParameterRGBA(SSTR::default_color, 0.0f, 0.0f, 0.0f, 0.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::enable_attr, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::color_attr, SSTR::linkable, false);
 }
 
 struct NodeData

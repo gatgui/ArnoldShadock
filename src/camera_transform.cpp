@@ -39,9 +39,6 @@ node_parameters
    AiParameterNode(SSTR::camera, NULL);
    AiParameterStr(SSTR::camera_name, "");
    AiParameterEnum(SSTR::mode, MM_world_to_camera, MatrixModeNames);
-   
-   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::camera_name, SSTR::linkable, false);
 }
 
 struct NodeData

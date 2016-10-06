@@ -12,8 +12,6 @@ node_parameters
 {
    AiParameterStr(SSTR::aov_name, "");
    AiParameterBool("default_value", false);
-   
-   AiMetaDataSetBool(mds, SSTR::aov_name, SSTR::linkable, false);
 }
 
 struct NodeData

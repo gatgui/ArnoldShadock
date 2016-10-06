@@ -83,12 +83,6 @@ node_parameters
    AiParameterVec("custom_vector_ddy", 0.0f, 0.0f, 0.0f);
    AiParameterMtx("offset_matrix", id);
    AiParameterBool(SSTR::recompute_surface_uv_derivs, false);
-   
-   AiMetaDataSetBool(mds, SSTR::lookup_vector, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::lookup_vector_space, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::custom_is_point, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::recompute_surface_uv_derivs, SSTR::linkable, false);
 }
 
 struct NodeData

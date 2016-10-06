@@ -28,8 +28,6 @@ node_parameters
 {
    AiParameterVec("input", 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::mode, VTC_RAW, VectorToColorModeNames);
-   
-   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
 }
 
 node_initialize

@@ -109,28 +109,6 @@ node_parameters
    AiParameterBool(SSTR::cache_texture_handles, true);
    AiParameterBool(SSTR::use_default_color, false);
    AiParameterRGBA(SSTR::default_color, 0.0f, 0.0f, 0.0f, 1.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::filter, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::mipmap_mode, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::mipmap_bias, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::single_channel, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::fill, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::swrap, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::twrap, SSTR::linkable, false);
-   //AiMetaDataSetBool(mds, "sscale", SSTR::linkable, false);
-   //AiMetaDataSetBool(mds, "tscale", SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::sflip, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::tflip, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::swidth, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::twidth, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::sblur, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::tblur, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::swap_st, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::cache_texture_handles, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::use_default_color, SSTR::linkable, false);
-   
-   AiMetaDataSetBool(mds, SSTR::filename, SSTR::filepath, true);
-   AiMetaDataSetStr(mds, SSTR::filename, "houdini.type", "file:image");
 }
 
 struct NodeData

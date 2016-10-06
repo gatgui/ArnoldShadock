@@ -29,8 +29,6 @@ node_parameters
 {
    AiParameterFlt("input", 0.0f);
    AiParameterEnum(SSTR::mode, 0, FloatToIntModeNames);
-   
-   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
 }
 
 node_initialize

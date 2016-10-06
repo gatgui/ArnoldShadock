@@ -33,10 +33,6 @@ node_parameters
    AiParameterArray(SSTR::interpolations, def);
    
    AiParameterVec("default_value", 0.0f, 0.0f, 0.0f);
-   
-   //AiMetaDataSetStr(mds, NULL, "ramps", SSTR::values);
-   //AiMetaDataSetStr(mds, NULL, "ramps.values.positions", SSTR::positions);
-   //AiMetaDataSetStr(mds, NULL, "ramps.values.interpolations", SSTR::interpolations);
 }
 
 struct NodeData

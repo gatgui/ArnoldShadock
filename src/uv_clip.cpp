@@ -30,9 +30,6 @@ node_parameters
    AiParameterPnt2("u_range", 0.0f, 1.0f);
    AiParameterPnt2("v_range", 0.0f, 1.0f);
    AiParameterRGBA("clipped_input", 0.0f, 0.0f, 0.0f, 1.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::order, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::transform_pivots, SSTR::linkable, false);
 }
 
 struct NodeData

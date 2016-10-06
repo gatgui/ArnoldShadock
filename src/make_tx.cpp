@@ -422,19 +422,6 @@ node_parameters
    AiParameterBOOL(SSTR::stripxmp, true);
    AiParameterBOOL(SSTR::oiioopt, true);
    AiParameterENUM(SSTR::mode, Mode_if_newer, MakeTxModeNames);
-   
-   AiMetaDataSetBool(mds, SSTR::filename, SSTR::filepath, true);
-   AiMetaDataSetStr(mds, SSTR::filename, "houdini.type", "file:image");
-   AiMetaDataSetBool(mds, SSTR::format, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::wraps, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::wrapt, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::tile, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::resize, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::mipmap, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::filter, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::stripxmp, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::oiioopt, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
 }
 
 node_initialize

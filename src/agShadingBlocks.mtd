@@ -621,18 +621,36 @@
 [node refract_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x00116548
+   
+   [attr ior1]
+      linkable BOOL false
+   
+   [attr ior2]
+      linkable BOOL false
 
 [node reflect_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x00116549
+   
+   [attr safe]
+      linkable BOOL false
 
 [node light_weight]
    maya.classification STRING "utility/general"
    maya.id INT 0x0011654A
+   
+   [attr weight]
+      linkable BOOL false
 
 [node illuminance_loop]
    maya.classification STRING "utility/general"
    maya.id INT 0x0011654B
+   
+   [attr combine]
+      linkable BOOL false
+   
+   [attr reset_lights_cache]
+      linkable BOOL false
 
 [node write_msgs]
    maya.classification STRING "utility/general"
@@ -668,34 +686,58 @@
 [node read_msg_b]
    maya.classification STRING "utility/general"
    maya.id INT 0x0011654D
+   
+   [attr msg_name]
+      linkable BOOL false
 
 [node read_msg_i]
    maya.classification STRING "utility/general"
    maya.id INT 0x0011654E
+   
+   [attr msg_name]
+      linkable BOOL false
 
 [node read_msg_f]
    maya.classification STRING "utility/general"
    maya.id INT 0x0011654F
+   
+   [attr msg_name]
+      linkable BOOL false
 
 [node read_msg_p2]
    maya.classification STRING "utility/general"
    maya.id INT 0x00116550
+   
+   [attr msg_name]
+      linkable BOOL false
 
 [node read_msg_p3]
    maya.classification STRING "utility/general"
    maya.id INT 0x00116551
+   
+   [attr msg_name]
+      linkable BOOL false
 
 [node read_msg_v]
    maya.classification STRING "utility/general"
    maya.id INT 0x00116552
+   
+   [attr msg_name]
+      linkable BOOL false
 
 [node read_msg_c3]
    maya.classification STRING "utility/general"
    maya.id INT 0x00116553
+   
+   [attr msg_name]
+      linkable BOOL false
 
 [node read_msg_c4]
    maya.classification STRING "utility/general"
    maya.id INT 0x00116554
+   
+   [attr msg_name]
+      linkable BOOL false
 
 # 0x00116555: agState/node_state
 
@@ -726,26 +768,62 @@
 [node bias_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x0011655C
+   
+   [attr bias]
+      min FLOAT 0
+      max FLOAT 1
 
 [node bias_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x0011655D
+   
+   [attr bias]
+      min VECTOR 0 0 0
+      max VECTOR 1 1 1
 
 [node bias_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x0011655E
+   
+   [attr bias]
+      min VECTOR 0 0 0
+      max VECTOR 1 1 1
 
 [node bias_gain_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x0011655F
+   
+   [attr bias]
+      min FLOAT 0
+      max FLOAT 1
+   
+   [attr gain]
+      min FLOAT 0
+      max FLOAT 1
 
 [node bias_gain_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x00116560
+   
+   [attr bias]
+      min VECTOR 0 0 0
+      max VECTOR 1 1 1
+   
+   [attr gain]
+      min VECTOR 0 0 0
+      max VECTOR 1 1 1
 
 [node bias_gain_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x00116561
+   
+   [attr bias]
+      min VECTOR 0 0 0
+      max VECTOR 1 1 1
+   
+   [attr gain]
+      min VECTOR 0 0 0
+      max VECTOR 1 1 1
 
 [node ceil_f]
    maya.classification STRING "utility/float"
@@ -774,14 +852,44 @@
 [node compare_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x00116568
+   
+   [attr operator]
+      linkable BOOL false
+   
+   [attr invert]
+      linkable BOOL false
+   
+   [attr precision]
+      min FLOAT 0.0
+      softmax FLOAT 1.0
 
 [node compare_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x00116569
+   
+   [attr operator]
+      linkable BOOL false
+   
+   [attr invert]
+      linkable BOOL false
+   
+   [attr precision]
+      min FLOAT 0.0
+      softmax FLOAT 1.0
 
 [node compare_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x0011656A
+   
+   [attr operator]
+      linkable BOOL false
+   
+   [attr invert]
+      linkable BOOL false
+   
+   [attr precision]
+      min FLOAT 0.0
+      softmax FLOAT 1.0
 
 [node f_to_b]
    maya.classification STRING "utility/convert"
@@ -790,18 +898,30 @@
 [node f_to_i]
    maya.classification STRING "utility/convert"
    maya.id INT 0x0011656C
+   
+   [attr mode]
+      linkable BOOL false
 
 [node v_to_c3]
    maya.classification STRING "utility/convert"
    maya.id INT 0x0011656D
+   
+   [attr mode]
+      linkable BOOL false
 
 [node c3_to_v]
    maya.classification STRING "utility/convert"
    maya.id INT 0x0011656E
+   
+   [attr mode]
+      linkable BOOL false
 
 [node c3_to_f]
    maya.classification STRING "utility/convert"
    maya.id INT 0x0011656F
+   
+   [attr mode]
+      linkable BOOL false
 
 [node f_to_v]
    maya.classification STRING "utility/convert"
@@ -814,6 +934,10 @@
 [node f_to_c4]
    maya.classification STRING "utility/convert"
    maya.id INT 0x00116572
+   
+   [attr alpha]
+      min FLOAT 0.0
+      max FLOAT 1.0
 
 [node b_to_i]
    maya.classification STRING "utility/convert"
@@ -830,14 +954,26 @@
 [node gain_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x00116576
+   
+   [attr gain]
+      min FLOAT 0
+      max FLOAT 1
 
 [node gain_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x00116577
+   
+   [attr gain]
+      min VECTOR 0 0 0
+      max VECTOR 1 1 1
 
 [node gain_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x00116578
+   
+   [attr gain]
+      min VECTOR 0 0 0
+      max VECTOR 1 1 1
 
 [node div_f]
    maya.classification STRING "utility/float"
@@ -930,14 +1066,26 @@
 [node mix_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x0011658F
+   
+   [attr mix]
+      min FLOAT 0.0
+      max FLOAT 1.0
 
 [node mix_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x00116590
+   
+   [attr mix]
+      min FLOAT 0.0
+      max FLOAT 1.0
 
 [node mix_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x00116591
+   
+   [attr mix]
+      min FLOAT 0.0
+      max FLOAT 1.0
 
 [node mod_f]
    maya.classification STRING "utility/float"
@@ -954,14 +1102,26 @@
 [node multi_switch_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x00116595
+   
+   [attr which]
+      min INT 0
+      max INT 15
 
 [node multi_switch_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x00116596
+   
+   [attr which]
+      min INT 0
+      max INT 15
 
 [node multi_switch_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x00116597
+   
+   [attr which]
+      min INT 0
+      max INT 15
 
 [node mult_f]
    maya.classification STRING "utility/float"
@@ -1090,10 +1250,22 @@
 [node trigo_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x001165B7
+   
+   [attr operation]
+      linkable BOOL false
+   
+   [attr units]
+      linkable BOOL false
 
 [node trigo_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165B8
+   
+   [attr operation]
+      linkable BOOL false
+   
+   [attr units]
+      linkable BOOL false
 
 [node length]
    maya.classification STRING "utility/vector"
@@ -1102,42 +1274,97 @@
 [node shape_attr_b]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001165BA
+   
+   [attr attribute]
+      linkable BOOL false
 
 [node shape_attr_i]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001165BB
+   
+   [attr attribute]
+      linkable BOOL false
 
 [node shape_attr_f]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001165BC
+   
+   [attr attribute]
+      linkable BOOL false
+   
+   [attr output_mode]
+      linkable BOOL false
 
 [node shape_attr_p2]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001165BD
+   
+   [attr attribute]
+      linkable BOOL false
+   
+   [attr output_mode]
+      linkable BOOL false
 
 [node shape_attr_v]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001165BE
+   
+   [attr attribute]
+      linkable BOOL false
+   
+   [attr output_mode]
+      linkable BOOL false
 
 [node shape_attr_c3]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001165BF
+   
+   [attr attribute]
+      linkable BOOL false
+   
+   [attr output_mode]
+      linkable BOOL false
 
 [node shape_attr_c4]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001165C0
+   
+   [attr attribute]
+      linkable BOOL false
+   
+   [attr output_mode]
+      linkable BOOL false
 
 [node shape_attr_s]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001165C1
+   
+   [attr attribute]
+      linkable BOOL false
 
 [node transform]
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165C2
+   
+   [attr as_point]
+      linkable BOOL false
 
 [node make_m]
    maya.classification STRING "utility/matrix"
    maya.id INT 0x001165C3
+   
+   [attr transform_order]
+      linkable BOOL false
+   
+   [attr rotation_order]
+      linkable BOOL false
+   
+   [attr angle_units]
+      linkable BOOL false
+   
+   [attr rotation]
+      softmin FLOAT -180
+      softmax FLOAT 180
 
 [node mult_m]
    maya.classification STRING "utility/matrix"
@@ -1146,22 +1373,52 @@
 [node set_trace_set]
    maya.classification STRING "utility/general"
    maya.id INT 0x001165C5
+   
+   [attr trace_set]
+      linkable BOOL false
+   
+   [attr inclusive]
+      linkable BOOL false
 
 [node shade]
    maya.classification STRING "utility/shade"
    maya.id INT 0x001165C6
+   
+   [attr mode]
+      linkable BOOL false
+   
+   [attr override_normal]
+      linkable BOOL false
 
 [node holdout]
    maya.classification STRING "utility/general"
    maya.id INT 0x001165C7
+   
+   [attr enable_attr]
+      linkable BOOL false
+   
+   [attr color_attr]
+      linkable BOOL false
 
 [node shading_point]
    maya.classification STRING "utility/state"
    maya.id INT 0x001165C8
+   
+   [attr space]
+      linkable BOOL false
 
 [node shading_normal]
    maya.classification STRING "utility/state"
    maya.id INT 0x001165C9
+   
+   [attr mode]
+      linkable BOOL false
+   
+   [attr faceforward]
+      linkable BOOL false
+   
+   [attr space]
+      linkable BOOL false
 
 [node write_aovs]
    maya.classification STRING "utility/aov"
@@ -1200,30 +1457,51 @@
 [node read_aov_b]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001165CB
+   
+   [attr aov_name]
+      linkable BOOL false
 
 [node read_aov_i]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001165CC
+   
+   [attr aov_name]
+      linkable BOOL false
 
 [node read_aov_f]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001165CD
+   
+   [attr aov_name]
+      linkable BOOL false
 
 [node read_aov_p2]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001165CE
+   
+   [attr aov_name]
+      linkable BOOL false
 
 [node read_aov_p3]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001165CF
+   
+   [attr aov_name]
+      linkable BOOL false
 
 [node read_aov_v]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001165D0
+   
+   [attr aov_name]
+      linkable BOOL false
 
 [node read_aov_c3]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001165D1
+   
+   [attr aov_name]
+      linkable BOOL false
 
 [node read_aov_c4]
    maya.classification STRING "utility/aov"
@@ -1240,30 +1518,70 @@
 [node lerp_m]
    maya.classification STRING "utility/matrix"
    maya.id INT 0x001165D5
+   
+   [attr blend]
+      min FLOAT 0.0
+      max FLOAT 1.0
 
 [node ramp_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x001165D6
+   
+   ramps STRING "values"
+   ramps.values.positions STRING "positions"
+   ramps.values.interpolations STRING "interpolations"
 
 [node ramp_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x001165D7
+   
+   ramps STRING "values"
+   ramps.values.positions STRING "positions"
+   ramps.values.interpolations STRING "interpolations"
 
 [node ramp_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165D8
+   
+   ramps STRING "values"
+   ramps.values.positions STRING "positions"
+   ramps.values.interpolations STRING "interpolations"
 
 [node smooth_switch_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x001165D9
+   
+   [attr threshold]
+      softmin FLOAT -5.0
+      softmax FLOAT 5.0
+   
+   [attr falloff]
+      min FLOAT 0.0
+      softmax FLOAT 5.0
 
 [node smooth_switch_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x001165DA
+   
+   [attr threshold]
+      softmin FLOAT -5.0
+      softmax FLOAT 5.0
+   
+   [attr falloff]
+      min FLOAT 0.0
+      softmax FLOAT 5.0
 
 [node smooth_switch_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165DB
+   
+   [attr threshold]
+      softmin FLOAT -5.0
+      softmax FLOAT 5.0
+   
+   [attr falloff]
+      min FLOAT 0.0
+      softmax FLOAT 5.0
 
 [node range_switch_f]
    maya.classification STRING "utility/float"
@@ -1280,14 +1598,26 @@
 [node smooth_range_switch_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x001165DF
+   
+   [attr falloff]
+      min FLOAT 0.0
+      softmax FLOAT 5.0
 
 [node smooth_range_switch_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x001165E0
+   
+   [attr falloff]
+      min FLOAT 0.0
+      softmax FLOAT 5.0
 
 [node smooth_range_switch_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165E1
+   
+   [attr falloff]
+      min FLOAT 0.0
+      softmax FLOAT 5.0
 
 [node make_p2]
    maya.classification STRING "utility/general"
@@ -1308,52 +1638,227 @@
 [node gaussian_f]
    maya.classification STRING "utility/float"
    maya.id INT 0x001165E6
+   
+   [attr width]
+      min FLOAT 0.0001
 
 [node gaussian_c3]
    maya.classification STRING "utility/color"
    maya.id INT 0x001165E7
+   
+   [attr width]
+      min FLOAT 0.0001
 
 [node gaussian_v]
    maya.classification STRING "utility/vector"
    maya.id INT 0x001165E8
+   
+   [attr width]
+      min FLOAT 0.0001
 
 [node uv_switch]
    maya.classification STRING "utility/uv"
    maya.id INT 0x001165E9
+   
+   [attr uv_set_name]
+      linkable BOOL false
+   
+   [attr recompute_surface_uv_derivs]
+      linkable BOOL false
 
 [node uv_project]
    maya.classification STRING "utility/uv"
    maya.id INT 0x001165EA
+   
+   [attr lookup_vector]
+      linkable BOOL false
+   
+   [attr lookup_vector_space]
+      linkable BOOL false
+   
+   [attr mode]
+      linkable BOOL false
+   
+   [attr custom_is_point]
+      linkable BOOL false
+   
+   [attr recompute_surface_uv_derivs]
+      linkable BOOL false
 
 [node uv_transform]
    maya.classification STRING "utility/uv"
    maya.id INT 0x001165EB
+   
+   [attr order]
+      linkable BOOL false
+   
+   [attr rotation]
+      softmin FLOAT -180
+      softmax FLOAT 180
+   
+   [attr transform_pivots]
+      linkable BOOL false
+   
+   [attr recompute_surface_uv_derivs]
+      linkable BOOL false
 
 [node uv_clip]
    maya.classification STRING "utility/uv"
    maya.id INT 0x001165EC
+   
+   [attr order]
+      linkable BOOL false
+   
+   [attr rotation]
+      softmin FLOAT -180
+      softmax FLOAT 180
+   
+   [attr transform_pivots]
+      linkable BOOL false
 
 [node make_tx]
    maya.classification STRING "utility/general"
    maya.id INT 0x001165ED
-
+   
+   [attr filename]
+      filepath BOOL true
+      houdini.type STRING "file:image"
+   
+   [attr format]
+      linkable BOOL false
+   
+   [attr wraps]
+      linkable BOOL false
+   
+   [attr wrapt]
+      linkable BOOL false
+   
+   [attr tile]
+      linkable BOOL false
+      min INT 0
+      softmax INT 128
+   
+   [attr resize]
+      linkable BOOL false
+   
+   [attr mipmap]
+      linkable BOOL false
+   
+   [attr filter]
+      linkable BOOL false
+   
+   [attr stripxmp]
+      desc STRING "Strip XML metadata. This options requires exiftools to be available."
+      linkable BOOL false
+   
+   [attr oiioopt]
+      linkable BOOL false
+   
+   [attr mode]
+      linkable BOOL false
+   
 [node camera_transform]
    maya.classification STRING "utility/state"
    maya.id INT 0x001165EE
+   
+   [attr mode]
+      linkable BOOL false
+   
+   [attr camera_name]
+      linkable BOOL false
 
 [node resolution]
    maya.classification STRING "utility/state"
    maya.id INT 0x001165EF
+   
+   [attr target]
+      linkable BOOL false
+   
+   [attr filename]
+      filepath BOOL true
+      houdini.type STRING "file:image"
 
 # 0x001165F0: Was allocated to image_resolution (merged with render_resolution in resolution that take old render_resolution ID)
 
 [node token_path]
    maya.classification STRING "utility/general"
    maya.id INT 0x001165F1
+   
+   [attr filename]
+      filepath BOOL true
+      houdini.type STRING "file:image"
 
 [node texture]
    maya.classification STRING "utility/texture"
    maya.id INT 0x001165F2
+   
+   [attr filename]
+      filepath BOOL true
+      houdini.type STRING "file:image"
+   
+   [attr filter]
+      linkable BOOL false
+   
+   [attr mipmap_mode]
+      linkable BOOL false
+   
+   [attr mipmap_bias]
+      linkable BOOL false
+      softmin INT -5
+      softmax INT 5
+   
+   [attr single_channel]
+      linkable BOOL false
+   
+   [attr start_channel]
+      min INT 0
+      softmax INT 4
+   
+   [attr fill]
+      linkable BOOL false
+      min FLOAT 0.0
+      softmax FLOAT 1.0
+   
+   [attr swrap]
+      linkable BOOL false
+   
+   [attr twrap]
+      linkable BOOL false
+   
+   [attr sflip]
+      linkable BOOL false
+   
+   [attr tflip]
+      linkable BOOL false
+   
+   [attr swidth]
+      linkable BOOL false
+      min FLOAT 0.0
+      softmax FLOAT 5.0
+   
+   [attr twidth]
+      linkable BOOL false
+      min FLOAT 0.0
+      softmax FLOAT 5.0
+   
+   [attr sblur]
+      linkable BOOL false
+      min FLOAT 0.0
+      softmax FLOAT 5.0
+   
+   [attr tblur]
+      linkable BOOL false
+      min FLOAT 0.0
+      softmax FLOAT 5.0
+   
+   [attr swap_st]
+      linkable BOOL false
+   
+   [attr cache_texture_handles]
+      linkable BOOL false
+   
+   [attr use_default_color]
+      linkable BOOL false
 
 # 0x001165F3: agUserDataRamp/userDataVectorRamp
 # 0x001165F4: agUserDataRamp/userDataVectorRamp

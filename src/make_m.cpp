@@ -24,10 +24,6 @@ node_parameters
    AiParameterPnt(SSTR::rotation_pivot, 0.0f, 0.0f, 0.0f);
    AiParameterVec(SSTR::scale, 1.0f, 1.0f, 1.0f);
    AiParameterPnt(SSTR::scale_pivot, 0.0f, 0.0f, 0.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::transform_order, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::rotation_order, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::angle_units, SSTR::linkable, false);
 }
 
 struct NodeData

@@ -26,10 +26,6 @@ node_parameters
    AiParameterPnt2(SSTR::translation, 0.0f, 0.0f);
    AiParameterBool(SSTR::transform_pivots, false);
    AiParameterBool(SSTR::recompute_surface_uv_derivs, false);
-   
-   AiMetaDataSetBool(mds, SSTR::order, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::transform_pivots, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::recompute_surface_uv_derivs, SSTR::linkable, false);
 }
 
 struct NodeData
