@@ -60,7 +60,8 @@ def make_mtd():
   #   ...
   #   #endif
   nodeexp = re.compile(r"^(\s*\[\s*node\s+)([^]]+)(\s*\]\s*)$")
-  attrexp = re.compile(r"(\s*)([^\s]+)\s+([^\s]+)\s+([^\s]+)\s*$")
+  attrexp = re.compile(r"^(\s+\[\s*attr\s+)([^]]+)(\s*\]\s*)$")
+  mdexp = re.compile(r"(\s*)([^\s]+)\s+([^\s]+)\s+([^\s]+)\s*$")
   ppexp = re.compile(r"^\s*#(.*)\s*$")
   ifexp = re.compile(r"^if\s+([^\s]+)\s+([<>=!]+)\s+([^\s]+)$")
   verexp = re.compile(r"^(\d+)(.(\d+)(.(\d+)(.(\d+))?)?)?$")
@@ -98,7 +99,9 @@ def make_mtd():
 
     has_maya_name = False
     maya_name = None
+    node_heading = ""
     attr_heading = ""
+    first_attr = -1
     ignore_lines = False
 
     for line in sf.readlines():
@@ -156,14 +159,20 @@ def make_mtd():
         
         if m:
           if not has_maya_name and maya_name is not None:
-            while len(dlines) > 0:
-              last = dlines.pop()
-              if len(last.strip()) > 0:
-                dlines.append(last)
-                break
-            dlines.append("\n" + attr_heading + "maya.name STRING \"" + maya_name + "\"\n\n")
+            extra_line = node_heading + "maya.name STRING \"" + maya_name + "\"\n\n"
+            if first_attr >= 0:
+              dlines.insert(first_attr, extra_line)
+            else:
+              while len(dlines) > 0:
+                last = dlines.pop()
+                if len(last.strip()) > 0:
+                  dlines.append(last)
+                  break
+              dlines.append("\n" + extra_line)
           
           has_maya_name = False
+          node_heading = line.split("[")[0] + " " # at least indent by one space
+          first_attr = -1
           base_name = remap.get(m.group(2), m.group(2))
           node_name = shdprefix + base_name
           maya_name = re.sub(r"_+$", "", shdprefix) + "".join(map(lambda x: x[0].upper() + x[1:], base_name.split("_")))
@@ -189,30 +198,41 @@ def make_mtd():
             else:
               mayaIds[mid] = len(dlines)
             
-            line = "%smaya.id INT 0x%s\n" % (m.group(1), m.group(2))
+            node_heading = m.group(1)
+            print("Node %s heading: '%s'" % (maya_name, node_heading))
+            line = "%smaya.id INT 0x%s\n" % (node_heading, m.group(2))
           
           else:
             if len(line.strip()) > 0:
               m = attrexp.match(line)
               if m:
-                attr_heading = m.group(1)
-                attr_name = m.group(2)
-                attr_type = m.group(3)
-                if attr_name == "maya.name":
-                  has_maya_name = True
-                  if maya_name is not None:
-                    print("has name! %s" % maya_name)
-                    line = attr_heading + attr_name + " " + attr_type + " \"" + maya_name + "\"\n"
+                if first_attr < 0:
+                  first_attr = len(dlines)
+              else:
+                m = mdexp.match(line)
+                if m:
+                  attr_heading = m.group(1)
+                  attr_name = m.group(2)
+                  attr_type = m.group(3)
+                  if attr_name == "maya.name":
+                    has_maya_name = True
+                    if maya_name is not None:
+                      print("has name! %s" % maya_name)
+                      line = attr_heading + attr_name + " " + attr_type + " \"" + maya_name + "\"\n"
           
           dlines.append(line)
 
     if not has_maya_name and maya_name is not None:
-      while len(dlines) > 0:
-        last = dlines.pop()
-        if len(last.strip()) > 0:
-          dlines.append(last)
-          break
-      dlines.append("\n" + attr_heading + "maya.name STRING \"" + maya_name + "\"\n\n")
+      extra_line = node_heading + "maya.name STRING \"" + maya_name + "\"\n\n"
+      if first_attr >= 0:
+        dlines.insert(first_attr, extra_line)
+      else:
+        while len(dlines) > 0:
+          last = dlines.pop()
+          if len(last.strip()) > 0:
+            dlines.append(last)
+            break
+        dlines.append("\n" + extra_line)
 
     sf.close()
 
