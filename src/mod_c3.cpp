@@ -11,7 +11,7 @@ enum ModC3Params
 node_parameters
 {
    AiParameterRGB("input1", 0.0f, 0.0f, 0.0f);
-   AiParameterRGB("input2", 1.0f, 0.0f, 0.0f);
+   AiParameterRGB("input2", 1.0f, 1.0f, 1.0f);
 }
 
 node_initialize
