@@ -18,7 +18,7 @@ node_parameters
    AiParameterFlt("eta", 1.0f);
    
    AiMetaDataSetFlt(mds, "g", "min", -1.0);
-   AiMetaDataSetFlt(mds, "g", "max", -1.0);
+   AiMetaDataSetFlt(mds, "g", "max",  1.0);
 }
 
 node_initialize
