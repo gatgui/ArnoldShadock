@@ -1022,9 +1022,6 @@
    
    [attr state]
       linkable BOOL false
-   
-   [attr trace]
-      linkable BOOL false
 
 [node trace_result_v]
    maya.classification STRING "utility/trace"
@@ -1032,18 +1029,12 @@
    
    [attr state]
       linkable BOOL false
-   
-   [attr trace]
-      linkable BOOL false
 
 [node probe_result_v]
    maya.classification STRING "utility/trace"
    maya.id INT 0x0011652A
    
    [attr state]
-      linkable BOOL false
-   
-   [attr trace]
       linkable BOOL false
 
 [node sampler]
@@ -1099,9 +1090,6 @@
    maya.id INT 0x00116531
    
    [attr state]
-      linkable BOOL false
-   
-   [attr trace]
       linkable BOOL false
 
 [node wireframe]
