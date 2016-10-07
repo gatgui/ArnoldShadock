@@ -16,10 +16,6 @@ node_parameters
    AiParameterEnum(SSTR::mode, GM_Expand, GammaModeNames);
    AiParameterEnum(SSTR::transform, GF_sRGB, GammaFunctionNames);
    AiParameterEnum(SSTR::logc_exposure, EL_800, LogCExposureLevelNames);
-
-   AiMetaDataSetBool(mds, SSTR::mode, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::transform, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::logc_exposure, SSTR::linkable, false);
 }
 
 struct NodeData

@@ -48,14 +48,6 @@ node_parameters
    AiParameterBool(SSTR::skip_shadow, false);
    AiParameterStr(SSTR::trace_set, "");
    AiParameterBool(SSTR::inclusive_trace_set, true);
-   
-   AiMetaDataSetBool(mds, SSTR::P_space, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::P_is_offset, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::N_space, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::fhemi, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::skip_shadow, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::trace_set, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::inclusive_trace_set, SSTR::linkable, false);
 }
 
 struct NodeData

@@ -14,8 +14,6 @@ node_parameters
    AiParameterRGB("sampler", 0.0f, 0.0f, 0.0f);
    AiParameterFlt("input", 0.0f);
    AiParameterEnum(SSTR::combine, CM_Add, CombineModeNames);
-   
-   AiMetaDataSetBool(mds, SSTR::combine, SSTR::linkable, false);
 }
 
 node_initialize

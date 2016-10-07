@@ -14,10 +14,6 @@ node_parameters
    AiParameterInt(SSTR::samples, 1);
    AiParameterBool(SSTR::seeded, false);
    AiParameterInt(SSTR::seed, 0);
-   
-   AiMetaDataSetBool(mds, SSTR::samples, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::seeded, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::seed, SSTR::linkable, false);
 }
 
 node_initialize

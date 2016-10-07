@@ -58,18 +58,6 @@ node_parameters
    AiParameterBool(SSTR::use_approximation, false);
    AiParameterBool(SSTR::fix_nans, false);
    AiParameterRGB(SSTR::nan_color, 0.0f, 0.0f, 0.0f);
-
-   AiMetaDataSetBool(mds, SSTR::output_mode, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::tm_key, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::tm_Lavg, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::tm_Lwht, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::ca_transform, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::ca_max_temperature, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::ca_white_point, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::color_space, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::use_approximation, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::fix_nans, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::nan_color, SSTR::linkable, false);
 }
 
 struct NodeData

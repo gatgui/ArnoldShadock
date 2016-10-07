@@ -106,16 +106,6 @@ node_parameters
    AiParameterPnt(SSTR::P, 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::P_space, S_world, SpaceNames);
    AiParameterBool(SSTR::P_is_offset, true);
-   
-   AiMetaDataSetBool(mds, SSTR::scattering_source, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::scattering_field, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::attenuation_source, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::attenuation_field, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::emission_source, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::emission_field, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::attenuation_mode, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::preserve_energy, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::interpolation, SSTR::linkable, false);
 }
 
 struct NodeData

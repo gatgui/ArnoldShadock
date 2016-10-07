@@ -22,12 +22,6 @@ node_parameters
    AiParameterRGB(SSTR::target, 1.0f, 1.0f, 1.0f);
    AiParameterEnum(SSTR::target_color_space, CS_Rec709, ColorSpaceNames);
    AiParameterEnum(SSTR::transform, gmath::CAT_VonKries, ChromaticAdaptationTransformNames);
-
-   AiMetaDataSetBool(mds, SSTR::source, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::source_color_space, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::target, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::target_color_space, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::transform, SSTR::linkable, false);
 }
 
 struct NodeData

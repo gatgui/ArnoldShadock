@@ -14,8 +14,6 @@ node_parameters
    AiParameterRGB("brdf", 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::ray_type, RT_Diffuse, RayTypeNames);
    AiParameterRGB(SSTR::weight, 1.0f, 1.0f, 1.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::ray_type, SSTR::linkable, false);
 }
 
 node_initialize

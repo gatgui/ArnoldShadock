@@ -16,9 +16,6 @@ node_parameters
    AiParameterRGB("mfp", 0.0f, 0.0f, 0.0f);
    AiParameterFlt("g", 0.0f);
    AiParameterFlt("eta", 1.0f);
-   
-   AiMetaDataSetFlt(mds, "g", "min", -1.0);
-   AiMetaDataSetFlt(mds, "g", "max",  1.0);
 }
 
 node_initialize

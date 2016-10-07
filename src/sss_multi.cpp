@@ -39,8 +39,6 @@ node_parameters
    AiParameterRGB("albedo2", 0.0f, 0.0f, 0.0f);
    AiParameterRGB("weight2", 0.0f, 0.0f, 0.0f);
    AiParameterFlt("radius_scale", 1.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::method, SSTR::linkable, false);
 }
 
 node_initialize

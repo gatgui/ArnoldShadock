@@ -18,9 +18,6 @@ node_parameters
    AiParameterEnum(SSTR::angle_units, AU_Degrees, AngleUnitsNames);
    AiParameterVec(SSTR::rotation, 0.0f, 0.0f, 0.0f);
    AiParameterPnt(SSTR::rotation_pivot, 0.0f, 0.0f, 0.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::rotation_order, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::angle_units, SSTR::linkable, false);
 }
 
 struct NodeData

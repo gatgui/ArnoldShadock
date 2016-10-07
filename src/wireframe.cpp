@@ -31,9 +31,6 @@ node_parameters
    AiParameterFlt("line_width", 1.0f);
    AiParameterEnum(SSTR::units, WS_screen, WidthSpaceNames);
    AiParameterEnum(SSTR::edge_type, ET_polygons, EdgeTypeNames);
-
-   AiMetaDataSetBool(mds, SSTR::units, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::edge_type, SSTR::linkable, false);
 }
 
 struct NodeData

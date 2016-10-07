@@ -25,8 +25,6 @@ node_parameters
    AiParameterEnum(SSTR::state, TS_point, TraceStateNames);
    AiParameterBool("trace", false);
    AiParameterVec("default", 0.0f, 0.0f, 0.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::state, SSTR::linkable, false);
 }
 
 node_initialize
@@ -59,7 +57,7 @@ shader_evaluate
    {
       if (hit && hit->isSG)
       {
-         AiMsgWarning("[trace_state_vector] Trying to access result from a 'probe' trace: Use 'probe_state_vector' instead");
+         AiMsgWarning("[trace_result_v] Trying to access result from a 'probe' trace: Use 'probe_result_v' instead");
       }
       sg->out.VEC = AiShaderEvalParamVec(p_default);
    }

@@ -29,8 +29,6 @@ node_parameters
    AiParameterPnt2("sample", 0.0f, 0.0f);
    AiParameterEnum(SSTR::distribution, ND_Beckmann, NormalDistributionNames);
    AiParameterFlt(SSTR::distribution_param, 0.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::distribution, SSTR::linkable, false);
 }
 
 struct NodeData

@@ -14,8 +14,6 @@ node_parameters
    AiParameterVec(SSTR::view_vector, 0.0f, 0.0f, 0.0f);
    AiParameterVec(SSTR::normal, 0.0f, 0.0f, 0.0f);
    AiParameterRGB(SSTR::reflectance, 1.0f, 1.0f, 1.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::reflectance, SSTR::linkable, false);
 }
 
 struct NodeData

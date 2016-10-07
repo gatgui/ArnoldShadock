@@ -34,8 +34,6 @@ node_parameters
    AiParameterRGB(SSTR::surface_color, 1.0f, 1.0f, 1.0f);
    AiParameterFlt(SSTR::surface_color_weight, 1.0f);
    AiParameterEnum(SSTR::light_weight, LW_none, LightWeightNames);
-   
-   AiMetaDataSetBool(mds, SSTR::light_weight, SSTR::linkable, false);
 }
 
 struct NodeData

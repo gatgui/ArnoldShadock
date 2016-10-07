@@ -21,8 +21,6 @@ node_parameters
 {
    AiParameterVec("ray", 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::type, TT_standard, TraceTypeNames);
-   
-   AiMetaDataSetBool(mds, SSTR::type, SSTR::linkable, false);
 }
 
 struct NodeData

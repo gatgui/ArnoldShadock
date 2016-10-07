@@ -41,14 +41,6 @@ node_parameters
    AiParameterRGBA(SSTR::_default, 0.0f, 0.0f, 0.0f, 1.0f);
    AiParameterRGBA("failed", 0.0f, 0.0f, 0.0f, 1.0f);
    
-   AiMetaDataSetBool(mds, SSTR::camera_use_default, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::shadow_use_default, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::reflected_use_default, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::refracted_use_default, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::subsurface_use_default, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::diffuse_use_default, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::glossy_use_default, SSTR::linkable, false);
-   
 }
 
 struct NodeData

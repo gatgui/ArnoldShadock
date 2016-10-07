@@ -53,19 +53,6 @@ node_parameters
    AiParameterVec(SSTR::multiply, 1.0f, 1.0f, 1.0f);
    AiParameterVec(SSTR::offset, 0.0f, 0.0f, 0.0f);
    AiParameterVec(SSTR::_default, 0.0f, 0.0f, 0.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::field, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::interpolation, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::pre_multiply, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::pre_offset, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::blend_mode, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::bias, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::gain, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::multiply, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::offset, SSTR::linkable, false);
-   
-   AiMetaDataSetFlt(mds, SSTR::blend, "min", 0.0f);
-   AiMetaDataSetFlt(mds, SSTR::blend, "max", 1.0f);
 }
 
 struct NodeData

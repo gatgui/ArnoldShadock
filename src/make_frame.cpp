@@ -45,10 +45,6 @@ node_parameters
    AiParameterPnt(SSTR::custom_origin, 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::z_axis, ZA_Nf, ZAxisNames);
    AiParameterVec(SSTR::custom_axis, 0.0f, 0.0f, 0.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::method, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::origin, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::z_axis, SSTR::linkable, false);
 }
 
 struct NodeData

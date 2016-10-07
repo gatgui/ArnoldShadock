@@ -32,11 +32,6 @@ node_parameters
    AiParameterFlt(SSTR::dispersion, 0.0f);
    AiParameterBool(SSTR::fresnel, false);
    AiParameterRGB(SSTR::transmittance, 1.0f, 1.0f, 1.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::distribution, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::local_frame, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::angle_units, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::fresnel, SSTR::linkable, false);
 }
 
 struct NodeData

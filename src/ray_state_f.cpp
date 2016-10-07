@@ -39,8 +39,6 @@ node_parameters
    AiParameterEnum(SSTR::state, RS_sx, RayStateNames);
    AiParameterVec("ray", 0.0f, 0.0f, 0.0f);
    AiParameterFlt("default", 0.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::state, SSTR::linkable, false);
 }
 
 struct NodeData

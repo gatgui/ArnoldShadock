@@ -24,10 +24,6 @@ node_parameters
    AiParameterMtx(SSTR::custom_frame, AI_M4_IDENTITY);
    AiParameterFlt(SSTR::frame_rotation, 0.0f);
    AiParameterEnum(SSTR::angle_units, AU_Degrees, AngleUnitsNames);
-   
-   AiMetaDataSetBool(mds, SSTR::distribution, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::local_frame, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::angle_units, SSTR::linkable, false);
 }
 
 struct NodeData

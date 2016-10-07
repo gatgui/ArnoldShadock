@@ -27,8 +27,6 @@ node_parameters
    AiParameterEnum(SSTR::state, TS_color, TraceStateNames);
    AiParameterBool("trace", false);
    AiParameterRGB("default", 0.0f, 0.0f, 0.0f);
-   
-   AiMetaDataSetBool(mds, SSTR::state, SSTR::linkable, false);
 }
 
 node_initialize
@@ -55,13 +53,13 @@ shader_evaluate
    HitData *hit = 0;
    
    if (!AiShaderEvalParamBool(p_trace) ||
-       !AiStateGetMsgPtr("agsb_trace_hit", (void**)&hit) ||
+       !AiStateGetMsgPtr(SSTR::agsb_trace_hit, (void**)&hit) ||
        !hit ||
        hit->isSG)
    {
       if (hit && hit->isSG)
       {
-         AiMsgWarning("[trace_state_color] Trying to access result from a 'probe' trace: Use 'probe_state_vector' instead");
+         AiMsgWarning("[trace_result_c3] Trying to access result from a 'probe' trace: Use 'probe_result_v' instead");
       }
       sg->out.RGB = AiShaderEvalParamRGB(p_default);
    }

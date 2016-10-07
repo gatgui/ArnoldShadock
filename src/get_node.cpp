@@ -24,9 +24,6 @@ node_parameters
 {
    AiParameterEnum(SSTR::target_node, TN_Shaded, TargetNodeNames);
    AiParameterInt(SSTR::light_index, -1);
-   
-   AiMetaDataSetBool(mds, SSTR::target_node, SSTR::linkable, false);
-   AiMetaDataSetBool(mds, SSTR::light_index, SSTR::linkable, false);
 }
 
 struct NodeData
