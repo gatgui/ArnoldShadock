@@ -10,7 +10,7 @@ excons.SetArgument("no-arch", 1)
 
 env = excons.MakeBaseEnv()
 
-version = "0.5.0"
+version = "0.5.1"
 
 withState = (excons.GetArgument("with-state", 1, int) != 0)
 withNoises = (excons.GetArgument("with-noises", 1, int) != 0)
