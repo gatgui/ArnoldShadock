@@ -227,7 +227,7 @@
       linkable BOOL false
 
 [node write_aov_c4]
-   maya.classification STRING "utility/aov"
+   maya.classification STRING "shader/surface"
    maya.id INT 0x001164F8
 
    [attr aov_name]
@@ -240,7 +240,7 @@
       linkable BOOL false
 
 [node write_aov_c3]
-   maya.classification STRING "utility/aov"
+   maya.classification STRING "shader/surface"
    maya.id INT 0x001164F9
 
    [attr aov_name]
@@ -253,7 +253,7 @@
       linkable BOOL false
 
 [node write_aov_v]
-   maya.classification STRING "utility/aov"
+   maya.classification STRING "shader/surface"
    maya.id INT 0x001164FA
 
    [attr aov_name]
@@ -266,7 +266,7 @@
       linkable BOOL false
 
 [node write_aov_p3]
-   maya.classification STRING "utility/aov"
+   maya.classification STRING "shader/surface"
    maya.id INT 0x001164FB
 
    [attr aov_name]
@@ -279,7 +279,7 @@
       linkable BOOL false
 
 [node write_aov_p2]
-   maya.classification STRING "utility/aov"
+   maya.classification STRING "shader/surface"
    maya.id INT 0x001164FC
 
    [attr aov_name]
@@ -292,7 +292,7 @@
       linkable BOOL false
 
 [node write_aov_f]
-   maya.classification STRING "utility/aov"
+   maya.classification STRING "shader/surface"
    maya.id INT 0x001164FD
 
    [attr aov_name]
@@ -305,7 +305,7 @@
       linkable BOOL false
 
 [node write_aov_i]
-   maya.classification STRING "utility/aov"
+   maya.classification STRING "shader/surface"
    maya.id INT 0x001164FE
 
    [attr aov_name]
@@ -318,7 +318,7 @@
       linkable BOOL false
 
 [node write_aov_b]
-   maya.classification STRING "utility/aov"
+   maya.classification STRING "shader/surface"
    maya.id INT 0x001164FF
 
    [attr aov_name]
@@ -731,7 +731,7 @@
       linkable BOOL false
 
 [node volume]
-   maya.classification STRING "utility/shade"
+   maya.classification STRING "shader/volume"
    maya.id INT 0x0011650E
    
    [attr scattering_source]
@@ -2110,7 +2110,7 @@
       linkable BOOL false
 
 [node write_aovs]
-   maya.classification STRING "utility/aov"
+   maya.classification STRING "shader/surface"
    maya.id INT 0x001165CA
    
    [attr bool_aov_name]
