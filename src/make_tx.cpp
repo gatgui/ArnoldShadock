@@ -1,8 +1,5 @@
-#include <ai.h>
+#include "common.h"
 #include <sys/stat.h>
-#include <cstdlib>
-#include <cstdio>
-#include <cstring>
 #include <string>
 #include <map>
 #include <vector>
@@ -14,7 +11,6 @@
 #include <unistd.h>
 #include <errno.h>
 #endif
-#include "strings.h"
 
 AI_SHADER_NODE_EXPORT_METHODS(MakeTxMtd);
 
@@ -86,8 +82,9 @@ static const char* MakeTxModeNames[] = {"if_newer", "always", "reuse", "disable"
 
 typedef std::map<std::string, bool> ConvertedMap;
 
-struct NodeData
+class MakeTxData
 {
+public:
    bool processInEval;
 
    char **txFilenames;
@@ -107,6 +104,62 @@ struct NodeData
    bool stripxmp;
    bool oiioopt;
    int mode;
+
+   MakeTxData()
+      : processInEval(false)
+      , txFilenames(0)
+      , numTxFilenames(0)
+      , format(Format_input)
+      , tile(0)
+      , wraps(Wrap_default)
+      , wrapt(Wrap_s)
+      , filter(Filter_box)
+      , resize(false)
+      , mipmap(true)
+      , stripxmp(false)
+      , oiioopt(true)
+      , mode(Mode_if_newer)
+   {
+      AiCritSecInitRecursive(&mutex);
+   }
+
+   ~MakeTxData()
+   {
+      freeFilenames();
+      AiCritSecClose(&mutex);
+   }
+
+   void allocateFilenames(int count)
+   {
+      freeFilenames();
+      
+      if (count > 0)
+      {
+         numTxFilenames = count;
+      
+         txFilenames = (char**) AiMalloc(count * sizeof(char*));
+         
+         for (int i=0; i<count; ++i)
+         {
+            txFilenames[i] = (char*) AiMalloc(MAX_FILENAME * sizeof(char));
+         }
+      }
+   }
+   
+   void freeFilenames()
+   {
+      converted.clear();
+      if (txFilenames)
+      {
+         for (int i=0; i<numTxFilenames; ++i)
+         {
+            AiFree(txFilenames[i]);
+         }
+         AiFree(txFilenames);
+         txFilenames = 0;
+         numTxFilenames = 0;
+      }
+   }
 };
 
 static std::string EscapeString(const std::string &s)
@@ -149,7 +202,7 @@ static std::string GetCommandLine(int argc, char **argv)
 
 static int ExecuteCommand(int argc, char **argv)
 {
-   #ifdef _WIN32
+#ifdef _WIN32
    
    PROCESS_INFORMATION pinfo;
    STARTUPINFO sinfo;
@@ -179,7 +232,7 @@ static int ExecuteCommand(int argc, char **argv)
    }
    return 1;
    
-   #else
+#else
    
    argv[argc] = 0;
    int pid = fork();
@@ -195,7 +248,7 @@ static int ExecuteCommand(int argc, char **argv)
       return (rpid == pid ? 0 : 1);
    }
 
-   #endif
+#endif
 }
 
 static bool GetTxName(const char *inFilename, char *txFilename, size_t sz)
@@ -249,7 +302,7 @@ static bool GetTxName(const char *inFilename, char *txFilename, size_t sz)
    return true;
 }
 
-static bool MakeTx(NodeData *data, const char *inFilename, const char *outFilename)
+static bool MakeTx(MakeTxData *data, const char *inFilename, const char *outFilename)
 {
    struct stat st0, st1;
 
@@ -349,7 +402,7 @@ static bool MakeTx(NodeData *data, const char *inFilename, const char *outFilena
          args.push_back(inFilename);
          
 
-         //AiMsgInfo("[MakeTx]   %s", cmd.c_str());
+         //AiMsgInfo("[make_tx]   %s", cmd.c_str());
          //int ret = system(cmd.c_str());
          int argc = (int) args.size();
          char **argv = (char**) AiMalloc((argc + 1) * sizeof(char*));
@@ -359,7 +412,7 @@ static bool MakeTx(NodeData *data, const char *inFilename, const char *outFilena
          }
          argv[argc] = 0;
 
-         AiMsgInfo("[MakeTx]   %s", GetCommandLine(argc, argv).c_str());
+         AiMsgInfo("[make_tx]   %s", GetCommandLine(argc, argv).c_str());
          int ret = ExecuteCommand(argc, argv);
 
          if (ret != 0)
@@ -379,13 +432,13 @@ static bool MakeTx(NodeData *data, const char *inFilename, const char *outFilena
             argv[2] = (char*) outFilename;
             argv[3] = 0;
 
-            AiMsgInfo("[MakeTx]   %s", GetCommandLine(3, argv).c_str());
+            AiMsgInfo("[make_tx]   %s", GetCommandLine(3, argv).c_str());
             //ret = system(cmd.c_str());
             ret = ExecuteCommand(3, argv);
 
             if (ret != 0)
             {
-               AiMsgWarning("[MakeTx]   Strip XMP metadata failed");
+               AiMsgDebug("[make_tx]   Strip XMP metadata failed");
             }
             else
             {
@@ -399,7 +452,7 @@ static bool MakeTx(NodeData *data, const char *inFilename, const char *outFilena
       }
       else
       {
-         AiMsgInfo("[MakeTx]   Already converted.");
+         AiMsgInfo("[make_tx]   Already converted.");
       }
       return true;
    }
@@ -419,23 +472,22 @@ node_parameters
    AiParameterBOOL(SSTR::resize, false);
    AiParameterBOOL(SSTR::mipmap, true);
    AiParameterENUM(SSTR::filter, Filter_box, MakeTxFilterNames);
-   AiParameterBOOL(SSTR::stripxmp, true);
+   AiParameterBOOL(SSTR::stripxmp, false);
    AiParameterBOOL(SSTR::oiioopt, true);
    AiParameterENUM(SSTR::mode, Mode_if_newer, MakeTxModeNames);
 }
 
 node_initialize
 {
+   MakeTxData *data = new MakeTxData();
+   AiNodeSetLocalData(node, data);
+   AddMemUsage<MakeTxData>();
 }
 
 node_update
 {
-   Finish(node);
-
-   NodeData *data = new NodeData();
-
-   AiCritSecInit(&(data->mutex));
-
+   MakeTxData *data = (MakeTxData*) AiNodeGetLocalData(node);
+   
    data->format = AiNodeGetInt(node, SSTR::format);
    data->resize = AiNodeGetBool(node, SSTR::resize);
    data->mipmap = AiNodeGetBool(node, SSTR::mipmap);
@@ -450,10 +502,7 @@ node_update
    if (!AiNodeGetLink(node, SSTR::filename))
    {
       data->processInEval = false;
-      
-      data->numTxFilenames = 1;
-      data->txFilenames = (char**) AiMalloc(data->numTxFilenames * sizeof(char*));
-      data->txFilenames[0] = (char*) AiMalloc(MAX_FILENAME * sizeof(char));
+      data->allocateFilenames(1);
       
       bool useinput = true;
       
@@ -463,7 +512,7 @@ node_update
       {
          if (data->mode == Mode_reuse)
          {
-            AiMsgInfo("[MakeTx] %s: Reuse %s", AiNodeGetName(node), data->txFilenames[0]);
+            AiMsgInfo("[make_tx] %s: Reuse %s", AiNodeGetName(node), data->txFilenames[0]);
             struct stat inst, txst;
             if (stat(inFilename, &inst) == 0 && stat(data->txFilenames[0], &txst) == 0)
             {
@@ -472,7 +521,7 @@ node_update
          }
          else
          {
-            AiMsgInfo("[MakeTx] %s: Convert input %s", AiNodeGetName(node), inFilename);
+            AiMsgInfo("[make_tx] %s: Convert input %s", AiNodeGetName(node), inFilename);
             useinput = !MakeTx(data, inFilename, data->txFilenames[0]);
          }
       }
@@ -480,63 +529,46 @@ node_update
       {
          if (data->mode == Mode_disable)
          {
-            AiMsgInfo("[MakeTx] %s: Disabled", AiNodeGetName(node));
+            AiMsgInfo("[make_tx] %s: Disabled", AiNodeGetName(node));
          }
          else
          {
-            AiMsgWarning("[MakeTx] %s: Could not generate TX filename", AiNodeGetName(node));
+            AiMsgWarning("[make_tx] %s: Could not generate TX filename", AiNodeGetName(node));
          }
       }
       
       if (useinput)
       {
+         AiMsgInfo("[make_tx] Not converted, use input as it is: %s", inFilename);
          strncpy(data->txFilenames[0], inFilename, MAX_FILENAME);
       }
    }
    else
    {
+      AtNode *opts = AiUniverseGetOptions();
+      
       if (data->mode == Mode_if_newer || data->mode == Mode_always)
       {
-         AiMsgInfo("[MakeTx] %s: Convertion delayed to shader evaluation time.", AiNodeGetName(node));
+         AiMsgInfo("[make_tx] %s: Convertion delayed to shader evaluation time.", AiNodeGetName(node));
       }
+      
       data->processInEval = true;
-      
-      AtNode *opts = AiUniverseGetOptions();
-      data->numTxFilenames = AiNodeGetInt(opts, SSTR::threads);
-      data->txFilenames = (char**) AiMalloc(data->numTxFilenames * sizeof(char*));
-      
-      for (int i=0; i<data->numTxFilenames; ++i)
-      {
-         data->txFilenames[i] = (char*) AiMalloc(MAX_FILENAME * sizeof(char));
-      }
+      data->allocateFilenames(AiNodeGetInt(opts, SSTR::threads));
    }
 
-   AiNodeSetLocalData(node, data);
+   
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
-
-   if (data != NULL)
-   {
-      data->converted.clear();
-
-      for (int i=0; i<data->numTxFilenames; ++i)
-      {
-         AiFree(data->txFilenames[i]);
-      }
-      AiFree(data->txFilenames);
-      
-      AiCritSecClose(&(data->mutex));
-
-      delete data;
-   }
+   MakeTxData *data = (MakeTxData*) AiNodeGetLocalData(node);
+   delete data;
+   SubMemUsage<MakeTxData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   MakeTxData *data = (MakeTxData*) AiNodeGetLocalData(node);
 
    if (data->processInEval)
    {
@@ -566,7 +598,7 @@ shader_evaluate
             }
             else
             {
-               AiMsgInfo("[MakeTx] %s: Convert input %s", AiNodeGetName(node), inFilename);
+               AiMsgInfo("[make_tx] %s: Convert input %s", AiNodeGetName(node), inFilename);
                success = MakeTx(data, inFilename, data->txFilenames[sg->tid]);
             }
             data->converted[inFilename] = success;
@@ -578,7 +610,7 @@ shader_evaluate
       }
       else
       {
-         //AiMsgInfo("[MakeTx] %s: Disabled", AiNodeGetName(node));
+         //AiMsgInfo("[make_tx] %s: Disabled", AiNodeGetName(node));
          sg->out.STR = inFilename;
       }
    }
