@@ -22,7 +22,7 @@ node_parameters
    AiParameterStr(SSTR::_default,  "");
 }
 
-struct NodeData
+struct NodeAttrSData
 {
    NodeAttrTarget target;
    int light_index;
@@ -33,13 +33,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new NodeAttrSData());
+   AddMemUsage<NodeAttrSData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   NodeAttrSData *data = (NodeAttrSData*) AiNodeGetLocalData(node);
    data->target = (NodeAttrTarget) AiNodeGetInt(node, SSTR::target);
    data->light_index = AiNodeGetInt(node, SSTR::light_index);
    data->attribute = AiNodeGetStr(node, SSTR::attribute);
@@ -49,14 +49,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   NodeAttrSData *data = (NodeAttrSData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<NodeAttrSData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   NodeAttrSData *data = (NodeAttrSData*) AiNodeGetLocalData(node);
    
    AtNode *src = NULL;
    

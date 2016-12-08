@@ -108,7 +108,7 @@ node_parameters
    AiParameterBool(SSTR::P_is_offset, true);
 }
 
-struct NodeData
+struct VolumeData
 {
    Source scatteringSource;
    AtString scatteringField;
@@ -150,13 +150,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new VolumeData());
+   AddMemUsage<VolumeData>();
 }
 
 node_update
 {
-   NodeData* data = (NodeData*) AiNodeGetLocalData(node);
+   VolumeData* data = (VolumeData*) AiNodeGetLocalData(node);
    
    // Scattering
    data->scatteringSource = (Source) AiNodeGetInt(node, SSTR::scattering_source);
@@ -243,14 +243,14 @@ node_update
 
 node_finish
 {
-   NodeData* data = (NodeData*) AiNodeGetLocalData(node);
+   VolumeData* data = (VolumeData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<VolumeData>();
 }
 
 shader_evaluate
 {
-   NodeData* data = (NodeData*) AiNodeGetLocalData(node);
+   VolumeData* data = (VolumeData*) AiNodeGetLocalData(node);
    
    // Override/Offset P
    AtPoint oldP = sg->P;

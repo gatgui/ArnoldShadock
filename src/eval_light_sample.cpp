@@ -36,7 +36,7 @@ node_parameters
    AiParameterEnum(SSTR::light_weight, LW_none, LightWeightNames);
 }
 
-struct NodeData
+struct EvalLightSampleData
 {
    bool evalSurfaceColor;
    AtColor surfaceColor;
@@ -49,13 +49,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new EvalLightSampleData());
+   AddMemUsage<EvalLightSampleData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   EvalLightSampleData *data = (EvalLightSampleData*) AiNodeGetLocalData(node);
    
    data->evalSurfaceColor = AiNodeIsLinked(node, SSTR::surface_color);
    if (!data->evalSurfaceColor)
@@ -74,14 +74,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   EvalLightSampleData *data = (EvalLightSampleData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<EvalLightSampleData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   EvalLightSampleData *data = (EvalLightSampleData*) AiNodeGetLocalData(node);
    
    BRDFData *brdf = 0;
    

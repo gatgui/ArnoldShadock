@@ -47,7 +47,7 @@ node_parameters
    AiParameterVec(SSTR::custom_axis, 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct MakeFrameData
 {
    Method method;
    Origin origin;
@@ -60,13 +60,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new MakeFrameData());
+   AddMemUsage<MakeFrameData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   MakeFrameData *data = (MakeFrameData*) AiNodeGetLocalData(node);
    
    data->method = (Method) AiNodeGetInt(node, SSTR::method);
    data->origin = (Origin) AiNodeGetInt(node, SSTR::origin);
@@ -87,14 +87,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   MakeFrameData *data = (MakeFrameData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<MakeFrameData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   MakeFrameData *data = (MakeFrameData*) AiNodeGetLocalData(node);
    
    AtVector O, X, Y, Z;
    

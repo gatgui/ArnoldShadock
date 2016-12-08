@@ -60,7 +60,7 @@ node_parameters
    AiParameterRGB(SSTR::nan_color, 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct BlackbodyData
 {
    OutputMode mode;
    const gmath::ColorSpace *CS;
@@ -75,16 +75,16 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = new NodeData();
+   BlackbodyData *data = new BlackbodyData();
    data->CS = 0;
    data->TM = 0;
    AiNodeSetLocalData(node, (void*)data);
-   AddMemUsage<NodeData>();
+   AddMemUsage<BlackbodyData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BlackbodyData *data = (BlackbodyData*) AiNodeGetLocalData(node);
 
    if (data->TM)
    {
@@ -136,18 +136,18 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BlackbodyData *data = (BlackbodyData*) AiNodeGetLocalData(node);
    if (data->TM)
    {
       delete data->TM;
    }
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<BlackbodyData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BlackbodyData *data = (BlackbodyData*) AiNodeGetLocalData(node);
 
    float temperature = AiShaderEvalParamFlt(p_temperature);
    

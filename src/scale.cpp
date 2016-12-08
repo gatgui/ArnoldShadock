@@ -16,7 +16,7 @@ node_parameters
    AiParameterPnt(SSTR::scale_pivot, 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct ScaleData
 {
    AtMatrix S;
    AtMatrix Sp;
@@ -29,8 +29,8 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = new NodeData();
-   AddMemUsage<NodeData>();
+   ScaleData *data = new ScaleData();
+   AddMemUsage<ScaleData>();
 
    data->S_set = false;
    data->Sp_set = false;
@@ -40,7 +40,7 @@ node_initialize
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ScaleData *data = (ScaleData*) AiNodeGetLocalData(node);
    
    data->S_set = false;
    if (!AiNodeIsLinked(node, SSTR::scale))
@@ -70,14 +70,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ScaleData *data = (ScaleData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ScaleData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ScaleData *data = (ScaleData*) AiNodeGetLocalData(node);
    
    AtVector p, ip, s;
    AtMatrix S, P, iP, tmp;

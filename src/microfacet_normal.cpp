@@ -31,7 +31,7 @@ node_parameters
    AiParameterFlt(SSTR::distribution_param, 0.0f);
 }
 
-struct NodeData
+struct MicrofacetNormalData
 {
    NormalDistribution distribution;
    bool evalDistributionParam;
@@ -40,13 +40,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new MicrofacetNormalData());
+   AddMemUsage<MicrofacetNormalData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   MicrofacetNormalData *data = (MicrofacetNormalData*) AiNodeGetLocalData(node);
    
    data->distribution = (NormalDistribution) AiNodeGetInt(node, SSTR::distribution);
    data->evalDistributionParam = AiNodeIsLinked(node, SSTR::distribution_param);
@@ -58,14 +58,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   MicrofacetNormalData *data = (MicrofacetNormalData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<MicrofacetNormalData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   MicrofacetNormalData *data = (MicrofacetNormalData*) AiNodeGetLocalData(node);
    
    AtPoint2 sample = AiShaderEvalParamPnt2(p_sample);
    

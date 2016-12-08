@@ -50,7 +50,7 @@ node_parameters
    AiParameterBool(SSTR::inclusive_trace_set, true);
 }
 
-struct NodeData
+struct TweakGlobalsData
 {
    bool evalP;
    CoordinateSpace PSpace;
@@ -69,13 +69,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new TweakGlobalsData());
+   AddMemUsage<TweakGlobalsData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TweakGlobalsData *data = (TweakGlobalsData*) AiNodeGetLocalData(node);
    
    data->evalP = AiNodeIsLinked(node, SSTR::P);
    data->PSpace = (CoordinateSpace) AiNodeGetInt(node, SSTR::P_space);
@@ -102,14 +102,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TweakGlobalsData *data = (TweakGlobalsData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<TweakGlobalsData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TweakGlobalsData *data = (TweakGlobalsData*) AiNodeGetLocalData(node);
    
    AtPoint oldP = sg->P;
    AtPoint oldPo = sg->Po;

@@ -41,28 +41,28 @@ node_parameters
    AiParameterFlt("default", 0.0f);
 }
 
-struct NodeData
+struct RayStateFData
 {
    int state;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new RayStateFData());
+   AddMemUsage<RayStateFData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RayStateFData *data = (RayStateFData*) AiNodeGetLocalData(node);
    data->state = AiNodeGetInt(node, SSTR::state);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RayStateFData *data = (RayStateFData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<RayStateFData>();
 }
 
 shader_evaluate
@@ -77,7 +77,7 @@ shader_evaluate
    }
    else
    {
-      NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+      RayStateFData *data = (RayStateFData*) AiNodeGetLocalData(node);
       
       switch (data->state)
       {

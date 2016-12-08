@@ -20,7 +20,7 @@ node_parameters
    AiParameterRGBA(SSTR::default_color, 0.0f, 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct HoldoutData
 {
    AtString enableAttr;
    bool evalDefaultEnable;
@@ -33,13 +33,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new HoldoutData());
+   AddMemUsage<HoldoutData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   HoldoutData *data = (HoldoutData*) AiNodeGetLocalData(node);
    
    data->enableAttr = AiNodeGetStr(node, SSTR::enable_attr);
    
@@ -60,14 +60,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   HoldoutData *data = (HoldoutData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<HoldoutData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   HoldoutData *data = (HoldoutData*) AiNodeGetLocalData(node);
    
    bool holdout = false;
    

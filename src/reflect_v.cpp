@@ -18,7 +18,7 @@ node_parameters
    AiParameterVec(SSTR::geometric_normal, 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct ReflectVData
 {
    bool evalN;
    bool safe;
@@ -27,13 +27,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ReflectVData());
+   AddMemUsage<ReflectVData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReflectVData *data = (ReflectVData*) AiNodeGetLocalData(node);
    
    data->evalN = AiNodeIsLinked(node, SSTR::normal);
    data->evalNg = AiNodeIsLinked(node, SSTR::geometric_normal);
@@ -42,14 +42,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReflectVData *data = (ReflectVData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ReflectVData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReflectVData *data = (ReflectVData*) AiNodeGetLocalData(node);
    
    AtVector D = AiShaderEvalParamVec(p_direction);
    AtVector N = (data->evalN ? AiShaderEvalParamVec(p_normal) : sg->N);

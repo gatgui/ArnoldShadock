@@ -58,7 +58,7 @@ node_parameters
    AiParameterEnum(SSTR::eval_order, EO_input_last, EvalOrderNames);
 }
 
-struct NodeData
+struct WriteAOVsData
 {
    bool hasBool;
    bool hasInt;
@@ -81,8 +81,8 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = new NodeData();
-   AddMemUsage<NodeData>();
+   WriteAOVsData *data = new WriteAOVsData();
+   AddMemUsage<WriteAOVsData>();
    
    data->hasBool = false;
    data->hasInt = false;
@@ -99,7 +99,7 @@ node_initialize
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WriteAOVsData *data = (WriteAOVsData*) AiNodeGetLocalData(node);
    
    bool blend = AiNodeGetBool(node, SSTR::blend_opacity);
    
@@ -165,14 +165,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WriteAOVsData *data = (WriteAOVsData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<WriteAOVsData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WriteAOVsData *data = (WriteAOVsData*) AiNodeGetLocalData(node);
    
    if (data->evalOrder == EO_input_first)
    {

@@ -19,7 +19,7 @@ node_parameters
    AiParameterEnum(SSTR::eval_order, EO_input_last, EvalOrderNames);
 }
 
-struct NodeData
+struct WriteMsgFData
 {
    bool valid;
    AtString msgName;
@@ -28,8 +28,8 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = new NodeData();
-   AddMemUsage<NodeData>();
+   WriteMsgFData *data = new WriteMsgFData();
+   AddMemUsage<WriteMsgFData>();
    
    data->valid = false;
    data->evalOrder = EO_input_last;
@@ -39,7 +39,7 @@ node_initialize
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WriteMsgFData *data = (WriteMsgFData*) AiNodeGetLocalData(node);
    
    data->evalOrder = (EvalOrder) AiNodeGetInt(node, SSTR::eval_order);
    data->msgName = AiNodeGetStr(node, SSTR::msg_name);
@@ -48,14 +48,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WriteMsgFData *data = (WriteMsgFData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<WriteMsgFData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WriteMsgFData *data = (WriteMsgFData*) AiNodeGetLocalData(node);
    
    if (data->evalOrder == EO_input_first)
    {

@@ -55,7 +55,7 @@ node_parameters
    AiParameterFlt(SSTR::_default, 0.0f);
 }
 
-struct NodeData
+struct SampleVolumeFData
 {
    AtString field;
    int interpolation;
@@ -77,13 +77,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new SampleVolumeFData());
+   AddMemUsage<SampleVolumeFData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   SampleVolumeFData *data = (SampleVolumeFData*) AiNodeGetLocalData(node);
    
    data->field = AiNodeGetStr(node, SSTR::field);
    data->interpolation = AiNodeGetInt(node, SSTR::interpolation);
@@ -115,14 +115,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   SampleVolumeFData *data = (SampleVolumeFData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<SampleVolumeFData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   SampleVolumeFData *data = (SampleVolumeFData*) AiNodeGetLocalData(node);
    
    AtPoint oldP = sg->P;
    AtPoint oldPo = sg->Po;

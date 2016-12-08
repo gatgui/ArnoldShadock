@@ -16,7 +16,7 @@ node_parameters
    AiParameterBool(SSTR::reset_lights_cache, false);
 }
 
-struct NodeData
+struct IlluminanceLoopData
 {
    CombineMode combine;
    bool resetLightsCache;
@@ -24,13 +24,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new IlluminanceLoopData());
+   AddMemUsage<IlluminanceLoopData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   IlluminanceLoopData *data = (IlluminanceLoopData*) AiNodeGetLocalData(node);
    
    data->combine = (CombineMode) AiNodeGetInt(node, SSTR::combine);
    data->resetLightsCache = AiNodeGetBool(node, SSTR::reset_lights_cache);
@@ -38,14 +38,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   IlluminanceLoopData *data = (IlluminanceLoopData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<IlluminanceLoopData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   IlluminanceLoopData *data = (IlluminanceLoopData*) AiNodeGetLocalData(node);
    
    if (data->resetLightsCache)
    {

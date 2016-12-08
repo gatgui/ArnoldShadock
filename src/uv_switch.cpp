@@ -16,7 +16,7 @@ node_parameters
    AiParameterBool(SSTR::recompute_surface_uv_derivs, false);
 }
 
-struct NodeData
+struct UVSwitchData
 {
    AtString uvSetName;
    bool recomputeSurfaceUVDerivs;
@@ -24,13 +24,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new UVSwitchData());
+   AddMemUsage<UVSwitchData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVSwitchData *data = (UVSwitchData*) AiNodeGetLocalData(node);
    
    data->uvSetName = AiNodeGetStr(node, SSTR::uv_set_name);
    data->recomputeSurfaceUVDerivs = AiNodeGetBool(node, SSTR::recompute_surface_uv_derivs);
@@ -38,9 +38,9 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVSwitchData *data = (UVSwitchData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<UVSwitchData>();
 }
 
 shader_evaluate
@@ -50,7 +50,7 @@ shader_evaluate
    
    UVData uvs(sg);
    
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVSwitchData *data = (UVSwitchData*) AiNodeGetLocalData(node);
    
    if (data->recomputeSurfaceUVDerivs)
    {

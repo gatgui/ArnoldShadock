@@ -34,7 +34,7 @@ node_parameters
    AiParameterRGB(SSTR::transmittance, 1.0f, 1.0f, 1.0f);
 }
 
-struct NodeData
+struct BtdfMicrofacetIntegrateData
 {
    int distribution;
    bool evalRoughnessX;
@@ -58,13 +58,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new BtdfMicrofacetIntegrateData());
+   AddMemUsage<BtdfMicrofacetIntegrateData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BtdfMicrofacetIntegrateData *data = (BtdfMicrofacetIntegrateData*) AiNodeGetLocalData(node);
    
    data->evalRoughnessX = AiNodeIsLinked(node, SSTR::roughness_x);
    data->evalRoughnessY = AiNodeIsLinked(node, SSTR::roughness_y);
@@ -117,14 +117,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BtdfMicrofacetIntegrateData *data = (BtdfMicrofacetIntegrateData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<BtdfMicrofacetIntegrateData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BtdfMicrofacetIntegrateData *data = (BtdfMicrofacetIntegrateData*) AiNodeGetLocalData(node);
    
    AtColor weight = AiShaderEvalParamRGB(p_weight);
    

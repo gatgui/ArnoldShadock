@@ -31,7 +31,7 @@ node_parameters
    AiParameterEnum(SSTR::units, AU_Radians, AngleUnitsNames);
 }
 
-struct NodeData
+struct TrigoVData
 {
    TrigonometryOperation operation;
    AngleUnits units;
@@ -39,22 +39,22 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new TrigoVData());
+   AddMemUsage<TrigoVData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TrigoVData *data = (TrigoVData*) AiNodeGetLocalData(node);
    data->operation = (TrigonometryOperation) AiNodeGetInt(node, SSTR::operation);
    data->units = (AngleUnits) AiNodeGetInt(node, SSTR::units);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TrigoVData *data = (TrigoVData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<TrigoVData>();
 }
 
 shader_evaluate
@@ -62,7 +62,7 @@ shader_evaluate
    static float sDegToRad = AI_PI / 180.0f;
    static float sRadToDeg = 180.0f / AI_PI;
    
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TrigoVData *data = (TrigoVData*) AiNodeGetLocalData(node);
    
    AtVector input = AiShaderEvalParamVec(p_input1);
    

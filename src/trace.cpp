@@ -23,7 +23,7 @@ node_parameters
    AiParameterEnum(SSTR::type, TT_standard, TraceTypeNames);
 }
 
-struct NodeData
+struct TraceData
 {
    TraceType type;
    int count;
@@ -32,8 +32,8 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = new NodeData();
-   AddMemUsage<NodeData>();
+   TraceData *data = new TraceData();
+   AddMemUsage<TraceData>();
    
    data->type = TT_standard;
    data->count = 0;
@@ -44,7 +44,7 @@ node_initialize
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TraceData *data = (TraceData*) AiNodeGetLocalData(node);
    
    TraceType type = (TraceType) AiNodeGetInt(node, SSTR::type);
    
@@ -124,7 +124,7 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TraceData *data = (TraceData*) AiNodeGetLocalData(node);
    
    if (data->count > 0)
    {
@@ -147,12 +147,12 @@ node_finish
    }
    
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<TraceData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TraceData *data = (TraceData*) AiNodeGetLocalData(node);
    
    AtRay *ray = 0;
    HitData *hit = 0;

@@ -18,7 +18,7 @@ node_parameters
    AiParameterEnum(SSTR::logc_exposure, EL_800, LogCExposureLevelNames);
 }
 
-struct NodeData
+struct GammaData
 {
    bool valid;
    bool expand;
@@ -27,13 +27,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new GammaData());
+   AddMemUsage<GammaData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   GammaData *data = (GammaData*) AiNodeGetLocalData(node);
 
    data->valid = true;
    data->expand = (AiNodeGetInt(node, SSTR::mode) == GM_Expand);
@@ -69,14 +69,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   GammaData *data = (GammaData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<GammaData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   GammaData *data = (GammaData*) AiNodeGetLocalData(node);
 
    AtRGB input = AiShaderEvalParamRGB(p_input);
 

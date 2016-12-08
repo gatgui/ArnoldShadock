@@ -18,7 +18,7 @@ node_parameters
    AiParameterBool(SSTR::as_point, false);
 }
 
-struct NodeData
+struct TransformData
 {
    bool evalMatrix;
    AtMatrix matrix;
@@ -27,13 +27,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new TransformData());
+   AddMemUsage<TransformData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TransformData *data = (TransformData*) AiNodeGetLocalData(node);
    data->asPoint = AiNodeGetBool(node, SSTR::as_point);
    data->evalMatrix = AiNodeIsLinked(node, SSTR::matrix);
    if (!data->evalMatrix)
@@ -44,14 +44,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TransformData *data = (TransformData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<TransformData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TransformData *data = (TransformData*) AiNodeGetLocalData(node);
 
    AtMatrix *mtx = (data->evalMatrix ? AiShaderEvalParamMtx(p_matrix) : &(data->matrix));
    AtVector vec = AiShaderEvalParamVec(p_vector);

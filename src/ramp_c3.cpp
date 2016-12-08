@@ -34,7 +34,7 @@ node_parameters
    AiParameterRGB("default_value", 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct RampC3Data
 {
    bool valid;
    unsigned int nkeys;
@@ -50,8 +50,8 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = new NodeData();
-   AddMemUsage<NodeData>();
+   RampC3Data *data = new RampC3Data();
+   AddMemUsage<RampC3Data>();
    
    data->valid = false;
    data->nkeys = 0;
@@ -69,7 +69,7 @@ node_initialize
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RampC3Data *data = (RampC3Data*) AiNodeGetLocalData(node);
    
    data->valid = false;
    data->nkeys = 0;
@@ -123,7 +123,7 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RampC3Data *data = (RampC3Data*) AiNodeGetLocalData(node);
    
    for (unsigned int i=0; i<data->nshuffles; ++i)
    {
@@ -132,12 +132,12 @@ node_finish
    AiFree(data->shuffles);
    
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<RampC3Data>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RampC3Data *data = (RampC3Data*) AiNodeGetLocalData(node);
    
    if (!data->valid)
    {

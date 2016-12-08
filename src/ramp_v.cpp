@@ -35,7 +35,7 @@ node_parameters
    AiParameterVec("default_value", 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct RampVData
 {
    bool valid;
    unsigned int nkeys;
@@ -51,8 +51,8 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = (NodeData*) AiMalloc(sizeof(NodeData));
-   AddMemUsage<NodeData>();
+   RampVData *data = (RampVData*) AiMalloc(sizeof(RampVData));
+   AddMemUsage<RampVData>();
    
    data->valid = false;
    data->nkeys = 0;
@@ -70,7 +70,7 @@ node_initialize
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RampVData *data = (RampVData*) AiNodeGetLocalData(node);
    
    data->valid = false;
    data->nkeys = 0;
@@ -124,7 +124,7 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RampVData *data = (RampVData*) AiNodeGetLocalData(node);
    
    for (unsigned int i=0; i<data->nshuffles; ++i)
    {
@@ -133,12 +133,12 @@ node_finish
    AiFree(data->shuffles);
    
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<RampVData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RampVData *data = (RampVData*) AiNodeGetLocalData(node);
    
    if (!data->valid)
    {

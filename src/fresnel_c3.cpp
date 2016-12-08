@@ -16,7 +16,7 @@ node_parameters
    AiParameterRGB(SSTR::reflectance, 1.0f, 1.0f, 1.0f);
 }
 
-struct NodeData
+struct FresnelC3Data
 {
    bool evalV;
    bool evalN;
@@ -25,13 +25,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new FresnelC3Data());
+   AddMemUsage<FresnelC3Data>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   FresnelC3Data *data = (FresnelC3Data*) AiNodeGetLocalData(node);
    
    data->evalV = AiNodeIsLinked(node, SSTR::view_vector);
    data->evalN = AiNodeIsLinked(node, SSTR::normal);
@@ -40,14 +40,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   FresnelC3Data *data = (FresnelC3Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<FresnelC3Data>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   FresnelC3Data *data = (FresnelC3Data*) AiNodeGetLocalData(node);
    
    AtVector V = (data->evalV ? AiShaderEvalParamVec(p_view_vector) : sg->Rd);
    AtVector N = (data->evalN ? AiShaderEvalParamVec(p_normal) : sg->N);

@@ -33,7 +33,7 @@ node_parameters
    AiParameterEnum(SSTR::edge_type, ET_polygons, EdgeTypeNames);
 }
 
-struct NodeData
+struct WireframeData
 {
    int units;
    int edgeType;
@@ -41,27 +41,27 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new WireframeData());
+   AddMemUsage<WireframeData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WireframeData *data = (WireframeData*) AiNodeGetLocalData(node);
    data->units = AiNodeGetInt(node, SSTR::units);
    data->edgeType = AiNodeGetInt(node, SSTR::edge_type);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WireframeData *data = (WireframeData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<WireframeData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WireframeData *data = (WireframeData*) AiNodeGetLocalData(node);
 
    float lineWidth = AiShaderEvalParamFlt(p_line_width);
    

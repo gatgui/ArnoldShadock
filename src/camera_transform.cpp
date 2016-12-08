@@ -41,7 +41,7 @@ node_parameters
    AiParameterEnum(SSTR::mode, MM_world_to_camera, MatrixModeNames);
 }
 
-struct NodeData
+struct CameraTransformData
 {
    AtNode *camera;
    MatrixMode mode;
@@ -49,13 +49,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new CameraTransformData());
+   AddMemUsage<CameraTransformData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   CameraTransformData *data = (CameraTransformData*) AiNodeGetLocalData(node);
    
    data->mode = (MatrixMode) AiNodeGetInt(node, SSTR::mode);
    
@@ -166,14 +166,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   CameraTransformData *data = (CameraTransformData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<CameraTransformData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   CameraTransformData *data = (CameraTransformData*) AiNodeGetLocalData(node);
    
    sg->out.pMTX = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
    

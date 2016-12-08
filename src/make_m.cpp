@@ -26,7 +26,7 @@ node_parameters
    AiParameterPnt(SSTR::scale_pivot, 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct MakeMData
 {
    AtMatrix T;
    AtMatrix Rx;
@@ -57,7 +57,7 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = new NodeData();
+   MakeMData *data = new MakeMData();
 
    data->T_set = false;
    data->Rx_set = false;
@@ -72,12 +72,12 @@ node_initialize
 
    AiNodeSetLocalData(node, data);
    
-   AddMemUsage<NodeData>();
+   AddMemUsage<MakeMData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   MakeMData *data = (MakeMData*) AiNodeGetLocalData(node);
    
    data->transformOrder = (TransformOrder) AiNodeGetInt(node, SSTR::transform_order);
    data->rotationOrder = (RotationOrder) AiNodeGetInt(node, SSTR::rotation_order);
@@ -207,14 +207,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   MakeMData *data = (MakeMData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<MakeMData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   MakeMData *data = (MakeMData*) AiNodeGetLocalData(node);
    
    AtVector p, ip, r, t, s;
    AtMatrix T, R, Rx, Ry, Rz, S, P, iP, tmp;

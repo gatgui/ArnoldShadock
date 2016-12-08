@@ -43,7 +43,7 @@ node_parameters
    
 }
 
-struct NodeData
+struct SwitchRayC4Data
 {
    bool evalCamera;
    bool cameraUseDefault;
@@ -63,13 +63,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new SwitchRayC4Data());
+   AddMemUsage<SwitchRayC4Data>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   SwitchRayC4Data *data = (SwitchRayC4Data*) AiNodeGetLocalData(node);
    
    data->evalCamera = AiNodeIsLinked(node, SSTR::camera);
    data->cameraUseDefault = AiNodeGetBool(node, SSTR::camera_use_default);
@@ -95,14 +95,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   SwitchRayC4Data *data = (SwitchRayC4Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<SwitchRayC4Data>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   SwitchRayC4Data *data = (SwitchRayC4Data*) AiNodeGetLocalData(node);
    
    if ((sg->Rt & AI_RAY_CAMERA) != 0)
    {

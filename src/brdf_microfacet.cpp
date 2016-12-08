@@ -26,7 +26,7 @@ node_parameters
    AiParameterEnum(SSTR::angle_units, AU_Degrees, AngleUnitsNames);
 }
 
-struct NodeData
+struct BrdfMicrofacetData
 {
    int distribution;
    bool evalRoughnessX;
@@ -45,13 +45,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new BrdfMicrofacetData());
+   AddMemUsage<BrdfMicrofacetData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BrdfMicrofacetData *data = (BrdfMicrofacetData*) AiNodeGetLocalData(node);
    
    data->evalRoughnessX = AiNodeIsLinked(node, SSTR::roughness_x);
    data->evalRoughnessY = AiNodeIsLinked(node, SSTR::roughness_y);
@@ -91,14 +91,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BrdfMicrofacetData *data = (BrdfMicrofacetData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<BrdfMicrofacetData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BrdfMicrofacetData *data = (BrdfMicrofacetData*) AiNodeGetLocalData(node);
    
    float rx = (data->evalRoughnessX ? AiShaderEvalParamFlt(p_roughness_x) : data->roughnessX);
    float ry = (data->evalRoughnessY ? AiShaderEvalParamFlt(p_roughness_y) : data->roughnessY);

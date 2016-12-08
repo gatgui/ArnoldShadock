@@ -22,7 +22,7 @@ node_parameters
    AiParameterStr(SSTR::filename, "");
 }
 
-struct NodeData
+struct ResolutionData
 {
    TargetResolution target;
    bool valid;
@@ -33,13 +33,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ResolutionData());
+   AddMemUsage<ResolutionData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ResolutionData *data = (ResolutionData*) AiNodeGetLocalData(node);
    
    AtNode *opts = AiUniverseGetOptions();
    
@@ -73,14 +73,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ResolutionData *data = (ResolutionData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ResolutionData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ResolutionData *data = (ResolutionData*) AiNodeGetLocalData(node);
    
    if (data->valid)
    {

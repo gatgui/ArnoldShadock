@@ -14,33 +14,33 @@ node_parameters
    AiParameterInt(SSTR::_default, 0);
 }
 
-struct NodeData
+struct ShapeAttrIData
 {
    AtString attribute;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ShapeAttrIData());
+   AddMemUsage<ShapeAttrIData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShapeAttrIData *data = (ShapeAttrIData*) AiNodeGetLocalData(node);
    data->attribute = AiNodeGetStr(node, SSTR::attribute);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShapeAttrIData *data = (ShapeAttrIData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ShapeAttrIData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShapeAttrIData *data = (ShapeAttrIData*) AiNodeGetLocalData(node);
    
    if (!AiUDataGetInt(data->attribute, &(sg->out.INT)))
    {

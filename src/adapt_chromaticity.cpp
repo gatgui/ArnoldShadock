@@ -24,20 +24,20 @@ node_parameters
    AiParameterEnum(SSTR::transform, gmath::CAT_VonKries, ChromaticAdaptationTransformNames);
 }
 
-struct NodeData
+struct AdaptChromaticityData
 {
    gmath::Matrix3 M;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new AdaptChromaticityData());
+   AddMemUsage<AdaptChromaticityData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   AdaptChromaticityData *data = (AdaptChromaticityData*) AiNodeGetLocalData(node);
 
    AtRGB src = AiNodeGetRGB(node, SSTR::source);
    AtRGB tgt = AiNodeGetRGB(node, SSTR::target);
@@ -52,14 +52,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   AdaptChromaticityData *data = (AdaptChromaticityData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<AdaptChromaticityData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   AdaptChromaticityData *data = (AdaptChromaticityData*) AiNodeGetLocalData(node);
 
    AtRGB input = AiShaderEvalParamRGB(p_input);
 

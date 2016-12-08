@@ -28,7 +28,7 @@ node_parameters
    AiParameterBool(SSTR::recompute_surface_uv_derivs, false);
 }
 
-struct NodeData
+struct UVTransformData
 {
    TransformOrder order;
    bool transformPivots;
@@ -37,13 +37,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new UVTransformData());
+   AddMemUsage<UVTransformData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVTransformData *data = (UVTransformData*) AiNodeGetLocalData(node);
    data->order = (TransformOrder) AiNodeGetInt(node, SSTR::order);
    data->transformPivots = AiNodeGetBool(node, SSTR::transform_pivots);
    data->recomputeSurfaceUVDerivs = AiNodeGetBool(node, SSTR::recompute_surface_uv_derivs);
@@ -51,14 +51,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVTransformData *data = (UVTransformData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<UVTransformData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVTransformData *data = (UVTransformData*) AiNodeGetLocalData(node);
    
    AtPoint2 uv, dx, dy;
    AtVector dPdx, dPdy;

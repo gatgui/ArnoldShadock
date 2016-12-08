@@ -32,7 +32,7 @@ node_parameters
    AiParameterRGBA("clipped_input", 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-struct NodeData
+struct UVClipData
 {
    TransformOrder order;
    bool transformPivots;
@@ -40,13 +40,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new UVClipData());
+   AddMemUsage<UVClipData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVClipData *data = (UVClipData*) AiNodeGetLocalData(node);
    
    data->order = (TransformOrder) AiNodeGetInt(node, SSTR::order);
    data->transformPivots = AiNodeGetBool(node, SSTR::transform_pivots);
@@ -54,14 +54,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVClipData *data = (UVClipData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<UVClipData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVClipData *data = (UVClipData*) AiNodeGetLocalData(node);
 
    AtPoint2 S = AiShaderEvalParamPnt2(p_scale);
    AtPoint2 Sp = AiShaderEvalParamPnt2(p_scale_pivot);

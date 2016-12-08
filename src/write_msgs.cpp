@@ -55,7 +55,7 @@ node_parameters
    AiParameterEnum(SSTR::eval_order, EO_input_last, EvalOrderNames);
 }
 
-struct NodeData
+struct WriteMsgsData
 {
    bool hasBool;
    bool hasInt;
@@ -78,8 +78,8 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = new NodeData();
-   AddMemUsage<NodeData>();
+   WriteMsgsData *data = new WriteMsgsData();
+   AddMemUsage<WriteMsgsData>();
    
    data->hasBool = false;
    data->hasInt = false;
@@ -96,7 +96,7 @@ node_initialize
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WriteMsgsData *data = (WriteMsgsData*) AiNodeGetLocalData(node);
    
    data->evalOrder = (EvalOrder) AiNodeGetInt(node, SSTR::eval_order);
    
@@ -127,14 +127,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WriteMsgsData *data = (WriteMsgsData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<WriteMsgsData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WriteMsgsData *data = (WriteMsgsData*) AiNodeGetLocalData(node);
    
    if (data->evalOrder == EO_input_first)
    {

@@ -14,34 +14,34 @@ node_parameters
    AiParameterPnt2("default_value", 0.0f, 0.0f);
 }
 
-struct NodeData
+struct ReadAOVP2Data
 {
    AtString aovName;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ReadAOVP2Data());
+   AddMemUsage<ReadAOVP2Data>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadAOVP2Data *data = (ReadAOVP2Data*) AiNodeGetLocalData(node);
    
    data->aovName = AiNodeGetStr(node, SSTR::aov_name);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadAOVP2Data *data = (ReadAOVP2Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ReadAOVP2Data>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadAOVP2Data *data = (ReadAOVP2Data*) AiNodeGetLocalData(node);
    
    if (!AiAOVGetPnt2(sg, data->aovName, sg->out.PNT2))
    {

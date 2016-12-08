@@ -16,7 +16,7 @@ node_parameters
    AiParameterEnum(SSTR::output_mode, AM_V, AttributeModeNames);
 }
 
-struct NodeData
+struct ShapeAttrP2Data
 {
    AtString attribute;
    AttributeMode output_mode;
@@ -24,27 +24,27 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ShapeAttrP2Data());
+   AddMemUsage<ShapeAttrP2Data>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShapeAttrP2Data *data = (ShapeAttrP2Data*) AiNodeGetLocalData(node);
    data->attribute = AiNodeGetStr(node, SSTR::attribute);
    data->output_mode = (AttributeMode) AiNodeGetInt(node, SSTR::output_mode);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShapeAttrP2Data *data = (ShapeAttrP2Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ShapeAttrP2Data>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShapeAttrP2Data *data = (ShapeAttrP2Data*) AiNodeGetLocalData(node);
    
    sg->out.PNT2 = AI_P2_ZERO;
    

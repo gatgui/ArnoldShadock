@@ -16,7 +16,7 @@ node_parameters
    AiParameterEnum(SSTR::output_mode, AM_V, AttributeModeNames);
 }
 
-struct NodeData
+struct ShapeAttrC4Data
 {
    AtString attribute;
    AttributeMode output_mode;
@@ -24,27 +24,27 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ShapeAttrC4Data());
+   AddMemUsage<ShapeAttrC4Data>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShapeAttrC4Data *data = (ShapeAttrC4Data*) AiNodeGetLocalData(node);
    data->attribute = AiNodeGetStr(node, SSTR::attribute);
    data->output_mode = (AttributeMode) AiNodeGetInt(node, SSTR::output_mode);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShapeAttrC4Data *data = (ShapeAttrC4Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ShapeAttrC4Data>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShapeAttrC4Data *data = (ShapeAttrC4Data*) AiNodeGetLocalData(node);
 
    sg->out.RGBA = AI_RGBA_BLACK;
    

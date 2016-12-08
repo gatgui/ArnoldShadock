@@ -14,34 +14,34 @@ node_parameters
    AiParameterPnt("default_value", 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct ReadMsgP3Data
 {
    AtString msgName;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ReadMsgP3Data());
+   AddMemUsage<ReadMsgP3Data>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgP3Data *data = (ReadMsgP3Data*) AiNodeGetLocalData(node);
    
    data->msgName = AiNodeGetStr(node, SSTR::msg_name);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgP3Data *data = (ReadMsgP3Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ReadMsgP3Data>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgP3Data *data = (ReadMsgP3Data*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgPnt(data->msgName, &(sg->out.PNT)))
    {

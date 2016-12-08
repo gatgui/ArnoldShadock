@@ -22,7 +22,7 @@ node_parameters
    AiParameterEnum(SSTR::angle_units, AU_Degrees, AngleUnitsNames);
 }
 
-struct NodeData
+struct BrdfAshikhminShirleyData
 {
    bool evalGlossinessX;
    float glossinessX;
@@ -38,13 +38,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new BrdfAshikhminShirleyData());
+   AddMemUsage<BrdfAshikhminShirleyData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BrdfAshikhminShirleyData *data = (BrdfAshikhminShirleyData*) AiNodeGetLocalData(node);
    
    data->evalGlossinessX = AiNodeIsLinked(node, SSTR::glossiness_x);
    data->evalGLossinessY = AiNodeIsLinked(node, SSTR::glossiness_y);
@@ -77,14 +77,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BrdfAshikhminShirleyData *data = (BrdfAshikhminShirleyData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<BrdfAshikhminShirleyData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BrdfAshikhminShirleyData *data = (BrdfAshikhminShirleyData*) AiNodeGetLocalData(node);
    
    float gx = (data->evalGlossinessX ? AiShaderEvalParamFlt(p_glossiness_x) : data->glossinessX);
    float gy = (data->evalGLossinessY ? AiShaderEvalParamFlt(p_glossiness_y) : data->glossinessY);

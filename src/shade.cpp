@@ -29,7 +29,7 @@ node_parameters
    AiParameterVec(SSTR::normal, 1.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct ShadeData
 {
    int mode;
    bool overrideNormal;
@@ -37,27 +37,27 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ShadeData());
+   AddMemUsage<ShadeData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShadeData *data = (ShadeData*) AiNodeGetLocalData(node);
    data->mode = AiNodeGetInt(node, SSTR::mode);
    data->overrideNormal = AiNodeGetBool(node, SSTR::override_normal);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShadeData *data = (ShadeData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ShadeData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShadeData *data = (ShadeData*) AiNodeGetLocalData(node);
    
    AtVector N = (data->overrideNormal ? AiShaderEvalParamVec(p_normal) : sg->N);
    

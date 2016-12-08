@@ -85,7 +85,7 @@ node_parameters
    AiParameterBool(SSTR::recompute_surface_uv_derivs, false);
 }
 
-struct NodeData
+struct UVProjectData
 {
    LookupVector lookupVector;
    LookupVectorSpace space;
@@ -97,13 +97,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new UVProjectData());
+   AddMemUsage<UVProjectData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVProjectData *data = (UVProjectData*) AiNodeGetLocalData(node);
    
    data->lookupVector = (LookupVector) AiNodeGetInt(node, SSTR::lookup_vector);
    data->space = (LookupVectorSpace) AiNodeGetInt(node, SSTR::lookup_vector_space);
@@ -115,9 +115,9 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVProjectData *data = (UVProjectData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<UVProjectData>();
 }
 
 shader_evaluate
@@ -129,7 +129,7 @@ shader_evaluate
    
    UVData uvs(sg);
    
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   UVProjectData *data = (UVProjectData*) AiNodeGetLocalData(node);
    
    if (data->recomputeSurfaceUVDerivs)
    {

@@ -18,7 +18,7 @@ node_parameters
    AiParameterFlt(SSTR::ior2, 1.0f);
 }
 
-struct NodeData
+struct RefractVData
 {
    bool evalN;
    float ior1;
@@ -27,13 +27,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new RefractVData());
+   AddMemUsage<RefractVData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RefractVData *data = (RefractVData*) AiNodeGetLocalData(node);
    
    data->evalN = AiNodeIsLinked(node, SSTR::normal);
    data->ior1 = AiNodeGetFlt(node, SSTR::ior1);
@@ -42,14 +42,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RefractVData *data = (RefractVData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<RefractVData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RefractVData *data = (RefractVData*) AiNodeGetLocalData(node);
    
    AtVector D = AiShaderEvalParamVec(p_direction);
    AtVector N = (data->evalN ? AiShaderEvalParamVec(p_normal) : sg->N);

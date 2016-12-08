@@ -14,34 +14,34 @@ node_parameters
    AiParameterFlt("default_value", 0.0f);
 }
 
-struct NodeData
+struct ReadMsgFData
 {
    AtString msgName;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ReadMsgFData());
+   AddMemUsage<ReadMsgFData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgFData *data = (ReadMsgFData*) AiNodeGetLocalData(node);
    
    data->msgName = AiNodeGetStr(node, SSTR::msg_name);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgFData *data = (ReadMsgFData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ReadMsgFData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgFData *data = (ReadMsgFData*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgFlt(data->msgName, &(sg->out.FLT)))
    {

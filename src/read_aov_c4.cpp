@@ -14,34 +14,34 @@ node_parameters
    AiParameterRGBA("default_value", 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-struct NodeData
+struct ReadAOVC4Data
 {
    AtString aovName;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ReadAOVC4Data());
+   AddMemUsage<ReadAOVC4Data>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadAOVC4Data *data = (ReadAOVC4Data*) AiNodeGetLocalData(node);
    
    data->aovName = AiNodeGetStr(node, SSTR::aov_name);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadAOVC4Data *data = (ReadAOVC4Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ReadAOVC4Data>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadAOVC4Data *data = (ReadAOVC4Data*) AiNodeGetLocalData(node);
    
    if (!AiAOVGetRGBA(sg, data->aovName, sg->out.RGBA))
    {

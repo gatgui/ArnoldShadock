@@ -16,7 +16,7 @@ node_parameters
    AiParameterEnum(SSTR::output_mode, AM_V, AttributeModeNames);
 }
 
-struct NodeData
+struct ShapeAttrVData
 {
    AtString attribute;
    AttributeMode output_mode;
@@ -24,27 +24,27 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ShapeAttrVData());
+   AddMemUsage<ShapeAttrVData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShapeAttrVData *data = (ShapeAttrVData*) AiNodeGetLocalData(node);
    data->attribute = AiNodeGetStr(node, SSTR::attribute);
    data->output_mode = (AttributeMode) AiNodeGetInt(node, SSTR::output_mode);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShapeAttrVData *data = (ShapeAttrVData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ShapeAttrVData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShapeAttrVData *data = (ShapeAttrVData*) AiNodeGetLocalData(node);
    
    sg->out.VEC = AI_V3_ZERO;
 

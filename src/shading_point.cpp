@@ -34,7 +34,7 @@ node_parameters
    AiParameterMtx(SSTR::custom_space, id);
 }
 
-struct NodeData
+struct ShadingPointData
 {
    bool evalTime;
    float time;
@@ -45,13 +45,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ShadingPointData());
+   AddMemUsage<ShadingPointData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShadingPointData *data = (ShadingPointData*) AiNodeGetLocalData(node);
    
    data->evalTime = AiNodeIsLinked(node, SSTR::time);
    
@@ -76,14 +76,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShadingPointData *data = (ShadingPointData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ShadingPointData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ShadingPointData *data = (ShadingPointData*) AiNodeGetLocalData(node);
    
    AtPoint outP;
    

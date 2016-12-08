@@ -14,34 +14,34 @@ node_parameters
    AiParameterRGBA("default_value", 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-struct NodeData
+struct ReadMsgC4Data
 {
    AtString msgName;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ReadMsgC4Data());
+   AddMemUsage<ReadMsgC4Data>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgC4Data *data = (ReadMsgC4Data*) AiNodeGetLocalData(node);
    
    data->msgName = AiNodeGetStr(node, SSTR::msg_name);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgC4Data *data = (ReadMsgC4Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ReadMsgC4Data>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgC4Data *data = (ReadMsgC4Data*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgRGBA(data->msgName, &(sg->out.RGBA)))
    {

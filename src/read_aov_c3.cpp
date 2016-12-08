@@ -14,34 +14,34 @@ node_parameters
    AiParameterRGB("default_value", 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct ReadAOVC3Data
 {
    AtString aovName;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ReadAOVC3Data());
+   AddMemUsage<ReadAOVC3Data>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadAOVC3Data *data = (ReadAOVC3Data*) AiNodeGetLocalData(node);
    
    data->aovName = AiNodeGetStr(node, SSTR::aov_name);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadAOVC3Data *data = (ReadAOVC3Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ReadAOVC3Data>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadAOVC3Data *data = (ReadAOVC3Data*) AiNodeGetLocalData(node);
    
    if (!AiAOVGetRGB(sg, data->aovName, sg->out.RGB))
    {

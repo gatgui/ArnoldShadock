@@ -39,7 +39,7 @@ struct Part
 
 typedef std::vector<Part> Parts;
 
-struct NodeData
+struct TokenPathData
 {
    bool evalPath;
    bool evalFrame;
@@ -50,7 +50,7 @@ struct NodeData
    char* *outPaths; // final path per thread
    char constPath[PATH_MAX_LENGTH];
    
-   NodeData()
+   TokenPathData()
    {
       evalPath = false;
       evalFrame = false;
@@ -59,7 +59,7 @@ struct NodeData
       outPaths = 0;
    }
    
-   ~NodeData()
+   ~TokenPathData()
    {
       clear();
    }
@@ -91,13 +91,13 @@ node_parameters
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new TokenPathData());
+   AddMemUsage<TokenPathData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TokenPathData *data = (TokenPathData*) AiNodeGetLocalData(node);
    
    data->clear();
    
@@ -329,14 +329,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TokenPathData *data = (TokenPathData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<TokenPathData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TokenPathData *data = (TokenPathData*) AiNodeGetLocalData(node);
    
    if (data->parts.size() == 0)
    {

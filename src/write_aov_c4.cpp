@@ -21,7 +21,7 @@ node_parameters
    AiParameterEnum(SSTR::eval_order, EO_input_first, EvalOrderNames);
 }
 
-struct NodeData
+struct WriteAOVC4Data
 {
    AtString aovName;
    bool valid;
@@ -30,8 +30,8 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = new NodeData();
-   AddMemUsage<NodeData>();
+   WriteAOVC4Data *data = new WriteAOVC4Data();
+   AddMemUsage<WriteAOVC4Data>();
    
    data->valid = false;
    data->evalOrder = EO_input_first;
@@ -41,7 +41,7 @@ node_initialize
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WriteAOVC4Data *data = (WriteAOVC4Data*) AiNodeGetLocalData(node);
    
    data->aovName = AiNodeGetStr(node, SSTR::aov_name);
    data->evalOrder = (EvalOrder) AiNodeGetInt(node, SSTR::eval_order);
@@ -59,14 +59,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WriteAOVC4Data *data = (WriteAOVC4Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<WriteAOVC4Data>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   WriteAOVC4Data *data = (WriteAOVC4Data*) AiNodeGetLocalData(node);
    
    if (data->evalOrder == EO_input_first)
    {

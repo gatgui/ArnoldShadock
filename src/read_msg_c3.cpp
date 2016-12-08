@@ -14,34 +14,34 @@ node_parameters
    AiParameterRGB("default_value", 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct ReadMsgC3Data
 {
    AtString msgName;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ReadMsgC3Data());
+   AddMemUsage<ReadMsgC3Data>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgC3Data *data = (ReadMsgC3Data*) AiNodeGetLocalData(node);
    
    data->msgName = AiNodeGetStr(node, SSTR::msg_name);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgC3Data *data = (ReadMsgC3Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ReadMsgC3Data>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgC3Data *data = (ReadMsgC3Data*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgRGB(data->msgName, &(sg->out.RGB)))
    {

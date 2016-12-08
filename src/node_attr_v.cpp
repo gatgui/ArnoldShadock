@@ -22,7 +22,7 @@ node_parameters
    AiParameterVec(SSTR::_default, 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct NodeAttrVData
 {
    NodeAttrTarget target;
    int light_index;
@@ -33,13 +33,13 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new NodeAttrVData());
+   AddMemUsage<NodeAttrVData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   NodeAttrVData *data = (NodeAttrVData*) AiNodeGetLocalData(node);
    data->target = (NodeAttrTarget) AiNodeGetInt(node, SSTR::target);
    data->light_index = AiNodeGetInt(node, SSTR::light_index);
    data->attribute = AiNodeGetStr(node, SSTR::attribute);
@@ -49,14 +49,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   NodeAttrVData *data = (NodeAttrVData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<NodeAttrVData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   NodeAttrVData *data = (NodeAttrVData*) AiNodeGetLocalData(node);
    
    sg->out.VEC = AI_V3_ZERO;
    

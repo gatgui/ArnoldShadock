@@ -20,7 +20,7 @@ node_parameters
    AiParameterPnt(SSTR::rotation_pivot, 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct RotateData
 {
    AtMatrix Rx;
    AtMatrix Ry;
@@ -42,8 +42,8 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = new NodeData();
-   AddMemUsage<NodeData>();
+   RotateData *data = new RotateData();
+   AddMemUsage<RotateData>();
 
    data->Rx_set = false;
    data->Ry_set = false;
@@ -57,7 +57,7 @@ node_initialize
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RotateData *data = (RotateData*) AiNodeGetLocalData(node);
    
    data->rotationOrder = (RotationOrder) AiNodeGetInt(node, SSTR::rotation_order);
    data->angleScale = (AiNodeGetInt(node, SSTR::angle_units) == AU_Radians ? AI_RTOD : 1.0f);
@@ -153,14 +153,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RotateData *data = (RotateData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<RotateData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   RotateData *data = (RotateData*) AiNodeGetLocalData(node);
    
    AtVector p, ip, r;
    AtMatrix R, Rx, Ry, Rz, P, iP, tmp;

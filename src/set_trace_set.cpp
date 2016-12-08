@@ -16,7 +16,7 @@ node_parameters
    AiParameterBool(SSTR::inclusive, true);
 }
 
-struct NodeData
+struct SetTraceSetData
 {
    AtString traceSet;
    bool inclusive;
@@ -24,27 +24,27 @@ struct NodeData
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new SetTraceSetData());
+   AddMemUsage<SetTraceSetData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   SetTraceSetData *data = (SetTraceSetData*) AiNodeGetLocalData(node);
    data->traceSet = AiNodeGetStr(node, SSTR::trace_set);
    data->inclusive = AiNodeGetBool(node, SSTR::inclusive);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   SetTraceSetData *data = (SetTraceSetData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<SetTraceSetData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   SetTraceSetData *data = (SetTraceSetData*) AiNodeGetLocalData(node);
    
    AiShaderGlobalsSetTraceSet(sg, data->traceSet, data->inclusive);
    

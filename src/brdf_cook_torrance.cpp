@@ -22,7 +22,7 @@ node_parameters
    AiParameterEnum(SSTR::angle_units, AU_Degrees, AngleUnitsNames);
 }
 
-struct NodeData
+struct BrdfCookTorranceData
 {
    bool evalRoughnessX;
    float roughnessX;
@@ -39,13 +39,13 @@ struct NodeData
 node_initialize
 {
    AiMsgWarning("[shading_block] 'brdf_cook_torrance' is deprecated, use 'brdf_microfacet' instead with distribution set to 'Beckmann'.");
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new BrdfCookTorranceData());
+   AddMemUsage<BrdfCookTorranceData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BrdfCookTorranceData *data = (BrdfCookTorranceData*) AiNodeGetLocalData(node);
    
    data->evalRoughnessX = AiNodeIsLinked(node, SSTR::roughness_x);
    data->evalRoughnessY = AiNodeIsLinked(node, SSTR::roughness_y);
@@ -78,14 +78,14 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BrdfCookTorranceData *data = (BrdfCookTorranceData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<BrdfCookTorranceData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   BrdfCookTorranceData *data = (BrdfCookTorranceData*) AiNodeGetLocalData(node);
    
    float rx = (data->evalRoughnessX ? AiShaderEvalParamFlt(p_roughness_x) : data->roughnessX);
    float ry = (data->evalRoughnessY ? AiShaderEvalParamFlt(p_roughness_y) : data->roughnessY);

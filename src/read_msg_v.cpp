@@ -14,34 +14,34 @@ node_parameters
    AiParameterVec("default_value", 0.0f, 0.0f, 0.0f);
 }
 
-struct NodeData
+struct ReadMsgVData
 {
    AtString msgName;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeData());
-   AddMemUsage<NodeData>();
+   AiNodeSetLocalData(node, new ReadMsgVData());
+   AddMemUsage<ReadMsgVData>();
 }
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgVData *data = (ReadMsgVData*) AiNodeGetLocalData(node);
    
    data->msgName = AiNodeGetStr(node, SSTR::msg_name);
 }
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgVData *data = (ReadMsgVData*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<ReadMsgVData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   ReadMsgVData *data = (ReadMsgVData*) AiNodeGetLocalData(node);
    
    if (!AiStateGetMsgVec(data->msgName, &(sg->out.VEC)))
    {

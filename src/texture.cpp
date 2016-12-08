@@ -111,7 +111,7 @@ node_parameters
    AiParameterRGBA(SSTR::default_color, 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-struct NodeData
+struct TextureData
 {
    bool evalPath;
    const char *filename;
@@ -123,8 +123,8 @@ struct NodeData
 
 node_initialize
 {
-   NodeData *data = new NodeData();
-   AddMemUsage<NodeData>();
+   TextureData *data = new TextureData();
+   AddMemUsage<TextureData>();
    
    // initialize for first node_update call
    data->handle = 0;
@@ -134,7 +134,7 @@ node_initialize
 
 node_update
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TextureData *data = (TextureData*) AiNodeGetLocalData(node);
    
    data->evalPath = AiNodeIsLinked(node, SSTR::filename);
    data->filename = 0;
@@ -177,7 +177,7 @@ node_update
 
 node_finish
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TextureData *data = (TextureData*) AiNodeGetLocalData(node);
    
    if (data->handle)
    {
@@ -185,12 +185,12 @@ node_finish
    }
    
    delete data;
-   SubMemUsage<NodeData>();
+   SubMemUsage<TextureData>();
 }
 
 shader_evaluate
 {
-   NodeData *data = (NodeData*) AiNodeGetLocalData(node);
+   TextureData *data = (TextureData*) AiNodeGetLocalData(node);
    
    bool success = true;
    bool *psuccess = (data->useDefaultColor ? &success : 0);
