@@ -2,8 +2,8 @@ Shader Building Blocks
 
 Requires Arnold 4.2.12.0 at least
 
-agAnimCurve    v2.0.5
-agNoises       v1.1.5
-agSeExpr       v1.2.3c
-agState        v1.1.3
-agUserDataRamp v1.0.4
+agAnimCurve    v2.0.7
+agNoises       v1.1.7
+agSeExpr       v1.2.4
+agState        v1.1.5
+agUserDataRamp v1.1.1
