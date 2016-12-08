@@ -18,6 +18,10 @@
 #
 # agShadingBlocks is numbering down from the end of the range
 
+[node cache_s]
+   maya.classification STRING "utility/cache"
+   maya.id INT 0x001164E7
+
 [node node_attr_i]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001164E8

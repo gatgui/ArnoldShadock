@@ -269,6 +269,7 @@ DECLARE_SHADER(NodeAttrV);
 DECLARE_SHADER(NodeAttrC3);
 DECLARE_SHADER(NodeAttrC4);
 DECLARE_SHADER(NodeAttrS);
+DECLARE_SHADER(CacheS);
 
 node_loader
 {
@@ -495,5 +496,6 @@ node_loader
    REGISTER_SHADER(NodeAttrC3, node_attr_c3, AI_TYPE_RGB)
    REGISTER_SHADER(NodeAttrC4, node_attr_c4, AI_TYPE_RGBA)
    REGISTER_SHADER(NodeAttrS, node_attr_s, AI_TYPE_STRING)
+   REGISTER_SHADER(CacheS, cache_s, AI_TYPE_STRING)
    return false;
 }
