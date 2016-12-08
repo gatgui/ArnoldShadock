@@ -306,6 +306,7 @@ namespace SSTR
 
 #ifdef USE_AGUSERDATARAMP
    AtString abort_on_error("abort_on_error");
+   AtString sort_positions("sort_positions");
 #endif
 
 #ifdef USE_AGSEEXPR
