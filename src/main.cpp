@@ -104,13 +104,13 @@ DECLARE_SHADER(ShapeAttrV);
 DECLARE_SHADER(ShapeAttrC3);
 DECLARE_SHADER(ShapeAttrC4);
 DECLARE_SHADER(ShapeAttrS);
-#ifdef USE_AGSTATE
-DECLARE_SHADER(agIntState);
-DECLARE_SHADER(agFloatState);
-DECLARE_SHADER(agColorState);
-DECLARE_SHADER(agVectorState);
-DECLARE_SHADER(agMatrixState);
-DECLARE_SHADER(agNodeState);
+#ifdef WITH_STATE_SHADERS
+DECLARE_SHADER(StateI);
+DECLARE_SHADER(StateF);
+DECLARE_SHADER(StateC3);
+DECLARE_SHADER(StateV);
+DECLARE_SHADER(StateM);
+DECLARE_SHADER(StateN);
 #endif
 DECLARE_SHADER(Transform);
 DECLARE_SHADER(MakeM);
@@ -141,21 +141,21 @@ DECLARE_SHADER(MakeV);
 DECLARE_SHADER(MakeC3);
 DECLARE_SHADER(MakeC4);
 DECLARE_FCV_SHADER(Gaussian);
-#ifdef USE_AGNOISES
+#ifdef WITH_NOISE_SHADERS
 DECLARE_SHADER(Fractal);
 DECLARE_SHADER(Voronoi);
 DECLARE_SHADER(DistortPoint);
 #endif
-#ifdef USE_AGSEEXPR
-DECLARE_SHADER(agSeExpr);
+#ifdef WITH_SEEXPR_SHADER
+DECLARE_SHADER(SeExpr);
 #endif
-#ifdef USE_AGANIMCURVE
-DECLARE_SHADER(agAnimCurve);
+#ifdef WITH_ANIMCURVE_SHADER
+DECLARE_SHADER(AnimCurve);
 #endif
-#ifdef USE_AGUSERDATARAMP
-DECLARE_SHADER(agUserDataFloatRamp);
-DECLARE_SHADER(agUserDataColorRamp);
-DECLARE_SHADER(agUserDataVectorRamp);
+#ifdef WITH_USERDATARAMP_SHADERS
+DECLARE_SHADER(UserDataRampF);
+DECLARE_SHADER(UserDataRampC3);
+DECLARE_SHADER(UserDataRampV);
 #endif
 DECLARE_SHADER(UVSwitch);
 DECLARE_SHADER(UVProject);
@@ -331,13 +331,13 @@ node_loader
    REGISTER_SHADER(ShapeAttrC3, shape_attr_c3, AI_TYPE_RGB)
    REGISTER_SHADER(ShapeAttrC4, shape_attr_c4, AI_TYPE_RGBA)
    REGISTER_SHADER(ShapeAttrS, shape_attr_s, AI_TYPE_STRING)
-#ifdef USE_AGSTATE
-   REGISTER_SHADER(agIntState, globals_i, AI_TYPE_INT)
-   REGISTER_SHADER(agFloatState, globals_f, AI_TYPE_FLOAT)
-   REGISTER_SHADER(agColorState, globals_c3, AI_TYPE_RGB)
-   REGISTER_SHADER(agVectorState, globals_v, AI_TYPE_VECTOR)
-   REGISTER_SHADER(agMatrixState, globals_m, AI_TYPE_MATRIX)
-   REGISTER_SHADER(agNodeState, globals_n, AI_TYPE_NODE)
+#ifdef WITH_STATE_SHADERS
+   REGISTER_SHADER(StateI, globals_i, AI_TYPE_INT)
+   REGISTER_SHADER(StateF, globals_f, AI_TYPE_FLOAT)
+   REGISTER_SHADER(StateC3, globals_c3, AI_TYPE_RGB)
+   REGISTER_SHADER(StateV, globals_v, AI_TYPE_VECTOR)
+   REGISTER_SHADER(StateM, globals_m, AI_TYPE_MATRIX)
+   REGISTER_SHADER(StateN, globals_n, AI_TYPE_NODE)
 #endif
    REGISTER_SHADER(Transform, transform, AI_TYPE_VECTOR)
    REGISTER_SHADER(MakeM, make_m, AI_TYPE_MATRIX)
@@ -368,21 +368,21 @@ node_loader
    REGISTER_SHADER(MakeC3, make_c3, AI_TYPE_RGB)
    REGISTER_SHADER(MakeC4, make_c4, AI_TYPE_RGBA)
    REGISTER_FCV_SHADER(Gaussian, gaussian)
-#ifdef USE_AGNOISES
+#ifdef WITH_NOISE_SHADERS
    REGISTER_SHADER(Fractal, fractal_noise, AI_TYPE_FLOAT);
    REGISTER_SHADER(Voronoi, voronoi_noise, AI_TYPE_FLOAT);
    REGISTER_SHADER(DistortPoint, distort_point, AI_TYPE_POINT);
 #endif
-#ifdef USE_AGSEEXPR
-   REGISTER_SHADER(agSeExpr, seexpr, AI_TYPE_VECTOR)
+#ifdef WITH_SEEXPR_SHADER
+   REGISTER_SHADER(SeExpr, seexpr, AI_TYPE_VECTOR)
 #endif
-#ifdef USE_AGANIMCURVE
-   REGISTER_SHADER(agAnimCurve, curve, AI_TYPE_FLOAT)
+#ifdef WITH_ANIMCURVE_SHADER
+   REGISTER_SHADER(AnimCurve, curve, AI_TYPE_FLOAT)
 #endif
-#ifdef USE_AGUSERDATARAMP
-   REGISTER_SHADER(agUserDataFloatRamp, shape_attr_ramp_f, AI_TYPE_FLOAT)
-   REGISTER_SHADER(agUserDataColorRamp, shape_attr_ramp_c3, AI_TYPE_RGB)
-   REGISTER_SHADER(agUserDataVectorRamp, shape_attr_ramp_v, AI_TYPE_VECTOR)
+#ifdef WITH_USERDATARAMP_SHADERS
+   REGISTER_SHADER(UserDataRampF, shape_attr_ramp_f, AI_TYPE_FLOAT)
+   REGISTER_SHADER(UserDataRampC3, shape_attr_ramp_c3, AI_TYPE_RGB)
+   REGISTER_SHADER(UserDataRampV, shape_attr_ramp_v, AI_TYPE_VECTOR)
 #endif
    REGISTER_SHADER(UVSwitch, uv_switch, AI_TYPE_RGBA)
    REGISTER_SHADER(UVProject, uv_project, AI_TYPE_RGBA)

@@ -6,8 +6,6 @@ import excons
 import shutil
 from excons.tools import arnold
 
-excons.SetArgument("no-arch", 1)
-
 env = excons.MakeBaseEnv()
 
 version = "0.6.0"
@@ -240,32 +238,32 @@ def make_mtd():
 
   if withState:
     dlines.append("\n")
-    append_file_content("agState/src/agState.mtd", remap={"vector_state": "globals_v",
-                                                          "float_state": "globals_f",
-                                                          "color_state": "globals_c3",
-                                                          "integer_state": "globals_i",
-                                                          "matrix_state": "globals_m",
-                                                          "node_state": "globals_n"})
+    append_file_content("ArnoldStateShaders/src/state.mtd.in", remap={"${prefix}state_v": "globals_v",
+                                                                      "${prefix}state_f": "globals_f",
+                                                                      "${prefix}state_c3": "globals_c3",
+                                                                      "${prefix}state_i": "globals_i",
+                                                                      "${prefix}state_m": "globals_m",
+                                                                      "${prefix}state_n": "globals_n"})
 
   if withNoises:
     dlines.append("\n")
-    append_file_content("agNoises/src/agNoises.mtd", remap={"ln_factal": "fractal_noise",
-                                                            "ln_voronoi": "voronoi_noise",
-                                                            "ln_distort_point": "distort_point"})
+    append_file_content("ArnoldNoiseShaders/src/noise.mtd.in", remap={"${prefix}fractal": "fractal_noise",
+                                                                      "${prefix}voronoi": "voronoi_noise",
+                                                                      "${prefix}distort_point": "distort_point"})
 
   if withSeExpr:
     dlines.append("\n")
-    append_file_content("agSeExpr/src/seexpr.mtd")
+    append_file_content("SeExprArnold/src/seexpr.mtd")
 
   if withAnimCurve:
     dlines.append("\n")
-    append_file_content("agAnimCurve/src/agAnimCurve.mtd", remap={"anim_curve": "curve"})
+    append_file_content("ArnoldAnimCurve/src/anim_curve.mtd.in", remap={"${prefix}anim_curve": "curve"})
 
   if withUserDataRamp:
     dlines.append("\n")
-    append_file_content("agUserDataRamp/src/agUserDataRamp.mtd", remap={"userDataFloatRamp": "shape_attr_ramp_f",
-                                                                        "userDataColorRamp": "shape_attr_ramp_c3",
-                                                                        "userDataVectorRamp": "shape_attr_ramp_v"})
+    append_file_content("ArnoldUserDataRamp/src/user_data_ramp.mtd.in", remap={"${prefix}user_data_ramp_f": "shape_attr_ramp_f",
+                                                                               "${prefix}user_data_ramp_c3": "shape_attr_ramp_c3",
+                                                                               "${prefix}user_data_ramp_v": "shape_attr_ramp_v"})
   
   # Modify maya node IDs
   print("Maya Node ID range: %s - %s" % (mayaIdStr(minMayaId), mayaIdStr(maxMayaId)))
@@ -307,46 +305,65 @@ if arniver[0] < 4 or (arniver[0] == 4 and (arniver[1] < 2 or (arniver[1] == 2 an
 defs = []
 incs = []
 libs = []
+prjs = []
 extra_srcs = []
 instfiles = {"arnold": ["agShadingBlocks.mtd"]}
 
 if withState:
-  defs.append("USE_AGSTATE")
-  incs.append("agState")
-  extra_srcs += glob.glob("agState/src/ag?*State.cpp")
+  defs.append("WITH_STATE_SHADERS")
+  prjs.append({"name": "state_shaders",
+               "type": "staticlib",
+               "srcs": glob.glob("ArnoldStateShaders/src/state_*.cpp"),
+               "custom": [arnold.Require]})
+  libs.append("state_shaders")
 
 if withNoises:
-  defs.append("USE_AGNOISES")
-  incs.append("agNoises/src")
-  extra_srcs += glob.glob("agNoises/src/ln_*.cpp") + \
-                glob.glob("agNoises/src/libnoise/*.cpp") + \
-                glob.glob("agNoises/src/stegu/*.cpp")
+  defs.append("WITH_NOISE_SHADERS")
+  incs.append("ArnoldNoiseShaders/src")
+  prjs.append({"name": "noise_shaders",
+               "type": "staticlib",
+               "srcs": ["ArnoldNoiseShaders/src/fractal.cpp",
+                        "ArnoldNoiseShaders/src/distort_point.cpp",
+                        "ArnoldNoiseShaders/src/voronoi.cpp",
+                        "ArnoldNoiseShaders/src/common.cpp",] + \
+                       glob.glob("ArnoldNoiseShaders/src/libnoise/*.cpp") + \
+                       glob.glob("ArnoldNoiseShaders/src/stegu/*.cpp"),
+               "custom": [arnold.Require]})
+  libs.append("noise_shaders")
 
 if withSeExpr:
-  excons.SetArgument("static", 1)
-  SConscript("agSeExpr/SeExpr/SConstruct")
-  defs.append("USE_AGSEEXPR")
-  incs.append("agSeExpr")
-  libs.append("SeExpr")
-  extra_srcs += ["agSeExpr/src/seexpr.cpp"]
-  instfiles["maya"] = instfiles.get("maya", []) + ["agSeExpr/maya/aiSeexprTemplate.py"]
+  excons.Call("SeExprArnold/SeExpr", targets=["SeExpr"], overrides={"static": "1"})
+  defs.append("WITH_SEEXPR_SHADER")
+  prjs.append({"name": "seexpr_shader",
+               "type": "staticlib",
+               "srcs": ["SeExprArnold/src/seexpr.cpp"],
+               "custom": [arnold.Require]})
+  libs.extend(["seexpr_shader", "SeExpr"])
+  instfiles["maya"] = instfiles.get("maya", []) + ["SeExprArnold/maya/aiSeexprTemplate.py"]
 
 if withAnimCurve:
-  defs.extend(["USE_AGANIMCURVE"])
-  extra_srcs += ["agAnimCurve/src/agAnimCurve.cpp"]
+  defs.extend(["WITH_ANIMCURVE_SHADER"])
+  prjs.append({"name": "animcurve_shader",
+               "type": "staticlib",
+               "srcs": ["ArnoldAnimCurve/src/anim_curve.cpp"],
+               "custom": [arnold.Require]})
+  libs.append("animcurve_shader")
 
 if withUserDataRamp:
-  defs.append("USE_AGUSERDATARAMP")
-  incs.append("agUserDataRamp/src")
-  extra_srcs += glob.glob("agUserDataRamp/src/agUserData*.cpp")
+  defs.append("WITH_USERDATARAMP_SHADERS")
+  incs.append("ArnoldUserDataRamp/src")
+  prjs.append({"name": "userdataramp_shaders",
+               "type": "staticlib",
+               "srcs": glob.glob("ArnoldUserDataRamp/src/user_data_ramp*.cpp") + \
+                       ["ArnoldUserDataRamp/src/common.cpp"],
+               "custom": [arnold.Require]})
+  libs.append("userdataramp_shaders")
 
 make_mtd()
 
-excons.SetArgument("static", 1)
-SConscript("gmath/SConstruct")
-Import("RequireGmath")
+excons.Call("gmath", overrides={"static": "1"}, imp=["RequireGmath"])
 
-prjs = [
+prjs.append(
   {"name": "agShadingBlocks",
    "prefix": "arnold",
    "type": "dynamicmodule",
@@ -358,19 +375,27 @@ prjs = [
    "install": instfiles,
    "custom": [RequireGmath, arnold.Require],
    "post": [check_symbols]
-  }
-]
+  })
 
 env.Append(CPPFLAGS=" -DSHADERS_PREFIX=\"\\\"%s\\\"\"" % shdprefix)
 if sys.platform != "win32":
   env.Append(CPPFLAGS=" -Wno-unused-parameter")
+
+excons.AddHelpOptions(agShadingBlocks="""AGSHADINGBLOCKS OPTIONS
+  with-state=0|1             : Include state querying shaders. [1]
+  with-noises=0|1            : Include noise shaders. [1]
+  with-seexpr=0|1            : Include SeExpr shader. [1]
+  with-animcurve=0|1         : Include animation curve shader. [1]
+  with-userdataramp=0|1      : Include user data based ramp shaders. [1]
+  shaders-prefix=<str>       : Set shaders prefix. ['gas_']
+  maya-base-nodeid=<int>     : Override maya node ids by setting a new node base id. [-]
+  maya-increasing-nodeid=0|1 : Whether node ids are generated by incrementing or decrementing the base id. [0]""")
 
 excons.DeclareTargets(env, prjs)
 
 dist_env, ver_dir = excons.EcosystemDist(env, "agShadingBlocks.env", {"agShadingBlocks": ""})
 dist_env.Install(ver_dir, "agShadingBlocks.mtd")
 if withSeExpr:
-  dist_env.Install(ver_dir+"/ae", "agSeExpr/maya/aiSeexprTemplate.py")
+  dist_env.Install(ver_dir+"/ae", "SeExprArnold/maya/aiSeexprTemplate.py")
 
 Default(["agShadingBlocks"])
-

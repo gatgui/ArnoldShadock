@@ -2,7 +2,9 @@
 
 namespace SSTR
 {
+#ifndef WITH_USERDATARAMP_SHADERS
    AtString linkable("linkable");
+#endif
    AtString source("source");
    AtString source_color_space("source_color_space");
    AtString target("target");
@@ -98,10 +100,12 @@ namespace SSTR
    
    AtString state("state");
    
+#ifndef WITH_USERDATARAMP_SHADERS
    AtString positions("positions");
    AtString values("values");
    AtString interpolations("interpolations");
-   
+#endif
+
    AtString aov_name("aov_name");
    
    AtString msg_name("msg_name");
@@ -256,7 +260,9 @@ namespace SSTR
    AtString motion_start_frame("motion_start_frame");
    AtString motion_end_frame("motion_end_frame");
    AtString relative_motion_frame("relative_motion_frame");
+#ifndef WITH_USERDATARAMP_SHADERS
    AtString default_interpolation("default_interpolation");
+#endif
    AtString shutter_start("shutter_start");
    AtString shutter_end("shutter_end");
    AtString fps("fps");
@@ -282,7 +288,7 @@ namespace SSTR
    AtString blend_min("blend_min");
    AtString blend_max("blend_max");
 
-#ifdef USE_AGANIMCURVE
+#ifdef WITH_ANIMCURVE_SHADER
    AtString input_is_frame_offset("input_is_frame_offset");
    AtString motion_steps("motion_steps");
    AtString in_tangents("in_tangents");
@@ -293,23 +299,18 @@ namespace SSTR
    AtString post_infinity("post_infinity");
 #endif
 
-#ifdef USE_AGNOISES
+#ifdef WITH_NOISE_SHADERS
    AtString Pref("Pref");
    AtString distance_func("distance_func");
    AtString custom_input("custom_input");
    AtString base_noise("base_noise");
 #endif
 
-#ifdef USE_AGSTATE
+#ifdef WITH_STATE_SHADERS
    AtString index("index");
 #endif
 
-#ifdef USE_AGUSERDATARAMP
-   AtString abort_on_error("abort_on_error");
-   AtString sort_positions("sort_positions");
-#endif
-
-#ifdef USE_AGSEEXPR
+#ifdef WITH_SEEXPR_SHADER
    AtString expression("expression");
    AtString fparam_name("fparam_name");
    AtString fparam_value("fparam_value");

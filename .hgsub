@@ -1,7 +1,7 @@
 excons = [git]git://github.com/gatgui/excons.git
 gmath = [git]git://github.com/gatgui/gmath.git
-agState = [hg]https://bitbucket.org/gatgui/agState
-agNoises = [hg]https://bitbucket.org/gatgui/agNoises
-agSeExpr = [hg]https://bitbucket.org/gatgui/agSeExpr
-agAnimCurve = [hg]https://bitbucket.org/gatgui/agAnimCurve
-agUserDataRamp = [hg]https://bitbucket.org/gatgui/agUserDataRamp
+ArnoldAnimCurve = [git]git://github.com/gatgui/ArnoldAnimCurve.git
+ArnoldNoiseShaders = [git]git://github.com/gatgui/ArnoldNoiseShaders.git
+ArnoldStateShaders = [git]git://github.com/gatgui/ArnoldStateShaders.git
+ArnoldUserDataRamp = [git]git://github.com/gatgui/ArnoldUserDataRamp.git
+SeExprArnold = [git]git://github.com/gatgui/SeExprArnold.git
