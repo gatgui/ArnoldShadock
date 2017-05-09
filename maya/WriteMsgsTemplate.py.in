@@ -1,0 +1,58 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@WRITEMSGS_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      
+      self.addControl("input")
+      self.addControl("eval_order")
+      
+      self.beginLayout("Bool")
+      self.addControl("bool_msg_name", label="Name")
+      self.addControl("bool_msg", label="Value")
+      self.endLayout()
+      
+      self.beginLayout("Int")
+      self.addControl("int_msg_name", label="Name")
+      self.addControl("int_msg", label="Value")
+      self.endLayout()
+      
+      self.beginLayout("Float")
+      self.addControl("float_msg_name", label="Name")
+      self.addControl("float_msg", label="Value")
+      self.endLayout()
+      
+      self.beginLayout("Point2")
+      self.addControl("point2_msg_name", label="Name")
+      self.addControl("point2_msg", label="Value")
+      self.endLayout()
+      
+      self.beginLayout("Point")
+      self.addControl("point_msg_name", label="Name")
+      self.addControl("point_msg", label="Value")
+      self.endLayout()
+      
+      self.beginLayout("Vector")
+      self.addControl("vector_msg_name", label="Name")
+      self.addControl("vector_msg", label="Value")
+      self.endLayout()
+      
+      self.beginLayout("RGB")
+      self.addControl("rgb_msg_name", label="Name")
+      self.addControl("rgb_msg", label="Value")
+      self.endLayout()
+      
+      self.beginLayout("RGBA")
+      self.addControl("rgba_msg_name", label="Name")
+      self.addControl("rgba_msg", label="Value")
+      self.endLayout()
+      
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

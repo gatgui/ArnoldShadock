@@ -1,0 +1,20 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@ADAPTCHROMATICITY_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("input")
+      self.addControl("source")
+      self.addControl("source_color_space")
+      self.addControl("target")
+      self.addControl("target_color_space")
+      self.addControl("transform")
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

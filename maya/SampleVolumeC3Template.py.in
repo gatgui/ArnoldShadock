@@ -1,0 +1,34 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@SAMPLEVOLUMEC3_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("field")
+      self.addControl("interpolation")
+      self.addControl("P")
+      self.addControl("P_space")
+      self.addControl("P_is_offset")
+      self.addControl("pre_multiply")
+      self.addControl("pre_offset")
+      self.beginLayout("Blend")
+      self.addControl("blend_mode")
+      self.addControl("blend")
+      self.addControl("blend_min")
+      self.addControl("blend_max")
+      self.endLayout()
+      self.beginLayout("Adjust")
+      self.addControl("bias")
+      self.addControl("gain")
+      self.addControl("multiply")
+      self.addControl("offset")
+      self.endLayout()
+      self.addControl("default")
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

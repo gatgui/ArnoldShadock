@@ -1,0 +1,18 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@SSSSINGLE_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("Rd", label="Albedo")
+      self.addControl("mfp", label="Mean Free Path Length")
+      self.addControl("g", label="Anisotropy")
+      self.addControl("eta", label="Refraction Index")
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

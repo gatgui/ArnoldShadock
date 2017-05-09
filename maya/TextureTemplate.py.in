@@ -1,0 +1,59 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@TEXTURE_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      
+      self.addControl("filename")
+      self.addControl("use_default_color")
+      self.addControl("default_color")
+      
+      self.beginLayout("Mipmaps", collapse=False)
+      self.addControl("mipmap_mode")
+      self.addControl("mipmap_bias")
+      self.endLayout()
+      
+      self.beginLayout("Channels", collapse=False)
+      self.addControl("single_channel")
+      self.addControl("start_channel")
+      self.addControl("fill")
+      self.endLayout()
+      
+      self.beginLayout("Placement", collapse=False)
+      self.addControl("swrap")
+      self.addControl("twrap")
+      self.addControl("sscale")
+      self.addControl("tscale")
+      self.beginNoOptimize()
+      self.addControl("sflip")
+      self.addControl("tflip")
+      self.addControl("swap_st")
+      self.endNoOptimize()
+      self.endLayout()
+
+      self.beginLayout("Filtering", collapse=False)
+      self.addControl("filter")
+      self.addControl("swidth")
+      self.addControl("twidth")
+      self.addControl("sblur")
+      self.addControl("tblur")
+      self.endLayout()
+      
+      self.beginLayout("Adjustments", collapse=False)
+      self.addControl("multiply")
+      self.addControl("offset")
+      self.endLayout()
+      
+      self.beginLayout("Advanced")
+      self.addControl("cache_texture_handles")
+      self.endLayout()
+      
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

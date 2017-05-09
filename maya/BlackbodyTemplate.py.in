@@ -1,0 +1,33 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@BLACKBODY_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("temperature")
+      self.addControl("output_mode")
+      self.addControl("exposure")
+      self.addControl("color_space")
+      self.beginNoOptimize()
+      self.addControl("use_approximation")
+      self.addControl("fix_nans")
+      self.endNoOptimize()
+      self.addControl("nan_color")
+      self.beginLayout("Tone Mapping")
+      self.addControl("tm_key")
+      self.addControl("tm_Lavg")
+      self.addControl("tm_Lwht")
+      self.endLayout()
+      self.beginLayout("Chromatic Adaptation")
+      self.addControl("ca_transform")
+      self.addControl("ca_max_temperature")
+      self.addControl("ca_white_point")
+      self.endLayout()
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

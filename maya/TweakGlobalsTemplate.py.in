@@ -1,0 +1,31 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@TWEAKGLOBALS_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("input")
+      self.beginLayout("Shading Point", collapse=False)
+      self.addControl("P")
+      self.addControl("P_space")
+      self.addControl("P_is_offset")
+      self.endLayout()
+      self.beginLayout("Shading Normal", collapse=False)
+      self.addControl("N")
+      self.addControl("N_space")
+      self.addControl("N_world_matrix")
+      self.endLayout()
+      self.beginNoOptimize()
+      self.addControl("fhemi")
+      self.addControl("skip_shadow")
+      self.endNoOptimize()
+      self.addControl("trace_set")
+      self.addControl("inclusive_trace_set")
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

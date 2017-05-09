@@ -1,0 +1,27 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@UVCLIP_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("input")
+      self.beginLayout("Transform", collapse=False)
+      self.addControl("order")
+      self.addControl("scale")
+      self.addControl("scale_pivot")
+      self.addControl("rotation")
+      self.addControl("rotation_pivot")
+      self.addControl("translation")
+      self.addControl("transform_pivots")
+      self.endLayout()
+      self.addControl("u_range")
+      self.addControl("v_range")
+      self.addControl("clipped_input")
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

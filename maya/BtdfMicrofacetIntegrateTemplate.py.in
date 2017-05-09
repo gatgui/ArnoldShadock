@@ -1,0 +1,26 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@BTDFMICROFACETINTEGRATE_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("weight")
+      self.addControl("distribution")
+      self.addControl("roughness_x")
+      self.addControl("roughness_y")
+      self.addControl("local_frame")
+      self.addControl("custom_frame")
+      self.addControl("frame_rotation")
+      self.addControl("angle_units")
+      self.addControl("ior")
+      self.addControl("dispersion")
+      self.addControl("fresnel")
+      self.addControl("transmittance")
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

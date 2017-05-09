@@ -1,0 +1,24 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@UVPROJECT_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("input")
+      self.addControl("lookup_vector")
+      self.addControl("lookup_vector_space")
+      self.addControl("mode")
+      self.addControl("custom_vector")
+      self.addControl("custom_vector_is_point")
+      self.addControl("custom_vector_ddx")
+      self.addControl("custom_vector_ddy")
+      self.addControl("offset_matrix")
+      self.addControl("recompute_surface_uv_derivs")
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

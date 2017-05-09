@@ -1,0 +1,44 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@VOLUME_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.beginLayout("Scattering", collapse=False)
+      self.addControl("scattering_source", label="Source")
+      self.addControl("scattering_field", label="Field")
+      self.addControl("scattering")
+      self.addControl("scattering_weight", label="Weight")
+      self.addControl("scattering_color", label="Color")
+      self.addControl("anisotropy")
+      self.endLayout()
+      self.beginLayout("Attenuation", collapse=False)
+      self.addControl("attenuation_mode", label="Mode")
+      self.addControl("preserve_energy")
+      self.addControl("attenuation_source", label="Source")
+      self.addControl("attenuation_field", label="Field")
+      self.addControl("attenuation")
+      self.addControl("attenuation_weight", label="Weight")
+      self.addControl("attenuation_color", label="Color")
+      self.endLayout()
+      self.beginLayout("Emission", collapse=False)
+      self.addControl("emission_source", label="Source")
+      self.addControl("emission_field", label="Field")
+      self.addControl("emission")
+      self.addControl("emission_weight", label="Weight")
+      self.addControl("emission_color", label="Color")
+      self.endLayout()
+      self.beginLayout("Fields Sampling")
+      self.addControl("interpolation")
+      self.addControl("P")
+      self.addControl("P_space")
+      self.addControl("P_is_offset")
+      self.endLayout()
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

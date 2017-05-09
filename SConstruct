@@ -190,7 +190,6 @@ def make_mtd_in():
                   if attr_name == "maya.name":
                     has_maya_name = True
                     if maya_name is not None:
-                      print("has name! %s" % maya_name)
                       line = attr_heading + attr_name + " " + attr_type + " \"" + maya_name + "\"\n"
           
           dlines.append(line)
@@ -300,6 +299,18 @@ instfiles = {}
 
 mtd = GenerateMtd("agShadingBlocks.mtd", make_mtd_in())
 instfiles["arnold"] = mtd
+
+for item in excons.glob("src/*.cpp"):
+  bn = os.path.splitext(os.path.basename(item))[0]
+  mbn = to_maya_name(bn, capitalize=True)
+  tplin = "maya/%sTemplate.py.in" % mbn
+  if not os.path.isfile(tplin):
+    if bn not in ("common", "main", "strings"):
+      print("No template for shader '%s'" % item)
+  else:
+    mn = to_maya_name(shdprefix + bn)
+    opts["%s_MAYA_NODENAME" % mbn.upper()] = mn
+    aes += GenerateMayaAE("maya/%sTemplate.py" % mn, tplin)
 
 
 if withState:

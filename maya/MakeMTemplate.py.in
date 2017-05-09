@@ -1,0 +1,22 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@MAKEM_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("transform_order")
+      self.addControl("translation")
+      self.addControl("rotation_order")
+      self.addControl("angle_units")
+      self.addControl("rotation")
+      self.addControl("rotation_pivot")
+      self.addControl("scale")
+      self.addControl("scale_pivot")
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

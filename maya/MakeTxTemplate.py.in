@@ -1,0 +1,25 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@MAKETX_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("filename")
+      self.addControl("format")
+      self.addControl("wraps")
+      self.addControl("wrapt")
+      self.addControl("tile")
+      self.addControl("resize")
+      self.addControl("mipmap")
+      self.addControl("filter")
+      self.addControl("stripxmp")
+      self.addControl("oiioopt")
+      self.addControl("mode")
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

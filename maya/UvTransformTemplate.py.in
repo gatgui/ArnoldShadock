@@ -1,0 +1,25 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@UVTRANSFORM_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("input")
+      self.addControl("order")
+      self.addControl("scale")
+      self.addControl("scale_pivot")
+      self.addControl("rotation")
+      self.addControl("rotation_pivot")
+      self.addControl("translation")
+      self.beginNoOptimize()
+      self.addControl("transform_pivots")
+      self.addControl("recompute_surface_uv_derivs")
+      self.endNoOptimize()
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

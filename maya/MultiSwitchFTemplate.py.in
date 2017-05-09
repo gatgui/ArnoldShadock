@@ -1,0 +1,31 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@MULTISWITCHF_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("which")
+      self.addControl("input0")
+      self.addControl("input1")
+      self.addControl("input2")
+      self.addControl("input3")
+      self.addControl("input4")
+      self.addControl("input5")
+      self.addControl("input6")
+      self.addControl("input7")
+      self.addControl("input8")
+      self.addControl("input9")
+      self.addControl("input10")
+      self.addControl("input11")
+      self.addControl("input12")
+      self.addControl("input13")
+      self.addControl("input14")
+      self.addControl("input15")
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

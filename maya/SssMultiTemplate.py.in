@@ -1,0 +1,31 @@
+import pymel.core as pm
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@SSSMULTI_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("method")
+      self.addControl("radius_scale")
+      self.beginLayout("Layer 0", collapse=False)
+      self.addControl("radius0", label="Radius")
+      self.addControl("albedo0", label="Albedo")
+      self.addControl("weight0", label="Weight")
+      self.endLayout()
+      self.beginLayout("Layer 1", collapse=False)
+      self.addControl("radius1", label="Radius")
+      self.addControl("albedo1", label="Albedo")
+      self.addControl("weight1", label="Weight")
+      self.endLayout()
+      self.beginLayout("Layer 2", collapse=False)
+      self.addControl("radius2", label="Radius")
+      self.addControl("albedo2", label="Albedo")
+      self.addControl("weight2", label="Weight")
+      self.endLayout()
+      self.endLayout()
+      
+      pm.mel.AEdependNodeTemplate(self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+
