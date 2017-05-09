@@ -2,8 +2,8 @@ Shader Building Blocks
 
 Requires Arnold 4.2.12.0 at least
 
-ArnoldAnimCurve    v2.0.7
-ArnoldNoiseShaders v1.1.7
-SeExprArnold       v1.2.4
-ArnoldStateShaders v1.1.5
-ArnoldUserDataRamp v1.1.1
+ArnoldAnimCurve    v2.0.8
+ArnoldNoiseShaders v1.1.8
+SeExprArnold       v1.2.5
+ArnoldStateShaders v1.1.6
+ArnoldUserDataRamp v1.1.2

@@ -3,6 +3,7 @@ syntax: glob
 *.dblite
 *.pdb
 *.env.tmp
+*.config
 release/
 debug/
 dist/
@@ -12,6 +13,6 @@ eco/
 .project
 .settings/
 excons.cache
-agShadingBlocks.mtd
+agShadingBlocks.mtd*
 agShadingBlocks_*.env
-
+maya/*.py
