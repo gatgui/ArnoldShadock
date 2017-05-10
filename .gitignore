@@ -10,6 +10,6 @@
 /*.env.tmp
 /*.config
 /excons.cache
-/agShadingBlocks.mtd*
-/agShadingBlocks_*.env
+/shadock.mtd*
+/shadock_*.env
 

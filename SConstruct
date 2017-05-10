@@ -11,7 +11,7 @@ env = excons.MakeBaseEnv()
 
 arniver = arnold.Version(asString=False)
 if arniver[0] < 4 or (arniver[0] == 4 and (arniver[1] < 2 or (arniver[1] == 2 and arniver[2] < 12))):
-  print("agShadingBlocks requires at least Arnold 4.2.12.0")
+  print("shadock requires at least Arnold 4.2.12.0")
   sys.exit(1)
 
 version = "0.6.0"
@@ -208,7 +208,7 @@ def make_mtd_in():
 
     sf.close()
 
-  append_file_content("src/agShadingBlocks.mtd")
+  append_file_content("src/shadock.mtd")
 
   if withState:
     dlines.append("\n")
@@ -263,7 +263,7 @@ def make_mtd_in():
         heading = dlines[lno].split("maya.id")[0]
         dlines[lno] = "%smaya.id INT %s\n" % (heading, mayaIdStr(nid))
   
-  outpath = "agShadingBlocks.mtd.in"
+  outpath = "shadock.mtd.in"
   
   df = open(outpath, "w")
   for line in dlines:
@@ -297,7 +297,7 @@ extra_srcs = []
 instfiles = {}
 
 
-mtd = GenerateMtd("agShadingBlocks.mtd", make_mtd_in())
+mtd = GenerateMtd("shadock.mtd", make_mtd_in())
 instfiles["arnold"] = mtd
 
 for item in excons.glob("src/*.cpp"):
@@ -389,7 +389,7 @@ instfiles["maya"] = aes
 
 
 prjs.append(
-  {"name": "agShadingBlocks",
+  {"name": "shadock",
    "prefix": "arnold",
    "type": "dynamicmodule",
    "defs": defs,
@@ -409,7 +409,7 @@ else:
   env.Append(CPPFLAGS=" /wd4100") # unreferenced format parameter
 
 
-excons.AddHelpOptions(agShadingBlocks="""AGSHADINGBLOCKS OPTIONS
+excons.AddHelpOptions(shadock="""SHADOCK OPTIONS
   with-state=0|1             : Include state querying shaders. [1]
   with-noises=0|1            : Include noise shaders. [1]
   with-seexpr=0|1            : Include SeExpr shader. [1]
@@ -421,8 +421,9 @@ excons.AddHelpOptions(agShadingBlocks="""AGSHADINGBLOCKS OPTIONS
 
 excons.DeclareTargets(env, prjs)
 
-dist_env, ver_dir = excons.EcosystemDist(env, "agShadingBlocks.env", {"agShadingBlocks": ""})
+dist_env, ver_dir = excons.EcosystemDist(env, "shadock.env", {"shadock": ""})
 dist_env.Install(ver_dir, mtd)
 dist_env.Install(ver_dir + "/maya/ae", aes)
 
-Default(["agShadingBlocks"])
+Default(["shadock"])
+

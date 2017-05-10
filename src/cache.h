@@ -1,5 +1,5 @@
-#ifndef __agShadingBlocks_cache_h__
-#define __agShadingBlocks_cache_h__
+#ifndef __shadock_cache_h__
+#define __shadock_cache_h__
 
 #include "common.h"
 

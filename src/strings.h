@@ -1,5 +1,5 @@
-#ifndef __agShadingBlocks_strings_h__
-#define __agShadingBlocks_strings_h__
+#ifndef __shadock_strings_h__
+#define __shadock_strings_h__
 
 #include <ai.h>
 

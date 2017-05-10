@@ -16,7 +16,7 @@
 # 0x0011640D: alRemapColor
 # 0x0011640E: alInputVector
 #
-# agShadingBlocks is numbering down from the end of the range
+# shadock is numbering down from the end of the range
 
 [node cache_s]
    maya.classification STRING "utility/cache"
@@ -2553,17 +2553,17 @@
    [attr use_default_color]
       linkable BOOL false
 
-# 0x001165F3: agUserDataRamp/userDataVectorRamp
-# 0x001165F4: agUserDataRamp/userDataVectorRamp
-# 0x001165F5: agUserDataRamp/userDataVectorRamp
-# 0x001165F6: agAnimCurve/anim_curve
-# 0x001165F7: agState/vector_state
-# 0x001165F8: agState/float_state
-# 0x001165F9: agState/color_state
-# 0x001165FA: agState/integer_state
-# 0x001165FB: agState/matrix_state
-# 0x001165FC: agNoises/ln_factal
-# 0x001165FD: agNoises/ln_distort_point
-# 0x001165FE: agNoises/ln_voronoi
-# 0x001165FF: agSeExpr/seexpr
+# 0x001165F3: ArnoldUserDataRamp/user_data_ramp_v
+# 0x001165F4: ArnoldUserDataRamp/user_data_ramp_f
+# 0x001165F5: ArnoldUserDataRamp/user_data_ramp_c3
+# 0x001165F6: ArnoldAnimCurve/anim_curve
+# 0x001165F7: ArnoldStateShaders/state_v
+# 0x001165F8: ArnoldStateShaders/state_f
+# 0x001165F9: ArnoldStateShaders/state_c3
+# 0x001165FA: ArnoldStateShaders/state_i
+# 0x001165FB: ArnoldStateShaders/state_m
+# 0x001165FC: ArnoldNoiseShaders/fractal
+# 0x001165FD: ArnoldNoiseShaders/distort_point
+# 0x001165FE: ArnoldNoiseShaders/voronoi
+# 0x001165FF: SeExprArnold/seexpr
 
