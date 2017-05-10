@@ -1,0 +1,21 @@
+[submodule "excons"]
+	path = excons
+	url = git://github.com/gatgui/excons.git
+[submodule "ArnoldAnimCurve"]
+	path = ArnoldAnimCurve
+	url = git://github.com/gatgui/ArnoldAnimCurve.git
+[submodule "ArnoldStateShaders"]
+	path = ArnoldStateShaders
+	url = git://github.com/gatgui/ArnoldStateShaders.git
+[submodule "ArnoldNoiseShaders"]
+	path = ArnoldNoiseShaders
+	url = git://github.com/gatgui/ArnoldNoiseShaders.git
+[submodule "ArnoldUserDataRamp"]
+	path = ArnoldUserDataRamp
+	url = git://github.com/gatgui/ArnoldUserDataRamp.git
+[submodule "SeExprArnold"]
+	path = SeExprArnold
+	url = git://github.com/gatgui/SeExprArnold.git
+[submodule "gmath"]
+	path = gmath
+	url = git://github.com/gatgui/gmath.git

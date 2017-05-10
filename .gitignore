@@ -1,0 +1,15 @@
+/release
+/debug
+/dist
+/eco
+/.build
+/maya/*.py
+/*.pyc
+/*.dblite
+/*.pdb
+/*.env.tmp
+/*.config
+/excons.cache
+/agShadingBlocks.mtd*
+/agShadingBlocks_*.env
+
