@@ -355,7 +355,7 @@ if withSeExpr:
   libs.extend(["seexpr_shader", "SeExpr"])
   mn = to_maya_name(shdprefix + "seexpr")
   opts["SEEXPR_MAYA_NODENAME"] = mn
-  aes += GenerateMayaAE("maya/%sTemplate.py" % mn, "SeExprArnold/maya/seexprTemplate.py.in")
+  aes += GenerateMayaAE("maya/%sTemplate.py" % mn, "SeExprArnold/maya/SeexprTemplate.py.in")
 
 if withAnimCurve:
   defs.extend(["WITH_ANIMCURVE_SHADER"])
