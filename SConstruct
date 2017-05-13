@@ -21,7 +21,7 @@ withNoises = (excons.GetArgument("with-noises", 1, int) != 0)
 withSeExpr = (excons.GetArgument("with-seexpr", 1, int) != 0)
 withAnimCurve = (excons.GetArgument("with-animcurve", 1, int) != 0)
 withUserDataRamp = (excons.GetArgument("with-userdataramp", 1, int) != 0)
-shdprefix = excons.GetArgument("shaders-prefix", "gas_")
+shdprefix = excons.GetArgument("shaders-prefix", "shk_")
 
 minMayaId = None
 maxMayaId = None
