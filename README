@@ -2,8 +2,8 @@ ShadOck (SHADing blOCKs)
 
 Requires Arnold 4.2.12.0 at least
 
-ArnoldAnimCurve    v2.0.8
-ArnoldNoiseShaders v1.1.8
-SeExprArnold       v1.2.5
-ArnoldStateShaders v1.1.6
-ArnoldUserDataRamp v1.1.2
+ArnoldAnimCurve    v2.0.9
+ArnoldNoiseShaders v1.1.9
+SeExprArnold       v1.2.6
+ArnoldStateShaders v1.1.7
+ArnoldUserDataRamp v1.1.3
