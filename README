@@ -1,9 +1,34 @@
 ShadOck (SHADing blOCKs)
 
-Requires Arnold 4.2.12.0 at least
+Requires Arnold 4.2.12.0 or above
 
-ArnoldAnimCurve    v2.0.9
-ArnoldNoiseShaders v1.1.9
-SeExprArnold       v1.2.6
-ArnoldStateShaders v1.1.7
-ArnoldUserDataRamp v1.1.3
+Dependencies
+============
+
+   ArnoldAnimCurve    v2.0.9
+   ArnoldNoiseShaders v1.1.9
+   SeExprArnold       v2.0.0 (optional LLVM backend support)
+   ArnoldStateShaders v1.1.7
+   ArnoldUserDataRamp v1.1.3
+
+How to
+======
+
+- Build SeExprArnold with llvm backend
+  
+  > scons seexpr-use-llvm=1 with-llvm=<llvm_prefix>
+
+  SeExpr requires LLVM 3.>=8 with RTTI enabled.
+
+  LLVM build is not integrated with SeExprArnold yet but should be pretty easy to do:
+
+  > git clone git://github.com/gatgui/llvm.git
+  > cd llvm
+  > git checkout release_39
+  > scons llvm-enable-rtti=1 
+
+  Then wait for at least a good 10 minutes on a fast 4 core machine (hint: call scons with the -j <n> option with <n> set to twice the number of cores)
+  
+  The path to resulting 'release' sub folder is what you shoud set for <llvm_prefix>.
+
+  LLVM backend is disabled by default.

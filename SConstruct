@@ -7,6 +7,9 @@ import shutil
 import excons.config
 from excons.tools import arnold
 
+# SeExpr v3 requires c++11 compatible compiler
+ARGUMENTS["use-c++11"] = ARGUMENTS.get("with-seexpr", "1")
+
 env = excons.MakeBaseEnv()
 
 arniver = arnold.Version(asString=False)
@@ -293,6 +296,7 @@ defs = []
 incs = []
 libs = []
 prjs = []
+reqs = [RequireGmath, arnold.Require]
 extra_srcs = []
 instfiles = {}
 
@@ -346,13 +350,15 @@ if withNoises:
     aes += GenerateMayaAE("maya/%sTemplate.py" % mn, "ArnoldNoiseShaders/maya/%sTemplate.py.in" % mbn)
 
 if withSeExpr:
-  excons.Call("SeExprArnold/SeExpr", targets=["SeExpr"], overrides={"static": "1"})
+  # allow caching of flags queried by SeExpr
+  excons.Call("SeExprArnold/SeExpr", targets=["SeExpr2"], imp=["RequireSeExpr2"], keepflags=["llvm"])
   defs.append("WITH_SEEXPR_SHADER")
   prjs.append({"name": "seexpr_shader",
                "type": "staticlib",
                "srcs": ["SeExprArnold/src/seexpr.cpp"],
-               "custom": [arnold.Require]})
-  libs.extend(["seexpr_shader", "SeExpr"])
+               "custom": [RequireSeExpr2, arnold.Require]})
+  libs.extend(["seexpr_shader"])
+  reqs.insert(0, RequireSeExpr2)
   mn = to_maya_name(shdprefix + "seexpr")
   opts["SEEXPR_MAYA_NODENAME"] = mn
   aes += GenerateMayaAE("maya/%sTemplate.py" % mn, "SeExprArnold/maya/SeexprTemplate.py.in")
@@ -398,7 +404,7 @@ prjs.append(
    "libs": libs,
    "srcs": glob.glob("src/*.cpp") + extra_srcs,
    "install": instfiles,
-   "custom": [RequireGmath, arnold.Require]
+   "custom": reqs
   })
 
 
