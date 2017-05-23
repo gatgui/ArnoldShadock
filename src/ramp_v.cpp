@@ -152,7 +152,7 @@ node_finish
    }
    AiFree(data->shuffles);
    
-   delete data;
+   AiFree(data);
    SubMemUsage<RampVData>();
 }
 
