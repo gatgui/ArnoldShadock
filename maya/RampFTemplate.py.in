@@ -7,13 +7,125 @@ class AE@RAMPF_MAYA_NODENAME@Template(ShaderAETemplate):
       
       self.beginLayout("Parameters", collapse=False)
       self.addControl("input")
-      self.addControl("positions")
-      self.addControl("values")
-      self.addControl("interpolations")
+      pm.mel.AEaddRampControl(self.nodeName + ".floatRamp");
       self.addControl("default_value")
       self.endLayout()
       
       pm.mel.AEdependNodeTemplate(self.nodeName)
       self.addExtraControls()
       self.endScrollLayout()
+
+# ===
+
+def _initCallbacks():
+   import maya.OpenMaya as om
+   import maya.cmds as cmds
+
+   def mayaInterpToArnold(i):
+      if i == om.MRampAttribute.kNone:
+         return 0
+      elif i == om.MRampAttribute.kLinear:
+         return 1
+      elif i == om.MRampAttribute.kSmooth:
+         return 2
+      elif i == om.MRampAttribute.kSpline:
+         return 3
+      else:
+         return 1
+
+   def setArray(nodeAttr, values, mapfunc=None):
+      n = len(values)
+      a1 = (cmds.getAttr(nodeAttr, multiIndices=1) or [])
+      for i in a1:
+         if i >= n:            
+            cmds.removeMultiInstance("%s[%d]" % (nodeAttr, i), b=1)
+      if mapfunc is None:
+         for i in xrange(n):
+            cmds.setAttr("%s[%d]" % (nodeAttr, i), values[i])
+      else:
+         for i in xrange(n):
+            cmds.setAttr("%s[%d]" % (nodeAttr, i), mapfunc(values[i]))
+
+   def attrChanged(msg, plug, othPlug, data):
+      fn = om.MFnDependencyNode(plug.node())
+      nn = fn.name()
+      pn = plug.partialName(False, True, True, False, True, True)
+      if pn.startswith("floatRamp"):
+         if (msg & om.MNodeMessage.kAttributeArrayAdded) != 0:
+            idx = plug.logicalIndex()
+            fn.findPlug("positions").elementByLogicalIndex(idx).setFloat(0.0)
+            fn.findPlug("values").elementByLogicalIndex(idx).setFloat(0.0)
+            fn.findPlug("interpolations").elementByLogicalIndex(idx).setInt(1)
+
+         if (msg & om.MNodeMessage.kAttributeSet) != 0:
+            idx = plug.parent().logicalIndex()
+            if pn.endswith("_Position"):
+               dstPlug = fn.findPlug("positions").elementByLogicalIndex(idx)
+               dstPlug.setFloat(plug.asFloat())
+            elif pn.endswith("_FloatValue"):
+               dstPlug = fn.findPlug("values").elementByLogicalIndex(idx)
+               dstPlug.setFloat(plug.asFloat())
+            elif pn.endswith("_Interp"):
+               dstPlug = fn.findPlug("interpolations").elementByLogicalIndex(idx)
+               dstPlug.setInt(mayaInterpToArnold(plug.asInt()))
+
+         if (msg & om.MNodeMessage.kConnectionMade) != 0:
+            idx = plug.parent().logicalIndex()
+            dstPlug = None
+            if pn.endswith("_Position"):
+               dstPlug = fn.findPlug("positions").elementByLogicalIndex(idx)
+            elif pn.endswith("_FloatValue"):
+               dstPlug = fn.findPlug("values").elementByLogicalIndex(idx)
+            elif pn.endswith("_Interp"):
+               dstPlug = fn.findPlug("interpolations").elementByLogicalIndex(idx)
+            if dstPlug and not dstPlug.isConnected():
+               dgmod = om.MDGModifier()
+               dgmod.connect(othPlug, dstPlug)
+               dgmod.doIt()
+
+         if (msg & om.MNodeMessage.kConnectionBroken) != 0:
+            idx = plug.parent().logicalIndex()
+            dstPlug = None
+            if pn.endswith("_Position"):
+               dstPlug = fn.findPlug("positions").elementByLogicalIndex(idx)
+            elif pn.endswith("_FloatValue"):
+               dstPlug = fn.findPlug("values").elementByLogicalIndex(idx)
+            elif pn.endswith("_Interp"):
+               dstPlug = fn.findPlug("interpolations").elementByLogicalIndex(idx)
+            if dstPlug and dstPlug.isConnected():
+               dgmod = om.MDGModifier()   
+               dgmod.disconnect(othPlug, dstPlug)
+               dgmod.doIt()
+
+         if (msg & om.MNodeMessage.kAttributeArrayRemoved) != 0:
+            idx = plug.logicalIndex()
+            cmds.removeMultiInstance("%s.positions[%d]" % (nn, idx), b=1)
+            cmds.removeMultiInstance("%s.values[%d]" % (nn, idx), b=1)
+            cmds.removeMultiInstance("%s.interpolations[%d]" % (nn, idx), b=1)
+
+   def nodeCreated(node, data):
+      nn = om.MFnDependencyNode(node).name()
+      ro = om.MRampAttribute.createRamp("floatRamp", "ftrp", node, 0.0)
+      ra = om.MRampAttribute(node, ro)
+      idxl = om.MIntArray()
+      posl = om.MFloatArray()
+      vall = om.MFloatArray()
+      intl = om.MIntArray()
+      ra.getEntries(idxl, posl, vall, intl)
+      setArray(nn + ".positions", posl)
+      setArray(nn + ".values", vall)
+      setArray(nn + ".interpolations", intl, mapfunc=mayaInterpToArnold)
+      # TODO: cache plugs and attribute objects to optimize attrChanged
+      om.MNodeMessage.addAttributeChangedCallback(node, attrChanged, None)
+
+   def nodeDeleted(node, data):
+      ids = om.MCallbackIdArray()
+      om.MMessage.nodeCallbacks(node, ids)
+      om.MMessage.removeCallbacks(ids)
+
+   om.MDGMessage.addNodeAddedCallback(nodeCreated, "@RAMPF_MAYA_NODENAME@", None)
+   om.MDGMessage.addNodeRemovedCallback(nodeDeleted, "@RAMPF_MAYA_NODENAME@", None)
+
+
+_initCallbacks()
 
