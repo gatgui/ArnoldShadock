@@ -17,7 +17,7 @@ if arniver[0] < 4 or (arniver[0] == 4 and (arniver[1] < 2 or (arniver[1] == 2 an
   print("shadock requires at least Arnold 4.2.12.0")
   sys.exit(1)
 
-version = "0.6.0"
+version = "1.0.0"
 
 withState = (excons.GetArgument("with-state", 1, int) != 0)
 withNoises = (excons.GetArgument("with-noises", 1, int) != 0)
@@ -427,7 +427,7 @@ excons.AddHelpOptions(shadock="""SHADOCK OPTIONS
 
 excons.DeclareTargets(env, prjs)
 
-dist_env, ver_dir = excons.EcosystemDist(env, "shadock.env", {"shadock": ""})
+dist_env, ver_dir = excons.EcosystemDist(env, "shadock.env", {"shadock": ""}, version=version)
 dist_env.Install(ver_dir, mtd)
 dist_env.Install(ver_dir + "/maya/ae", aes)
 
