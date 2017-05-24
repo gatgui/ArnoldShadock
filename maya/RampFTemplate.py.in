@@ -7,7 +7,7 @@ class AE@RAMPF_MAYA_NODENAME@Template(ShaderAETemplate):
       
       self.beginLayout("Parameters", collapse=False)
       self.addControl("input")
-      pm.mel.AEaddRampControl(self.nodeName + ".floatRamp");
+      pm.mel.AEaddRampControl(self.nodeName + ".floatRamp")
       self.addControl("default_value")
       self.endLayout()
       
@@ -20,6 +20,45 @@ class AE@RAMPF_MAYA_NODENAME@Template(ShaderAETemplate):
 def _initCallbacks():
    import maya.OpenMaya as om
    import maya.cmds as cmds
+
+   class NodeData(object):
+      def __init__(self, node):
+         super(NodeData, self).__init__()
+         self.node = node
+         self.fn = om.MFnDependencyNode(node)
+         self.posp = self.fn.findPlug("positions")
+         self.posa = self.posp.attribute()
+         self.valp = self.fn.findPlug("values")
+         self.vala = self.valp.attribute()
+         self.intp = self.fn.findPlug("interpolations")
+         self.inta = self.intp.attribute()
+         self.rampp = self.fn.findPlug("floatRamp")
+         self.rampa = self.rampp.attribute()
+         self.rampposa = self.fn.attribute("floatRamp_Position")
+         self.rampvala = self.fn.attribute("floatRamp_FloatValue")
+         self.rampinta = self.fn.attribute("floatRamp_Interp")
+         self.ignorecb = False
+
+      def __str__(self):
+         return "NodeData('%s')" % self.fn.name()
+
+   def plugFullName(p):
+      return p.partialName(True, True, True, False, True, True)
+
+   def removePlug(p):
+      cmds.removeMultiInstance(plugFullName(p), b=1)
+
+   def arnoldInterpToMaya(i):
+      if i == 0:
+         return om.MRampAttribute.kNone
+      elif i == 1:
+         return om.MRampAttribute.kLinear
+      elif i == 2:
+         return om.MRampAttribute.kSmooth
+      elif i == 3:
+         return om.MRampAttribute.kSpline
+      else:
+         return om.MRampAttribute.kLinear
 
    def mayaInterpToArnold(i):
       if i == om.MRampAttribute.kNone:
@@ -47,66 +86,179 @@ def _initCallbacks():
             cmds.setAttr("%s[%d]" % (nodeAttr, i), mapfunc(values[i]))
 
    def attrChanged(msg, plug, othPlug, data):
-      fn = om.MFnDependencyNode(plug.node())
-      nn = fn.name()
-      pn = plug.partialName(False, True, True, False, True, True)
-      if pn.startswith("floatRamp"):
-         if (msg & om.MNodeMessage.kAttributeArrayAdded) != 0:
+      if data.ignorecb:
+         return
+
+      data.ignorecb = True
+
+      try:
+         elementAdded = ((msg & om.MNodeMessage.kAttributeArrayAdded) != 0)
+         elementRemoved = ((msg & om.MNodeMessage.kAttributeArrayRemoved) != 0)
+         attributeSet = ((msg & om.MNodeMessage.kAttributeSet) != 0)
+         attributeConnected = ((msg & om.MNodeMessage.kConnectionMade) != 0)
+         attributeDisconnected = ((msg & om.MNodeMessage.kConnectionBroken) != 0)
+
+         attr = plug.attribute()
+
+         if attr == data.rampa:
             idx = plug.logicalIndex()
-            fn.findPlug("positions").elementByLogicalIndex(idx).setFloat(0.0)
-            fn.findPlug("values").elementByLogicalIndex(idx).setFloat(0.0)
-            fn.findPlug("interpolations").elementByLogicalIndex(idx).setInt(1)
+            if elementAdded:
+               data.posp.elementByLogicalIndex(idx).setFloat(0.0)
+               data.valp.elementByLogicalIndex(idx).setFloat(0.0)
+               data.intp.elementByLogicalIndex(idx).setInt(1)
+            elif elementRemoved:
+               removePlug(data.posp.elementByLogicalIndex(idx))
+               removePlug(data.valp.elementByLogicalIndex(idx))
+               removePlug(data.intp.elementByLogicalIndex(idx))
 
-         if (msg & om.MNodeMessage.kAttributeSet) != 0:
+         elif attr == data.rampposa:
             idx = plug.parent().logicalIndex()
-            if pn.endswith("_Position"):
-               dstPlug = fn.findPlug("positions").elementByLogicalIndex(idx)
-               dstPlug.setFloat(plug.asFloat())
-            elif pn.endswith("_FloatValue"):
-               dstPlug = fn.findPlug("values").elementByLogicalIndex(idx)
-               dstPlug.setFloat(plug.asFloat())
-            elif pn.endswith("_Interp"):
-               dstPlug = fn.findPlug("interpolations").elementByLogicalIndex(idx)
-               dstPlug.setInt(mayaInterpToArnold(plug.asInt()))
+            if attributeSet:
+               data.posp.elementByLogicalIndex(idx).setFloat(plug.asFloat())
+            elif attributeConnected:
+               dstPlug = data.posp.elementByLogicalIndex(idx)
+               if not dstPlug.isConnected():
+                  dgmod = om.MDGModifier()
+                  dgmod.connect(othPlug, dstPlug)
+                  dgmod.doIt()
+            elif attributeDisconnected:
+               dstPlug = data.posp.elementByLogicalIndex(idx)
+               if dstPlug.isConnected():
+                  dgmod = om.MDGModifier()
+                  dgmod.disconnect(othPlug, dstPlug)
+                  dgmod.doIt()
 
-         if (msg & om.MNodeMessage.kConnectionMade) != 0:
+         elif attr == data.rampvala:
             idx = plug.parent().logicalIndex()
-            dstPlug = None
-            if pn.endswith("_Position"):
-               dstPlug = fn.findPlug("positions").elementByLogicalIndex(idx)
-            elif pn.endswith("_FloatValue"):
-               dstPlug = fn.findPlug("values").elementByLogicalIndex(idx)
-            elif pn.endswith("_Interp"):
-               dstPlug = fn.findPlug("interpolations").elementByLogicalIndex(idx)
-            if dstPlug and not dstPlug.isConnected():
-               dgmod = om.MDGModifier()
-               dgmod.connect(othPlug, dstPlug)
-               dgmod.doIt()
+            if attributeSet:
+               data.valp.elementByLogicalIndex(idx).setFloat(plug.asFloat())
+            elif attributeConnected:
+               dstPlug = data.valp.elementByLogicalIndex(idx)
+               if not dstPlug.isConnected():
+                  dgmod = om.MDGModifier()
+                  dgmod.connect(othPlug, dstPlug)
+                  dgmod.doIt()
+            elif attributeDisconnected:
+               dstPlug = data.valp.elementByLogicalIndex(idx)
+               if dstPlug.isConnected():
+                  dgmod = om.MDGModifier()
+                  dgmod.disconnect(othPlug, dstPlug)
+                  dgmod.doIt()
 
-         if (msg & om.MNodeMessage.kConnectionBroken) != 0:
+         elif attr == data.rampinta:
             idx = plug.parent().logicalIndex()
-            dstPlug = None
-            if pn.endswith("_Position"):
-               dstPlug = fn.findPlug("positions").elementByLogicalIndex(idx)
-            elif pn.endswith("_FloatValue"):
-               dstPlug = fn.findPlug("values").elementByLogicalIndex(idx)
-            elif pn.endswith("_Interp"):
-               dstPlug = fn.findPlug("interpolations").elementByLogicalIndex(idx)
-            if dstPlug and dstPlug.isConnected():
-               dgmod = om.MDGModifier()   
-               dgmod.disconnect(othPlug, dstPlug)
-               dgmod.doIt()
+            if attributeSet:
+               data.intp.elementByLogicalIndex(idx).setInt(mayaInterpToArnold(plug.asInt()))
+            elif attributeConnected:
+               dstPlug = data.intp.elementByLogicalIndex(idx)
+               if not dstPlug.isConnected():
+                  dgmod = om.MDGModifier()
+                  dgmod.connect(othPlug, dstPlug)
+                  dgmod.doIt()
+            elif attributeDisconnected:
+               dstPlug = data.intp.elementByLogicalIndex(idx)
+               if dstPlug.isConnected():
+                  dgmod = om.MDGModifier()
+                  dgmod.disconnect(othPlug, dstPlug)
+                  dgmod.doIt()
 
-         if (msg & om.MNodeMessage.kAttributeArrayRemoved) != 0:
+         elif attr == data.posa:
             idx = plug.logicalIndex()
-            cmds.removeMultiInstance("%s.positions[%d]" % (nn, idx), b=1)
-            cmds.removeMultiInstance("%s.values[%d]" % (nn, idx), b=1)
-            cmds.removeMultiInstance("%s.interpolations[%d]" % (nn, idx), b=1)
+            if elementAdded:
+               rep = data.rampp.elementByLogicalIndex(idx)
+               rep.child(data.rampposa).setFloat(plug.asFloat())
+               rep.child(data.rampvala).setFloat(0.0)
+               rep.child(data.rampinta).setInt(om.MRampAttribute.kLinear)
+               data.valp.elementByLogicalIndex(idx).setFloat(0.0)
+               data.intp.elementByLogicalIndex(idx).setInt(1)
+            elif elementRemoved:
+               removePlug(data.valp.elementByLogicalIndex(idx))
+               removePlug(data.intp.elementByLogicalIndex(idx))
+               removePlug(data.rampp.elementByLogicalIndex(idx))
+            elif attributeSet:
+               data.rampp.elementByLogicalIndex(idx).child(data.rampposa).setFloat(plug.asFloat())
+            elif attributeConnected:
+               dstPlug = data.rampp.elementByLogicalIndex(idx).child(data.rampposa)
+               if not dstPlug.isConnected():
+                  dgmod = om.MDGModifier()
+                  dgmod.connect(othPlug, dstPlug)
+                  dgmod.doIt()
+            elif attributeDisconnected:
+               dstPlug = data.rampp.elementByLogicalIndex(idx).child(data.rampposa)
+               if dstPlug.isConnected():
+                  dgmod = om.MDGModifier()
+                  dgmod.disconnect(othPlug, dstPlug)
+                  dgmod.doIt()
+
+         elif attr == data.vala:
+            idx = plug.logicalIndex()
+            if elementAdded:
+               rep = data.rampp.elementByLogicalIndex(idx)
+               rep.child(data.rampposa).setFloat(0.0)
+               rep.child(data.rampvala).setFloat(plug.asFloat())
+               rep.child(data.rampinta).setInt(om.MRampAttribute.kLinear)
+               data.posp.elementByLogicalIndex(idx).setFloat(0.0)
+               data.intp.elementByLogicalIndex(idx).setInt(1)
+            elif elementRemoved:
+               removePlug(data.posp.elementByLogicalIndex(idx))
+               removePlug(data.intp.elementByLogicalIndex(idx))
+               removePlug(data.rampp.elementByLogicalIndex(idx))
+            elif attributeSet:
+               data.rampp.elementByLogicalIndex(idx).child(data.rampvala).setFloat(plug.asFloat())
+            elif attributeConnected:
+               dstPlug = data.rampp.elementByLogicalIndex(idx).child(data.rampvala)
+               if not dstPlug.isConnected():
+                  dgmod = om.MDGModifier()
+                  dgmod.connect(othPlug, dstPlug)
+                  dgmod.doIt()
+            elif attributeDisconnected:
+               dstPlug = data.rampp.elementByLogicalIndex(idx).child(data.rampvala)
+               if dstPlug.isConnected():
+                  dgmod = om.MDGModifier()
+                  dgmod.disconnect(othPlug, dstPlug)
+                  dgmod.doIt()
+
+         elif attr == data.inta:
+            idx = plug.logicalIndex()
+            if elementAdded:
+               rep = data.rampp.elementByLogicalIndex(idx)
+               rep.child(data.rampposa).setFloat(0.0)
+               rep.child(data.rampvala).setFloat(0.0)
+               rep.child(data.rampinta).setInt(arnoldInterpToMaya(plug.asInt()))
+               data.posp.elementByLogicalIndex(idx).setFloat(0.0)
+               data.valp.elementByLogicalIndex(idx).setFloat(0.0)
+            elif elementRemoved:
+               removePlug(data.posp.elementByLogicalIndex(idx))
+               removePlug(data.valp.elementByLogicalIndex(idx))
+               removePlug(data.rampp.elementByLogicalIndex(idx))
+            elif attributeSet:
+               data.rampp.elementByLogicalIndex(idx).child(data.rampinta).setInt(arnoldInterpToMaya(plug.asInt()))
+            elif attributeConnected:
+               dstPlug = data.rampp.elementByLogicalIndex(idx).child(data.rampinta)
+               if not dstPlug.isConnected():
+                  dgmod = om.MDGModifier()
+                  dgmod.connect(othPlug, dstPlug)
+                  dgmod.doIt()
+            elif attributeDisconnected:
+               dstPlug = data.rampp.elementByLogicalIndex(idx).child(data.rampinta)
+               if dstPlug.isConnected():
+                  dgmod = om.MDGModifier()
+                  dgmod.disconnect(othPlug, dstPlug)
+                  dgmod.doIt()
+
+      except Exception, e:
+         print("Callback failed: %s" % e)
+         data.ignorecb = False
+         raise e
+
+      data.ignorecb = False
 
    def nodeCreated(node, data):
       nn = om.MFnDependencyNode(node).name()
+      # Create a proxy ramp attribute
       ro = om.MRampAttribute.createRamp("floatRamp", "ftrp", node, 0.0)
       ra = om.MRampAttribute(node, ro)
+      # Initialize  'positions', 'values' and 'interpolations' arrays from ramp values
       idxl = om.MIntArray()
       posl = om.MFloatArray()
       vall = om.MFloatArray()
@@ -115,8 +267,9 @@ def _initCallbacks():
       setArray(nn + ".positions", posl)
       setArray(nn + ".values", vall)
       setArray(nn + ".interpolations", intl, mapfunc=mayaInterpToArnold)
-      # TODO: cache plugs and attribute objects to optimize attrChanged
-      om.MNodeMessage.addAttributeChangedCallback(node, attrChanged, None)
+      # Add callback to keep array attribtues and ramp in sync
+      data = NodeData(node)
+      om.MNodeMessage.addAttributeChangedCallback(node, attrChanged, data)
 
    def nodeDeleted(node, data):
       ids = om.MCallbackIdArray()
