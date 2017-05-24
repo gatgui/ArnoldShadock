@@ -182,7 +182,7 @@ shader_evaluate
       if (data->evalPositions)
       {
          si = sg->tid;
-         SortRampPositions(i, data->shuffles[si]);
+         SortRampPositions(p, data->shuffles[si]);
       }
       
       ColorRamp(p, v, i, RI_Linear, data->shuffles[si], input, sg->out.RGB);
