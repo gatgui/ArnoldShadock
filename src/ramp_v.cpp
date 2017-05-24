@@ -183,7 +183,7 @@ shader_evaluate
       if (data->evalPositions)
       {
          si = sg->tid;
-         SortRampPositions(i, data->shuffles[si]);
+         SortRampPositions(p, data->shuffles[si]);
       }
       
       VectorRamp(p, v, i, RI_Linear, data->shuffles[si], input, sg->out.VEC);
