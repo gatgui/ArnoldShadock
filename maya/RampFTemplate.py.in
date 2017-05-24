@@ -18,6 +18,7 @@ class AE@RAMPF_MAYA_NODENAME@Template(ShaderAETemplate):
 # ===
 
 def _initCallbacks():
+   import re
    import maya.OpenMaya as om
    import maya.cmds as cmds
 
@@ -254,19 +255,20 @@ def _initCallbacks():
       data.ignorecb = False
 
    def nodeCreated(node, data):
-      nn = om.MFnDependencyNode(node).name()
+      fn = om.MFnDependencyNode(node)
+      nn = fn.name()
       # Create a proxy ramp attribute
-      ro = om.MRampAttribute.createRamp("floatRamp", "ftrp", node, 0.0)
+      ro = om.MRampAttribute.createRamp("floatRamp", "ftrp", node, fn.findPlug("defaultValue").asFloat())
       ra = om.MRampAttribute(node, ro)
       # Initialize  'positions', 'values' and 'interpolations' arrays from ramp values
-      idxl = om.MIntArray()
-      posl = om.MFloatArray()
-      vall = om.MFloatArray()
-      intl = om.MIntArray()
-      ra.getEntries(idxl, posl, vall, intl)
-      setArray(nn + ".positions", posl)
-      setArray(nn + ".values", vall)
-      setArray(nn + ".interpolations", intl, mapfunc=mayaInterpToArnold)
+      idxa = om.MIntArray()
+      posa = om.MFloatArray()
+      vala = om.MFloatArray()
+      inta = om.MIntArray()
+      ra.getEntries(idxa, posa, vala, inta)
+      setArray(nn + ".positions", posa)
+      setArray(nn + ".values", vala)
+      setArray(nn + ".interpolations", inta, mapfunc=mayaInterpToArnold)
       # Add callback to keep array attribtues and ramp in sync
       data = NodeData(node)
       om.MNodeMessage.addAttributeChangedCallback(node, attrChanged, data)
@@ -279,6 +281,84 @@ def _initCallbacks():
    om.MDGMessage.addNodeAddedCallback(nodeCreated, "@RAMPF_MAYA_NODENAME@", None)
    om.MDGMessage.addNodeRemovedCallback(nodeDeleted, "@RAMPF_MAYA_NODENAME@", None)
 
+   # Process any existing nodes
+   for n in cmds.ls(type="@RAMPF_MAYA_NODENAME@"):
+      node = om.MObject()
+      sl = om.MSelectionList()
+      sl.add(n)
+      sl.getDependNode(0, node)
+      fn = om.MFnDependencyNode(node)
+      add = True
+      try:
+         fn.findPlug("floatRamp")
+         add = False
+      except:
+         pass
+      posl = cmds.getAttr("%s.positions" % n)[0]
+      if len(posl) == 0:
+         # No values set, behave as if it were a new node (maya ramps must have at least one value)
+         if add:
+            nodeCreated(node, None)
+         else:
+            print("Warning: Ramp and Array attributes out of sync on '%s'" % n)
+            data = NodeData(node)
+            om.MNodeMessage.addAttributeChangedCallback(node, attrChanged, data)
+      else:
+         vall = cmds.getAttr("%s.values" % n)[0]
+         intl = map(arnoldInterpToMaya, cmds.getAttr("%s.interpolations" % n)[0])
+         # Add ramp attribute
+         posa = om.MFloatArray(len(posl), 0.0)
+         vala = om.MFloatArray(len(posl), 0.0)
+         inta = om.MIntArray(len(posl), om.MRampAttribute.kLinear)
+         for i in xrange(len(posl)):
+            posa[i] = posl[i]
+            vala[i] = vall[i]
+            inta[i] = intl[i]
+         if add:
+            # Create new ramp from array parameter values
+            ro = om.MRampAttribute.createRamp("floatRamp", "ftrp", node, vala, posa, inta)
+         else:
+            # Clear any connections on existing ramp
+            conns = cmds.listConnections("%s.floatRamp" % n, s=1, d=0, sh=1, c=1, p=1)
+            if conns:
+               for i in xrange(0, len(conns), 2):
+                  src = conns[i+1]
+                  dst = conns[i]
+                  cmds.disconnectAttr(src, dst)
+            # Set ramp static values
+            ra = om.MRampAttribute(node, fn.attribute("floatRamp"))
+            ra.setRamp(vala, posa, inta)
+         # Mirror connections to array attributes on dummy ramp
+         # Key positions
+         conns = cmds.listConnections("%s.positions" % n, s=1, d=0, sh=1, c=1, p=1)
+         if conns:
+            e = re.compile(r"positions\[(\d+)\]")
+            for i in xrange(0, len(conns), 2):
+               src = conns[i+1]
+               dst = conns[i]
+               dst = e.sub(r"floatRamp[\1].floatRamp_Position", dst)
+               cmds.connectAttr(src, dst)
+         # Key interpolations
+         conns = cmds.listConnections("%s.interpolations" % n, s=1, d=0, sh=1, c=1, p=1)
+         if conns:
+            e = re.compile(r"interpolations\[(\d+)\]")
+            for i in xrange(0, len(conns), 2):
+               src = conns[i+1]
+               dst = conns[i]
+               dst = e.sub(r"floatRamp[\1].floatRamp_Interp", dst)
+               cmds.connectAttr(src, dst)
+         # Key values
+         conns = cmds.listConnections("%s.values" % n, s=1, d=0, sh=1, c=1, p=1)
+         if conns:
+            e = re.compile(r"values\[(\d+)\]")
+            for i in xrange(0, len(conns), 2):
+               src = conns[i+1]
+               dst = conns[i]
+               dst = e.sub(r"floatRamp[\1].floatRamp_FloatValue", dst)
+               cmds.connectAttr(src, dst)
+         # Add node callback
+         data = NodeData(node)
+         om.MNodeMessage.addAttributeChangedCallback(node, attrChanged, data)
 
 _initCallbacks()
 
