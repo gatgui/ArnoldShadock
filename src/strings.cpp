@@ -338,4 +338,12 @@ namespace SSTR
    AtString vparam_value("vparam_value");
    AtString stop_on_error("stop_on_error");
 #endif
+
+   AtString in_white("in_white");
+   AtString in_black("in_black");
+   AtString out_white("out_white");
+   AtString out_black("out_black");
+   AtString saturation_scale("saturation_scale");
+   AtString hue_shift("hue_shift");
+   AtString gamma("gamma");
 }

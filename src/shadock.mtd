@@ -18,6 +18,46 @@
 #
 # shadock is numbering down from the end of the range
 
+[node grade]
+   maya.classificatoin STRING "utility/color"
+   maya.id INT 0x001164E6
+
+   [attr in_black]
+      linkable BOOL false
+
+   [attr in_white]
+      linkable BOOL false
+
+   [attr out_black]
+      linkable BOOL false
+
+   [attr out_white]
+      linkable BOOL false
+
+   [attr saturation_scale]
+      min FLOAT 0.0
+      softmax FLOAT 2.0
+
+   [attr hue_shift]
+      min FLOAT 0.0
+      max FLOAT 1.0
+
+   [attr gain]
+      min FLOAT 0.0
+      max FLOAT 1.0
+   
+   [attr bias]
+      min FLOAT 0.0
+      max FLOAT 1.0
+
+   [attr gamma]
+      softmin FLOAT 0.0
+      softmax FLOAT 3.0
+
+   [attr exposure]
+      softmin FLOAT -2.0
+      softmax FLOAT 2.0
+
 [node cache_s]
    maya.classification STRING "utility/cache"
    maya.id INT 0x001164E7
