@@ -152,7 +152,7 @@ node_finish
    }
    AiFree(data->shuffles);
    
-   delete data;
+   AiFree(data);
    SubMemUsage<RampFData>();
 }
 
@@ -183,7 +183,7 @@ shader_evaluate
       if (data->evalPositions)
       {
          si = sg->tid;
-         SortRampPositions(i, data->shuffles[si]);
+         SortRampPositions(p, data->shuffles[si]);
       }
       
       FloatRamp(p, v, i, RI_Linear, data->shuffles[si], input, sg->out.FLT);

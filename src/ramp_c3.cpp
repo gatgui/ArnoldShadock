@@ -70,7 +70,7 @@ struct RampC3Data
 
 node_initialize
 {
-   RampC3Data *data = new RampC3Data();
+   RampC3Data *data = (RampC3Data*) AiMalloc(sizeof(RampC3Data));
    AddMemUsage<RampC3Data>();
    
    data->valid = false;
@@ -151,7 +151,7 @@ node_finish
    }
    AiFree(data->shuffles);
    
-   delete data;
+   AiFree(data);
    SubMemUsage<RampC3Data>();
 }
 
@@ -182,7 +182,7 @@ shader_evaluate
       if (data->evalPositions)
       {
          si = sg->tid;
-         SortRampPositions(i, data->shuffles[si]);
+         SortRampPositions(p, data->shuffles[si]);
       }
       
       ColorRamp(p, v, i, RI_Linear, data->shuffles[si], input, sg->out.RGB);
