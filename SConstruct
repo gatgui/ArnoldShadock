@@ -285,12 +285,6 @@ def to_maya_name(name, capitalize=False):
 
 excons.Call("gmath", overrides={"static": "1"}, imp=["RequireGmath"])
 
-
-opts = {"PREFIX": shdprefix}
-
-GenerateMtd = excons.config.AddGenerator(env, "mtd", opts)
-GenerateMayaAE = excons.config.AddGenerator(env, "mayaAE", opts)
-
 aes = []
 defs = []
 incs = []
@@ -299,11 +293,14 @@ prjs = []
 reqs = [RequireGmath, arnold.Require]
 extra_srcs = []
 instfiles = {}
+opts = {"PREFIX": shdprefix}
 
+GenerateMtd = excons.config.AddGenerator(env, "mtd", opts)
 
 mtd = GenerateMtd("shadock.mtd", make_mtd_in())
 instfiles["arnold"] = mtd
 
+tpls = []
 for item in excons.glob("src/*.cpp"):
   bn = os.path.splitext(os.path.basename(item))[0]
   mbn = to_maya_name(bn, capitalize=True)
@@ -314,8 +311,11 @@ for item in excons.glob("src/*.cpp"):
   else:
     mn = to_maya_name(shdprefix + bn)
     opts["%s_MAYA_NODENAME" % mbn.upper()] = mn
-    aes += GenerateMayaAE("maya/%sTemplate.py" % mn, tplin)
+    tpls.append(("maya/%sTemplate.py" % mn, tplin))
 
+GenerateMayaAE = excons.config.AddGenerator(env, "mayaAE", opts)
+
+aes = [GenerateMayaAE(x[0], x[1]) for x in tpls]
 
 if withState:
   defs.append("WITH_STATE_SHADERS")
