@@ -60,5 +60,5 @@ shader_evaluate
    AtRGB output_min = AiShaderEvalParamRGB(p_output_min);
    AtRGB output_max = AiShaderEvalParamRGB(p_output_max);
    
-   sg->out.RGB = ExpandToRange(SmoothStep(NormalizeToRange(input, input_min, input_max)), output_min, output_max);
+   sg->out.RGB() = ExpandToRange(SmoothStep(NormalizeToRange(input, input_min, input_max)), output_min, output_max);
 }

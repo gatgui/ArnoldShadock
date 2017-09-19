@@ -60,19 +60,19 @@ shader_evaluate
    
    if (value >= threshold+falloff)
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_if_true);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_if_true);
    }
    else if (value < threshold-falloff)
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_if_false);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_if_false);
    }
    else
    {
       float blend = SmoothStep(NormalizeToRange(value, threshold-falloff, threshold+falloff));
       
-      AtColor trueValue = AiShaderEvalParamRGB(p_if_true);
-      AtColor falseValue = AiShaderEvalParamRGB(p_if_false);
+      AtRGB trueValue = AiShaderEvalParamRGB(p_if_true);
+      AtRGB falseValue = AiShaderEvalParamRGB(p_if_false);
       
-      sg->out.RGB = (1.0f - blend) * falseValue + blend * trueValue;
+      sg->out.RGB() = (1.0f - blend) * falseValue + blend * trueValue;
    }
 }

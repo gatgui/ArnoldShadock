@@ -362,11 +362,11 @@ shader_evaluate
    {
       if (data->evalPath)
       {
-         sg->out.STR = AiShaderEvalParamStr(p_filename);
+         sg->out.STR() = AiShaderEvalParamStr(p_filename);
       }
       else
       {
-         sg->out.STR = data->constPath;
+         sg->out.STR() = (AtString)data->constPath;
       }
    }
    else
@@ -379,7 +379,7 @@ shader_evaluate
       bool success = true;
       char buffer[256];
       const char *partStr = 0;
-      
+      AtString partAtStr;
       outPath[0] = '\0';
       
       for (Parts::const_iterator part = data->parts.begin(); part != data->parts.end(); ++part)
@@ -403,9 +403,9 @@ shader_evaluate
             {
             case TK_attr_string:
                {
-                  if (AiUDataGetStr(part->sarg1.c_str(), &partStr))
+                  if (AiUDataGetStr((AtString)part->sarg1.c_str(), partAtStr))
                   {
-                     partLen = strlen(partStr);
+                     partLen = strlen(partAtStr.c_str());
                   }
                   else
                   {
@@ -426,7 +426,7 @@ shader_evaluate
                {
                   int attrval = 0;
                   
-                  if (AiUDataGetInt(part->sarg1.c_str(), &attrval))
+                  if (AiUDataGetInt((AtString)part->sarg1.c_str(), attrval))
                   {
                      sprintf(buffer, "%d", attrval);
                      partLen = strlen(buffer);
@@ -575,6 +575,6 @@ shader_evaluate
          outPath[0] = '\0';
       }
       
-      sg->out.STR = outPath;
+      sg->out.STR() = (AtString)outPath;
    }
 }

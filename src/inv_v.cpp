@@ -48,7 +48,7 @@ shader_evaluate
 {
    AtVector input = AiShaderEvalParamVec(p_input);
    
-   sg->out.VEC.x = 1.0f / input.x;
-   sg->out.VEC.y = 1.0f / input.y;
-   sg->out.VEC.z = 1.0f / input.z;
+   sg->out.VEC().x = 1.0f / input.x;
+   sg->out.VEC().y = 1.0f / input.y;
+   sg->out.VEC().z = 1.0f / input.z;
 }

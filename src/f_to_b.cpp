@@ -48,5 +48,5 @@ node_finish
 
 shader_evaluate
 {
-   sg->out.BOOL = (AiShaderEvalParamFlt(p_input) >= AiShaderEvalParamFlt(p_threshold));
+   sg->out.BOOL() = (AiShaderEvalParamFlt(p_input) >= AiShaderEvalParamFlt(p_threshold));
 }

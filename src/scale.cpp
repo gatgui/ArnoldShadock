@@ -33,7 +33,7 @@ node_parameters
 {
    AiParameterVec("input", 0.0f, 0.0f, 0.0f);
    AiParameterVec(SSTR::scale, 1.0f, 1.0f, 1.0f);
-   AiParameterPnt(SSTR::scale_pivot, 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::scale_pivot, 0.0f, 0.0f, 0.0f);
 }
 
 struct ScaleData
@@ -67,24 +67,23 @@ node_update
    {
       data->S_set = true;
       AtVector S = AiNodeGetVec(node, SSTR::scale);
-      AiM4Scaling(data->S, &S);
+      data->S = AiM4Scaling(S);
    }
 
    data->Sp_set = false;
    if (!AiNodeIsLinked(node, SSTR::scale_pivot))
    {
       data->Sp_set = true;
-      AtPoint P = AiNodeGetPnt(node, SSTR::scale_pivot);
-      AiM4Translation(data->Sp, &P);
+      AtVector P = AiNodeGetVec(node, SSTR::scale_pivot);
+      data->Sp = AiM4Translation(P);
       P = -P;
-      AiM4Translation(data->iSp, &P);
+      data->iSp = AiM4Translation(P);
    }
    
    if (data->S_set && data->Sp_set)
    {
-      AtMatrix tmp;
-      AiM4Mult(tmp, data->S, data->iSp);
-      AiM4Mult(data->Sf, data->Sp, tmp);
+      AtMatrix tmp = AiM4Mult(data->S, data->iSp);
+      data->Sf = AiM4Mult(data->Sp, tmp);
    }
 }
 
@@ -106,18 +105,18 @@ shader_evaluate
    if (!data->S_set)
    {
       s = AiShaderEvalParamVec(p_scale);
-      AiM4Scaling(S, &s);
+      S = AiM4Scaling(s);
    }
    else
    {
       if (data->Sp_set)
       {
-         AiM4Copy(S, data->Sf);
+         S = data->Sf;
          computeS = false;
       }
       else
       {
-         AiM4Copy(S, data->S);
+         S = data->S;
       }
    }
    
@@ -126,19 +125,19 @@ shader_evaluate
       p = AiShaderEvalParamVec(p_scale_pivot);
       ip = -p;
       
-      AiM4Translation(P, &p);
-      AiM4Translation(iP, &ip);
+      P = AiM4Translation(p);
+      iP = AiM4Translation(ip);
       
-      AiM4Mult(tmp, S, iP);
-      AiM4Mult(S, P, tmp);
+      tmp = AiM4Mult(S, iP);
+      S = AiM4Mult(P, tmp);
    }
    else if (computeS)
    {
-      AiM4Mult(tmp, S, data->iSp);
-      AiM4Mult(S, data->Sp, tmp);
+      tmp = AiM4Mult(S, data->iSp);
+      S = AiM4Mult(data->Sp, tmp);
    }
    
    AtVector v = AiShaderEvalParamVec(p_input);
    
-   AiM4VectorByMatrixMult(&(sg->out.VEC), S, &v);
+   sg->out.VEC() = AiM4VectorByMatrixMult(S, v);
 }

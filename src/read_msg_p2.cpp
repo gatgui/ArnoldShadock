@@ -31,7 +31,7 @@ enum ReadMsgP2Params
 node_parameters
 {
    AiParameterStr(SSTR::msg_name, "");
-   AiParameterPnt2("default_value", 0.0f, 0.0f);
+   AiParameterVec2("default_value", 0.0f, 0.0f);
 }
 
 struct ReadMsgP2Data
@@ -63,8 +63,8 @@ shader_evaluate
 {
    ReadMsgP2Data *data = (ReadMsgP2Data*) AiNodeGetLocalData(node);
    
-   if (!AiStateGetMsgPnt2(data->msgName, &(sg->out.PNT2)))
+   if (!AiStateGetMsgVec2(data->msgName, &(sg->out.VEC2())))
    {
-      sg->out.PNT2 = AiShaderEvalParamPnt2(p_default_value);
+      sg->out.VEC2() = AiShaderEvalParamVec2(p_default_value);
    }
 }

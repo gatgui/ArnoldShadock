@@ -778,26 +778,41 @@
 [node switch_ray_f]
    maya.classification STRING "utility/trace"
    maya.id INT 0x0011650F
-   
+
    [attr camera_use_default]
       linkable BOOL false
-   
+
    [attr shadow_use_default]
       linkable BOOL false
-   
-   [attr reflected_use_default]
+
+   [attr diffuse_transmit_use_default]
       linkable BOOL false
-   
-   [attr refracted_use_default]
+
+   [attr specular_transmit_use_default]
       linkable BOOL false
-   
+
+   [attr volume_use_default]
+      linkable BOOL false
+
+   [attr diffuse_reflect_use_default]
+      linkable BOOL false
+
+   [attr specular_reflect_use_default]
+      linkable BOOL false
+
    [attr subsurface_use_default]
       linkable BOOL false
-   
+
    [attr diffuse_use_default]
       linkable BOOL false
-   
-   [attr glossy_use_default]
+
+   [attr specular_use_default]
+      linkable BOOL false
+
+   [attr reflect_use_default]
+      linkable BOOL false
+
+   [attr transmit_use_default]
       linkable BOOL false
 
 [node switch_ray_c3]
@@ -806,23 +821,38 @@
    
    [attr camera_use_default]
       linkable BOOL false
-   
+
    [attr shadow_use_default]
       linkable BOOL false
-   
-   [attr reflected_use_default]
+
+   [attr diffuse_transmit_use_default]
       linkable BOOL false
-   
-   [attr refracted_use_default]
+
+   [attr specular_transmit_use_default]
       linkable BOOL false
-   
+
+   [attr volume_use_default]
+      linkable BOOL false
+
+   [attr diffuse_reflect_use_default]
+      linkable BOOL false
+
+   [attr specular_reflect_use_default]
+      linkable BOOL false
+
    [attr subsurface_use_default]
       linkable BOOL false
-   
+
    [attr diffuse_use_default]
       linkable BOOL false
-   
-   [attr glossy_use_default]
+
+   [attr specular_use_default]
+      linkable BOOL false
+
+   [attr reflect_use_default]
+      linkable BOOL false
+
+   [attr transmit_use_default]
       linkable BOOL false
 
 [node switch_ray_c4]
@@ -831,23 +861,38 @@
    
    [attr camera_use_default]
       linkable BOOL false
-   
+
    [attr shadow_use_default]
       linkable BOOL false
-   
-   [attr reflected_use_default]
+
+   [attr diffuse_transmit_use_default]
       linkable BOOL false
-   
-   [attr refracted_use_default]
+
+   [attr specular_transmit_use_default]
       linkable BOOL false
-   
+
+   [attr volume_use_default]
+      linkable BOOL false
+
+   [attr diffuse_reflect_use_default]
+      linkable BOOL false
+
+   [attr specular_reflect_use_default]
+      linkable BOOL false
+
    [attr subsurface_use_default]
       linkable BOOL false
-   
+
    [attr diffuse_use_default]
       linkable BOOL false
-   
-   [attr glossy_use_default]
+
+   [attr specular_use_default]
+      linkable BOOL false
+
+   [attr reflect_use_default]
+      linkable BOOL false
+
+   [attr transmit_use_default]
       linkable BOOL false
 
 [node sample_dir]
@@ -1358,10 +1403,7 @@
    [attr float_msg_name]
       linkable BOOL false
 
-   [attr point2_msg_name]
-      linkable BOOL false
-
-   [attr point_msg_name]
+   [attr vector2_msg_name]
       linkable BOOL false
 
    [attr vector_msg_name]
@@ -2126,10 +2168,7 @@
    [attr float_aov_name]
       linkable BOOL false
 
-   [attr point2_aov_name]
-      linkable BOOL false
-
-   [attr point_aov_name]
+   [attr vector2_aov_name]
       linkable BOOL false
 
    [attr vector_aov_name]

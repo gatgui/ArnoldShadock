@@ -56,9 +56,9 @@ shader_evaluate
 {
    VectorCache *cache = (VectorCache*) AiNodeGetLocalData(node);
    
-   if (!GetCacheValue(sg, cache, sg->out.VEC))
+   if (!GetCacheValue(sg, cache, sg->out.VEC()))
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_input);
-      SetCacheValue(sg, cache, sg->out.VEC);
+      sg->out.VEC() = AiShaderEvalParamVec(p_input);
+      SetCacheValue(sg, cache, sg->out.VEC());
    }
 }

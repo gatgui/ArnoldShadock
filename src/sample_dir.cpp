@@ -29,7 +29,7 @@ enum SampleDirParams
 
 node_parameters
 {
-   AiParameterPnt2("sample", 0.0f, 0.0f);
+   AiParameterVec2("sample", 0.0f, 0.0f);
 }
 
 node_initialize
@@ -46,7 +46,7 @@ node_finish
 
 shader_evaluate
 {
-   AtPoint2 sample = AiShaderEvalParamPnt2(p_sample);
+   AtVector2 sample = AiShaderEvalParamVec2(p_sample);
    // sample.x = (sin(theta))^2
    // sample.y = phi / 2 * PI
    
@@ -60,5 +60,5 @@ shader_evaluate
    D.y = sinTheta * sinf(phi);
    D.z = cosTheta;
    
-   sg->out.VEC = D;
+   sg->out.VEC() = D;
 }

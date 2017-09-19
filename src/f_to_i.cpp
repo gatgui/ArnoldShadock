@@ -77,17 +77,17 @@ shader_evaluate
    switch (mode)
    {
    case FTI_CEIL:
-      sg->out.INT = static_cast<int>(ceilf(input));
+      sg->out.INT() = static_cast<int>(ceilf(input));
       return;
    case FTI_ROUND:
-      sg->out.INT = static_cast<int>(floorf(0.5f + input));
+      sg->out.INT() = static_cast<int>(floorf(0.5f + input));
       return;
    case FTI_TRUNCATE:
-      sg->out.INT = static_cast<int>(input < 0.0f ? -floorf(-input) : floorf(input));
+      sg->out.INT() = static_cast<int>(input < 0.0f ? -floorf(-input) : floorf(input));
       return;
    case FTI_FLOOR:
    default:
-      sg->out.INT = static_cast<int>(floorf(input));
+      sg->out.INT() = static_cast<int>(floorf(input));
       return;
    }
 }

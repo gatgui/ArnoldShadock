@@ -63,8 +63,8 @@ shader_evaluate
 {
    ReadAOVC4Data *data = (ReadAOVC4Data*) AiNodeGetLocalData(node);
    
-   if (!AiAOVGetRGBA(sg, data->aovName, sg->out.RGBA))
+   if (!AiAOVGetRGBA(sg, data->aovName, sg->out.RGBA()))
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_default_value);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_default_value);
    }
 }

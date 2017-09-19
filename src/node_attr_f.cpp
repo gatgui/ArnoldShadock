@@ -79,6 +79,7 @@ shader_evaluate
    NodeAttrFData *data = (NodeAttrFData*) AiNodeGetLocalData(node);
    
    AtNode *src = NULL;
+   AtLightSample ls;
    
    switch (data->target)
    {
@@ -91,7 +92,8 @@ shader_evaluate
    case NAT_light:
       if (data->light_index < 0)
       {
-         src = sg->Lp;
+         AiLightsGetSample(sg, ls);
+         src = (AtNode *)ls.Lp;
       }
       else if (data->light_index < sg->nlights)
       {
@@ -112,7 +114,7 @@ shader_evaluate
       
    if (!src)
    {
-      sg->out.FLT = AiShaderEvalParamFlt(p_default);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_default);
    }
    else
    {
@@ -139,11 +141,11 @@ shader_evaluate
       
       if (type == AI_TYPE_FLOAT)
       {
-         sg->out.FLT = AiNodeGetFlt(src, data->attribute);
+         sg->out.FLT() = AiNodeGetFlt(src, data->attribute);
       }
       else
       {
-         sg->out.FLT = AiShaderEvalParamFlt(p_default);
+         sg->out.FLT() = AiShaderEvalParamFlt(p_default);
       }
    }
 }

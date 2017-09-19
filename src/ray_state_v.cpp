@@ -89,7 +89,7 @@ shader_evaluate
    
    if (!AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) || !ray)
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_default);
+      sg->out.VEC() = AiShaderEvalParamVec(p_default);
    }
    else
    {
@@ -98,25 +98,25 @@ shader_evaluate
       switch (data->state)
       {
       case RS_origin:
-         sg->out.VEC = ray->origin;
+         sg->out.VEC() = ray->origin;
          break;
       case RS_dir:
-         sg->out.VEC = ray->dir;
+         sg->out.VEC() = ray->dir;
          break;
       case RS_dOdx:
-         sg->out.VEC = ray->dOdx;
+         sg->out.VEC() = ray->dOdx;
          break;
       case RS_dOdy:
-         sg->out.VEC = ray->dOdy;
+         sg->out.VEC() = ray->dOdy;
          break;
       case RS_dDdx:
-         sg->out.VEC = ray->dDdx;
+         sg->out.VEC() = ray->dDdx;
          break;
       case RS_dDdy:
-         sg->out.VEC =  ray->dDdy;
+         sg->out.VEC() =  ray->dDdy;
          break;
       default:
-         sg->out.VEC = AiShaderEvalParamVec(p_default);
+         sg->out.VEC() = AiShaderEvalParamVec(p_default);
          break;
       }
    }

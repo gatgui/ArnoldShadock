@@ -54,5 +54,5 @@ shader_evaluate
    float input1 = AiShaderEvalParamFlt(p_input1);
    float input2 = AiShaderEvalParamFlt(p_input2);
    
-   sg->out.FLT = input1 + mix * (input2 - input1);
+   sg->out.FLT() = input1 + mix * (input2 - input1);
 }

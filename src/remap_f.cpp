@@ -60,5 +60,5 @@ shader_evaluate
    float output_min = AiShaderEvalParamFlt(p_output_min);
    float output_max = AiShaderEvalParamFlt(p_output_max);
    
-   sg->out.FLT = ExpandToRange(NormalizeToRange(input, input_min, input_max), output_min, output_max);
+   sg->out.FLT() = ExpandToRange(NormalizeToRange(input, input_min, input_max), output_min, output_max);
 }

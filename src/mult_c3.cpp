@@ -51,5 +51,5 @@ shader_evaluate
    AtRGB input1 = AiShaderEvalParamRGB(p_input1);
    AtRGB input2 = AiShaderEvalParamRGB(p_input2);
    
-   sg->out.RGB = input1 * input2;
+   sg->out.RGB() = input1 * input2;
 }

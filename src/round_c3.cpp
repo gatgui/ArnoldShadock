@@ -48,7 +48,7 @@ shader_evaluate
 {
    AtRGB input = AiShaderEvalParamRGB(p_input);
    
-   sg->out.RGB.r = float(ROUND(input.r));
-   sg->out.RGB.g = float(ROUND(input.g));
-   sg->out.RGB.b = float(ROUND(input.b));
+   sg->out.RGB().r = float(std::round(input.r));
+   sg->out.RGB().g = float(std::round(input.g));
+   sg->out.RGB().b = float(std::round(input.b));
 }

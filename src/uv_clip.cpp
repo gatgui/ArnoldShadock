@@ -41,14 +41,14 @@ node_parameters
 {
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
    AiParameterEnum(SSTR::order, TO_SRT, TransformOrderNames);
-   AiParameterPnt2(SSTR::scale, 1.0f, 1.0f);
-   AiParameterPnt2(SSTR::scale_pivot, 0.5f, 0.5f);
+   AiParameterVec2(SSTR::scale, 1.0f, 1.0f);
+   AiParameterVec2(SSTR::scale_pivot, 0.5f, 0.5f);
    AiParameterFlt(SSTR::rotation, 0.0f);
-   AiParameterPnt2(SSTR::rotation_pivot, 0.5f, 0.5f);
-   AiParameterPnt2(SSTR::translation, 0.0f, 0.0f);
+   AiParameterVec2(SSTR::rotation_pivot, 0.5f, 0.5f);
+   AiParameterVec2(SSTR::translation, 0.0f, 0.0f);
    AiParameterBool(SSTR::transform_pivots, false);
-   AiParameterPnt2("u_range", 0.0f, 1.0f);
-   AiParameterPnt2("v_range", 0.0f, 1.0f);
+   AiParameterVec2("u_range", 0.0f, 1.0f);
+   AiParameterVec2("v_range", 0.0f, 1.0f);
    AiParameterRGBA("clipped_input", 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
@@ -83,15 +83,15 @@ shader_evaluate
 {
    UVClipData *data = (UVClipData*) AiNodeGetLocalData(node);
 
-   AtPoint2 S = AiShaderEvalParamPnt2(p_scale);
-   AtPoint2 Sp = AiShaderEvalParamPnt2(p_scale_pivot);
+   AtVector2 S = AiShaderEvalParamVec2(p_scale);
+   AtVector2 Sp = AiShaderEvalParamVec2(p_scale_pivot);
    float R = AiShaderEvalParamFlt(p_rotation);
-   AtPoint2 Rp = AiShaderEvalParamPnt2(p_rotation_pivot);
-   AtPoint2 T = AiShaderEvalParamPnt2(p_translation);
-   AtPoint2 u_range = AiShaderEvalParamPnt2(p_u_range);
-   AtPoint2 v_range = AiShaderEvalParamPnt2(p_v_range);
+   AtVector2 Rp = AiShaderEvalParamVec2(p_rotation_pivot);
+   AtVector2 T = AiShaderEvalParamVec2(p_translation);
+   AtVector2 u_range = AiShaderEvalParamVec2(p_u_range);
+   AtVector2 v_range = AiShaderEvalParamVec2(p_v_range);
    
-   AtPoint2 uv;
+   AtVector2 uv;
    float cosA, sinA;
    
    S.x = 1.0f / S.x;
@@ -155,10 +155,10 @@ shader_evaluate
    if (uv.x < u_range.x || uv.x > u_range.y ||
        uv.y < v_range.x || uv.y > v_range.y)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_clipped_input);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_clipped_input);
    }
    else
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
    }
 }

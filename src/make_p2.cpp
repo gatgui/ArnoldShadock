@@ -48,6 +48,6 @@ node_finish
 
 shader_evaluate
 {
-   sg->out.PNT2.x = AiShaderEvalParamFlt(p_x);
-   sg->out.PNT2.y = AiShaderEvalParamFlt(p_y);
+   sg->out.VEC2().x = AiShaderEvalParamFlt(p_x);
+   sg->out.VEC2().y = AiShaderEvalParamFlt(p_y);
 }

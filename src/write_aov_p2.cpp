@@ -36,7 +36,7 @@ node_parameters
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
    
    AiParameterStr(SSTR::aov_name, "");
-   AiParameterPnt2(SSTR::aov_input, 0.0f, 0.0f);
+   AiParameterVec2(SSTR::aov_input, 0.0f, 0.0f);
    AiParameterBool(SSTR::blend_opacity, true);
    AiParameterEnum(SSTR::eval_order, EO_input_first, EvalOrderNames);
 }
@@ -69,7 +69,7 @@ node_update
    if (!data->aovName.empty())
    {
       bool blend = AiNodeGetBool(node, SSTR::blend_opacity);
-      data->valid = AiAOVRegister(data->aovName, AI_TYPE_POINT2, (blend ? AI_AOV_BLEND_OPACITY : AI_AOV_BLEND_NONE));
+      data->valid = AiAOVRegister(data->aovName, AI_TYPE_VECTOR2, (blend ? AI_AOV_BLEND_OPACITY : AI_AOV_BLEND_NONE));
    }
    else
    {
@@ -90,19 +90,19 @@ shader_evaluate
    
    if (data->evalOrder == EO_input_first)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
    }
    
    if ((sg->Rt & AI_RAY_CAMERA))
    {
-      if (data->valid && AiAOVEnabled(data->aovName, AI_TYPE_POINT2))
+      if (data->valid && AiAOVEnabled(data->aovName, AI_TYPE_VECTOR2))
       {
-         AiAOVSetPnt2(sg, data->aovName, AiShaderEvalParamPnt2(p_aov_input));
+         AiAOVSetVec2(sg, data->aovName, AiShaderEvalParamVec2(p_aov_input));
       }
    }
    
    if (data->evalOrder == EO_input_last)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
    }
 }

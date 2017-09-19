@@ -50,7 +50,7 @@ node_finish
 
 shader_evaluate
 {
-   sg->out.VEC.x = AiShaderEvalParamFlt(p_x);
-   sg->out.VEC.y = AiShaderEvalParamFlt(p_y);
-   sg->out.VEC.z = AiShaderEvalParamFlt(p_z);
+   sg->out.VEC().x = AiShaderEvalParamFlt(p_x);
+   sg->out.VEC().y = AiShaderEvalParamFlt(p_y);
+   sg->out.VEC().z = AiShaderEvalParamFlt(p_z);
 }

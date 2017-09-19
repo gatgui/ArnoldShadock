@@ -144,7 +144,7 @@ DECLARE_SHADER(WriteAOVs);
 DECLARE_SHADER(ReadAOVB);
 DECLARE_SHADER(ReadAOVI);
 DECLARE_SHADER(ReadAOVF);
-DECLARE_SHADER(ReadAOVP2);
+DECLARE_SHADER(ReadAOVV2);
 DECLARE_SHADER(ReadAOVP3);
 DECLARE_SHADER(ReadAOVV);
 DECLARE_SHADER(ReadAOVC3);
@@ -156,7 +156,7 @@ DECLARE_FCV_SHADER(Ramp);
 DECLARE_FCV_SHADER(SmoothSwitch);
 DECLARE_FCV_SHADER(RangeSwitch);
 DECLARE_FCV_SHADER(SmoothRangeSwitch);
-DECLARE_SHADER(MakeP2);
+DECLARE_SHADER(MakeV2);
 DECLARE_SHADER(MakeV);
 DECLARE_SHADER(MakeC3);
 DECLARE_SHADER(MakeC4);
@@ -284,7 +284,7 @@ DECLARE_SHADER(WriteMsgC4);
 DECLARE_SHADER(NodeAttrB);
 DECLARE_SHADER(NodeAttrI);
 DECLARE_SHADER(NodeAttrF);
-DECLARE_SHADER(NodeAttrP2);
+DECLARE_SHADER(NodeAttrV2);
 DECLARE_SHADER(NodeAttrV);
 DECLARE_SHADER(NodeAttrC3);
 DECLARE_SHADER(NodeAttrC4);
@@ -346,7 +346,7 @@ node_loader
    REGISTER_SHADER(ShapeAttrB, shape_attr_b, AI_TYPE_BOOLEAN)
    REGISTER_SHADER(ShapeAttrI, shape_attr_i, AI_TYPE_INT)
    REGISTER_SHADER(ShapeAttrF, shape_attr_f, AI_TYPE_FLOAT)
-   REGISTER_SHADER(ShapeAttrP2, shape_attr_p2, AI_TYPE_POINT2)
+   REGISTER_SHADER(ShapeAttrP2, shape_attr_p2, AI_TYPE_VECTOR2)
    REGISTER_SHADER(ShapeAttrV, shape_attr_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(ShapeAttrC3, shape_attr_c3, AI_TYPE_RGB)
    REGISTER_SHADER(ShapeAttrC4, shape_attr_c4, AI_TYPE_RGBA)
@@ -365,14 +365,14 @@ node_loader
    REGISTER_SHADER(SetTraceSet, set_trace_set, AI_TYPE_RGBA)
    REGISTER_SHADER(Shade, shade, AI_TYPE_RGB)
    REGISTER_SHADER(Holdout, holdout, AI_TYPE_RGBA)
-   REGISTER_SHADER(ShadingPoint, shading_point, AI_TYPE_POINT)
+   REGISTER_SHADER(ShadingPoint, shading_point, AI_TYPE_VECTOR)
    REGISTER_SHADER(ShadingNormal, shading_normal, AI_TYPE_VECTOR)
    REGISTER_SHADER(WriteAOVs, write_aovs, AI_TYPE_RGBA)
    REGISTER_SHADER(ReadAOVB, read_aov_b, AI_TYPE_BOOLEAN)
    REGISTER_SHADER(ReadAOVI, read_aov_i, AI_TYPE_INT)
    REGISTER_SHADER(ReadAOVF, read_aov_f, AI_TYPE_FLOAT)
-   REGISTER_SHADER(ReadAOVP2, read_aov_p2, AI_TYPE_POINT2)
-   REGISTER_SHADER(ReadAOVP3, read_aov_p3, AI_TYPE_POINT)
+   REGISTER_SHADER(ReadAOVV2, read_aov_p2, AI_TYPE_VECTOR2)
+   REGISTER_SHADER(ReadAOVP3, read_aov_p3, AI_TYPE_VECTOR)
    REGISTER_SHADER(ReadAOVV, read_aov_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(ReadAOVC3, read_aov_c3, AI_TYPE_RGB)
    REGISTER_SHADER(ReadAOVC4, read_aov_c4, AI_TYPE_RGBA)
@@ -383,7 +383,7 @@ node_loader
    REGISTER_FCV_SHADER(SmoothSwitch, smooth_switch)
    REGISTER_FCV_SHADER(RangeSwitch, range_switch)
    REGISTER_FCV_SHADER(SmoothRangeSwitch, smooth_range_switch)
-   REGISTER_SHADER(MakeP2, make_p2, AI_TYPE_POINT2)
+   REGISTER_SHADER(MakeV2, make_v2, AI_TYPE_VECTOR2)
    REGISTER_SHADER(MakeV, make_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(MakeC3, make_c3, AI_TYPE_RGB)
    REGISTER_SHADER(MakeC4, make_c4, AI_TYPE_RGBA)
@@ -391,7 +391,7 @@ node_loader
 #ifdef WITH_NOISE_SHADERS
    REGISTER_SHADER(Fractal, fractal_noise, AI_TYPE_FLOAT);
    REGISTER_SHADER(Voronoi, voronoi_noise, AI_TYPE_FLOAT);
-   REGISTER_SHADER(DistortPoint, distort_point, AI_TYPE_POINT);
+   REGISTER_SHADER(DistortPoint, distort_point, AI_TYPE_VECTOR);
 #endif
 #ifdef WITH_SEEXPR_SHADER
    REGISTER_SHADER(SeExpr, seexpr, AI_TYPE_VECTOR)
@@ -417,8 +417,8 @@ node_loader
    REGISTER_SHADER(ReadMsgB, read_msg_b, AI_TYPE_BOOLEAN)
    REGISTER_SHADER(ReadMsgI, read_msg_i, AI_TYPE_INT)
    REGISTER_SHADER(ReadMsgF, read_msg_f, AI_TYPE_FLOAT)
-   REGISTER_SHADER(ReadMsgP2, read_msg_p2, AI_TYPE_POINT2)
-   REGISTER_SHADER(ReadMsgP3, read_msg_p3, AI_TYPE_POINT)
+   REGISTER_SHADER(ReadMsgP2, read_msg_p2, AI_TYPE_VECTOR2)
+   REGISTER_SHADER(ReadMsgP3, read_msg_p3, AI_TYPE_VECTOR)
    REGISTER_SHADER(ReadMsgV, read_msg_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(ReadMsgC3, read_msg_c3, AI_TYPE_RGB)
    REGISTER_SHADER(ReadMsgC4, read_msg_c4, AI_TYPE_RGBA)
@@ -455,7 +455,7 @@ node_loader
    REGISTER_SHADER(TraceResultV, trace_result_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(ProbeResultV, probe_result_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(Sampler, sampler, AI_TYPE_RGB)
-   REGISTER_SHADER(SampleValue, sample_value, AI_TYPE_POINT2)
+   REGISTER_SHADER(SampleValue, sample_value, AI_TYPE_VECTOR2)
    REGISTER_FCV_SHADER(SampleLoop, sample_loop)
    REGISTER_SHADER(SssSingle, sss_single, AI_TYPE_RGB)
    REGISTER_SHADER(SssMulti, sss_multi, AI_TYPE_RGB)
@@ -479,8 +479,8 @@ node_loader
    REGISTER_SHADER(SwitchRayC4, switch_ray_c4, AI_TYPE_RGBA)
    REGISTER_SHADER(Volume, volume, AI_TYPE_RGB)
    REGISTER_SHADER(SampleVolumeF, sample_volume_f, AI_TYPE_FLOAT)
-   REGISTER_SHADER(SampleVolumeP2, sample_volume_p2, AI_TYPE_POINT2)
-   REGISTER_SHADER(SampleVolumeP3, sample_volume_p3, AI_TYPE_POINT)
+   REGISTER_SHADER(SampleVolumeP2, sample_volume_p2, AI_TYPE_VECTOR2)
+   REGISTER_SHADER(SampleVolumeP3, sample_volume_p3, AI_TYPE_VECTOR)
    REGISTER_SHADER(SampleVolumeV, sample_volume_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(SampleVolumeC3, sample_volume_c3, AI_TYPE_RGB)
    REGISTER_SHADER(SampleVolumeC4, sample_volume_c4, AI_TYPE_RGBA)
@@ -511,7 +511,7 @@ node_loader
    REGISTER_SHADER(NodeAttrB, node_attr_b, AI_TYPE_BOOLEAN)
    REGISTER_SHADER(NodeAttrI, node_attr_i, AI_TYPE_INT)
    REGISTER_SHADER(NodeAttrF, node_attr_f, AI_TYPE_FLOAT)
-   REGISTER_SHADER(NodeAttrP2, node_attr_p2, AI_TYPE_POINT2)
+   REGISTER_SHADER(NodeAttrV2, node_attr_p2, AI_TYPE_VECTOR2)
    REGISTER_SHADER(NodeAttrV, node_attr_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(NodeAttrC3, node_attr_c3, AI_TYPE_RGB)
    REGISTER_SHADER(NodeAttrC4, node_attr_c4, AI_TYPE_RGBA)

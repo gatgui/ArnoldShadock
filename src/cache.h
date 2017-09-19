@@ -30,11 +30,11 @@ struct CacheEntry
    T value;
    
    AtNode *Op;
-   AtPoint P;
+   AtVector P;
    AtVector N;
    float u;
    float v;
-   AtPoint Ro;
+   AtVector Ro;
 };
 
 template <typename T>

@@ -62,40 +62,40 @@ shader_evaluate
    
    if (!AiStateGetMsgPtr(SSTR::agsb_sampler, (void**)&sampler) || !sampler)
    {
-      sg->out.RGB = AI_RGB_BLACK;
+      sg->out.RGB() = AI_RGB_BLACK;
    }
    else
    {
-      AtPoint2 sample;
+      AtVector2 sample;
       
       CombineMode combine = (CombineMode) *((int*) AiNodeGetLocalData(node));
       
-      sg->out.RGB = AI_RGB_BLACK;
+      sg->out.RGB() = AI_RGB_BLACK;
       
       AtSamplerIterator *it = AiSamplerIterator(sampler, sg);
       
       while (AiSamplerGetSample(it, &(sample.x)))
       {
-         AiStateSetMsgPnt2(SSTR::agsb_sample_value, sample);
+         AiStateSetMsgVec2(SSTR::agsb_sample_value, sample);
          
-         AtColor input = AiShaderEvalParamRGB(p_input);
+         AtRGB input = AiShaderEvalParamRGB(p_input);
          
          switch (combine)
          {
          case CM_Max:
-            sg->out.RGB.r = MAX(input.r, sg->out.RGB.r);
-            sg->out.RGB.g = MAX(input.g, sg->out.RGB.g);
-            sg->out.RGB.b = MAX(input.b, sg->out.RGB.b);
+            sg->out.RGB().r = AiMax(input.r, sg->out.RGB().r);
+            sg->out.RGB().g = AiMax(input.g, sg->out.RGB().g);
+            sg->out.RGB().b = AiMax(input.b, sg->out.RGB().b);
             break;
          case CM_Min:
-            sg->out.RGB.r = MIN(input.r, sg->out.RGB.r);
-            sg->out.RGB.g = MIN(input.g, sg->out.RGB.g);
-            sg->out.RGB.b = MIN(input.b, sg->out.RGB.b);
+            sg->out.RGB().r = AiMin(input.r, sg->out.RGB().r);
+            sg->out.RGB().g = AiMin(input.g, sg->out.RGB().g);
+            sg->out.RGB().b = AiMin(input.b, sg->out.RGB().b);
             break;
          case CM_Add:
          case CM_Avg:
          default:
-            sg->out.RGB += input;
+            sg->out.RGB() += input;
             break;
          }
       }
@@ -103,9 +103,9 @@ shader_evaluate
       if (combine == CM_Avg)
       {
          float nrm = AiSamplerGetSampleInvCount(it);
-         sg->out.RGB.r *= nrm;
-         sg->out.RGB.g *= nrm;
-         sg->out.RGB.b *= nrm;
+         sg->out.RGB().r *= nrm;
+         sg->out.RGB().g *= nrm;
+         sg->out.RGB().b *= nrm;
       }
    }
 }

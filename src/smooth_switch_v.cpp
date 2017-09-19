@@ -60,11 +60,11 @@ shader_evaluate
    
    if (value >= threshold+falloff)
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_if_true);
+      sg->out.VEC() = AiShaderEvalParamVec(p_if_true);
    }
    else if (value < threshold-falloff)
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_if_false);
+      sg->out.VEC() = AiShaderEvalParamVec(p_if_false);
    }
    else
    {
@@ -73,6 +73,6 @@ shader_evaluate
       AtVector trueValue = AiShaderEvalParamVec(p_if_true);
       AtVector falseValue = AiShaderEvalParamVec(p_if_false);
       
-      sg->out.VEC = (1.0f - blend) * falseValue + blend * trueValue;
+      sg->out.VEC() = (1.0f - blend) * falseValue + blend * trueValue;
    }
 }

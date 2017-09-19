@@ -79,7 +79,7 @@ shader_evaluate
       {
          AiMsgWarning("[trace_result_v] Trying to access result from a 'probe' trace: Use 'probe_result_v' instead");
       }
-      sg->out.VEC = AiShaderEvalParamVec(p_default);
+      sg->out.VEC() = AiShaderEvalParamVec(p_default);
    }
    else
    {
@@ -90,10 +90,10 @@ shader_evaluate
       switch (state)
       {
       case TS_point:
-         sg->out.VEC = sample->point;
+         sg->out.VEC() = sample->point;
          break;
       default:
-         sg->out.VEC = AiShaderEvalParamVec(p_default);
+         sg->out.VEC() = AiShaderEvalParamVec(p_default);
          break;
       }
    }

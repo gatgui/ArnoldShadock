@@ -51,7 +51,7 @@ shader_evaluate
    AtVector input = AiShaderEvalParamVec(p_input);
    AtVector gain = AiShaderEvalParamVec(p_gain);
    
-   sg->out.VEC.x = GAIN(input.x, gain.x);
-   sg->out.VEC.y = GAIN(input.y, gain.y);
-   sg->out.VEC.z = GAIN(input.z, gain.z);
+   sg->out.VEC().x = AiGain(input.x, gain.x);
+   sg->out.VEC().y = AiGain(input.y, gain.y);
+   sg->out.VEC().z = AiGain(input.z, gain.z);
 }

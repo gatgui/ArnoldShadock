@@ -29,7 +29,7 @@ enum SampleValueParams
 
 node_parameters
 {
-   AiParameterPnt2("default", 0.0f, 0.0f);
+   AiParameterVec2("default", 0.0f, 0.0f);
 }
 
 node_initialize
@@ -46,14 +46,14 @@ node_finish
 
 shader_evaluate
 {
-   AtPoint2 sample;
+   AtVector2 sample;
    
-   if (!AiStateGetMsgPnt2(SSTR::agsb_sample_value, &sample))
+   if (!AiStateGetMsgVec2(SSTR::agsb_sample_value, &sample))
    {
-      sg->out.PNT2 = AiShaderEvalParamPnt2(p_default);
+      sg->out.VEC2() = AiShaderEvalParamVec2(p_default);
    }
    else
    {
-      sg->out.PNT2 = sample;
+      sg->out.VEC2() = sample;
    }
 }

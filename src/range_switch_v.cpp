@@ -60,10 +60,10 @@ shader_evaluate
    
    if (lower <= value && value <= upper)
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_inside_range);
+      sg->out.VEC() = AiShaderEvalParamVec(p_inside_range);
    }
    else
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_outside_range);
+      sg->out.VEC() = AiShaderEvalParamVec(p_outside_range);
    }
 }

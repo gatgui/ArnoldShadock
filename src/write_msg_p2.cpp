@@ -35,7 +35,7 @@ node_parameters
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
    
    AiParameterStr(SSTR::msg_name, "");
-   AiParameterPnt2(SSTR::msg_input, 0.0f, 0.0f);
+   AiParameterVec2(SSTR::msg_input, 0.0f, 0.0f);
    AiParameterEnum(SSTR::eval_order, EO_input_last, EvalOrderNames);
 }
 
@@ -79,16 +79,16 @@ shader_evaluate
    
    if (data->evalOrder == EO_input_first)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
    }
    
    if (data->valid)
    {
-      AiStateSetMsgPnt2(data->msgName, AiShaderEvalParamPnt2(p_msg_input));
+      AiStateSetMsgVec2(data->msgName, AiShaderEvalParamVec2(p_msg_input));
    }
    
    if (data->evalOrder == EO_input_last)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
    }
 }

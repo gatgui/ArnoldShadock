@@ -74,30 +74,31 @@ shader_evaluate
    
    AiLightsPrepare(sg);
    
-   sg->out.RGB = AI_RGB_BLACK;
+   sg->out.RGB() = AI_RGB_BLACK;
    
    float sampleCount = 0.0f;
-   AtColor sampleValue;
+   AtRGB sampleValue;
+   AtLightSample ls;
    
-   while (AiLightsGetSample(sg))
+   while (AiLightsGetSample(sg, ls))
    {
       sampleValue = AiShaderEvalParamRGB(p_input);
       switch (data->combine)
       {
       case CM_Max:
-         sg->out.RGB.r = MAX(sampleValue.r, sg->out.RGB.r);
-         sg->out.RGB.g = MAX(sampleValue.g, sg->out.RGB.g);
-         sg->out.RGB.b = MAX(sampleValue.b, sg->out.RGB.b);
+         sg->out.RGB().r = AiMax(sampleValue.r, sg->out.RGB().r);
+         sg->out.RGB().g = AiMax(sampleValue.g, sg->out.RGB().g);
+         sg->out.RGB().b = AiMax(sampleValue.b, sg->out.RGB().b);
          break;
       case CM_Min:
-         sg->out.RGB.r = MIN(sampleValue.r, sg->out.RGB.r);
-         sg->out.RGB.g = MIN(sampleValue.g, sg->out.RGB.g);
-         sg->out.RGB.b = MIN(sampleValue.b, sg->out.RGB.b);
+         sg->out.RGB().r = AiMin(sampleValue.r, sg->out.RGB().r);
+         sg->out.RGB().g = AiMin(sampleValue.g, sg->out.RGB().g);
+         sg->out.RGB().b = AiMin(sampleValue.b, sg->out.RGB().b);
          break;
       case CM_Add:
       case CM_Avg:
       default:
-         sg->out.RGB += sampleValue;
+         sg->out.RGB() += sampleValue;
       }
       
       sampleCount += 1.0f;
@@ -106,6 +107,6 @@ shader_evaluate
    if (data->combine == CM_Avg && sampleCount > 0.0f)
    {
       sampleCount = 1.0f / sampleCount;
-      sg->out.RGB *= sampleCount;
+      sg->out.RGB() *= sampleCount;
    }
 }

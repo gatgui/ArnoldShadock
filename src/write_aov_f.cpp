@@ -90,7 +90,7 @@ shader_evaluate
    
    if (data->evalOrder == EO_input_first)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
    }
    
    if ((sg->Rt & AI_RAY_CAMERA))
@@ -103,6 +103,6 @@ shader_evaluate
    
    if (data->evalOrder == EO_input_last)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
    }
 }

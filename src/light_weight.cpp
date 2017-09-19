@@ -68,39 +68,23 @@ node_finish
 shader_evaluate
 {
    int weight = *((int*) AiNodeGetLocalData(node));
+   AtLightSample ls;
+   AiLightsGetSample(sg, ls);
    
-   if (sg->Lp)
+   if (ls.Lp)
    {
       switch (weight)
       {
       case LW_diffuse:
-         // Note: AiLightGetAffectDiffuse API is set deprecated
-         //       but still in use by MtoA
-         if (AiLightGetAffectDiffuse(sg->Lp))
-         {
-            sg->out.FLT = AiLightGetDiffuse(sg->Lp);
-         }
-         else
-         {
-            sg->out.FLT = 0.0f;
-         }
+         sg->out.FLT() = AiLightGetDiffuse(ls.Lp);
          return;
       
       case LW_specular:
-         // Note: AiLightGetAffectSpecular is set deprecated
-         //       but still in use by MtoA
-         if (AiLightGetAffectSpecular(sg->Lp))
-         {
-            sg->out.FLT = AiLightGetSpecular(sg->Lp);
-         }
-         else
-         {
-            sg->out.FLT = 0.0f;
-         }
+         sg->out.FLT() = AiLightGetSpecular(ls.Lp);
          return;
       
       case LW_sss:
-         sg->out.FLT = AiLightGetSSS(sg->Lp);
+         sg->out.FLT() = AiLightGetSSS(ls.Lp);
          return;
       
       default:
@@ -108,5 +92,5 @@ shader_evaluate
       }
    }
    
-   sg->out.FLT = 0.0f;
+   sg->out.FLT() = 0.0f;
 }

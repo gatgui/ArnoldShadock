@@ -32,11 +32,11 @@ node_parameters
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
 }
 
-typedef Cache<AtColor> ColorCache;
+typedef Cache<AtRGB> ColorCache;
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AllocCache<AtColor>(0));
+   AiNodeSetLocalData(node, AllocCache<AtRGB>(0));
 }
 
 node_update
@@ -56,9 +56,9 @@ shader_evaluate
 {
    ColorCache *cache = (ColorCache*) AiNodeGetLocalData(node);
    
-   if (!GetCacheValue(sg, cache, sg->out.RGB))
+   if (!GetCacheValue(sg, cache, sg->out.RGB()))
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_input);
-      SetCacheValue(sg, cache, sg->out.RGB);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_input);
+      SetCacheValue(sg, cache, sg->out.RGB());
    }
 }

@@ -96,5 +96,5 @@ shader_evaluate
       break;
    }
    
-   sg->out.BOOL = (AiShaderEvalParamBool(p_invert) ? !rv : rv);
+   sg->out.BOOL() = (AiShaderEvalParamBool(p_invert) ? !rv : rv);
 }

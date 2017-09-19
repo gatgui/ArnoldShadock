@@ -66,28 +66,26 @@ shader_evaluate
 {
    ShapeAttrVData *data = (ShapeAttrVData*) AiNodeGetLocalData(node);
    
-   sg->out.VEC = AI_V3_ZERO;
+   sg->out.VEC() = AI_V3_ZERO;
 
    if (data->output_mode == AM_V)
    {
-      if (!AiUDataGetVec(data->attribute, &(sg->out.VEC)) &&
-          !AiUDataGetPnt(data->attribute, &(sg->out.PNT)))
+      if (!AiUDataGetVec(data->attribute, sg->out.VEC()))
       {
-         sg->out.VEC = AiShaderEvalParamVec(p_default);
+         sg->out.VEC() = AiShaderEvalParamVec(p_default);
       }
    }
    else
    {
       AtVector dVdx, dVdy;
       
-      if (!AiUDataGetDxyDerivativesVec(data->attribute, &dVdx, &dVdy) &&
-          !AiUDataGetDxyDerivativesPnt(data->attribute, &dVdx, &dVdy))
+      if (!AiUDataGetDxyDerivativesVec(data->attribute, dVdx, dVdy))
       {
-         sg->out.VEC = AiShaderEvalParamVec(p_default);
+         sg->out.VEC() = AiShaderEvalParamVec(p_default);
       }
       else
       {
-         sg->out.VEC = (data->output_mode == AM_dVdx ? dVdx : dVdy);
+         sg->out.VEC() = (data->output_mode == AM_dVdx ? dVdx : dVdy);
       }
    }
 }

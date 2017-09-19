@@ -63,8 +63,8 @@ shader_evaluate
 {
    ReadMsgVData *data = (ReadMsgVData*) AiNodeGetLocalData(node);
    
-   if (!AiStateGetMsgVec(data->msgName, &(sg->out.VEC)))
+   if (!AiStateGetMsgVec(data->msgName, &(sg->out.VEC())))
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_default_value);
+      sg->out.VEC() = AiShaderEvalParamVec(p_default_value);
    }
 }

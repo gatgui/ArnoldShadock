@@ -29,8 +29,7 @@ enum TransposeParams
 
 node_parameters
 {
-   AtMatrix id;
-   AiM4Identity(id);
+   AtMatrix id = AiM4Identity();
    
    AiParameterMtx("input", id);
 }
@@ -49,8 +48,8 @@ node_finish
 
 shader_evaluate
 {
-   sg->out.pMTX = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
+   sg->out.pMTX() = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
    
    AtMatrix *mtx = AiShaderEvalParamMtx(p_input);
-   AiM4Transpose(*mtx, *(sg->out.pMTX));
+   *(sg->out.pMTX()) = AiM4Transpose(*mtx);
 }

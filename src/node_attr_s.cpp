@@ -79,6 +79,7 @@ shader_evaluate
    NodeAttrSData *data = (NodeAttrSData*) AiNodeGetLocalData(node);
    
    AtNode *src = NULL;
+   AtLightSample ls;
    
    switch (data->target)
    {
@@ -91,7 +92,8 @@ shader_evaluate
    case NAT_light:
       if (data->light_index < 0)
       {
-         src = sg->Lp;
+         AiLightsGetSample(sg, ls);
+         src = (AtNode *)ls.Lp;
       }
       else if (data->light_index < sg->nlights)
       {
@@ -112,7 +114,7 @@ shader_evaluate
       
    if (!src)
    {
-      sg->out.STR = AiShaderEvalParamStr(p_default);
+      sg->out.STR() = AiShaderEvalParamStr(p_default);
    }
    else
    {
@@ -139,11 +141,11 @@ shader_evaluate
       
       if (type == AI_TYPE_STRING)
       {
-         sg->out.STR = AiNodeGetStr(src, data->attribute);
+         sg->out.STR() = AiNodeGetStr(src, data->attribute);
       }
       else
       {
-         sg->out.STR = AiShaderEvalParamStr(p_default);
+         sg->out.STR() = AiShaderEvalParamStr(p_default);
       }
    }
 }

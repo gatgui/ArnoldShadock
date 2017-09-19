@@ -85,7 +85,7 @@ shader_evaluate
 
    gmath::Vector3 out = data->M * gmath::Vector3(input.r, input.g, input.b);
 
-   sg->out.RGB.r = out.x;
-   sg->out.RGB.g = out.y;
-   sg->out.RGB.b = out.z;
+   sg->out.RGB().r = out.x;
+   sg->out.RGB().g = out.y;
+   sg->out.RGB().b = out.z;
 }

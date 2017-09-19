@@ -54,7 +54,7 @@ shader_evaluate
    AtRGB input_min = AiShaderEvalParamRGB(p_input_min);
    AtRGB input_max = AiShaderEvalParamRGB(p_input_max);
    
-   sg->out.RGB.r = CLAMP(input.r, input_min.r, input_max.r);
-   sg->out.RGB.g = CLAMP(input.g, input_min.g, input_max.g);
-   sg->out.RGB.b = CLAMP(input.b, input_min.b, input_max.b);
+   sg->out.RGB().r = AiClamp(input.r, input_min.r, input_max.r);
+   sg->out.RGB().g = AiClamp(input.g, input_min.g, input_max.g);
+   sg->out.RGB().b = AiClamp(input.b, input_min.b, input_max.b);
 }

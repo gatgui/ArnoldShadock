@@ -20,9 +20,9 @@ SOFTWARE.
 
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(NodeAttrP2Mtd);
+AI_SHADER_NODE_EXPORT_METHODS(NodeAttrV2Mtd);
 
-enum NodeAttrP2Params
+enum NodeAttrV2Params
 {
    p_target = 0,
    p_light_index,
@@ -39,10 +39,10 @@ node_parameters
    AiParameterNode(SSTR::target_node, NULL);
    AiParameterStr(SSTR::attribute, "");
    AiParameterBool(SSTR::user_defined, true);
-   AiParameterPnt2(SSTR::_default, 0.0f, 0.0f);
+   AiParameterVec2(SSTR::_default, 0.0f, 0.0f);
 }
 
-struct NodeAttrP2Data
+struct NodeAttrV2Data
 {
    NodeAttrTarget target;
    int light_index;
@@ -53,13 +53,13 @@ struct NodeAttrP2Data
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new NodeAttrP2Data());
-   AddMemUsage<NodeAttrP2Data>();
+   AiNodeSetLocalData(node, new NodeAttrV2Data());
+   AddMemUsage<NodeAttrV2Data>();
 }
 
 node_update
 {
-   NodeAttrP2Data *data = (NodeAttrP2Data*) AiNodeGetLocalData(node);
+   NodeAttrV2Data *data = (NodeAttrV2Data*) AiNodeGetLocalData(node);
    data->target = (NodeAttrTarget) AiNodeGetInt(node, SSTR::target);
    data->light_index = AiNodeGetInt(node, SSTR::light_index);
    data->attribute = AiNodeGetStr(node, SSTR::attribute);
@@ -69,16 +69,17 @@ node_update
 
 node_finish
 {
-   NodeAttrP2Data *data = (NodeAttrP2Data*) AiNodeGetLocalData(node);
+   NodeAttrV2Data *data = (NodeAttrV2Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<NodeAttrP2Data>();
+   SubMemUsage<NodeAttrV2Data>();
 }
 
 shader_evaluate
 {
-   NodeAttrP2Data *data = (NodeAttrP2Data*) AiNodeGetLocalData(node);
+   NodeAttrV2Data *data = (NodeAttrV2Data*) AiNodeGetLocalData(node);
    
    AtNode *src = NULL;
+   AtLightSample ls;
    
    switch (data->target)
    {
@@ -91,7 +92,8 @@ shader_evaluate
    case NAT_light:
       if (data->light_index < 0)
       {
-         src = sg->Lp;
+         AiLightsGetSample(sg, ls);
+         src = (AtNode *)ls.Lp;
       }
       else if (data->light_index < sg->nlights)
       {
@@ -112,7 +114,7 @@ shader_evaluate
       
    if (!src)
    {
-      sg->out.PNT2 = AiShaderEvalParamPnt2(p_default);
+      sg->out.VEC2() = AiShaderEvalParamVec2(p_default);
    }
    else
    {
@@ -137,13 +139,13 @@ shader_evaluate
          }
       }
       
-      if (type == AI_TYPE_POINT2)
+      if (type == AI_TYPE_VECTOR2)
       {
-         sg->out.PNT2 = AiNodeGetPnt2(src, data->attribute);
+         sg->out.VEC2() = AiNodeGetVec2(src, data->attribute);
       }
       else
       {
-         sg->out.PNT2 = AiShaderEvalParamPnt2(p_default);
+         sg->out.VEC2() = AiShaderEvalParamVec2(p_default);
       }
    }
 }

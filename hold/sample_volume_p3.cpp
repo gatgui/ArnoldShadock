@@ -225,9 +225,9 @@ shader_evaluate
       }
       
       // Gain/Bias
-      out.x = GAIN(BIAS(out.x, data->bias), data->gain);
-      out.y = GAIN(BIAS(out.y, data->bias), data->gain);
-      out.z = GAIN(BIAS(out.z, data->bias), data->gain);
+      out.x = AiGain(AiBias(out.x, data->bias), data->gain);
+      out.y = AiGain(AiBias(out.y, data->bias), data->gain);
+      out.z = AiGain(AiBias(out.z, data->bias), data->gain);
       
       // Post mult/add
       sg->out.PNT = data->postAdd + data->postMult * out;

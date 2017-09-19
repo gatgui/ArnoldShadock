@@ -54,7 +54,7 @@ shader_evaluate
    AtVector input_min = AiShaderEvalParamVec(p_input_min);
    AtVector input_max = AiShaderEvalParamVec(p_input_max);
    
-   sg->out.VEC.x = CLAMP(input.x, input_min.x, input_max.x);
-   sg->out.VEC.y = CLAMP(input.y, input_min.y, input_max.y);
-   sg->out.VEC.z = CLAMP(input.z, input_min.z, input_max.z);
+   sg->out.VEC().x = AiClamp(input.x, input_min.x, input_max.x);
+   sg->out.VEC().y = AiClamp(input.y, input_min.y, input_max.y);
+   sg->out.VEC().z = AiClamp(input.z, input_min.z, input_max.z);
 }

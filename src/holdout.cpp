@@ -93,7 +93,7 @@ shader_evaluate
    
    if ((sg->Rt & AI_RAY_CAMERA) != 0)
    {
-      if (data->enableAttr.empty() || !AiUDataGetBool(data->enableAttr, &holdout))
+      if (data->enableAttr.empty() || !AiUDataGetBool(data->enableAttr, holdout))
       {
          holdout = (data->evalDefaultEnable ? AiShaderEvalParamBool(p_default_enable) : data->defaultEnable);
       }
@@ -101,14 +101,14 @@ shader_evaluate
    
    if (holdout)
    {
-      if (data->colorAttr.empty() || !AiUDataGetRGBA(data->colorAttr, &(sg->out.RGBA)))
+      if (data->colorAttr.empty() || !AiUDataGetRGBA(data->colorAttr, sg->out.RGBA()))
       {
-         sg->out.RGBA = (data->evalDefaultColor ? AiShaderEvalParamRGBA(p_default_color) : data->defaultColor);
+         sg->out.RGBA() = (data->evalDefaultColor ? AiShaderEvalParamRGBA(p_default_color) : data->defaultColor);
       }
    }
    else
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
    }
 }
 

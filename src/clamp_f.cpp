@@ -54,5 +54,5 @@ shader_evaluate
    float input_min = AiShaderEvalParamFlt(p_input_min);
    float input_max = AiShaderEvalParamFlt(p_input_max);
    
-   sg->out.FLT = CLAMP(input, input_min, input_max);
+   sg->out.FLT() = AiClamp(input, input_min, input_max);
 }

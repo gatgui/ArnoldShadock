@@ -81,7 +81,7 @@ shader_evaluate
       {
          AiMsgWarning("[trace_result_c3] Trying to access result from a 'probe' trace: Use 'probe_result_v' instead");
       }
-      sg->out.RGB = AiShaderEvalParamRGB(p_default);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_default);
    }
    else
    {
@@ -92,13 +92,13 @@ shader_evaluate
       switch (state)
       {
       case TS_color:
-         sg->out.RGB = sample->color;
+         sg->out.RGB() = sample->color;
          break;
       case TS_opacity:
-         sg->out.RGB = sample->opacity;
+         sg->out.RGB() = sample->opacity;
          break;
       default:
-         sg->out.RGB = AiShaderEvalParamRGB(p_default);
+         sg->out.RGB() = AiShaderEvalParamRGB(p_default);
          break;
       }
    }

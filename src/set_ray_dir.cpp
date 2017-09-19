@@ -57,10 +57,10 @@ shader_evaluate
    if (AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) && ray)
    {
       ray->dir = AiShaderEvalParamVec(p_dir);
-      sg->out.VEC = ray->dir;
+      sg->out.VEC() = ray->dir;
    }
    else
    {
-      sg->out.VEC = AI_V3_ZERO;
+      sg->out.VEC() = AI_V3_ZERO;
    }
 }

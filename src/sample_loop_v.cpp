@@ -62,40 +62,40 @@ shader_evaluate
    
    if (!AiStateGetMsgPtr(SSTR::agsb_sampler, (void**)&sampler) || !sampler)
    {
-      sg->out.VEC = AI_V3_ZERO;
+      sg->out.VEC() = AI_V3_ZERO;
    }
    else
    {
-      AtPoint2 sample;
+      AtVector2 sample;
       
       CombineMode combine = (CombineMode) *((int*) AiNodeGetLocalData(node));
       
-      sg->out.VEC = AI_V3_ZERO;
+      sg->out.VEC() = AI_V3_ZERO;
       
       AtSamplerIterator *it = AiSamplerIterator(sampler, sg);
       
       while (AiSamplerGetSample(it, &(sample.x)))
       {
-         AiStateSetMsgPnt2(SSTR::agsb_sample_value, sample);
+         AiStateSetMsgVec2(SSTR::agsb_sample_value, sample);
          
          AtVector input = AiShaderEvalParamVec(p_input);
          
          switch (combine)
          {
          case CM_Max:
-            sg->out.VEC.x = MAX(input.x, sg->out.VEC.x);
-            sg->out.VEC.y = MAX(input.y, sg->out.VEC.y);
-            sg->out.VEC.z = MAX(input.z, sg->out.VEC.z);
+            sg->out.VEC().x = AiMax(input.x, sg->out.VEC().x);
+            sg->out.VEC().y = AiMax(input.y, sg->out.VEC().y);
+            sg->out.VEC().z = AiMax(input.z, sg->out.VEC().z);
             break;
          case CM_Min:
-            sg->out.VEC.x = MIN(input.x, sg->out.VEC.x);
-            sg->out.VEC.y = MIN(input.y, sg->out.VEC.y);
-            sg->out.VEC.z = MIN(input.z, sg->out.VEC.z);
+            sg->out.VEC().x = AiMin(input.x, sg->out.VEC().x);
+            sg->out.VEC().y = AiMin(input.y, sg->out.VEC().y);
+            sg->out.VEC().z = AiMin(input.z, sg->out.VEC().z);
             break;
          case CM_Add:
          case CM_Avg:
          default:
-            sg->out.VEC += input;
+            sg->out.VEC() += input;
             break;
          }
       }
@@ -103,9 +103,9 @@ shader_evaluate
       if (combine == CM_Avg)
       {
          float nrm = AiSamplerGetSampleInvCount(it);
-         sg->out.VEC.x *= nrm;
-         sg->out.VEC.y *= nrm;
-         sg->out.VEC.z *= nrm;
+         sg->out.VEC().x *= nrm;
+         sg->out.VEC().y *= nrm;
+         sg->out.VEC().z *= nrm;
       }
    }
 }

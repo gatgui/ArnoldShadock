@@ -91,63 +91,63 @@ shader_evaluate
    case TO_COS:
       {
          float f = (data->units == AU_Degrees ? sDegToRad : 1.0f);
-         sg->out.VEC.x = cosf(f * input.x);
-         sg->out.VEC.y = cosf(f * input.y);
-         sg->out.VEC.z = cosf(f * input.z);
+         sg->out.VEC().x = cosf(f * input.x);
+         sg->out.VEC().y = cosf(f * input.y);
+         sg->out.VEC().z = cosf(f * input.z);
       }
       break;
    case TO_SIN:
       {
          float f = (data->units == AU_Degrees ? sDegToRad : 1.0f);
-         sg->out.VEC.x = sinf(f * input.x);
-         sg->out.VEC.y = sinf(f * input.y);
-         sg->out.VEC.z = sinf(f * input.z);
+         sg->out.VEC().x = sinf(f * input.x);
+         sg->out.VEC().y = sinf(f * input.y);
+         sg->out.VEC().z = sinf(f * input.z);
       }
       break;
    case TO_TAN:
       {
          float f = (data->units == AU_Degrees ? sDegToRad : 1.0f);
-         sg->out.VEC.x = tanf(f * input.x);
-         sg->out.VEC.y = tanf(f * input.y);
-         sg->out.VEC.z = tanf(f * input.z);
+         sg->out.VEC().x = tanf(f * input.x);
+         sg->out.VEC().y = tanf(f * input.y);
+         sg->out.VEC().z = tanf(f * input.z);
       }
       break;
    case TO_ACOS:
       {
          float f = (data->units == AU_Degrees ? sRadToDeg : 1.0f);
-         sg->out.VEC.x = f * acosf(input.x);
-         sg->out.VEC.y = f * acosf(input.y);
-         sg->out.VEC.z = f * acosf(input.z);
+         sg->out.VEC().x = f * acosf(input.x);
+         sg->out.VEC().y = f * acosf(input.y);
+         sg->out.VEC().z = f * acosf(input.z);
       }
       break;
    case TO_ASIN:
       {
          float f = (data->units == AU_Degrees ? sRadToDeg : 1.0f);
-         sg->out.VEC.x = f * asinf(input.x);
-         sg->out.VEC.y = f * asinf(input.y);
-         sg->out.VEC.z = f * asinf(input.z);
+         sg->out.VEC().x = f * asinf(input.x);
+         sg->out.VEC().y = f * asinf(input.y);
+         sg->out.VEC().z = f * asinf(input.z);
       }
       break;
    case TO_ATAN:
       {
          float f = (data->units == AU_Degrees ? sRadToDeg : 1.0f);
-         sg->out.VEC.x = f * atanf(input.x);
-         sg->out.VEC.y = f * atanf(input.y);
-         sg->out.VEC.z = f * atanf(input.z);
+         sg->out.VEC().x = f * atanf(input.x);
+         sg->out.VEC().y = f * atanf(input.y);
+         sg->out.VEC().z = f * atanf(input.z);
       }
       break;
    case TO_ATAN2:
       {
          AtVector input2 = AiShaderEvalParamVec(p_input2);
          float f = (data->units == AU_Degrees ? sRadToDeg : 1.0f);
-         sg->out.VEC.x = f * atan2f(input.x, input2.x);
-         sg->out.VEC.y = f * atan2f(input.y, input2.y);
-         sg->out.VEC.z = f * atan2f(input.z, input2.z);
+         sg->out.VEC().x = f * atan2f(input.x, input2.x);
+         sg->out.VEC().y = f * atan2f(input.y, input2.y);
+         sg->out.VEC().z = f * atan2f(input.z, input2.z);
       }
       break;
    default:
-      sg->out.VEC.x = 0.0f;
-      sg->out.VEC.y = 0.0f;
-      sg->out.VEC.z = 0.0f;
+      sg->out.VEC().x = 0.0f;
+      sg->out.VEC().y = 0.0f;
+      sg->out.VEC().z = 0.0f;
    }
 }

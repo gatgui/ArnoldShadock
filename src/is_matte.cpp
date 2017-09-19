@@ -40,5 +40,5 @@ node_finish
 
 shader_evaluate
 {
-   sg->out.BOOL = AiShaderGlobalsIsObjectMatte(sg);
+   sg->out.BOOL() = AiShaderGlobalsIsObjectMatte(sg);
 }

@@ -63,8 +63,8 @@ shader_evaluate
 {
    ReadMsgC3Data *data = (ReadMsgC3Data*) AiNodeGetLocalData(node);
    
-   if (!AiStateGetMsgRGB(data->msgName, &(sg->out.RGB)))
+   if (!AiStateGetMsgRGB(data->msgName, &(sg->out.RGB())))
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_default_value);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_default_value);
    }
 }

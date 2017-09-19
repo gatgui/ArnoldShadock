@@ -46,5 +46,5 @@ node_finish
 
 shader_evaluate
 {
-   sg->out.INT = (AiShaderEvalParamBool(p_input) ? 1 : 0);
+   sg->out.INT() = (AiShaderEvalParamBool(p_input) ? 1 : 0);
 }

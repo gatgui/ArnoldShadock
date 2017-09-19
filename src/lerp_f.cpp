@@ -54,5 +54,5 @@ shader_evaluate
    float f2 = AiShaderEvalParamFlt(p_input2);
    float blend = AiShaderEvalParamFlt(p_blend);
    
-   sg->out.FLT = (1.0f - blend) * f1 + blend * f2;
+   sg->out.FLT() = (1.0f - blend) * f1 + blend * f2;
 }

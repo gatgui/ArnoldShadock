@@ -59,7 +59,7 @@ node_parameters
 {
    AiParameterStr(SSTR::field, "");
    AiParameterEnum(SSTR::interpolation, VI_linear, VolumeInterpNames);
-   AiParameterPnt(SSTR::P, 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::P, 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::P_space, S_world, SpaceNames);
    AiParameterBool(SSTR::P_is_offset, true);
    AiParameterRGB(SSTR::pre_multiply, 1.0f, 1.0f, 1.0f);
@@ -81,18 +81,18 @@ struct SampleVolumeC3Data
    int interpolation;
    bool evalP;
    bool ignoreP;
-   AtPoint P;
+   AtVector P;
    Space space;
    bool isOffset;
    bool evalDefault;
-   AtColor _default;
+   AtRGB _default;
    float bias;
    float gain;
-   AtColor preMult;
-   AtColor preAdd;
+   AtRGB preMult;
+   AtRGB preAdd;
    BlendMode blendMode;
-   AtColor postMult;
-   AtColor postAdd;
+   AtRGB postMult;
+   AtRGB postAdd;
 };
 
 node_initialize
@@ -124,8 +124,8 @@ node_update
    data->evalP = AiNodeIsLinked(node, SSTR::P);
    if (!data->evalP)
    {
-      data->P = AiNodeGetPnt(node, SSTR::P);
-      data->ignoreP = (data->isOffset && AiV3IsZero(data->P));
+      data->P = AiNodeGetVec(node, SSTR::P);
+      data->ignoreP = (data->isOffset && AiV3IsSmall(data->P));
    }
    else
    {
@@ -144,18 +144,18 @@ shader_evaluate
 {
    SampleVolumeC3Data *data = (SampleVolumeC3Data*) AiNodeGetLocalData(node);
    
-   AtPoint oldP = sg->P;
-   AtPoint oldPo = sg->Po;
+   AtVector oldP = sg->P;
+   AtVector oldPo = sg->Po;
    
    if (!data->ignoreP)
    {
-      AtPoint P;
+      AtVector P;
       bool updateP = true;
       
       if (data->evalP)
       {
-         P = AiShaderEvalParamPnt(p_P);
-         updateP = (!data->isOffset || !AiV3IsZero(P));
+         P = AiShaderEvalParamVec(p_P);
+         updateP = (!data->isOffset || !AiV3IsSmall(P));
       }
       else
       {
@@ -168,21 +168,21 @@ shader_evaluate
          {
          case S_object:
             sg->Po = (data->isOffset ? (sg->Po + P) : P);
-            AiM4PointByMatrixMult(&(sg->P), sg->M, &(sg->Po));
+            sg->P = AiM4PointByMatrixMult(sg->M, sg->Po);
             break;
          case S_world:
          default:
             sg->P = (data->isOffset ? (sg->P + P) : P);
-            AiM4PointByMatrixMult(&(sg->Po), sg->Minv, &(sg->P));
+            sg->Po = AiM4PointByMatrixMult(sg->Minv, sg->P);
          }
       }
    }
 
-   AtColor out = AI_RGB_BLACK;
+   AtRGB out = AI_RGB_BLACK;
 
    if (!AiVolumeSampleRGB(data->field, data->interpolation, &out))
    {
-      sg->out.RGB = (data->evalDefault ? AiShaderEvalParamRGB(p_default) : data->_default);
+      sg->out.RGB() = (data->evalDefault ? AiShaderEvalParamRGB(p_default) : data->_default);
    }
    else
    {
@@ -197,7 +197,7 @@ shader_evaluate
             float blend = AiShaderEvalParamFlt(p_blend);
             if (blend < 1.0f)
             {
-               AtColor bmin = AiShaderEvalParamRGB(p_blend_min);
+               AtRGB bmin = AiShaderEvalParamRGB(p_blend_min);
                out = bmin + blend * (out - bmin);
             }
          }
@@ -207,15 +207,15 @@ shader_evaluate
             float blend = AiShaderEvalParamFlt(p_blend);
             if (blend > 0.0f)
             {
-               AtColor bmax = AiShaderEvalParamRGB(p_blend_max);
+               AtRGB bmax = AiShaderEvalParamRGB(p_blend_max);
                out = out + blend * (bmax - out);
             }
          }
          break;
       case BM_field_as_blender:
          {
-            AtColor bmin = AiShaderEvalParamRGB(p_blend_min);
-            AtColor bmax = AiShaderEvalParamRGB(p_blend_max);
+            AtRGB bmin = AiShaderEvalParamRGB(p_blend_min);
+            AtRGB bmax = AiShaderEvalParamRGB(p_blend_max);
             out.r = bmin.r + out.r * (bmax.r - bmin.r);
             out.g = bmin.g + out.g * (bmax.g - bmin.g);
             out.b = bmin.b + out.b * (bmax.b - bmin.b);
@@ -225,12 +225,12 @@ shader_evaluate
       }
       
       // Gain/Bias
-      out.r = GAIN(BIAS(out.r, data->bias), data->gain);
-      out.g = GAIN(BIAS(out.g, data->bias), data->gain);
-      out.b = GAIN(BIAS(out.b, data->bias), data->gain);
+      out.r = AiGain(AiBias(out.r, data->bias), data->gain);
+      out.g = AiGain(AiBias(out.g, data->bias), data->gain);
+      out.b = AiGain(AiBias(out.b, data->bias), data->gain);
       
       // Post mult/add
-      sg->out.RGB = data->postAdd + data->postMult * out;
+      sg->out.RGB() = data->postAdd + data->postMult * out;
    }
 
    sg->P = oldP;

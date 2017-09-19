@@ -57,5 +57,5 @@ shader_evaluate
    float g = AiShaderEvalParamFlt(p_g);
    float eta = AiShaderEvalParamFlt(p_eta);
    
-   sg->out.RGB = AiSSSTraceSingleScatter(sg, Rd, mfp, g, eta);
+   sg->out.RGB() = AiSSSTraceSingleScatter(sg, Rd, mfp, g, eta);
 }

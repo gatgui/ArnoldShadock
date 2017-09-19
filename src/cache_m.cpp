@@ -56,9 +56,9 @@ shader_evaluate
 {
    MatrixCache *cache = (MatrixCache*) AiNodeGetLocalData(node);
    
-   if (!GetCacheValue(sg, cache, sg->out.pMTX))
+   if (!GetCacheValue(sg, cache, sg->out.pMTX()))
    {
-      sg->out.pMTX = AiShaderEvalParamMtx(p_input);
-      SetCacheValue(sg, cache, sg->out.pMTX);
+      sg->out.pMTX() = AiShaderEvalParamMtx(p_input);
+      SetCacheValue(sg, cache, sg->out.pMTX());
    }
 }

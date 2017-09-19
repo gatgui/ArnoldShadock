@@ -48,5 +48,5 @@ shader_evaluate
 {
    AtRay *ray = 0;
    
-   sg->out.BOOL = (AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) && ray != 0);
+   sg->out.BOOL() = (AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) && ray != 0);
 }

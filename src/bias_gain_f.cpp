@@ -54,5 +54,5 @@ shader_evaluate
    float bias = AiShaderEvalParamFlt(p_bias);
    float gain = AiShaderEvalParamFlt(p_gain);
    
-   sg->out.FLT = GAIN(BIAS(input, bias), gain);
+   sg->out.FLT() = AiGain(AiBias(input, bias), gain);
 }

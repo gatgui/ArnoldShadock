@@ -62,43 +62,43 @@ shader_evaluate
    
    if (!AiStateGetMsgPtr(SSTR::agsb_sampler, (void**)&sampler) || !sampler)
    {
-      sg->out.RGB = AI_RGB_BLACK;
+      sg->out.RGB() = AI_RGB_BLACK;
    }
    else
    {
-      AtPoint2 sample;
+      AtVector2 sample;
       
       CombineMode combine = (CombineMode) *((int*) AiNodeGetLocalData(node));
       
-      sg->out.FLT = 0.0f;
+      sg->out.FLT() = 0.0f;
       
       AtSamplerIterator *it = AiSamplerIterator(sampler, sg);
       
       while (AiSamplerGetSample(it, &(sample.x)))
       {
-         AiStateSetMsgPnt2(SSTR::agsb_sample_value, sample);
+         AiStateSetMsgVec2(SSTR::agsb_sample_value, sample);
          
          float input = AiShaderEvalParamFlt(p_input);
          
          switch (combine)
          {
          case CM_Max:
-            sg->out.FLT = MAX(input, sg->out.FLT);
+            sg->out.FLT() = AiMax(input, sg->out.FLT());
             break;
          case CM_Min:
-            sg->out.FLT = MIN(input, sg->out.FLT);
+            sg->out.FLT() = AiMin(input, sg->out.FLT());
             break;
          case CM_Add:
          case CM_Avg:
          default:
-            sg->out.FLT += input;
+            sg->out.FLT() += input;
             break;
          }
       }
       
       if (combine == CM_Avg)
       {
-         sg->out.FLT *= AiSamplerGetSampleInvCount(it);
+         sg->out.FLT() *= AiSamplerGetSampleInvCount(it);
       }
    }
 }

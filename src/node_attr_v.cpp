@@ -78,9 +78,10 @@ shader_evaluate
 {
    NodeAttrVData *data = (NodeAttrVData*) AiNodeGetLocalData(node);
    
-   sg->out.VEC = AI_V3_ZERO;
+   sg->out.VEC() = AI_V3_ZERO;
    
    AtNode *src = NULL;
+   AtLightSample ls;
    
    switch (data->target)
    {
@@ -93,7 +94,8 @@ shader_evaluate
    case NAT_light:
       if (data->light_index < 0)
       {
-         src = sg->Lp;
+         AiLightsGetSample(sg, ls);
+         src = (AtNode *)ls.Lp;
       }
       else if (data->light_index < sg->nlights)
       {
@@ -114,7 +116,7 @@ shader_evaluate
       
    if (!src)
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_default);
+      sg->out.VEC() = AiShaderEvalParamVec(p_default);
    }
    else
    {
@@ -141,14 +143,11 @@ shader_evaluate
       
       switch (type)
       {
-      case AI_TYPE_POINT:
-         sg->out.VEC = AiNodeGetPnt(src, data->attribute);
-         break;
       case AI_TYPE_VECTOR:
-         sg->out.VEC = AiNodeGetVec(src, data->attribute);
+         sg->out.VEC() = AiNodeGetVec(src, data->attribute);
          break;
       default:
-         sg->out.VEC = AiShaderEvalParamVec(p_default);
+         sg->out.VEC() = AiShaderEvalParamVec(p_default);
       }
    }
 }

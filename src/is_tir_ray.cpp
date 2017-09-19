@@ -52,10 +52,10 @@ shader_evaluate
    {
       // Only check agsb_tir if we have a valid ray
       bool tir = false;
-      sg->out.BOOL = (AiStateGetMsgBool(SSTR::agsb_tir, &tir) && tir);
+      sg->out.BOOL() = (AiStateGetMsgBool(SSTR::agsb_tir, &tir) && tir);
    }
    else
    {
-      sg->out.BOOL = false;
+      sg->out.BOOL() = false;
    }
 }

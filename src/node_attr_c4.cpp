@@ -79,6 +79,7 @@ shader_evaluate
    NodeAttrC4Data *data = (NodeAttrC4Data*) AiNodeGetLocalData(node);
    
    AtNode *src = NULL;
+   AtLightSample ls;
    
    switch (data->target)
    {
@@ -91,7 +92,8 @@ shader_evaluate
    case NAT_light:
       if (data->light_index < 0)
       {
-         src = sg->Lp;
+         AiLightsGetSample(sg, ls);
+         src = (AtNode *)ls.Lp;
       }
       else if (data->light_index < sg->nlights)
       {
@@ -112,7 +114,7 @@ shader_evaluate
    
    if (!src)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_default);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_default);
    }
    else
    {
@@ -140,14 +142,14 @@ shader_evaluate
       switch (type)
       {
       case AI_TYPE_RGB:
-         sg->out.RGB = AiNodeGetRGB(src, data->attribute);
-         sg->out.RGBA.a = 1.0f;
+         sg->out.RGB() = AiNodeGetRGB(src, data->attribute);
+         sg->out.RGBA().a = 1.0f;
          break;
       case AI_TYPE_RGBA:
-         sg->out.RGBA = AiNodeGetRGBA(src, data->attribute);
+         sg->out.RGBA() = AiNodeGetRGBA(src, data->attribute);
          break;
       default:
-         sg->out.RGBA = AiShaderEvalParamRGBA(p_default);
+         sg->out.RGBA() = AiShaderEvalParamRGBA(p_default);
       }
    }
 }

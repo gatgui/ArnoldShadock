@@ -77,10 +77,10 @@ shader_evaluate
    if (data->safe)
    {
       AtVector Ng = (data->evalNg ? AiShaderEvalParamVec(p_geometric_normal) : sg->Ng);
-      AiReflectSafe(&D, &N, &Ng, &(sg->out.VEC));
+      sg->out.VEC() = AiReflectSafe(D, N, Ng);
    }
    else
    {
-      AiReflect(&D, &N, &(sg->out.VEC));
+      sg->out.VEC() = AiReflect(D, N);
    }
 }

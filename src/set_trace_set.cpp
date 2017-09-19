@@ -68,7 +68,7 @@ shader_evaluate
    
    AiShaderGlobalsSetTraceSet(sg, data->traceSet, data->inclusive);
    
-   sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+   sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
    
    AiShaderGlobalsUnsetTraceSet(sg);
 }

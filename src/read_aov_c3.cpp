@@ -63,8 +63,8 @@ shader_evaluate
 {
    ReadAOVC3Data *data = (ReadAOVC3Data*) AiNodeGetLocalData(node);
    
-   if (!AiAOVGetRGB(sg, data->aovName, sg->out.RGB))
+   if (!AiAOVGetRGB(sg, data->aovName, sg->out.RGB()))
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_default_value);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_default_value);
    }
 }

@@ -57,11 +57,11 @@ shader_evaluate
    if (AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) && ray)
    {
       AtVector N = AiShaderEvalParamVec(p_normal);
-      AiReflectRay(ray, (AiV3IsZero(N) ? &(sg->N) : &N), sg);
-      sg->out.VEC = ray->dir;
+      AiReflectRay(*ray, (AiV3IsSmall(N) ? sg->N : N), sg);
+      sg->out.VEC() = ray->dir;
    }
    else
    {
-      sg->out.VEC = AI_V3_ZERO;
+      sg->out.VEC() = AI_V3_ZERO;
    }
 }

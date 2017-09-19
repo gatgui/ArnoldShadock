@@ -93,7 +93,7 @@ shader_evaluate
    
    if (!AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) || !ray)
    {
-      sg->out.FLT = AiShaderEvalParamFlt(p_default);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_default);
    }
    else
    {
@@ -102,31 +102,31 @@ shader_evaluate
       switch (data->state)
       {
       case RS_sx:
-         sg->out.FLT = ray->sx;
+         sg->out.FLT() = -1 + (ray->x + ray->px) * (2.0f / AiNodeGetInt(AiUniverseGetOptions(), "xres"));;
          break;
       case RS_sy:
-         sg->out.FLT = ray->sy;
+         sg->out.FLT() = 1 - (ray->y + ray->py) * (2.0f / AiNodeGetInt(AiUniverseGetOptions(), "yres"));;
          break;
       case RS_px:
-         sg->out.FLT = ray->px;
+         sg->out.FLT() = ray->px;
          break;
       case RS_py:
-         sg->out.FLT = ray->py;
+         sg->out.FLT() = ray->py;
          break;
       case RS_mindist:
-         sg->out.FLT = ray->mindist;
+         sg->out.FLT() = ray->mindist;
          break;
       case RS_maxdist:
-         sg->out.FLT =  ray->maxdist;
+         sg->out.FLT() =  ray->maxdist;
          break;
       case RS_weight:
-         sg->out.FLT = ray->weight;
+         sg->out.FLT() = ray->weight.r;
          break;
       case RS_time:
-         sg->out.FLT = ray->time;
+         sg->out.FLT() = ray->time;
          break;
       default:
-         sg->out.FLT = AiShaderEvalParamFlt(p_default);
+         sg->out.FLT() = AiShaderEvalParamFlt(p_default);
          break;
       }
    }

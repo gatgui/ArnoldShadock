@@ -39,11 +39,11 @@ node_parameters
 {
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
    AiParameterEnum(SSTR::order, TO_SRT, TransformOrderNames);
-   AiParameterPnt2(SSTR::scale, 1.0f, 1.0f);
-   AiParameterPnt2(SSTR::scale_pivot, 0.5f, 0.5f);
+   AiParameterVec2(SSTR::scale, 1.0f, 1.0f);
+   AiParameterVec2(SSTR::scale_pivot, 0.5f, 0.5f);
    AiParameterFlt(SSTR::rotation, 0.0f);
-   AiParameterPnt2(SSTR::rotation_pivot, 0.5f, 0.5f);
-   AiParameterPnt2(SSTR::translation, 0.0f, 0.0f);
+   AiParameterVec2(SSTR::rotation_pivot, 0.5f, 0.5f);
+   AiParameterVec2(SSTR::translation, 0.0f, 0.0f);
    AiParameterBool(SSTR::transform_pivots, false);
    AiParameterBool(SSTR::recompute_surface_uv_derivs, false);
 }
@@ -80,17 +80,17 @@ shader_evaluate
 {
    UVTransformData *data = (UVTransformData*) AiNodeGetLocalData(node);
    
-   AtPoint2 uv, dx, dy;
+   AtVector2 uv, dx, dy;
    AtVector dPdx, dPdy;
    float cosA, sinA;
    
    UVData uvs(sg);
    
-   AtPoint2 S = AiShaderEvalParamPnt2(p_scale);
-   AtPoint2 Sp = AiShaderEvalParamPnt2(p_scale_pivot);
+   AtVector2 S = AiShaderEvalParamVec2(p_scale);
+   AtVector2 Sp = AiShaderEvalParamVec2(p_scale_pivot);
    float R = AiShaderEvalParamFlt(p_rotation);
-   AtPoint2 Rp = AiShaderEvalParamPnt2(p_rotation_pivot);
-   AtPoint2 T = AiShaderEvalParamPnt2(p_translation);
+   AtVector2 Rp = AiShaderEvalParamVec2(p_rotation_pivot);
+   AtVector2 T = AiShaderEvalParamVec2(p_translation);
    
    // start by inverting values... we're modifying the uvs, be we visualize the resulting mapped texture
    // feels more natural to manipulate the result
@@ -210,7 +210,7 @@ shader_evaluate
       ComputeSurfaceUVDerivatives(sg, dPdx, dPdy);
    }
    
-   sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+   sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
    
    uvs.restore(sg);
 }

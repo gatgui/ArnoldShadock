@@ -63,16 +63,16 @@ shader_evaluate
    
    if (lower <= value && value <= upper)
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_inside_range);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_inside_range);
    }
    else if (value < lower-falloff || value > upper+falloff)
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_outside_range);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_outside_range);
    }
    else
    {
-      AtColor insideValue = AiShaderEvalParamRGB(p_inside_range);
-      AtColor outsideValue = AiShaderEvalParamRGB(p_outside_range);
+      AtRGB insideValue = AiShaderEvalParamRGB(p_inside_range);
+      AtRGB outsideValue = AiShaderEvalParamRGB(p_outside_range);
       float blend;
       
       if (value <= lower)
@@ -84,6 +84,6 @@ shader_evaluate
          blend = 1.0f - SmoothStep(NormalizeToRange(value, upper, upper+falloff));
       }
       
-      sg->out.RGB = (1.0f - blend) * outsideValue + blend * insideValue;
+      sg->out.RGB() = (1.0f - blend) * outsideValue + blend * insideValue;
    }
 }

@@ -84,12 +84,12 @@ shader_evaluate
    switch (data->mode)
    {
    case SM_DirectDiffuse:
-      sg->out.RGB = AiDirectDiffuse(&N, sg);
+      sg->out.RGB() = AiDirectDiffuse(N, sg);
       break;
    case SM_IndirectDiffuse:
-      sg->out.RGB = AiIndirectDiffuse(&N, sg);
+      sg->out.RGB() = AiIndirectDiffuse(N, sg, AI_RGB_WHITE);
       break;
    default:
-      sg->out.RGB = AI_RGB_BLACK;
+      sg->out.RGB() = AI_RGB_BLACK;
    }
 }

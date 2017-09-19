@@ -183,7 +183,7 @@ shader_evaluate
    
    if (!AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) || !ray)
    {
-      sg->out.BOOL = false;
+      sg->out.BOOL() = false;
    }
    else
    {
@@ -192,17 +192,17 @@ shader_evaluate
       switch (data->type)
       {
       case TT_probe:
-         sg->out.BOOL = AiTraceProbe(ray, (AtShaderGlobals*) hit->ptr);
+         sg->out.BOOL() = AiTraceProbe(*ray, (AtShaderGlobals*) hit->ptr);
          break;
       case TT_background:
-         AiTraceBackground(ray, (AtScrSample*) hit->ptr);
-         sg->out.BOOL = true;
+         AiTraceBackground(*ray, *((AtScrSample*) hit->ptr));
+         sg->out.BOOL() = true;
          break;
       case TT_standard:
       default:
-         sg->out.BOOL = AiTrace(ray, (AtScrSample*) hit->ptr);
+         sg->out.BOOL() = AiTrace(*ray, AI_RGB_WHITE, *((AtScrSample*) hit->ptr));
       }
    }
    
-   AiStateSetMsgPtr(SSTR::agsb_trace_hit, (sg->out.BOOL ? hit : 0));
+   AiStateSetMsgPtr(SSTR::agsb_trace_hit, (sg->out.BOOL() ? hit : 0));
 }

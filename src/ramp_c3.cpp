@@ -114,11 +114,11 @@ node_update
    data->interpolations = AiNodeGetArray(node, SSTR::interpolations);
    data->evalInterpolations = AiNodeIsLinked(node, SSTR::interpolations);
    
-   if (data->positions->nelements > 0 ||
-       data->positions->nelements == data->values->nelements ||
-       data->positions->nelements == data->interpolations->nelements)
+   if (AiArrayGetNumElements(data->positions) > 0 ||
+       AiArrayGetNumElements(data->positions) == AiArrayGetNumElements(data->values) ||
+       AiArrayGetNumElements(data->positions) == AiArrayGetNumElements(data->interpolations))
    {
-      data->nkeys = data->positions->nelements;
+      data->nkeys = AiArrayGetNumElements(data->positions);
       
       data->nshuffles = (data->evalPositions ? GetRenderThreadsCount() : 1);
       data->shuffles = (unsigned int **) AiMalloc(data->nshuffles * sizeof(unsigned int*));
@@ -161,7 +161,7 @@ shader_evaluate
    
    if (!data->valid)
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_default_value);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_default_value);
       return;
    }
    
@@ -169,10 +169,10 @@ shader_evaluate
    AtArray *v = (data->evalValues ? AiShaderEvalParamArray(p_values) : data->values);
    AtArray *i = (data->evalInterpolations ? AiShaderEvalParamArray(p_interpolations) : data->interpolations);
    
-   if (v->nelements != data->nkeys || p->nelements != data->nkeys || i->nelements != data->nkeys)
+   if (AiArrayGetNumElements(v) != data->nkeys || AiArrayGetNumElements(p) != data->nkeys || AiArrayGetNumElements(i) != data->nkeys)
    {
       AiMsgWarning("[ramp_color] Array size mismatch");
-      sg->out.RGB = AiShaderEvalParamFlt(p_default_value);
+      sg->out.RGB() = AiShaderEvalParamFlt(p_default_value);
    }
    else
    {
@@ -185,6 +185,6 @@ shader_evaluate
          SortRampPositions(p, data->shuffles[si]);
       }
       
-      ColorRamp(p, v, i, RI_Linear, data->shuffles[si], input, sg->out.RGB);
+      ColorRamp(p, v, i, RI_Linear, data->shuffles[si], input, sg->out.RGB());
    }
 }

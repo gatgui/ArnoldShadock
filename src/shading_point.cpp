@@ -46,8 +46,7 @@ static const char* ShadingPointSpaceNames[] =
 
 node_parameters
 {
-   AtMatrix id;
-   AiM4Identity(id);
+   AtMatrix id = AiM4Identity();
    
    AiParameterFlt(SSTR::time, 0.0f);
    AiParameterEnum(SSTR::space, SPS_World, ShadingPointSpaceNames);
@@ -88,9 +87,9 @@ node_update
    {
       // custom space -> world matrix
       AtMatrix tmp;
-      AiNodeGetMatrix(node, SSTR::custom_space, tmp);
+      tmp = AiNodeGetMatrix(node, SSTR::custom_space);
       // world -> custom space matrix
-      AiM4Invert(data->customSpace, tmp);
+      data->customSpace = AiM4Invert(tmp);
    }
 }
 
@@ -105,14 +104,14 @@ shader_evaluate
 {
    ShadingPointData *data = (ShadingPointData*) AiNodeGetLocalData(node);
    
-   AtPoint outP;
+   AtVector outP;
    
-   AiShaderGlobalsGetPositionAtTime(sg, (data->evalTime ? AiShaderEvalParamFlt(p_time) : data->time), &outP, 0, 0, 0);
+   AiShaderGlobalsGetPositionAtTime(sg, (data->evalTime ? AiShaderEvalParamFlt(p_time) : data->time), outP, 0, 0, 0);
    
    switch (data->space)
    {
    case SPS_Object:
-      sg->out.PNT = AiShaderGlobalsTransformPoint(sg, outP, AI_WORLD_TO_OBJECT);
+      sg->out.VEC() = AiShaderGlobalsTransformPoint(sg, outP, AI_WORLD_TO_OBJECT);
       break;
       
    case SPS_Custom:
@@ -122,21 +121,20 @@ shader_evaluate
             // custom space -> world matrix
             AtMatrix *tmp = AiShaderEvalParamMtx(p_custom_space);
             // world -> custom space matrix
-            AtMatrix customSpace;
-            AiM4Invert(customSpace, *tmp);
+            AtMatrix customSpace = AiM4Invert(*tmp);
             
-            AiM4PointByMatrixMult(&(sg->out.PNT), customSpace, &outP);
+            sg->out.VEC() = AiM4PointByMatrixMult(customSpace, outP);
          }
          else
          {
-            AiM4PointByMatrixMult(&(sg->out.PNT), data->customSpace, &outP);
+            sg->out.VEC() = AiM4PointByMatrixMult(data->customSpace, outP);
          }
       }
       break;
       
    case SPS_World:
    default:
-      sg->out.PNT = outP;
+      sg->out.VEC() = outP;
       break;
    }
 }

@@ -68,7 +68,6 @@ enum UVMode
    UV_triplanar,
    UV_perspective,
    UV_angular_map,
-   UV_cubic_map,
    UV_lat_long,
    UV_mirrored_ball
 };
@@ -79,7 +78,6 @@ static const char* UVModeNames[] =
    "triplanar",
    "perspective",
    "angular_map",
-   "cubic_map",
    "lat_long",
    "mirrored_ball",
    NULL
@@ -89,14 +87,12 @@ static const char* UVModeNames[] =
 
 node_parameters
 {
-   AtMatrix id;
-   
-   AiM4Identity(id);
+   AtMatrix id = AiM4Identity();
    
    AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
    AiParameterEnum(SSTR::lookup_vector, LV_N, LookupVectorNames);
    AiParameterEnum(SSTR::lookup_vector_space, LVS_world, LookupVectorSpaceNames);
-   AiParameterEnum(SSTR::mode, UV_cubic_map, UVModeNames);
+   AiParameterEnum(SSTR::mode, UV_lat_long, UVModeNames);
    AiParameterVec(SSTR::custom_vector, 0.0f, 0.0f, 1.0f);
    AiParameterBool(SSTR::custom_is_point, false);
    AiParameterVec("custom_vector_ddx", 0.0f, 0.0f, 0.0f);
@@ -162,21 +158,20 @@ shader_evaluate
    if (data->useCustomVector)
    {
       v0 = AiShaderEvalParamVec(p_custom_vector);
-      AiV4Create(d, v0.x, v0.y, v0.y, (data->customIsPoint ? 1.0f : 0.0f));
+      d = AtHPoint(v0, (data->customIsPoint ? 1.0f : 0.0f));
       
       v1 = AiShaderEvalParamVec(p_custom_vector_ddx);
       
       v2 = AiShaderEvalParamVec(p_custom_vector_ddy);
       
-      if (!AiV3IsZero(v1) && !AiV3IsZero(v2))
+      if (!AiV3IsSmall(v1) && !AiV3IsSmall(v2))
       {
          withDerivatives = true;
-         
-         AiV4Create(ddx, d.x + v1.x, d.y + v1.y, d.z + v1.z, d.w);
-         AiV4Create(ddy, d.x + v2.x, d.y + v2.y, d.z + v2.z, d.w);
+         ddx = AtHPoint(v0 + v1, d.w);
+         ddy = AtHPoint(v0 + v2, d.w);
       }
-      
-      AiM4Copy(M, *Moff);
+
+      M = *Moff;
    }
    else
    {
@@ -185,32 +180,32 @@ shader_evaluate
       if (data->lookupVector == LV_P)
       {
          AiV4CreatePoint(d, sg->P);
-         AiV4Create(ddx, sg->P.x + sg->dPdx.x, sg->P.y + sg->dPdx.y, sg->P.z + sg->dPdx.z, 1.0f);
-         AiV4Create(ddy, sg->P.x + sg->dPdy.x, sg->P.y + sg->dPdy.y, sg->P.z + sg->dPdy.z, 1.0f);
+         ddx = AtHPoint(sg->P.x + sg->dPdx.x, sg->P.y + sg->dPdx.y, sg->P.z + sg->dPdx.z, 1.0f);
+         ddy = AtHPoint(sg->P.x + sg->dPdy.x, sg->P.y + sg->dPdy.y, sg->P.z + sg->dPdy.z, 1.0f);
       }
       else
       {
          AiV4CreateVector(d, sg->N);
-         AiV4Create(ddx, sg->N.x + sg->dNdx.x, sg->N.y + sg->dNdx.y, sg->N.z + sg->dNdx.z, 0.0f);
-         AiV4Create(ddy, sg->N.x + sg->dNdy.x, sg->N.y + sg->dNdy.y, sg->N.z + sg->dNdy.z, 0.0f);
+         ddx = AtHPoint(sg->N.x + sg->dNdx.x, sg->N.y + sg->dNdx.y, sg->N.z + sg->dNdx.z, 0.0f);
+         ddy = AtHPoint(sg->N.x + sg->dNdy.x, sg->N.y + sg->dNdy.y, sg->N.z + sg->dNdy.z, 0.0f);
          withDerivatives = false;
       }
       
       if (data->space == LVS_object)
       {
-         AiM4Mult(M, sg->Minv, *Moff);
+         M = AiM4Mult(sg->Minv, *Moff);
       }
       else
       {
-         AiM4Copy(M, *Moff);
+         M = *Moff;
       }
    }
    
-   AiM4HPointByMatrixMult(&h, M, &d);
+   h = AiM4HPointByMatrixMult(M, d);
    d = h;
-   AiM4HPointByMatrixMult(&h, M, &ddx);
+   h = AiM4HPointByMatrixMult(M, ddx);
    ddx = h;
-   AiM4HPointByMatrixMult(&h, M, &ddy);
+   h = AiM4HPointByMatrixMult(M, ddy);
    ddy = h;
    
    switch (data->mode)
@@ -293,63 +288,48 @@ shader_evaluate
       }
       break;
    case UV_angular_map:
-      AiV3Create(v0, d.x, d.y, d.z);
+      v0 = AtVector(d.x, d.y, d.z);
       if (withDerivatives)
       {
-         AiV3Create(v1, ddx.x, ddx.y, ddx.z);
-         AiV3Create(v2, ddy.x, ddy.y, ddy.z);
+         v1 = AtVector(ddx.x, ddx.y, ddx.z);
+         v2 = AtVector(ddy.x, ddy.y, ddy.z);
          v1 -= v0;
          v2 -= v0;
-         AiMappingAngularMapDerivs(&v0, &v1, &v2, &(sg->u), &(sg->v), &(sg->dudx), &(sg->dudy), &(sg->dvdx), &(sg->dvdy));
+         AiMappingAngularMapDerivs(v0, v1, v2, sg->u, sg->v, sg->dudx, sg->dudy, sg->dvdx, sg->dvdy);
       }
       else
       {
-         AiMappingAngularMap(&v0, &(sg->u), &(sg->v));
-      }
-      break;
-   case UV_cubic_map:
-      AiV3Create(v0, d.x, d.y, d.z);
-      if (withDerivatives)
-      {
-         AiV3Create(v1, ddx.x, ddx.y, ddx.z);
-         AiV3Create(v2, ddy.x, ddy.y, ddy.z);
-         v1 -= v0;
-         v2 -= v0;
-         AiMappingCubicMapDerivs(&v0, &v1, &v2, &(sg->u), &(sg->v), &(sg->dudx), &(sg->dudy), &(sg->dvdx), &(sg->dvdy));
-      }
-      else
-      {
-         AiMappingCubicMap(&v0, &(sg->u), &(sg->v));
+         AiMappingAngularMap(v0, sg->u, sg->v);
       }
       break;
    case UV_lat_long:
-      AiV3Create(v0, d.x, d.y, d.z);
+      v0 = AtVector(d.x, d.y, d.z);
       if (withDerivatives)
       {
-         AiV3Create(v1, ddx.x, ddx.y, ddx.z);
-         AiV3Create(v2, ddy.x, ddy.y, ddy.z);
+         v1 = AtVector(ddx.x, ddx.y, ddx.z);
+         v2 = AtVector(ddy.x, ddy.y, ddy.z);
          v1 -= v0;
          v2 -= v0;
-         AiMappingLatLongDerivs(&v0, &v1, &v2, &(sg->u), &(sg->v), &(sg->dudx), &(sg->dudy), &(sg->dvdx), &(sg->dvdy));
+         AiMappingLatLongDerivs(v0, v1, v2, sg->u, sg->v, sg->dudx, sg->dudy, sg->dvdx, sg->dvdy);
       }
       else
       {
-         AiMappingLatLong(&v0, &(sg->u), &(sg->v));
+         AiMappingLatLong(v0, sg->u, sg->v);
       }
       break;
    case UV_mirrored_ball:
-      AiV3Create(v0, d.x, d.y, d.z);
+      v0 = AtVector(d.x, d.y, d.z);
       if (withDerivatives)
       {
-         AiV3Create(v1, ddx.x, ddx.y, ddx.z);
-         AiV3Create(v2, ddy.x, ddy.y, ddy.z);
+         v1 = AtVector(ddx.x, ddx.y, ddx.z);
+         v2 = AtVector(ddy.x, ddy.y, ddy.z);
          v1 -= v0;
          v2 -= v0;
-         AiMappingMirroredBallDerivs(&v0, &v1, &v2, &(sg->u), &(sg->v), &(sg->dudx), &(sg->dudy), &(sg->dvdx), &(sg->dvdy));
+         AiMappingMirroredBallDerivs(v0, v1, v2, sg->u, sg->v, sg->dudx, sg->dudy, sg->dvdx, sg->dvdy);
       }
       else
       {
-         AiMappingMirroredBall(&v0, &(sg->u), &(sg->v));
+         AiMappingMirroredBall(v0, sg->u, sg->v);
       }
       break;
    default:
@@ -369,7 +349,7 @@ shader_evaluate
       ComputeSurfaceUVDerivatives(sg, dPdx, dPdy);
    }
    
-   sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+   sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
    
    uvs.restore(sg);
 }

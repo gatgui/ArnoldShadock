@@ -32,11 +32,12 @@ enum RayStateIParams
 enum RayState
 {
    RS_type = 0,
-   RS_level,
-   RS_diff_bounces,
-   RS_gloss_bounces,
-   RS_refl_bounces,
-   RS_refr_bounces,
+   RS_bounces,
+   RS_bounces_diffuse,
+   RS_bounces_specular,
+   RS_bounces_reflect,
+   RS_bounces_transmit,
+   RS_bounces_volume,
    RS_x,
    RS_y
 };
@@ -44,11 +45,12 @@ enum RayState
 static const char* RayStateNames[] =
 {
    "type",
-   "level",
-   "diff_bounces",
-   "gloss_bounces",
-   "refl_bounces",
-   "refr_bounces",
+   "bounces",
+   "bounces_diffuse",
+   "bounces_specular",
+   "bounces_reflect",
+   "bounces_transmit",
+   "bounces_volume",
    "x",
    "y",
    NULL
@@ -93,40 +95,43 @@ shader_evaluate
    
    if (!AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) || !ray)
    {
-      sg->out.INT = AiShaderEvalParamInt(p_default);
+      sg->out.INT() = AiShaderEvalParamInt(p_default);
    }
    else
    {
       RayStateIData *data = (RayStateIData*) AiNodeGetLocalData(node);
-      
+
       switch (data->state)
       {
       case RS_type:
-         sg->out.INT = ray->type;
+         sg->out.INT() = ray->type;
          break;
-      case RS_level:
-         sg->out.INT = ray->level;
+      case RS_bounces:
+         sg->out.INT() = ray->bounces;
          break;
-      case RS_diff_bounces:
-         sg->out.INT = ray->diff_bounces;
+      case RS_bounces_diffuse:
+         sg->out.INT() = ray->bounces_diffuse;
          break;
-      case RS_gloss_bounces:
-         sg->out.INT = ray->gloss_bounces;
+      case RS_bounces_specular:
+         sg->out.INT() = ray->bounces_specular;
          break;
-      case RS_refl_bounces:
-         sg->out.INT = ray->refl_bounces;
+      case RS_bounces_reflect:
+         sg->out.INT() = ray->bounces_reflect;
          break;
-      case RS_refr_bounces:
-         sg->out.INT =  ray->refr_bounces;
+      case RS_bounces_transmit:
+         sg->out.INT() =  ray->bounces_transmit;
+         break;
+      case RS_bounces_volume:
+         sg->out.INT() =  ray->bounces_volume;
          break;
       case RS_x:
-         sg->out.INT = ray->x;
+         sg->out.INT() = ray->x;
          break;
       case RS_y:
-         sg->out.INT = ray->y;
+         sg->out.INT() = ray->y;
          break;
       default:
-         sg->out.INT = AiShaderEvalParamInt(p_default);
+         sg->out.INT() = AiShaderEvalParamInt(p_default);
          break;
       }
    }

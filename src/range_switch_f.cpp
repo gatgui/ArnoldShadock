@@ -60,10 +60,10 @@ shader_evaluate
    
    if (lower <= value && value <= upper)
    {
-      sg->out.FLT = AiShaderEvalParamFlt(p_inside_range);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_inside_range);
    }
    else
    {
-      sg->out.FLT = AiShaderEvalParamFlt(p_outside_range);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_outside_range);
    }
 }

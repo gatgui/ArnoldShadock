@@ -52,12 +52,12 @@ shader_evaluate
    
    if (MaxComponent<3>(&(opacity.r)) <= AI_EPSILON)
    {
-      sg->out.RGB = AI_RGB_BLACK;
+      sg->out.RGB() = AI_RGB_BLACK;
       sg->out_opacity = AI_RGB_BLACK;
    }
    else
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_color);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_color);
       sg->out_opacity = opacity;
    }
 }

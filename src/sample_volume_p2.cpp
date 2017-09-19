@@ -59,20 +59,20 @@ node_parameters
 {
    AiParameterStr(SSTR::field, "");
    AiParameterEnum(SSTR::interpolation, VI_linear, VolumeInterpNames);
-   AiParameterPnt(SSTR::P, 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::P, 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::P_space, S_world, SpaceNames);
    AiParameterBool(SSTR::P_is_offset, true);
-   AiParameterPnt2(SSTR::pre_multiply, 1.0f, 1.0f);
-   AiParameterPnt2(SSTR::pre_offset, 0.0f, 0.0f);
+   AiParameterVec2(SSTR::pre_multiply, 1.0f, 1.0f);
+   AiParameterVec2(SSTR::pre_offset, 0.0f, 0.0f);
    AiParameterEnum(SSTR::blend_mode, BM_none, BlendModeNames);
    AiParameterFlt(SSTR::blend, 1.0f);
-   AiParameterPnt2(SSTR::blend_min, 0.0f, 0.0f);
-   AiParameterPnt2(SSTR::blend_max, 1.0f, 1.0f);
+   AiParameterVec2(SSTR::blend_min, 0.0f, 0.0f);
+   AiParameterVec2(SSTR::blend_max, 1.0f, 1.0f);
    AiParameterFlt(SSTR::bias, 0.5f);
    AiParameterFlt(SSTR::gain, 0.5f);
-   AiParameterPnt2(SSTR::multiply, 1.0f, 1.0f);
-   AiParameterPnt2(SSTR::offset, 0.0f, 0.0f);
-   AiParameterPnt2(SSTR::_default, 0.0f, 0.0f);
+   AiParameterVec2(SSTR::multiply, 1.0f, 1.0f);
+   AiParameterVec2(SSTR::offset, 0.0f, 0.0f);
+   AiParameterVec2(SSTR::_default, 0.0f, 0.0f);
 }
 
 struct SampleVolumeP2Data
@@ -81,18 +81,18 @@ struct SampleVolumeP2Data
    int interpolation;
    bool evalP;
    bool ignoreP;
-   AtPoint P;
+   AtVector P;
    Space space;
    bool isOffset;
    bool evalDefault;
-   AtPoint2 _default;
+   AtVector2 _default;
    float bias;
    float gain;
-   AtPoint2 preMult;
-   AtPoint2 preAdd;
+   AtVector2 preMult;
+   AtVector2 preAdd;
    BlendMode blendMode;
-   AtPoint2 postMult;
-   AtPoint2 postAdd;
+   AtVector2 postMult;
+   AtVector2 postAdd;
 };
 
 node_initialize
@@ -110,22 +110,22 @@ node_update
    data->evalDefault = AiNodeIsLinked(node, SSTR::_default);
    if (!data->evalDefault)
    {
-      data->_default = AiNodeGetPnt2(node, SSTR::_default);
+      data->_default = AiNodeGetVec2(node, SSTR::_default);
    }
-   data->preMult = AiNodeGetPnt2(node, SSTR::pre_multiply);
-   data->preAdd = AiNodeGetPnt2(node, SSTR::pre_offset);
+   data->preMult = AiNodeGetVec2(node, SSTR::pre_multiply);
+   data->preAdd = AiNodeGetVec2(node, SSTR::pre_offset);
    data->blendMode = (BlendMode) AiNodeGetInt(node, SSTR::blend_mode);
    data->bias = AiNodeGetFlt(node, SSTR::bias);
    data->gain = AiNodeGetFlt(node, SSTR::gain);
-   data->postMult = AiNodeGetPnt2(node, SSTR::multiply);
-   data->postAdd = AiNodeGetPnt2(node, SSTR::offset);
+   data->postMult = AiNodeGetVec2(node, SSTR::multiply);
+   data->postAdd = AiNodeGetVec2(node, SSTR::offset);
    data->space = (Space) AiNodeGetInt(node, SSTR::P_space);
    data->isOffset = AiNodeGetBool(node, SSTR::P_is_offset);
    data->evalP = AiNodeIsLinked(node, SSTR::P);
    if (!data->evalP)
    {
-      data->P = AiNodeGetPnt(node, SSTR::P);
-      data->ignoreP = (data->isOffset && AiV3IsZero(data->P));
+      data->P = AiNodeGetVec(node, SSTR::P);
+      data->ignoreP = (data->isOffset && AiV3IsSmall(data->P));
    }
    else
    {
@@ -144,18 +144,18 @@ shader_evaluate
 {
    SampleVolumeP2Data *data = (SampleVolumeP2Data*) AiNodeGetLocalData(node);
    
-   AtPoint oldP = sg->P;
-   AtPoint oldPo = sg->Po;
+   AtVector oldP = sg->P;
+   AtVector oldPo = sg->Po;
    
    if (!data->ignoreP)
    {
-      AtPoint P;
+      AtVector P;
       bool updateP = true;
       
       if (data->evalP)
       {
-         P = AiShaderEvalParamPnt(p_P);
-         updateP = (!data->isOffset || !AiV3IsZero(P));
+         P = AiShaderEvalParamVec(p_P);
+         updateP = (!data->isOffset || !AiV3IsSmall(P));
       }
       else
       {
@@ -168,21 +168,21 @@ shader_evaluate
          {
          case S_object:
             sg->Po = (data->isOffset ? (sg->Po + P) : P);
-            AiM4PointByMatrixMult(&(sg->P), sg->M, &(sg->Po));
+            sg->P = AiM4PointByMatrixMult(sg->M, sg->Po);
             break;
          case S_world:
          default:
             sg->P = (data->isOffset ? (sg->P + P) : P);
-            AiM4PointByMatrixMult(&(sg->Po), sg->Minv, &(sg->P));
+            sg->Po = AiM4PointByMatrixMult(sg->Minv, sg->P);
          }
       }
    }
 
-   AtPoint2 out = AI_P2_ZERO;
+   AtVector2 out = AI_P2_ZERO;
 
-   if (!AiVolumeSamplePnt2(data->field, data->interpolation, &out))
+   if (!AiVolumeSampleVec2(data->field, data->interpolation, &out))
    {
-      sg->out.PNT2 = (data->evalDefault ? AiShaderEvalParamPnt2(p_default) : data->_default);
+      sg->out.VEC2() = (data->evalDefault ? AiShaderEvalParamVec2(p_default) : data->_default);
    }
    else
    {
@@ -197,7 +197,7 @@ shader_evaluate
             float blend = AiShaderEvalParamFlt(p_blend);
             if (blend < 1.0f)
             {
-               AtPoint2 bmin = AiShaderEvalParamPnt2(p_blend_min);
+               AtVector2 bmin = AiShaderEvalParamVec2(p_blend_min);
                out = bmin + blend * (out - bmin);
             }
          }
@@ -207,15 +207,15 @@ shader_evaluate
             float blend = AiShaderEvalParamFlt(p_blend);
             if (blend > 0.0f)
             {
-               AtPoint2 bmax = AiShaderEvalParamPnt2(p_blend_max);
+               AtVector2 bmax = AiShaderEvalParamVec2(p_blend_max);
                out = out + blend * (bmax - out);
             }
          }
          break;
       case BM_field_as_blender:
          {
-            AtPoint2 bmin = AiShaderEvalParamPnt2(p_blend_min);
-            AtPoint2 bmax = AiShaderEvalParamPnt2(p_blend_max);
+            AtVector2 bmin = AiShaderEvalParamVec2(p_blend_min);
+            AtVector2 bmax = AiShaderEvalParamVec2(p_blend_max);
             out.x = bmin.x + out.x * (bmax.x - bmin.x);
             out.y = bmin.y + out.y * (bmax.y - bmin.y);
          }
@@ -224,11 +224,11 @@ shader_evaluate
       }
       
       // Gain/Bias
-      out.x = GAIN(BIAS(out.x, data->bias), data->gain);
-      out.y = GAIN(BIAS(out.y, data->bias), data->gain);
+      out.x = AiGain(AiBias(out.x, data->bias), data->gain);
+      out.y = AiGain(AiBias(out.y, data->bias), data->gain);
       
       // Post mult/add
-      sg->out.PNT2 = data->postAdd + data->postMult * out;
+      sg->out.VEC2() = data->postAdd + data->postMult * out;
    }
 
    sg->P = oldP;

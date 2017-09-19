@@ -484,17 +484,17 @@ static bool MakeTx(MakeTxData *data, const char *inFilename, const char *outFile
 
 node_parameters
 {
-   AiParameterSTR(SSTR::filename, "");
-   AiParameterENUM(SSTR::format, Format_input, MakeTxFormatNames);
-   AiParameterENUM(SSTR::wraps, Wrap_default, MakeTxWrapNames);
-   AiParameterENUM(SSTR::wrapt, Wrap_s, MakeTxWrapNames);
-   AiParameterINT(SSTR::tile, 0);
-   AiParameterBOOL(SSTR::resize, false);
-   AiParameterBOOL(SSTR::mipmap, true);
-   AiParameterENUM(SSTR::filter, Filter_box, MakeTxFilterNames);
-   AiParameterBOOL(SSTR::stripxmp, false);
-   AiParameterBOOL(SSTR::oiioopt, true);
-   AiParameterENUM(SSTR::mode, Mode_if_newer, MakeTxModeNames);
+   AiParameterStr(SSTR::filename, "");
+   AiParameterEnum(SSTR::format, Format_input, MakeTxFormatNames);
+   AiParameterEnum(SSTR::wraps, Wrap_default, MakeTxWrapNames);
+   AiParameterEnum(SSTR::wrapt, Wrap_s, MakeTxWrapNames);
+   AiParameterInt(SSTR::tile, 0);
+   AiParameterBool(SSTR::resize, false);
+   AiParameterBool(SSTR::mipmap, true);
+   AiParameterEnum(SSTR::filter, Filter_box, MakeTxFilterNames);
+   AiParameterBool(SSTR::stripxmp, false);
+   AiParameterBool(SSTR::oiioopt, true);
+   AiParameterEnum(SSTR::mode, Mode_if_newer, MakeTxModeNames);
 }
 
 node_initialize
@@ -626,16 +626,16 @@ shader_evaluate
          
          AiCritSecLeave(&(data->mutex));
          
-         sg->out.STR = (success ? data->txFilenames[sg->tid] : inFilename);
+         sg->out.STR() = (AtString)(success ? data->txFilenames[sg->tid] : inFilename);
       }
       else
       {
          //AiMsgInfo("[make_tx] %s: Disabled", AiNodeGetName(node));
-         sg->out.STR = inFilename;
+         sg->out.STR() = (AtString)inFilename;
       }
    }
    else
    {
-      sg->out.STR = data->txFilenames[0];
+      sg->out.STR() = (AtString)data->txFilenames[0];
    }
 }

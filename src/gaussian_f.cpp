@@ -62,5 +62,5 @@ shader_evaluate
    
    float tmp = input - center;
    
-   sg->out.FLT = offset + amplitude * expf(-(tmp * tmp) / (2.0f * width * width));
+   sg->out.FLT() = offset + amplitude * expf(-(tmp * tmp) / (2.0f * width * width));
 }

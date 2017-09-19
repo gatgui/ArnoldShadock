@@ -32,7 +32,7 @@ enum ShapeAttrP2Params
 node_parameters
 {
    AiParameterStr(SSTR::attribute, "");
-   AiParameterPnt2(SSTR::_default, 0.0f, 0.0f);
+   AiParameterVec2(SSTR::_default, 0.0f, 0.0f);
    AiParameterEnum(SSTR::output_mode, AM_V, AttributeModeNames);
 }
 
@@ -66,26 +66,26 @@ shader_evaluate
 {
    ShapeAttrP2Data *data = (ShapeAttrP2Data*) AiNodeGetLocalData(node);
    
-   sg->out.PNT2 = AI_P2_ZERO;
+   sg->out.VEC2() = AI_P2_ZERO;
    
    if (data->output_mode == AM_V)
    {
-      if (!AiUDataGetPnt2(data->attribute, &(sg->out.PNT2)))
+      if (!AiUDataGetVec2(data->attribute, sg->out.VEC2()))
       {
-         sg->out.PNT2 = AiShaderEvalParamPnt2(p_default);
+         sg->out.VEC2() = AiShaderEvalParamVec2(p_default);
       }
    }
    else
    {
-      AtPoint2 dVdx, dVdy;
+      AtVector2 dVdx, dVdy;
       
-      if (!AiUDataGetDxyDerivativesPnt2(data->attribute, &dVdx, &dVdx))
+      if (!AiUDataGetDxyDerivativesVec2(data->attribute, dVdx, dVdx))
       {
-         sg->out.PNT2 = AiShaderEvalParamPnt2(p_default);
+         sg->out.VEC2() = AiShaderEvalParamVec2(p_default);
       }
       else
       {
-         sg->out.PNT2 = (data->output_mode == AM_dVdx ? dVdx : dVdy);
+         sg->out.VEC2() = (data->output_mode == AM_dVdx ? dVdx : dVdy);
       }
    }
 }

@@ -52,11 +52,12 @@ node_update
    
    if (AiNodeGetBool(node, SSTR::seeded))
    {
-      sampler = AiSamplerSeeded(AiNodeGetInt(node, SSTR::seed), AiNodeGetInt(node, SSTR::samples), 2);
+      sampler = AiSampler(AiNodeGetInt(node, SSTR::seed), AiNodeGetInt(node, SSTR::samples), 2);
    }
    else
    {
-      sampler = AiSampler(AiNodeGetInt(node, SSTR::samples), 2);
+      static const uint32_t seed = static_cast<uint32_t>(AiNodeEntryGetNameAtString(AiNodeGetNodeEntry(node)).hash());
+      sampler = AiSampler(seed, AiNodeGetInt(node, SSTR::samples), 2);
    }
    
    AiNodeSetLocalData(node, sampler);
@@ -75,5 +76,5 @@ node_finish
 shader_evaluate
 {
    AiStateSetMsgPtr(SSTR::agsb_sampler, AiNodeGetLocalData(node));
-   sg->out.RGB = AI_RGB_BLACK;
+   sg->out.RGB() = AI_RGB_BLACK;
 }

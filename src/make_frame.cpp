@@ -62,7 +62,7 @@ node_parameters
 {
    AiParameterEnum(SSTR::method, M_x_along_dPdu, MethodNames);
    AiParameterEnum(SSTR::origin, O_P, OriginNames);
-   AiParameterPnt(SSTR::custom_origin, 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::custom_origin, 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::z_axis, ZA_Nf, ZAxisNames);
    AiParameterVec(SSTR::custom_axis, 0.0f, 0.0f, 0.0f);
 }
@@ -96,7 +96,7 @@ node_update
    
    if (data->origin == O_custom && !data->evalCustomOrigin)
    {
-      data->customOrigin = AiNodeGetPnt(node, SSTR::custom_origin);
+      data->customOrigin = AiNodeGetVec(node, SSTR::custom_origin);
    }
    
    if (data->zAxis == ZA_custom && !data->evalCustomAxis)
@@ -129,7 +129,7 @@ shader_evaluate
    }
    else
    {
-      O = AiShaderEvalParamPnt(p_custom_origin);
+      O = AiShaderEvalParamVec(p_custom_origin);
    }
    
    // Read Z axis
@@ -154,7 +154,7 @@ shader_evaluate
    switch (data->method)
    {
    case M_x_along_dPdu:
-      if (!AiV3IsZero(sg->dPdu))
+      if (!AiV3IsSmall(sg->dPdu))
       {
          X = AiV3Normalize(sg->dPdu);
          Y = AiV3Normalize(AiV3Cross(Z, X));
@@ -162,11 +162,11 @@ shader_evaluate
       }
       else
       {
-         AiBuildLocalFramePolar(&X, &Y, &Z);
+         AiV3BuildLocalFramePolar(X, Y, Z);
       }
       break;
    case M_x_along_dPdv:
-      if (!AiV3IsZero(sg->dPdv))
+      if (!AiV3IsSmall(sg->dPdv))
       {
          X = AiV3Normalize(sg->dPdv);
          Y = AiV3Normalize(AiV3Cross(Z, X));
@@ -174,19 +174,19 @@ shader_evaluate
       }
       else
       {
-         AiBuildLocalFramePolar(&X, &Y, &Z);
+         AiV3BuildLocalFramePolar(X, Y, Z);
       }
       break;
    case M_shirley:
-      AiBuildLocalFrameShirley(&X, &Y, &Z);
+      AiV3BuildLocalFrame(X, Y, Z);
       break;
    case M_polar:
    default:
-      AiBuildLocalFramePolar(&X, &Y, &Z);
+      AiV3BuildLocalFramePolar(X, Y, Z);
       break;
    }
    
-   sg->out.pMTX = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
+   sg->out.pMTX() = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
    
-   AiM4Frame(*(sg->out.pMTX), &O, &X, &Y, &Z);
+   *(sg->out.pMTX()) = AiM4Frame(O, X, Y, Z);
 }

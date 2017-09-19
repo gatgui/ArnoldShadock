@@ -40,5 +40,5 @@ node_finish
 
 shader_evaluate
 {
-   sg->out.RGB = AiLightsGetShadowMatte(sg);
+   sg->out.RGB() = AiLightsIntegrateShadowMatte(sg);
 }

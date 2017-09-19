@@ -81,7 +81,7 @@ shader_evaluate
       {
          AiMsgWarning("[trace_result_f] Trying to access result from a 'probe' trace: Use 'probe_result_v' instead");
       }
-      sg->out.FLT = AiShaderEvalParamFlt(p_default);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_default);
    }
    else
    {
@@ -92,13 +92,13 @@ shader_evaluate
       switch (state)
       {
       case TS_alpha:
-         sg->out.FLT = sample->alpha;
+         sg->out.FLT() = sample->alpha;
          break;
       case TS_z:
-         sg->out.FLT = sample->z;
+         sg->out.FLT() = sample->z;
          break;
       default:
-         sg->out.FLT = AiShaderEvalParamFlt(p_default);
+         sg->out.FLT() = AiShaderEvalParamFlt(p_default);
          break;
       }
    }

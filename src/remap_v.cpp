@@ -60,5 +60,5 @@ shader_evaluate
    AtVector output_min = AiShaderEvalParamVec(p_output_min);
    AtVector output_max = AiShaderEvalParamVec(p_output_max);
    
-   sg->out.VEC = ExpandToRange(NormalizeToRange(input, input_min, input_max), output_min, output_max);
+   sg->out.VEC() = ExpandToRange(NormalizeToRange(input, input_min, input_max), output_min, output_max);
 }

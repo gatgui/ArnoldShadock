@@ -61,7 +61,7 @@ shader_evaluate
    if (AiStateGetMsgPtr(SSTR::agsb_ray, (void**)&ray) && ray)
    {
       AtVector N = AiShaderEvalParamVec(p_normal);
-      if (!AiRefractRay(ray, (AiV3IsZero(N) ? &(sg->N) : &N),
+      if (!AiRefractRay(*ray, (AiV3IsSmall(N) ? sg->N : N),
                         AiShaderEvalParamFlt(p_n1),
                         AiShaderEvalParamFlt(p_n2), sg))
       {
@@ -71,11 +71,11 @@ shader_evaluate
       {
          AiStateSetMsgBool(SSTR::agsb_tir, false);
       }
-      sg->out.VEC = ray->dir;
+      sg->out.VEC() = ray->dir;
    }
    else
    {
       AiStateSetMsgBool(SSTR::agsb_tir, false);
-      sg->out.VEC = AI_V3_ZERO;
+      sg->out.VEC() = AI_V3_ZERO;
    }
 }

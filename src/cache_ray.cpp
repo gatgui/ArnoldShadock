@@ -70,5 +70,5 @@ shader_evaluate
       AiStateSetMsgPtr(SSTR::agsb_ray, ray);
    }
    
-   sg->out.RGB = AI_RGB_BLACK;
+   sg->out.RGB() = AI_RGB_BLACK;
 }

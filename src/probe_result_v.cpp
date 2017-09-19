@@ -81,7 +81,7 @@ shader_evaluate
       {
          AiMsgWarning("[probe_result_v] Trying to access result from a 'standard' or 'background' trace: Use 'trace_result_v' instead");
       }
-      sg->out.VEC = AiShaderEvalParamVec(p_default);
+      sg->out.VEC() = AiShaderEvalParamVec(p_default);
    }
    else
    {
@@ -92,13 +92,13 @@ shader_evaluate
       switch (state)
       {
       case PS_position:
-         sg->out.VEC = hitsg->P;
+         sg->out.VEC() = hitsg->P;
          break;
       case PS_normal:
-         sg->out.VEC = hitsg->N;
+         sg->out.VEC() = hitsg->N;
          break;
       default:
-         sg->out.VEC = AiShaderEvalParamVec(p_default);
+         sg->out.VEC() = AiShaderEvalParamVec(p_default);
          break;
       }
    }
