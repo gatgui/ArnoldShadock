@@ -1021,26 +1021,26 @@
    maya.classification STRING "utility/cache"
    maya.id INT 0x00116522
 
-[node sample_loop_f]
-   maya.classification STRING "utility/sampling"
-   maya.id INT 0x00116523
+# [node sample_loop_f]
+#    maya.classification STRING "utility/sampling"
+#    maya.id INT 0x00116523
    
-   [attr combine]
-      linkable BOOL true
+#    [attr combine]
+#       linkable BOOL true
 
-[node sample_loop_c3]
-   maya.classification STRING "utility/sampling"
-   maya.id INT 0x00116524
+# [node sample_loop_c3]
+#    maya.classification STRING "utility/sampling"
+#    maya.id INT 0x00116524
    
-   [attr combine]
-      linkable BOOL true
+#    [attr combine]
+#       linkable BOOL true
 
-[node sample_loop_v]
-   maya.classification STRING "utility/sampling"
-   maya.id INT 0x00116525
+# [node sample_loop_v]
+#    maya.classification STRING "utility/sampling"
+#    maya.id INT 0x00116525
    
-   [attr combine]
-      linkable BOOL true
+#    [attr combine]
+#       linkable BOOL true
 
 # [node sss_single]
 #    maya.classification STRING "utility/shade"
@@ -1086,25 +1086,25 @@
    [attr state]
       linkable BOOL false
 
-[node sampler]
-   maya.classification STRING "utility/sampling"
-   maya.id INT 0x0011652B
+# [node sampler]
+#    maya.classification STRING "utility/sampling"
+#    maya.id INT 0x0011652B
    
-   [attr samples]
-      linkable BOOL false
-      min INT 1
-      softmax INT 5
+#    [attr samples]
+#       linkable BOOL false
+#       min INT 1
+#       softmax INT 5
    
-   [attr seeded]
-      linkable BOOL false
+#    [attr seeded]
+#       linkable BOOL false
    
-   [attr seed]
-      linkable BOOL false
-      min INT 0
+#    [attr seed]
+#       linkable BOOL false
+#       min INT 0
 
-[node sample_value]
-   maya.classification STRING "utility/sampling"
-   maya.id INT 0x0011652C
+# [node sample_value]
+#    maya.classification STRING "utility/sampling"
+#    maya.id INT 0x0011652C
 
 [node ray_state_i]
    maya.classification STRING "utility/trace"

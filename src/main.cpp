@@ -227,9 +227,9 @@ DECLARE_SHADER(TraceResultF);
 DECLARE_SHADER(TraceResultC3);
 DECLARE_SHADER(TraceResultV);
 DECLARE_SHADER(ProbeResultV);
-DECLARE_SHADER(Sampler);
-DECLARE_SHADER(SampleValue);
-DECLARE_FCV_SHADER(SampleLoop);
+// DECLARE_SHADER(Sampler);
+// DECLARE_SHADER(SampleValue);
+// DECLARE_FCV_SHADER(SampleLoop);
 // DECLARE_SHADER(SssSingle);
 // DECLARE_SHADER(SssMulti);
 DECLARE_SHADER(GetNode);
@@ -454,9 +454,9 @@ node_loader
    REGISTER_SHADER(TraceResultC3, trace_result_c3, AI_TYPE_RGB)
    REGISTER_SHADER(TraceResultV, trace_result_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(ProbeResultV, probe_result_v, AI_TYPE_VECTOR)
-   REGISTER_SHADER(Sampler, sampler, AI_TYPE_RGB)
-   REGISTER_SHADER(SampleValue, sample_value, AI_TYPE_VECTOR2)
-   REGISTER_FCV_SHADER(SampleLoop, sample_loop)
+   // REGISTER_SHADER(Sampler, sampler, AI_TYPE_RGB)
+   // REGISTER_SHADER(SampleValue, sample_value, AI_TYPE_VECTOR2)
+   // REGISTER_FCV_SHADER(SampleLoop, sample_loop)
    // REGISTER_SHADER(SssSingle, sss_single, AI_TYPE_RGB)
    // REGISTER_SHADER(SssMulti, sss_multi, AI_TYPE_RGB)
    REGISTER_SHADER(GetNode, get_node, AI_TYPE_NODE)
