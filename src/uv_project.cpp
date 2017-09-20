@@ -158,7 +158,7 @@ shader_evaluate
    if (data->useCustomVector)
    {
       v0 = AiShaderEvalParamVec(p_custom_vector);
-      d = AtHPoint(v0, (data->customIsPoint ? 1.0f : 0.0f));
+      d = AtHPoint(v0.x, v0.y, v0.z, (data->customIsPoint ? 1.0f : 0.0f));
       
       v1 = AiShaderEvalParamVec(p_custom_vector_ddx);
       
@@ -167,8 +167,8 @@ shader_evaluate
       if (!AiV3IsSmall(v1) && !AiV3IsSmall(v2))
       {
          withDerivatives = true;
-         ddx = AtHPoint(v0 + v1, d.w);
-         ddy = AtHPoint(v0 + v2, d.w);
+         ddx = AtHPoint(v0.x + v1.x, v0.y + v1.y, v0.z + v1.z, d.w);
+         ddy = AtHPoint(v0.x + v2.x, v0.y + v2.y, v0.z + v2.z, d.w);
       }
 
       M = *Moff;
