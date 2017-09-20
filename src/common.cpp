@@ -93,6 +93,7 @@ const char* RayTypeNames[] =
    "specular",
    "reflect",
    "transmit",
+   "all",
    NULL
 };
 
@@ -109,7 +110,8 @@ uint8_t RayTypeValues[] =
    AI_RAY_ALL_DIFFUSE,
    AI_RAY_ALL_SPECULAR,
    AI_RAY_ALL_REFLECT,
-   AI_RAY_ALL_TRANSMIT
+   AI_RAY_ALL_TRANSMIT,
+   AI_RAY_ALL
 };
 
 const char* GammaModeNames[] =

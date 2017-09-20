@@ -105,11 +105,17 @@ enum RayType
 {
    RT_Camera = 0,
    RT_Shadow,
-   RT_Reflected,
-   RT_Refracted,
+   RT_DiffuseTransmit,
+   RT_SpecularTransmit,
+   RT_Volume,
+   RT_DiffuseReflect,
+   RT_SpecularReflect,
+   RT_Subsurface,
    RT_Diffuse,
-   RT_Glossy,
-   RT_Generic
+   RT_Specular,
+   RT_Reflect,
+   RT_Transmit,
+   RT_All
 };
 
 extern const char* RayTypeNames[];
