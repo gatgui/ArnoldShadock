@@ -46,7 +46,7 @@ static const char* NormalDistributionNames[] =
 
 node_parameters
 {
-   AiParameterPnt2("sample", 0.0f, 0.0f);
+   AiParameterVec2("sample", 0.0f, 0.0f);
    AiParameterEnum(SSTR::distribution, ND_Beckmann, NormalDistributionNames);
    AiParameterFlt(SSTR::distribution_param, 0.0f);
 }
@@ -87,7 +87,7 @@ shader_evaluate
 {
    MicrofacetNormalData *data = (MicrofacetNormalData*) AiNodeGetLocalData(node);
    
-   AtPoint2 sample = AiShaderEvalParamPnt2(p_sample);
+   AtVector2 sample = AiShaderEvalParamVec2(p_sample);
    
    float param = (data->evalDistributionParam ? AiShaderEvalParamFlt(p_distribution_param) : data->distributionParam);
    
@@ -124,7 +124,7 @@ shader_evaluate
       break;
    }
    
-   sg->out.VEC.x = cosf(phi) * sinTheta;
-   sg->out.VEC.y = sinf(phi) * sinTheta;
-   sg->out.VEC.z = cosTheta;
+   sg->out.VEC().x = cosf(phi) * sinTheta;
+   sg->out.VEC().y = sinf(phi) * sinTheta;
+   sg->out.VEC().z = cosTheta;
 }
