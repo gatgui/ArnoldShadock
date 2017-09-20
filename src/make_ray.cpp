@@ -32,7 +32,7 @@ enum MakeRayParams
 
 node_parameters
 {
-   AiParameterEnum(SSTR::type, RT_Generic, RayTypeNames);
+   AiParameterEnum(SSTR::type, RT_All, RayTypeNames);
    AiParameterVec(SSTR::origin, 0.0f, 0.0f, 0.0f);
    AiParameterVec(SSTR::direction, 0.0f, 0.0f, 0.0f);
    AiParameterFlt("maxdist", AI_BIG);
