@@ -899,24 +899,24 @@
    maya.classification STRING "utility/sampling"
    maya.id INT 0x00116512
 
-[node microfacet_normal]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116513
+# [node microfacet_normal]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116513
    
-   [attr distribution]
-      linkable BOOL false
+#    [attr distribution]
+#       linkable BOOL false
 
-[node is_tir_ray]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x00116514
+# [node is_tir_ray]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x00116514
 
-[node is_valid_ray]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x00116515
+# [node is_valid_ray]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x00116515
 
-[node set_ray_dir]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x00116516
+# [node set_ray_dir]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x00116516
 
 # [node set_opacity]
 #    maya.classification STRING "utility/shade"
@@ -1017,9 +1017,9 @@
 #    [attr fresnel]
 #       linkable BOOL false
 
-[node cache_ray]
-   maya.classification STRING "utility/cache"
-   maya.id INT 0x00116522
+# [node cache_ray]
+#    maya.classification STRING "utility/cache"
+#    maya.id INT 0x00116522
 
 # [node sample_loop_f]
 #    maya.classification STRING "utility/sampling"
@@ -1065,26 +1065,26 @@
 #       min FLOAT 0.0
 #       softmax FLOAT 5.0
 
-[node trace_result_c3]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x00116528
+# [node trace_result_c3]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x00116528
    
-   [attr state]
-      linkable BOOL false
+#    [attr state]
+#       linkable BOOL false
 
-[node trace_result_v]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x00116529
+# [node trace_result_v]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x00116529
    
-   [attr state]
-      linkable BOOL false
+#    [attr state]
+#       linkable BOOL false
 
-[node probe_result_v]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x0011652A
+# [node probe_result_v]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x0011652A
    
-   [attr state]
-      linkable BOOL false
+#    [attr state]
+#       linkable BOOL false
 
 # [node sampler]
 #    maya.classification STRING "utility/sampling"
@@ -1106,40 +1106,40 @@
 #    maya.classification STRING "utility/sampling"
 #    maya.id INT 0x0011652C
 
-[node ray_state_i]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x0011652D
+# [node ray_state_i]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x0011652D
    
-   [attr state]
-      linkable BOOL false
+#    [attr state]
+#       linkable BOOL false
 
-[node ray_state_f]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x0011652E
+# [node ray_state_f]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x0011652E
    
-   [attr state]
-      linkable BOOL false
+#    [attr state]
+#       linkable BOOL false
 
-[node ray_state_v]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x0011652F
+# [node ray_state_v]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x0011652F
    
-   [attr state]
-      linkable BOOL false
+#    [attr state]
+#       linkable BOOL false
 
-[node trace]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x00116530
+# [node trace]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x00116530
    
-   [attr type]
-      linkable BOOL false
+#    [attr type]
+#       linkable BOOL false
 
-[node trace_result_f]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x00116531
+# [node trace_result_f]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x00116531
    
-   [attr state]
-      linkable BOOL false
+#    [attr state]
+#       linkable BOOL false
 
 [node wireframe]
    maya.classification STRING "utility/shade"
@@ -1159,24 +1159,24 @@
    maya.classification STRING "utility/shade"
    maya.id INT 0x00116533
 
-[node make_ray]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x00116534
+# [node make_ray]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x00116534
    
-   [attr type]
-      linkable BOOL false
+#    [attr type]
+#       linkable BOOL false
    
-   [attr maxdist]
-      linkable BOOL false
-      min FLOAT 0.0
+#    [attr maxdist]
+#       linkable BOOL false
+#       min FLOAT 0.0
 
-[node reflect_ray]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x00116535
+# [node reflect_ray]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x00116535
 
-[node refract_ray]
-   maya.classification STRING "utility/trace"
-   maya.id INT 0x00116536
+# [node refract_ray]
+#    maya.classification STRING "utility/trace"
+#    maya.id INT 0x00116536
 
 # [node cache_brdf]
 #    maya.classification STRING "utility/cache"
@@ -1373,22 +1373,22 @@
    [attr safe]
       linkable BOOL false
 
-[node light_weight]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x0011654A
+# [node light_weight]
+#    maya.classification STRING "utility/general"
+#    maya.id INT 0x0011654A
    
-   [attr weight]
-      linkable BOOL false
+#    [attr weight]
+#       linkable BOOL false
 
-[node illuminance_loop]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x0011654B
+# [node illuminance_loop]
+#    maya.classification STRING "utility/general"
+#    maya.id INT 0x0011654B
    
-   [attr combine]
-      linkable BOOL false
+#    [attr combine]
+#       linkable BOOL false
    
-   [attr reset_lights_cache]
-      linkable BOOL false
+#    [attr reset_lights_cache]
+#       linkable BOOL false
 
 [node write_msgs]
    maya.classification STRING "utility/general"

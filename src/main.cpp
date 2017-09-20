@@ -195,8 +195,8 @@ DECLARE_SHADER(ReadMsgV2);
 DECLARE_SHADER(ReadMsgV);
 DECLARE_SHADER(ReadMsgC3);
 DECLARE_SHADER(ReadMsgC4);
-DECLARE_SHADER(IlluminanceLoop);
-DECLARE_SHADER(LightWeight);
+// DECLARE_SHADER(IlluminanceLoop);
+// DECLARE_SHADER(LightWeight);
 DECLARE_SHADER(ReflectV);
 DECLARE_SHADER(RefractV);
 // DECLARE_FLOAT_SHADER(Fresnel);
@@ -216,17 +216,17 @@ DECLARE_SHADER(CacheM);
 // DECLARE_SHADER(CacheBrdf);
 DECLARE_SHADER(Wireframe);
 DECLARE_SHADER(ShadowMatte);
-DECLARE_SHADER(MakeRay);
-DECLARE_SHADER(ReflectRay);
-DECLARE_SHADER(RefractRay);
-DECLARE_SHADER(RayStateI);
-DECLARE_SHADER(RayStateF);
-DECLARE_SHADER(RayStateV);
-DECLARE_SHADER(Trace);
-DECLARE_SHADER(TraceResultF);
-DECLARE_SHADER(TraceResultC3);
-DECLARE_SHADER(TraceResultV);
-DECLARE_SHADER(ProbeResultV);
+// DECLARE_SHADER(MakeRay);
+// DECLARE_SHADER(ReflectRay);
+// DECLARE_SHADER(RefractRay);
+// DECLARE_SHADER(RayStateI);
+// DECLARE_SHADER(RayStateF);
+// DECLARE_SHADER(RayStateV);
+// DECLARE_SHADER(Trace);
+// DECLARE_SHADER(TraceResultF);
+// DECLARE_SHADER(TraceResultC3);
+// DECLARE_SHADER(TraceResultV);
+// DECLARE_SHADER(ProbeResultV);
 // DECLARE_SHADER(Sampler);
 // DECLARE_SHADER(SampleValue);
 // DECLARE_FCV_SHADER(SampleLoop);
@@ -236,17 +236,17 @@ DECLARE_SHADER(GetNode);
 DECLARE_SHADER(CompareN);
 // DECLARE_SHADER(BrdfStretchedPhong);
 // DECLARE_SHADER(BtdfMicrofacetIntegrate);
-DECLARE_SHADER(CacheRay);
+// DECLARE_SHADER(CacheRay);
 // DECLARE_SHADER(SetOpacity);
 // DECLARE_SHADER(BrdfEvalSample);
 // DECLARE_SHADER(BrdfEvalPdf);
 // DECLARE_SHADER(BrdfEval);
 DECLARE_FCV_SHADER(Lerp);
-DECLARE_SHADER(SetRayDir);
-DECLARE_SHADER(IsValidRay);
-DECLARE_SHADER(IsTirRay);
+// DECLARE_SHADER(SetRayDir);
+// DECLARE_SHADER(IsValidRay);
+// DECLARE_SHADER(IsTirRay);
 DECLARE_SHADER(SampleDir);
-DECLARE_SHADER(MicrofacetNormal);
+// DECLARE_SHADER(MicrofacetNormal);
 DECLARE_SHADER(SwitchRayF);
 DECLARE_SHADER(SwitchRayC3);
 DECLARE_SHADER(SwitchRayC4);
@@ -422,8 +422,8 @@ node_loader
    REGISTER_SHADER(ReadMsgV, read_msg_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(ReadMsgC3, read_msg_c3, AI_TYPE_RGB)
    REGISTER_SHADER(ReadMsgC4, read_msg_c4, AI_TYPE_RGBA)
-   REGISTER_SHADER(IlluminanceLoop, illuminance_loop, AI_TYPE_RGB)
-   REGISTER_SHADER(LightWeight, light_weight, AI_TYPE_FLOAT)
+   // REGISTER_SHADER(IlluminanceLoop, illuminance_loop, AI_TYPE_RGB)
+   // REGISTER_SHADER(LightWeight, light_weight, AI_TYPE_FLOAT)
    REGISTER_SHADER(ReflectV, reflect_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(RefractV, refract_v, AI_TYPE_VECTOR)
    // REGISTER_FLOAT_SHADER(Fresnel, fresnel)
@@ -443,17 +443,17 @@ node_loader
    // REGISTER_SHADER(CacheBrdf, cache_brdf, AI_TYPE_RGB)
    REGISTER_SHADER(Wireframe, wireframe, AI_TYPE_FLOAT)
    REGISTER_SHADER(ShadowMatte, shadow_matte, AI_TYPE_RGB)
-   REGISTER_SHADER(MakeRay, make_ray, AI_TYPE_VECTOR)
-   REGISTER_SHADER(ReflectRay, reflect_ray, AI_TYPE_VECTOR)
-   REGISTER_SHADER(RefractRay, refract_ray, AI_TYPE_VECTOR)
-   REGISTER_SHADER(RayStateI, ray_state_i, AI_TYPE_INT)
-   REGISTER_SHADER(RayStateF, ray_state_f, AI_TYPE_FLOAT)
-   REGISTER_SHADER(RayStateV, ray_state_v, AI_TYPE_VECTOR)
-   REGISTER_SHADER(Trace, trace, AI_TYPE_BOOLEAN)
-   REGISTER_SHADER(TraceResultF, trace_result_f, AI_TYPE_FLOAT)
-   REGISTER_SHADER(TraceResultC3, trace_result_c3, AI_TYPE_RGB)
-   REGISTER_SHADER(TraceResultV, trace_result_v, AI_TYPE_VECTOR)
-   REGISTER_SHADER(ProbeResultV, probe_result_v, AI_TYPE_VECTOR)
+   // REGISTER_SHADER(MakeRay, make_ray, AI_TYPE_VECTOR)
+   // REGISTER_SHADER(ReflectRay, reflect_ray, AI_TYPE_VECTOR)
+   // REGISTER_SHADER(RefractRay, refract_ray, AI_TYPE_VECTOR)
+   // REGISTER_SHADER(RayStateI, ray_state_i, AI_TYPE_INT)
+   // REGISTER_SHADER(RayStateF, ray_state_f, AI_TYPE_FLOAT)
+   // REGISTER_SHADER(RayStateV, ray_state_v, AI_TYPE_VECTOR)
+   // REGISTER_SHADER(Trace, trace, AI_TYPE_BOOLEAN)
+   // REGISTER_SHADER(TraceResultF, trace_result_f, AI_TYPE_FLOAT)
+   // REGISTER_SHADER(TraceResultC3, trace_result_c3, AI_TYPE_RGB)
+   // REGISTER_SHADER(TraceResultV, trace_result_v, AI_TYPE_VECTOR)
+   // REGISTER_SHADER(ProbeResultV, probe_result_v, AI_TYPE_VECTOR)
    // REGISTER_SHADER(Sampler, sampler, AI_TYPE_RGB)
    // REGISTER_SHADER(SampleValue, sample_value, AI_TYPE_VECTOR2)
    // REGISTER_FCV_SHADER(SampleLoop, sample_loop)
@@ -463,17 +463,17 @@ node_loader
    REGISTER_SHADER(CompareN, compare_n, AI_TYPE_BOOLEAN)
    // REGISTER_SHADER(BrdfStretchedPhong, brdf_stretched_phong, AI_TYPE_RGB)
    // REGISTER_SHADER(BtdfMicrofacetIntegrate, btdf_microfacet_integrate, AI_TYPE_RGB)
-   REGISTER_SHADER(CacheRay, cache_ray, AI_TYPE_VECTOR)
+   // REGISTER_SHADER(CacheRay, cache_ray, AI_TYPE_VECTOR)
    // REGISTER_SHADER(SetOpacity, set_opacity, AI_TYPE_RGB)
    // REGISTER_SHADER(BrdfEvalSample, brdf_eval_sample, AI_TYPE_VECTOR)
    // REGISTER_SHADER(BrdfEvalPdf, brdf_eval_pdf, AI_TYPE_FLOAT)
    // REGISTER_SHADER(BrdfEval, brdf_eval, AI_TYPE_RGB)
    REGISTER_FCV_SHADER(Lerp, lerp)
-   REGISTER_SHADER(SetRayDir, set_ray_dir, AI_TYPE_VECTOR)
-   REGISTER_SHADER(IsValidRay, is_valid_ray, AI_TYPE_BOOLEAN)
-   REGISTER_SHADER(IsTirRay, is_tir_ray, AI_TYPE_BOOLEAN)
+   // REGISTER_SHADER(SetRayDir, set_ray_dir, AI_TYPE_VECTOR)
+   // REGISTER_SHADER(IsValidRay, is_valid_ray, AI_TYPE_BOOLEAN)
+   // REGISTER_SHADER(IsTirRay, is_tir_ray, AI_TYPE_BOOLEAN)
    REGISTER_SHADER(SampleDir, sample_dir, AI_TYPE_VECTOR)
-   REGISTER_SHADER(MicrofacetNormal, microfacet_normal, AI_TYPE_VECTOR)
+   // REGISTER_SHADER(MicrofacetNormal, microfacet_normal, AI_TYPE_VECTOR)
    REGISTER_SHADER(SwitchRayF, switch_ray_f, AI_TYPE_FLOAT)
    REGISTER_SHADER(SwitchRayC3, switch_ray_c3, AI_TYPE_RGB)
    REGISTER_SHADER(SwitchRayC4, switch_ray_c4, AI_TYPE_RGBA)
