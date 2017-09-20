@@ -180,15 +180,15 @@
    [attr eval_order]
       linkable BOOL false
 
-[node write_msg_p3]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x001164F3
+# [node write_msg_p3]
+#    maya.classification STRING "utility/general"
+#    maya.id INT 0x001164F3
 
-   [attr msg_name]
-      linkable BOOL false
+#    [attr msg_name]
+#       linkable BOOL false
 
-   [attr eval_order]
-      linkable BOOL false
+#    [attr eval_order]
+#       linkable BOOL false
 
 [node write_msg_p2]
    maya.classification STRING "utility/general"
@@ -269,18 +269,18 @@
    [attr eval_order]
       linkable BOOL false
 
-[node write_aov_p3]
-   maya.classification STRING "shader/surface"
-   maya.id INT 0x001164FB
+# [node write_aov_p3]
+#    maya.classification STRING "shader/surface"
+#    maya.id INT 0x001164FB
 
-   [attr aov_name]
-      linkable BOOL false
+#    [attr aov_name]
+#       linkable BOOL false
 
-   [attr blend_opacity]
-      linkable BOOL false
+#    [attr blend_opacity]
+#       linkable BOOL false
 
-   [attr eval_order]
-      linkable BOOL false
+#    [attr eval_order]
+#       linkable BOOL false
 
 [node write_aov_p2]
    maya.classification STRING "shader/surface"
@@ -334,38 +334,38 @@
    [attr eval_order]
       linkable BOOL false
 
-[node microfacet_fresnel]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116500
+# [node microfacet_fresnel]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116500
 
-[node brdf_microfacet]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116501
+# [node brdf_microfacet]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116501
    
-   [attr distribution]
-      linkable BOOL false
+#    [attr distribution]
+#       linkable BOOL false
    
-   [attr roughness_x]
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr roughness_x]
+#       min FLOAT 0.0
+#       max FLOAT 1.0
    
-   [attr roughness_y]
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr roughness_y]
+#       min FLOAT 0.0
+#       max FLOAT 1.0
    
-   [attr ior]
-      min FLOAT 0.0
-      softmax FLOAT 5.0
+#    [attr ior]
+#       min FLOAT 0.0
+#       softmax FLOAT 5.0
    
-   [attr local_frame]
-      linkable BOOL false
+#    [attr local_frame]
+#       linkable BOOL false
    
-   [attr frame_rotation]
-      softmin FLOAT -180.0
-      softmax FLOAT 180.0
+#    [attr frame_rotation]
+#       softmin FLOAT -180.0
+#       softmax FLOAT 180.0
    
-   [attr angle_units]
-      linkable BOOL false
+#    [attr angle_units]
+#       linkable BOOL false
 
 [node blackbody]
    maya.classification STRING "utility/color"
@@ -554,50 +554,50 @@
    [attr offset]
       linkable BOOL false
 
-[node sample_volume_p3]
-   maya.classification STRING "utility/sampling"
-   maya.id INT 0x0011650A
+# [node sample_volume_p3]
+#    maya.classification STRING "utility/sampling"
+#    maya.id INT 0x0011650A
    
-   [attr field]
-      linkable BOOL false
+#    [attr field]
+#       linkable BOOL false
    
-   [attr interpolation]
-      linkable BOOL false
+#    [attr interpolation]
+#       linkable BOOL false
    
-   [attr P_space]
-      linkable BOOL false
+#    [attr P_space]
+#       linkable BOOL false
    
-   [attr P_is_offset]
-      linkable BOOL false
+#    [attr P_is_offset]
+#       linkable BOOL false
    
-   [attr pre_multiply]
-      linkable BOOL false
+#    [attr pre_multiply]
+#       linkable BOOL false
    
-   [attr pre_offset]
-      linkable BOOL false
+#    [attr pre_offset]
+#       linkable BOOL false
    
-   [attr blend_mode]
-      linkable BOOL false
+#    [attr blend_mode]
+#       linkable BOOL false
    
-   [attr blend]
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr blend]
+#       min FLOAT 0.0
+#       max FLOAT 1.0
    
-   [attr bias]
-      linkable BOOL false
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr bias]
+#       linkable BOOL false
+#       min FLOAT 0.0
+#       max FLOAT 1.0
    
-   [attr gain]
-      linkable BOOL false
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr gain]
+#       linkable BOOL false
+#       min FLOAT 0.0
+#       max FLOAT 1.0
    
-   [attr multiply]
-      linkable BOOL false
+#    [attr multiply]
+#       linkable BOOL false
    
-   [attr offset]
-      linkable BOOL false
+#    [attr offset]
+#       linkable BOOL false
 
 [node sample_volume_v]
    maya.classification STRING "utility/sampling"
@@ -734,46 +734,46 @@
    [attr offset]
       linkable BOOL false
 
-[node volume]
-   maya.classification STRING "shader/volume"
-   maya.id INT 0x0011650E
+# [node volume]
+#    maya.classification STRING "shader/volume"
+#    maya.id INT 0x0011650E
    
-   [attr scattering_source]
-      linkable BOOL false
+#    [attr scattering_source]
+#       linkable BOOL false
    
-   [attr scattering_field]
-      linkable BOOL false
+#    [attr scattering_field]
+#       linkable BOOL false
    
-   [attr anisotropy]
-      min FLOAT -1.0
-      max FLOAT 1.0
+#    [attr anisotropy]
+#       min FLOAT -1.0
+#       max FLOAT 1.0
    
-   [attr attenuation_source]
-      linkable BOOL false
+#    [attr attenuation_source]
+#       linkable BOOL false
    
-   [attr attenuation_field]
-      linkable BOOL false
+#    [attr attenuation_field]
+#       linkable BOOL false
    
-   [attr attenuation_mode]
-      linkable BOOL false
+#    [attr attenuation_mode]
+#       linkable BOOL false
    
-   [attr preserve_energy]
-      linkable BOOL false
+#    [attr preserve_energy]
+#       linkable BOOL false
    
-   [attr emission_source]
-      linkable BOOL false
+#    [attr emission_source]
+#       linkable BOOL false
    
-   [attr emission_field]
-      linkable BOOL false
+#    [attr emission_field]
+#       linkable BOOL false
    
-   [attr interpolation]
-      linkable BOOL false
+#    [attr interpolation]
+#       linkable BOOL false
    
-   [attr P_space]
-      linkable BOOL false
+#    [attr P_space]
+#       linkable BOOL false
    
-   [attr P_is_offset]
-      linkable BOOL false
+#    [attr P_is_offset]
+#       linkable BOOL false
 
 [node switch_ray_f]
    maya.classification STRING "utility/trace"
@@ -918,21 +918,21 @@
    maya.classification STRING "utility/trace"
    maya.id INT 0x00116516
 
-[node set_opacity]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116517
+# [node set_opacity]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116517
 
-[node brdf_eval_sample]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116518
+# [node brdf_eval_sample]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116518
 
-[node brdf_eval_pdf]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116519
+# [node brdf_eval_pdf]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116519
 
-[node brdf_eval]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x0011651A
+# [node brdf_eval]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x0011651A
 
 [node lerp_f]
    maya.classification STRING "utility/float"
@@ -973,49 +973,49 @@
    maya.classification STRING "utility/general"
    maya.id INT 0x0011651F
 
-[node brdf_stretched_phong]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116520
+# [node brdf_stretched_phong]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116520
    
-   [attr exponent]
-      min FLOAT 0.0
-      softmax FLOAT 1.0
+#    [attr exponent]
+#       min FLOAT 0.0
+#       softmax FLOAT 1.0
 
-[node btdf_microfacet_integrate]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116521
+# [node btdf_microfacet_integrate]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116521
    
-   [attr distribution]
-      linkable BOOL false
+#    [attr distribution]
+#       linkable BOOL false
    
-   [attr roughness_x]
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr roughness_x]
+#       min FLOAT 0.0
+#       max FLOAT 1.0
    
-   [attr roughness_y]
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr roughness_y]
+#       min FLOAT 0.0
+#       max FLOAT 1.0
    
-   [attr local_frame]
-      linkable BOOL false
+#    [attr local_frame]
+#       linkable BOOL false
    
-   [attr frame_rotation]
-      softmin FLOAT -180.0
-      softmax FLOAT 180.0
+#    [attr frame_rotation]
+#       softmin FLOAT -180.0
+#       softmax FLOAT 180.0
    
-   [attr angle_units]
-      linkable BOOL false
+#    [attr angle_units]
+#       linkable BOOL false
    
-   [attr ior]
-      min FLOAT 0.0
-      softmax FLOAT 5.0
+#    [attr ior]
+#       min FLOAT 0.0
+#       softmax FLOAT 5.0
    
-   [attr dispersion]
-      min FLOAT 0.0
-      softmax FLOAT 5.0
+#    [attr dispersion]
+#       min FLOAT 0.0
+#       softmax FLOAT 5.0
    
-   [attr fresnel]
-      linkable BOOL false
+#    [attr fresnel]
+#       linkable BOOL false
 
 [node cache_ray]
    maya.classification STRING "utility/cache"
@@ -1042,28 +1042,28 @@
    [attr combine]
       linkable BOOL true
 
-[node sss_single]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116526
+# [node sss_single]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116526
    
-   [attr g]
-      min FLOAT -1.0
-      max FLOAT 1.0
+#    [attr g]
+#       min FLOAT -1.0
+#       max FLOAT 1.0
    
-   [attr eta]
-      min FLOAT 0.0
-      softmax FLOAT 5.0
+#    [attr eta]
+#       min FLOAT 0.0
+#       softmax FLOAT 5.0
 
-[node sss_multi]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116527
+# [node sss_multi]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116527
    
-   [attr method]
-      linkable BOOL false
+#    [attr method]
+#       linkable BOOL false
    
-   [attr radius_scale]
-      min FLOAT 0.0
-      softmax FLOAT 5.0
+#    [attr radius_scale]
+#       min FLOAT 0.0
+#       softmax FLOAT 5.0
 
 [node trace_result_c3]
    maya.classification STRING "utility/trace"
@@ -1178,9 +1178,9 @@
    maya.classification STRING "utility/trace"
    maya.id INT 0x00116536
 
-[node cache_brdf]
-   maya.classification STRING "utility/cache"
-   maya.id INT 0x00116537
+# [node cache_brdf]
+#    maya.classification STRING "utility/cache"
+#    maya.id INT 0x00116537
 
 [node cache_m]
    maya.classification STRING "utility/cache"
@@ -1198,12 +1198,12 @@
    maya.classification STRING "utility/cache"
    maya.id INT 0x0011653B
 
-[node brdf_integrate]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x0011653C
+# [node brdf_integrate]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x0011653C
    
-   [attr ray_type]
-      linkable BOOL false
+#    [attr ray_type]
+#       linkable BOOL false
 
 [node make_frame]
    maya.classification STRING "utility/matrix"
@@ -1257,104 +1257,104 @@
    [attr inclusive_trace_set]
       linkable BOOL false
 
-[node brdf_oren_nayar]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116541
+# [node brdf_oren_nayar]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116541
    
-   [attr roughness]
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr roughness]
+#       min FLOAT 0.0
+#       max FLOAT 1.0
 
-[node brdf_cook_torrance]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116542
+# [node brdf_cook_torrance]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116542
    
-   [attr roughness_x]
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr roughness_x]
+#       min FLOAT 0.0
+#       max FLOAT 1.0
    
-   [attr roughness_y]
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr roughness_y]
+#       min FLOAT 0.0
+#       max FLOAT 1.0
    
-   [attr local_frame]
-      linkable BOOL false
+#    [attr local_frame]
+#       linkable BOOL false
    
-   [attr frame_rotation]
-      softmin FLOAT -180.0
-      softmax FLOAT 180.0
+#    [attr frame_rotation]
+#       softmin FLOAT -180.0
+#       softmax FLOAT 180.0
    
-   [attr angle_units]
-      linkable BOOL false
+#    [attr angle_units]
+#       linkable BOOL false
 
-[node brdf_ward_duer]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116543
+# [node brdf_ward_duer]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116543
    
-   [attr roughness_x]
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr roughness_x]
+#       min FLOAT 0.0
+#       max FLOAT 1.0
    
-   [attr roughness_y]
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr roughness_y]
+#       min FLOAT 0.0
+#       max FLOAT 1.0
    
-   [attr local_frame]
-      linkable BOOL false
+#    [attr local_frame]
+#       linkable BOOL false
    
-   [attr frame_rotation]
-      softmin FLOAT -180.0
-      softmax FLOAT 180.0
+#    [attr frame_rotation]
+#       softmin FLOAT -180.0
+#       softmax FLOAT 180.0
    
-   [attr angle_units]
-      linkable BOOL false
+#    [attr angle_units]
+#       linkable BOOL false
 
-[node brdf_ashikhmin_shirley]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116544
+# [node brdf_ashikhmin_shirley]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116544
    
-   [attr glossiness_x]
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr glossiness_x]
+#       min FLOAT 0.0
+#       max FLOAT 1.0
    
-   [attr glossiness_y]
-      min FLOAT 0.0
-      max FLOAT 1.0
+#    [attr glossiness_y]
+#       min FLOAT 0.0
+#       max FLOAT 1.0
    
-   [attr local_frame]
-      linkable BOOL false
+#    [attr local_frame]
+#       linkable BOOL false
    
-   [attr frame_rotation]
-      softmin FLOAT -180.0
-      softmax FLOAT 180.0
+#    [attr frame_rotation]
+#       softmin FLOAT -180.0
+#       softmax FLOAT 180.0
    
-   [attr angle_units]
-      linkable BOOL false
+#    [attr angle_units]
+#       linkable BOOL false
 
-[node eval_light_sample]
-   maya.classification STRING "utility/shade"
-   maya.id INT 0x00116545
+# [node eval_light_sample]
+#    maya.classification STRING "utility/shade"
+#    maya.id INT 0x00116545
    
-   [attr surface_color_weight]
-      min FLOAT 0.0
-      softmax FLOAT 1.0
+#    [attr surface_color_weight]
+#       min FLOAT 0.0
+#       softmax FLOAT 1.0
    
-   [attr light_weight]
-      linkable BOOL false
+#    [attr light_weight]
+#       linkable BOOL false
 
-[node fresnel_f]
-   maya.classification STRING "utility/float"
-   maya.id INT 0x00116546
+# [node fresnel_f]
+#    maya.classification STRING "utility/float"
+#    maya.id INT 0x00116546
    
-   [attr reflectance]
-      linkable BOOL false
+#    [attr reflectance]
+#       linkable BOOL false
 
-[node fresnel_c3]
-   maya.classification STRING "utility/color"
-   maya.id INT 0x00116547
+# [node fresnel_c3]
+#    maya.classification STRING "utility/color"
+#    maya.id INT 0x00116547
    
-   [attr reflectance]
-      linkable BOOL false
+#    [attr reflectance]
+#       linkable BOOL false
 
 [node refract_v]
    maya.classification STRING "utility/vector"
@@ -1446,12 +1446,12 @@
    [attr msg_name]
       linkable BOOL false
 
-[node read_msg_p3]
-   maya.classification STRING "utility/general"
-   maya.id INT 0x00116551
+# [node read_msg_p3]
+#    maya.classification STRING "utility/general"
+#    maya.id INT 0x00116551
    
-   [attr msg_name]
-      linkable BOOL false
+#    [attr msg_name]
+#       linkable BOOL false
 
 [node read_msg_v]
    maya.classification STRING "utility/general"
@@ -2214,12 +2214,12 @@
    [attr aov_name]
       linkable BOOL false
 
-[node read_aov_p3]
-   maya.classification STRING "utility/aov"
-   maya.id INT 0x001165CF
+# [node read_aov_p3]
+#    maya.classification STRING "utility/aov"
+#    maya.id INT 0x001165CF
    
-   [attr aov_name]
-      linkable BOOL false
+#    [attr aov_name]
+#       linkable BOOL false
 
 [node read_aov_v]
    maya.classification STRING "utility/aov"
