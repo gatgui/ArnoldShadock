@@ -20,9 +20,9 @@ SOFTWARE.
 
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(MakeP2Mtd);
+AI_SHADER_NODE_EXPORT_METHODS(MakeV2Mtd);
 
-enum MakeP2Params
+enum MakeV2Params
 {
    p_x = 0,
    p_y

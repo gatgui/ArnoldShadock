@@ -86,7 +86,7 @@
    [attr user_defined]
       linkable BOOL false
 
-[node node_attr_p2]
+[node node_attr_v2]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001164EC
    
@@ -190,7 +190,7 @@
 #    [attr eval_order]
 #       linkable BOOL false
 
-[node write_msg_p2]
+[node write_msg_v2]
    maya.classification STRING "utility/general"
    maya.id INT 0x001164F4
 
@@ -282,7 +282,7 @@
 #    [attr eval_order]
 #       linkable BOOL false
 
-[node write_aov_p2]
+[node write_aov_v2]
    maya.classification STRING "shader/surface"
    maya.id INT 0x001164FC
 
@@ -509,7 +509,7 @@
    [attr offset]
       linkable BOOL false
 
-[node sample_volume_p2]
+[node sample_volume_v2]
    maya.classification STRING "utility/sampling"
    maya.id INT 0x00116509
    
@@ -1439,7 +1439,7 @@
    [attr msg_name]
       linkable BOOL false
 
-[node read_msg_p2]
+[node read_msg_v2]
    maya.classification STRING "utility/general"
    maya.id INT 0x00116550
    
@@ -2030,7 +2030,7 @@
    [attr output_mode]
       linkable BOOL false
 
-[node shape_attr_p2]
+[node shape_attr_v2]
    maya.classification STRING "utility/userdata"
    maya.id INT 0x001165BD
    
@@ -2207,7 +2207,7 @@
    [attr aov_name]
       linkable BOOL false
 
-[node read_aov_p2]
+[node read_aov_v2]
    maya.classification STRING "utility/aov"
    maya.id INT 0x001165CE
    
@@ -2351,7 +2351,7 @@
       min FLOAT 0.0
       softmax FLOAT 5.0
 
-[node make_p2]
+[node make_v2]
    maya.classification STRING "utility/general"
    maya.id INT 0x001165E2
 

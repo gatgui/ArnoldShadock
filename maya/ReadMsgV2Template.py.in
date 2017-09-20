@@ -1,13 +1,13 @@
 import pymel.core as pm
 from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
 
-class AE@MAKEP2_MAYA_NODENAME@Template(ShaderAETemplate):
+class AE@READMSGV2_MAYA_NODENAME@Template(ShaderAETemplate):
    def setup(self):
       self.beginScrollLayout()
       
       self.beginLayout("Parameters", collapse=False)
-      self.addControl("x")
-      self.addControl("y")
+      self.addControl("msg_name")
+      self.addControl("default_value")
       self.endLayout()
       
       pm.mel.AEdependNodeTemplate(self.nodeName)

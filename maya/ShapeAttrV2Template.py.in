@@ -1,7 +1,7 @@
 import pymel.core as pm
 from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
 
-class AE@SHAPEATTRP2_MAYA_NODENAME@Template(ShaderAETemplate):
+class AE@SHAPEATTRV2_MAYA_NODENAME@Template(ShaderAETemplate):
    def setup(self):
       self.beginScrollLayout()
       

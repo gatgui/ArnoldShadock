@@ -20,51 +20,75 @@ SOFTWARE.
 
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(ReadMsgP2Mtd);
+AI_SHADER_NODE_EXPORT_METHODS(WriteMsgV2Mtd);
 
-enum ReadMsgP2Params
+enum WriteMsgV2Params
 {
-   p_msg_name = 0,
-   p_default_value
+   p_input = 0,
+   p_msg_name,
+   p_msg_input,
+   p_eval_order
 };
 
 node_parameters
 {
+   AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
+   
    AiParameterStr(SSTR::msg_name, "");
-   AiParameterVec2("default_value", 0.0f, 0.0f);
+   AiParameterVec2(SSTR::msg_input, 0.0f, 0.0f);
+   AiParameterEnum(SSTR::eval_order, EO_input_last, EvalOrderNames);
 }
 
-struct ReadMsgP2Data
+struct WriteMsgV2Data
 {
+   bool valid;
    AtString msgName;
+   EvalOrder evalOrder;
 };
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new ReadMsgP2Data());
-   AddMemUsage<ReadMsgP2Data>();
+   WriteMsgV2Data *data = new WriteMsgV2Data();
+   AddMemUsage<WriteMsgV2Data>();
+   
+   data->valid = false;
+   data->evalOrder = EO_input_last;
+   
+   AiNodeSetLocalData(node, data);
 }
 
 node_update
 {
-   ReadMsgP2Data *data = (ReadMsgP2Data*) AiNodeGetLocalData(node);
+   WriteMsgV2Data *data = (WriteMsgV2Data*) AiNodeGetLocalData(node);
    
+   data->evalOrder = (EvalOrder) AiNodeGetInt(node, SSTR::eval_order);
    data->msgName = AiNodeGetStr(node, SSTR::msg_name);
+   data->valid = !data->msgName.empty();
 }
 
 node_finish
 {
-   ReadMsgP2Data *data = (ReadMsgP2Data*) AiNodeGetLocalData(node);
+   WriteMsgV2Data *data = (WriteMsgV2Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<ReadMsgP2Data>();
+   SubMemUsage<WriteMsgV2Data>();
 }
 
 shader_evaluate
 {
-   ReadMsgP2Data *data = (ReadMsgP2Data*) AiNodeGetLocalData(node);
+   WriteMsgV2Data *data = (WriteMsgV2Data*) AiNodeGetLocalData(node);
    
-   if (!AiStateGetMsgVec2(data->msgName, &(sg->out.VEC2())))
+   if (data->evalOrder == EO_input_first)
    {
-      sg->out.VEC2() = AiShaderEvalParamVec2(p_default_value);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
+   }
+   
+   if (data->valid)
+   {
+      AiStateSetMsgVec2(data->msgName, AiShaderEvalParamVec2(p_msg_input));
+   }
+   
+   if (data->evalOrder == EO_input_last)
+   {
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
    }
 }

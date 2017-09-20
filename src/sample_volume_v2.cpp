@@ -20,9 +20,9 @@ SOFTWARE.
 
 #include "common.h"
 
-AI_SHADER_NODE_EXPORT_METHODS(SampleVolumeP2Mtd);
+AI_SHADER_NODE_EXPORT_METHODS(SampleVolumeV2Mtd);
 
-enum SampleVolumeP2Params
+enum SampleVolumeV2Params
 {
    p_field = 0,
    p_interpolation,
@@ -75,7 +75,7 @@ node_parameters
    AiParameterVec2(SSTR::_default, 0.0f, 0.0f);
 }
 
-struct SampleVolumeP2Data
+struct SampleVolumeV2Data
 {
    AtString field;
    int interpolation;
@@ -97,13 +97,13 @@ struct SampleVolumeP2Data
 
 node_initialize
 {
-   AiNodeSetLocalData(node, new SampleVolumeP2Data());
-   AddMemUsage<SampleVolumeP2Data>();
+   AiNodeSetLocalData(node, new SampleVolumeV2Data());
+   AddMemUsage<SampleVolumeV2Data>();
 }
 
 node_update
 {
-   SampleVolumeP2Data *data = (SampleVolumeP2Data*) AiNodeGetLocalData(node);
+   SampleVolumeV2Data *data = (SampleVolumeV2Data*) AiNodeGetLocalData(node);
    
    data->field = AiNodeGetStr(node, SSTR::field);
    data->interpolation = AiNodeGetInt(node, SSTR::interpolation);
@@ -135,14 +135,14 @@ node_update
 
 node_finish
 {
-   SampleVolumeP2Data *data = (SampleVolumeP2Data*) AiNodeGetLocalData(node);
+   SampleVolumeV2Data *data = (SampleVolumeV2Data*) AiNodeGetLocalData(node);
    delete data;
-   SubMemUsage<SampleVolumeP2Data>();
+   SubMemUsage<SampleVolumeV2Data>();
 }
 
 shader_evaluate
 {
-   SampleVolumeP2Data *data = (SampleVolumeP2Data*) AiNodeGetLocalData(node);
+   SampleVolumeV2Data *data = (SampleVolumeV2Data*) AiNodeGetLocalData(node);
    
    AtVector oldP = sg->P;
    AtVector oldPo = sg->Po;
