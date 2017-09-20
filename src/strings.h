@@ -85,12 +85,12 @@ namespace SSTR
    extern AtString target_node;
    extern AtString light_index;
    
-   extern AtString agsb_brdf;
-   extern AtString agsb_ray;
-   extern AtString agsb_trace_hit;
-   extern AtString agsb_tir;
-   extern AtString agsb_sampler;
-   extern AtString agsb_sample_value;
+   // extern AtString agsb_brdf;
+   // extern AtString agsb_ray;
+   // extern AtString agsb_trace_hit;
+   // extern AtString agsb_tir;
+   // extern AtString agsb_sampler;
+   // extern AtString agsb_sample_value;
    
    extern AtString method;
    extern AtString origin;

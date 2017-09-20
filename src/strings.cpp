@@ -84,12 +84,12 @@ namespace SSTR
    AtString target_node("target_node");
    AtString light_index("light_index");
    
-   AtString agsb_brdf("agsb_brdf");
-   AtString agsb_ray("agsb_ray");
-   AtString agsb_trace_hit("agsb_trace_hit");
-   AtString agsb_tir("agsb_tir");
-   AtString agsb_sampler("agsb_sampler");
-   AtString agsb_sample_value("agsb_sample_value");
+   // AtString agsb_brdf("agsb_brdf");
+   // AtString agsb_ray("agsb_ray");
+   // AtString agsb_trace_hit("agsb_trace_hit");
+   // AtString agsb_tir("agsb_tir");
+   // AtString agsb_sampler("agsb_sampler");
+   // AtString agsb_sample_value("agsb_sample_value");
    
    AtString method("method");
    AtString origin("origin");
