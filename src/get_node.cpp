@@ -34,11 +34,11 @@ enum TargetNode
    TN_Shader,
    TN_Proc,
    TN_Light,
-   TN_Traced,
-   TN_Probed
+   // TN_Traced,
+   // TN_Probed
 };
 
-static const char* TargetNodeNames[] = {"shaded", "shader", "proc", "light", "traced", "probed", NULL};
+static const char* TargetNodeNames[] = {"shaded", "shader", "proc", "light", /*"traced", "probed",*/ NULL};
 
 node_parameters
 {
@@ -80,27 +80,27 @@ shader_evaluate
    
    switch (data->targetNode)
    {
-   case TN_Probed:
-   case TN_Traced:
-      {
-         HitData *hd = 0;
-         if (AiStateGetMsgPtr(SSTR::agsb_trace_hit, (void**)&hd) && hd)
-         {
-            if (data->targetNode == TN_Probed)
-            {
-               sg->out.PTR() = (void*) (hd->isSG ? ((AtShaderGlobals*)hd->ptr)->Op : 0);
-            }
-            else
-            {
-               sg->out.PTR() = (void*) (!hd->isSG ? ((AtScrSample*)hd->ptr)->obj : 0);
-            }
-         }
-         else
-         {
-            sg->out.PTR() = (void*) 0;
-         }
-      }
-      break;
+   // case TN_Probed:
+   // case TN_Traced:
+   //    {
+   //       HitData *hd = 0;
+   //       if (AiStateGetMsgPtr(SSTR::agsb_trace_hit, (void**)&hd) && hd)
+   //       {
+   //          if (data->targetNode == TN_Probed)
+   //          {
+   //             sg->out.PTR() = (void*) (hd->isSG ? ((AtShaderGlobals*)hd->ptr)->Op : 0);
+   //          }
+   //          else
+   //          {
+   //             sg->out.PTR() = (void*) (!hd->isSG ? ((AtScrSample*)hd->ptr)->obj : 0);
+   //          }
+   //       }
+   //       else
+   //       {
+   //          sg->out.PTR() = (void*) 0;
+   //       }
+   //    }
+   //    break;
    case TN_Light:
       {
          if (data->lightIndex < 0)
