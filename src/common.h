@@ -33,6 +33,12 @@ extern const char* CompareOperatorNames[];
 
 #define ABS std::abs
 
+template <typename T>
+inline int SGN(T a)
+{
+   return (a < 0) ? -1 : 1;
+}
+
 enum CompareOperator
 {
    CO_EQ = 0,
