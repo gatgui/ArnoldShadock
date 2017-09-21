@@ -895,6 +895,46 @@
    [attr transmit_use_default]
       linkable BOOL false
 
+[node switch_ray_shader]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x001164F3
+
+   [attr camera_use_default]
+      linkable BOOL false
+
+   [attr shadow_use_default]
+      linkable BOOL false
+
+   [attr diffuse_transmit_use_default]
+      linkable BOOL false
+
+   [attr specular_transmit_use_default]
+      linkable BOOL false
+
+   [attr volume_use_default]
+      linkable BOOL false
+
+   [attr diffuse_reflect_use_default]
+      linkable BOOL false
+
+   [attr specular_reflect_use_default]
+      linkable BOOL false
+
+   [attr subsurface_use_default]
+      linkable BOOL false
+
+   [attr diffuse_use_default]
+      linkable BOOL false
+
+   [attr specular_use_default]
+      linkable BOOL false
+
+   [attr reflect_use_default]
+      linkable BOOL false
+
+   [attr transmit_use_default]
+      linkable BOOL false
+
 [node sample_dir]
    maya.classification STRING "utility/sampling"
    maya.id INT 0x00116512

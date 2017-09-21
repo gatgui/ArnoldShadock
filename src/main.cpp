@@ -250,6 +250,7 @@ DECLARE_SHADER(SampleDir);
 DECLARE_SHADER(SwitchRayF);
 DECLARE_SHADER(SwitchRayC3);
 DECLARE_SHADER(SwitchRayC4);
+DECLARE_SHADER(SwitchRayShader);
 // DECLARE_SHADER(Volume);
 DECLARE_SHADER(SampleVolumeF);
 DECLARE_SHADER(SampleVolumeV2);
@@ -477,6 +478,7 @@ node_loader
    REGISTER_SHADER(SwitchRayF, switch_ray_f, AI_TYPE_FLOAT)
    REGISTER_SHADER(SwitchRayC3, switch_ray_c3, AI_TYPE_RGB)
    REGISTER_SHADER(SwitchRayC4, switch_ray_c4, AI_TYPE_RGBA)
+   REGISTER_SHADER(SwitchRayShader, switch_ray_shader, AI_TYPE_CLOSURE)
    // REGISTER_SHADER(Volume, volume, AI_TYPE_RGB)
    REGISTER_SHADER(SampleVolumeF, sample_volume_f, AI_TYPE_FLOAT)
    REGISTER_SHADER(SampleVolumeV2, sample_volume_v2, AI_TYPE_VECTOR2)
