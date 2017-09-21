@@ -40,14 +40,6 @@ enum SwitchRayFParams
    p_specular_reflect_use_default,
    p_subsurface,
    p_subsurface_use_default,
-   p_diffuse,
-   p_diffuse_use_default,
-   p_specular,
-   p_specular_use_default,
-   p_reflect,
-   p_reflect_use_default,
-   p_transmit,
-   p_transmit_use_default,
    p_default,
    p_failed
 };
@@ -70,14 +62,6 @@ node_parameters
    AiParameterBool(SSTR::specular_reflect_use_default, true);
    AiParameterFlt(SSTR::subsurface, 0.0f);
    AiParameterBool(SSTR::subsurface_use_default, true);
-   AiParameterFlt(SSTR::diffuse, 0.0f);
-   AiParameterBool(SSTR::diffuse_use_default, true);
-   AiParameterFlt(SSTR::specular, 0.0f);
-   AiParameterBool(SSTR::specular_use_default, true);
-   AiParameterFlt(SSTR::reflect, 0.0f);
-   AiParameterBool(SSTR::reflect_use_default, true);
-   AiParameterFlt(SSTR::transmit, 0.0f);
-   AiParameterBool(SSTR::transmit_use_default, true);
    AiParameterFlt(SSTR::_default, 0.0f);
    AiParameterFlt("failed", 0.0f);
 }
@@ -100,14 +84,6 @@ struct SwitchRayFData
    bool specularReflectUseDefault;
    bool evalSubsurface;
    bool subsurfaceUseDefault;
-   bool evalDiffuse;
-   bool diffuseUseDefault;
-   bool evalSpecular;
-   bool specularUseDefault;
-   bool evalReflect;
-   bool reflectUseDefault;
-   bool evalTransmit;
-   bool transmitUseDefault;
 };
 
 node_initialize
@@ -136,14 +112,6 @@ node_update
    data->specularReflectUseDefault = AiNodeGetBool(node, SSTR::specular_reflect_use_default);
    data->evalSubsurface = AiNodeIsLinked(node, SSTR::subsurface);
    data->subsurfaceUseDefault = AiNodeGetBool(node, SSTR::subsurface_use_default);
-   data->evalDiffuse = AiNodeIsLinked(node, SSTR::diffuse);
-   data->diffuseUseDefault = AiNodeGetBool(node, SSTR::diffuse_use_default);
-   data->evalSpecular = AiNodeIsLinked(node, SSTR::specular);
-   data->specularUseDefault = AiNodeGetBool(node, SSTR::specular_use_default);
-   data->evalReflect = AiNodeIsLinked(node, SSTR::reflect);
-   data->reflectUseDefault = AiNodeGetBool(node, SSTR::reflect_use_default);
-   data->evalTransmit = AiNodeIsLinked(node, SSTR::transmit);
-   data->transmitUseDefault = AiNodeGetBool(node, SSTR::transmit_use_default);
 }
 
 node_finish
@@ -188,22 +156,6 @@ shader_evaluate
    else if ((sg->Rt & AI_RAY_SUBSURFACE) != 0)
    {
       sg->out.FLT() = AiShaderEvalParamFlt((data->evalSubsurface || !data->subsurfaceUseDefault) ? p_subsurface : p_default);
-   }
-   else if ((sg->Rt & AI_RAY_ALL_DIFFUSE) != 0)
-   {
-      sg->out.FLT() = AiShaderEvalParamFlt((data->evalDiffuse || !data->diffuseUseDefault) ? p_diffuse : p_default);
-   }
-   else if ((sg->Rt & AI_RAY_ALL_SPECULAR) != 0)
-   {
-      sg->out.FLT() = AiShaderEvalParamFlt((data->evalSpecular || !data->specularUseDefault) ? p_specular : p_default);
-   }
-   else if ((sg->Rt & AI_RAY_ALL_REFLECT) != 0)
-   {
-      sg->out.FLT() = AiShaderEvalParamFlt((data->evalReflect || !data->reflectUseDefault) ? p_reflect : p_default);
-   }
-   else if ((sg->Rt & AI_RAY_ALL_TRANSMIT) != 0)
-   {
-      sg->out.FLT() = AiShaderEvalParamFlt((data->evalTransmit || !data->transmitUseDefault) ? p_transmit : p_default);
    }
    else
    {

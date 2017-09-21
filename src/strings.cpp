@@ -186,14 +186,6 @@ namespace SSTR
    AtString specular_reflect_use_default("specular_reflect_use_default");
    AtString subsurface("subsurface");
    AtString subsurface_use_default("subsurface_use_default");
-   AtString diffuse("diffuse");
-   AtString diffuse_use_default("diffuse_use_default");
-   AtString specular("specular");
-   AtString specular_use_default("specular_use_default");
-   AtString reflect("reflect");
-   AtString reflect_use_default("reflect_use_default");
-   AtString transmit("transmit");
-   AtString transmit_use_default("transmit_use_default");
 
    AtString mipmap_mode("mipmap_mode");
    AtString mipmap_bias("mipmap_bias");

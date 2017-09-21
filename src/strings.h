@@ -203,14 +203,6 @@ namespace SSTR
    extern AtString specular_reflect_use_default;
    extern AtString subsurface;
    extern AtString subsurface_use_default;
-   extern AtString diffuse;
-   extern AtString diffuse_use_default;
-   extern AtString specular;
-   extern AtString specular_use_default;
-   extern AtString reflect;
-   extern AtString reflect_use_default;
-   extern AtString transmit;
-   extern AtString transmit_use_default;
 
    extern AtString matrix;
    extern AtString as_point;

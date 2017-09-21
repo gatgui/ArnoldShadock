@@ -40,14 +40,6 @@ enum SwitchRayShaderParams
    p_specular_reflect_use_default,
    p_subsurface,
    p_subsurface_use_default,
-   p_diffuse,
-   p_diffuse_use_default,
-   p_specular,
-   p_specular_use_default,
-   p_reflect,
-   p_reflect_use_default,
-   p_transmit,
-   p_transmit_use_default,
    p_default,
    p_failed
 };
@@ -70,14 +62,6 @@ node_parameters
    AiParameterBool(SSTR::specular_reflect_use_default, true);
    AiParameterClosure(SSTR::subsurface);
    AiParameterBool(SSTR::subsurface_use_default, true);
-   AiParameterClosure(SSTR::diffuse);
-   AiParameterBool(SSTR::diffuse_use_default, true);
-   AiParameterClosure(SSTR::specular);
-   AiParameterBool(SSTR::specular_use_default, true);
-   AiParameterClosure(SSTR::reflect);
-   AiParameterBool(SSTR::reflect_use_default, true);
-   AiParameterClosure(SSTR::transmit);
-   AiParameterBool(SSTR::transmit_use_default, true);
    AiParameterClosure(SSTR::_default);
    AiParameterClosure("failed");
 }
@@ -92,10 +76,6 @@ struct SwitchRayShaderData
    bool diffuseReflectUseDefault;
    bool specularReflectUseDefault;
    bool subsurfaceUseDefault;
-   bool diffuseUseDefault;
-   bool specularUseDefault;
-   bool reflectUseDefault;
-   bool transmitUseDefault;
 };
 
 node_initialize
@@ -116,10 +96,6 @@ node_update
    data->diffuseReflectUseDefault = AiNodeGetBool(node, SSTR::diffuse_reflect_use_default);
    data->specularReflectUseDefault = AiNodeGetBool(node, SSTR::specular_reflect_use_default);
    data->subsurfaceUseDefault = AiNodeGetBool(node, SSTR::subsurface_use_default);
-   data->diffuseUseDefault = AiNodeGetBool(node, SSTR::diffuse_use_default);
-   data->specularUseDefault = AiNodeGetBool(node, SSTR::specular_use_default);
-   data->reflectUseDefault = AiNodeGetBool(node, SSTR::reflect_use_default);
-   data->transmitUseDefault = AiNodeGetBool(node, SSTR::transmit_use_default);
 }
 
 node_finish
@@ -164,22 +140,6 @@ shader_evaluate
    else if ((sg->Rt & AI_RAY_SUBSURFACE) != 0)
    {
       sg->out.CLOSURE() = AiShaderEvalParamClosure(!data->subsurfaceUseDefault ? p_subsurface : p_default);
-   }
-   else if ((sg->Rt & AI_RAY_ALL_DIFFUSE) != 0)
-   {
-      sg->out.CLOSURE() = AiShaderEvalParamClosure(!data->diffuseUseDefault ? p_diffuse : p_default);
-   }
-   else if ((sg->Rt & AI_RAY_ALL_SPECULAR) != 0)
-   {
-      sg->out.CLOSURE() = AiShaderEvalParamClosure(!data->specularUseDefault ? p_specular : p_default);
-   }
-   else if ((sg->Rt & AI_RAY_ALL_REFLECT) != 0)
-   {
-      sg->out.CLOSURE() = AiShaderEvalParamClosure(!data->reflectUseDefault ? p_reflect : p_default);
-   }
-   else if ((sg->Rt & AI_RAY_ALL_TRANSMIT) != 0)
-   {
-      sg->out.CLOSURE() = AiShaderEvalParamClosure(!data->transmitUseDefault ? p_transmit : p_default);
    }
    else
    {
