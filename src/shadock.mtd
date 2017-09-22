@@ -29,9 +29,6 @@
    [attr target]
       linkable BOOL false
    
-   [attr light_index]
-      linkable BOOL false
-   
    [attr attribute]
       linkable BOOL false
    
@@ -43,9 +40,6 @@
    maya.id INT 0x001164E9
    
    [attr target]
-      linkable BOOL false
-   
-   [attr light_index]
       linkable BOOL false
    
    [attr attribute]
@@ -61,9 +55,6 @@
    [attr target]
       linkable BOOL false
    
-   [attr light_index]
-      linkable BOOL false
-   
    [attr attribute]
       linkable BOOL false
    
@@ -75,9 +66,6 @@
    maya.id INT 0x001164EB
    
    [attr target]
-      linkable BOOL false
-   
-   [attr light_index]
       linkable BOOL false
    
    [attr attribute]
@@ -93,9 +81,6 @@
    [attr target]
       linkable BOOL false
    
-   [attr light_index]
-      linkable BOOL false
-   
    [attr attribute]
       linkable BOOL false
    
@@ -107,9 +92,6 @@
    maya.id INT 0x001164ED
    
    [attr target]
-      linkable BOOL false
-   
-   [attr light_index]
       linkable BOOL false
    
    [attr attribute]
@@ -125,9 +107,6 @@
    [attr target]
       linkable BOOL false
    
-   [attr light_index]
-      linkable BOOL false
-   
    [attr attribute]
       linkable BOOL false
    
@@ -139,9 +118,6 @@
    maya.id INT 0x001164EF
    
    [attr target]
-      linkable BOOL false
-   
-   [attr light_index]
       linkable BOOL false
    
    [attr attribute]
@@ -1004,10 +980,6 @@
    
    [attr target_node]
       linkable BOOL false
-   
-   [attr light_index]
-      linkable BOOL false
-      min INT -1
 
 [node compare_n]
    maya.classification STRING "utility/general"

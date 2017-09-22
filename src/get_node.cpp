@@ -25,31 +25,27 @@ AI_SHADER_NODE_EXPORT_METHODS(GetNodeMtd);
 enum GetNodeParams
 {
    p_target_node = 0,
-   p_light_index
 };
 
 enum TargetNode
 {
    TN_Shaded = 0,
    TN_Shader,
-   TN_Proc,
-   TN_Light,
+   TN_Proc
    // TN_Traced,
    // TN_Probed
 };
 
-static const char* TargetNodeNames[] = {"shaded", "shader", "proc", "light", /*"traced", "probed",*/ NULL};
+static const char* TargetNodeNames[] = {"shaded", "shader", "proc", /*"light", "traced", "probed",*/ NULL};
 
 node_parameters
 {
    AiParameterEnum(SSTR::target_node, TN_Shaded, TargetNodeNames);
-   AiParameterInt(SSTR::light_index, -1);
 }
 
 struct GetNodeData
 {
    int targetNode;
-   int lightIndex;
 };
 
 node_initialize
@@ -63,7 +59,6 @@ node_update
    GetNodeData *data = (GetNodeData*) AiNodeGetLocalData(node);
    
    data->targetNode = AiNodeGetInt(node, SSTR::target_node);
-   data->lightIndex = AiNodeGetInt(node, SSTR::light_index);
 }
 
 node_finish
@@ -76,7 +71,6 @@ node_finish
 shader_evaluate
 {
    GetNodeData *data = (GetNodeData*) AiNodeGetLocalData(node);
-   AtLightSample ls;
    
    switch (data->targetNode)
    {
@@ -101,23 +95,6 @@ shader_evaluate
    //       }
    //    }
    //    break;
-   case TN_Light:
-      {
-         if (data->lightIndex < 0)
-         {
-            AiLightsGetSample(sg, ls);
-            sg->out.PTR() = (void *)(ls.Lp);
-         }
-         else if (data->lightIndex < sg->nlights)
-         {
-            sg->out.PTR() = sg->lights[data->lightIndex];
-         }
-         else
-         {
-            sg->out.PTR() = (void*) 0;
-         }
-      }
-      break;
    case TN_Shader:
       sg->out.PTR() = sg->shader;
       break;

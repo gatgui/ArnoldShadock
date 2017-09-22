@@ -7,7 +7,6 @@ class AE@NODEATTRC4_MAYA_NODENAME@Template(ShaderAETemplate):
       
       self.beginLayout("Parameters", collapse=False)
       self.addControl("target")
-      self.addControl("light_index")
       self.addControl("target_node")
       self.addControl("attribute")
       self.addControl("used_defined")

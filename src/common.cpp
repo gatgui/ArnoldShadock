@@ -231,7 +231,6 @@ const char* NodeAttrTargetNames[] =
 {
    "surface",
    "shader",
-   "light",
    "procedural",
    "custom",
    NULL

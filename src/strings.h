@@ -83,7 +83,6 @@ namespace SSTR
    extern AtString logc_exposure;
    
    extern AtString target_node;
-   extern AtString light_index;
    
    // extern AtString agsb_brdf;
    // extern AtString agsb_ray;

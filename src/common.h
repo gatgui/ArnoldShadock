@@ -227,7 +227,6 @@ enum NodeAttrTarget
 {
    NAT_surface = 0,
    NAT_shader,
-   NAT_light,
    NAT_procedural,
    NAT_custom
 };

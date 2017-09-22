@@ -82,7 +82,6 @@ namespace SSTR
    AtString logc_exposure("logc_exposure");
    
    AtString target_node("target_node");
-   AtString light_index("light_index");
    
    // AtString agsb_brdf("agsb_brdf");
    // AtString agsb_ray("agsb_ray");
