@@ -32,7 +32,7 @@ SOFTWARE.
 static int gsShaderCount = 0;
 
 #define DECLARE_SHADER(name)\
-   extern AtNodeMethods* name##Mtd;\
+   extern const AtNodeMethods* name##Mtd;\
    static int name = gsShaderCount++
 
 #define DECLARE_FLOAT_SHADER(name) DECLARE_SHADER(name##F)
