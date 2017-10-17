@@ -17,7 +17,7 @@ if arniver[0] < 4 or (arniver[0] == 4 and (arniver[1] < 2 or (arniver[1] == 2 an
   print("shadock requires at least Arnold 4.2.12.0")
   sys.exit(1)
 
-version = "1.0.0"
+version = "1.1.0"
 
 withState = (excons.GetArgument("with-state", 1, int) != 0)
 withNoises = (excons.GetArgument("with-noises", 1, int) != 0)

@@ -294,6 +294,14 @@ namespace SSTR
    extern AtString blend;
    extern AtString blend_min;
    extern AtString blend_max;
+
+   extern AtString saturation_scale;
+   extern AtString hue_shift;
+   extern AtString in_black;
+   extern AtString in_white;
+   extern AtString out_white;
+   extern AtString out_black;
+   extern AtString gamma;
 }
 
 #endif
