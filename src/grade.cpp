@@ -121,9 +121,9 @@ shader_evaluate
       output = gmath::HSVtoRGB(hsv);
    }
 
-   output.r = GAIN(BIAS(output.r, bias), gain);
-   output.g = GAIN(BIAS(output.g, bias), gain);
-   output.b = GAIN(BIAS(output.b, bias), gain);
+   output.r = AiGain(AiBias(output.r, bias), gain);
+   output.g = AiGain(AiBias(output.g, bias), gain);
+   output.b = AiGain(AiBias(output.b, bias), gain);
 
    if (gamma < (1.0f - AI_EPSILON) || gamma > (1.0f + AI_EPSILON))
    {
@@ -137,7 +137,7 @@ shader_evaluate
       output *= powf(2.0f, exposure);
    }
 
-   sg->out.RGB.r = output.r;
-   sg->out.RGB.g = output.g;
-   sg->out.RGB.b = output.b;
+   sg->out.RGB().r = output.r;
+   sg->out.RGB().g = output.g;
+   sg->out.RGB().b = output.b;
 }
