@@ -33,7 +33,7 @@ enum HoldoutParams
 
 node_parameters
 {
-   AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
+   AiParameterClosure("input");
    AiParameterStr(SSTR::enable_attr, "");
    AiParameterBool(SSTR::default_enable, true);
    AiParameterStr(SSTR::color_attr, "");
@@ -101,14 +101,19 @@ shader_evaluate
    
    if (holdout)
    {
-      if (data->colorAttr.empty() || !AiUDataGetRGBA(data->colorAttr, sg->out.RGBA()))
+      AtRGBA col;
+      if (data->colorAttr.empty() || !AiUDataGetRGBA(data->colorAttr, col))
       {
-         sg->out.RGBA() = (data->evalDefaultColor ? AiShaderEvalParamRGBA(p_default_color) : data->defaultColor);
+         col = (data->evalDefaultColor ? AiShaderEvalParamRGBA(p_default_color) : data->defaultColor);
       }
+      AtClosureList closures;
+      closures.add(AiClosureEmission(sg, col.rgb()));
+      closures.add(AiClosureMatte(sg, AtRGB(1 - col.a)));
+      sg->out.CLOSURE() = closures;
    }
    else
    {
-      sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
+      sg->out.CLOSURE() = AiShaderEvalParamClosure(p_input);
    }
 }
 

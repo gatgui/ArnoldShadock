@@ -81,15 +81,17 @@ shader_evaluate
    
    AtVector N = (data->overrideNormal ? AiShaderEvalParamVec(p_normal) : sg->N);
    
-   switch (data->mode)
+   if (data->mode == SM_DirectDiffuse || data->mode == SM_IndirectDiffuse)
    {
-   case SM_DirectDiffuse:
-      sg->out.RGB() = AiDirectDiffuse(N, sg);
-      break;
-   case SM_IndirectDiffuse:
-      sg->out.RGB() = AiIndirectDiffuse(N, sg, AI_RGB_WHITE);
-      break;
-   default:
-      sg->out.RGB() = AI_RGB_BLACK;
+      AtClosureList closures;
+      AtBSDF *bsdf = AiOrenNayarBSDF(sg, AI_RGB_WHITE, N);
+      AiBSDFSetDirectIndirect(bsdf, (data->mode == SM_DirectDiffuse ? 1.0 : 0.0),
+                                    (data->mode == SM_DirectDiffuse ? 0.0 : 1.0));
+      closures.add(bsdf);
+      sg->out.CLOSURE() = closures;
+   }
+   else
+   {
+      sg->out.CLOSURE() = AiClosureEmission(sg, AI_RGB_BLACK);
    }
 }
