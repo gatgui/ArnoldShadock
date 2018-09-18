@@ -13,7 +13,7 @@ ARGUMENTS["use-c++11"] = ARGUMENTS.get("with-seexpr", "1")
 env = excons.MakeBaseEnv()
 
 arniver = arnold.Version(asString=False)
-if arniver[0] < 5 or (arniver[0] == 5 and arniver[1] != 0):
+if arniver[0] < 5:
   print("shadock requires at least Arnold 5.0.0.0")
   sys.exit(1)
 
