@@ -249,6 +249,7 @@
 [node write_aov_c4]
    maya.classification STRING "shader/surface"
    maya.id INT 0x001164F8
+   aov_shader BOOL true
 
    [attr aov_name]
       linkable BOOL false
@@ -262,6 +263,7 @@
 [node write_aov_c3]
    maya.classification STRING "shader/surface"
    maya.id INT 0x001164F9
+   aov_shader BOOL true
 
    [attr aov_name]
       linkable BOOL false
@@ -275,6 +277,7 @@
 [node write_aov_v]
    maya.classification STRING "shader/surface"
    maya.id INT 0x001164FA
+   aov_shader BOOL true
 
    [attr aov_name]
       linkable BOOL false
@@ -301,6 +304,7 @@
 [node write_aov_v2]
    maya.classification STRING "shader/surface"
    maya.id INT 0x001164FC
+   aov_shader BOOL true
 
    [attr aov_name]
       linkable BOOL false
@@ -314,6 +318,7 @@
 [node write_aov_f]
    maya.classification STRING "shader/surface"
    maya.id INT 0x001164FD
+   aov_shader BOOL true
 
    [attr aov_name]
       linkable BOOL false
@@ -327,6 +332,7 @@
 [node write_aov_i]
    maya.classification STRING "shader/surface"
    maya.id INT 0x001164FE
+   aov_shader BOOL true
 
    [attr aov_name]
       linkable BOOL false
@@ -340,6 +346,7 @@
 [node write_aov_b]
    maya.classification STRING "shader/surface"
    maya.id INT 0x001164FF
+   aov_shader BOOL true
 
    [attr aov_name]
       linkable BOOL false
@@ -2210,6 +2217,7 @@
 [node write_aovs]
    maya.classification STRING "shader/surface"
    maya.id INT 0x001165CA
+   aov_shader BOOL true
    
    [attr bool_aov_name]
       linkable BOOL false
