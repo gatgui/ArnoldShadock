@@ -446,6 +446,11 @@ def _initCallbacks():
       else:
          vall = [cmds.getAttr("%s.values[%d]" % (n, i)) for i in cmds.getAttr("%s.values" % n, multiIndices=1)]
          intl = map(arnoldInterpToMaya, cmds.getAttr("%s.interpolations" % n)[0])
+         # Adjust vall and intl to posl size if necessary
+         while len(vall) < len(posl):
+            vall.append((0.0, 0.0, 0.0))
+         while len(intl) < len(posl):
+            intl.append(arnoldInterpToMaya(1))
          # Add ramp attribute
          posa = om.MFloatArray(len(posl), 0.0)
          vala = om.MColorArray(len(posl), om.MColor(0.0, 0.0, 0.0))
