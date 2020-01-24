@@ -31,10 +31,8 @@ enum WriteAOVsParams
    p_int_aov,
    p_float_aov_name,
    p_float_aov,
-   p_point2_aov_name,
-   p_point2_aov,
-   p_point_aov_name,
-   p_point_aov,
+   p_vector2_aov_name,
+   p_vector2_aov,
    p_vector_aov_name,
    p_vector_aov,
    p_rgb_aov_name,
@@ -47,7 +45,7 @@ enum WriteAOVsParams
 
 node_parameters
 {
-   AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
+   AiParameterClosure("input");
    
    AiParameterStr(SSTR::bool_aov_name, "");
    AiParameterBool("bool_aov", false);
@@ -58,11 +56,8 @@ node_parameters
    AiParameterStr(SSTR::float_aov_name, "");
    AiParameterFlt("float_aov", 0.0f);
    
-   AiParameterStr(SSTR::point2_aov_name, "");
-   AiParameterPnt2("point2_aov", 0.0f, 0.0f);
-   
-   AiParameterStr(SSTR::point_aov_name, "");
-   AiParameterPnt("point_aov", 0.0f, 0.0f, 0.0f);
+   AiParameterStr(SSTR::vector2_aov_name, "");
+   AiParameterVec2("vector2_aov", 0.0f, 0.0f);
    
    AiParameterStr(SSTR::vector_aov_name, "");
    AiParameterVec("vector_aov", 0.0f, 0.0f, 0.0f);
@@ -83,16 +78,14 @@ struct WriteAOVsData
    bool hasBool;
    bool hasInt;
    bool hasFloat;
-   bool hasPoint2;
-   bool hasPoint;
+   bool hasVector2;
    bool hasVector;
    bool hasRGB;
    bool hasRGBA;
    AtString boolName;
    AtString intName;
    AtString floatName;
-   AtString point2Name;
-   AtString pointName;
+   AtString vector2Name;
    AtString vectorName;
    AtString rgbName;
    AtString rgbaName;
@@ -107,8 +100,7 @@ node_initialize
    data->hasBool = false;
    data->hasInt = false;
    data->hasFloat = false;
-   data->hasPoint2 = false;
-   data->hasPoint = false;
+   data->hasVector2 = false;
    data->hasVector = false;
    data->hasRGB = false;
    data->hasRGBA = false;
@@ -147,18 +139,11 @@ node_update
       data->hasFloat = true;
    }
    
-   data->hasPoint2 = false;
-   data->point2Name = AiNodeGetStr(node, SSTR::point2_aov_name);
-   if (!data->point2Name.empty())
+   data->hasVector2 = false;
+   data->vector2Name = AiNodeGetStr(node, SSTR::vector2_aov_name);
+   if (!data->vector2Name.empty())
    {
-      data->hasPoint2 = AiAOVRegister(data->point2Name, AI_TYPE_POINT2, (blend ? AI_AOV_BLEND_OPACITY : AI_AOV_BLEND_NONE));
-   }
-   
-   data->hasPoint = false;
-   data->pointName = AiNodeGetStr(node, SSTR::point_aov_name);
-   if (!data->pointName.empty())
-   {
-      data->hasPoint = AiAOVRegister(data->pointName, AI_TYPE_POINT, (blend ? AI_AOV_BLEND_OPACITY : AI_AOV_BLEND_NONE));
+      data->hasVector2 = AiAOVRegister(data->vector2Name, AI_TYPE_VECTOR2, (blend ? AI_AOV_BLEND_OPACITY : AI_AOV_BLEND_NONE));
    }
    
    data->hasVector = false;
@@ -196,7 +181,7 @@ shader_evaluate
    
    if (data->evalOrder == EO_input_first)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.CLOSURE() = AiShaderEvalParamClosure(p_input);
    }
    
    if ((sg->Rt & AI_RAY_CAMERA))
@@ -213,13 +198,9 @@ shader_evaluate
       {
          AiAOVSetFlt(sg, data->floatName, AiShaderEvalParamFlt(p_float_aov));
       }
-      if (data->hasPoint2 && AiAOVEnabled(data->point2Name, AI_TYPE_POINT2))
+      if (data->hasVector2 && AiAOVEnabled(data->vector2Name, AI_TYPE_VECTOR2))
       {
-         AiAOVSetPnt2(sg, data->point2Name, AiShaderEvalParamPnt2(p_point2_aov));
-      }
-      if (data->hasPoint && AiAOVEnabled(data->pointName, AI_TYPE_POINT))
-      {
-         AiAOVSetPnt(sg, data->pointName, AiShaderEvalParamPnt(p_point_aov));
+         AiAOVSetVec2(sg, data->vector2Name, AiShaderEvalParamVec2(p_vector2_aov));
       }
       if (data->hasVector && AiAOVEnabled(data->vectorName, AI_TYPE_VECTOR))
       {
@@ -237,6 +218,6 @@ shader_evaluate
    
    if (data->evalOrder == EO_input_last)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.CLOSURE() = AiShaderEvalParamClosure(p_input);
    }
 }

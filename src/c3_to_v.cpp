@@ -78,8 +78,8 @@ shader_evaluate
    {
    case CTV_HSV:
       {
-         float M = MAX3(input.r, input.g, input.b);
-         float m = MIN3(input.r, input.g, input.b);
+         float M = AiMax(input.r, input.g, input.b);
+         float m = AiMin(input.r, input.g, input.b);
          float C = M - m;
          
          float hue = 0.0f;
@@ -116,15 +116,15 @@ shader_evaluate
             }
          }
          
-         sg->out.VEC.x = hue;
-         sg->out.VEC.y = sat;
-         sg->out.VEC.z = val;
+         sg->out.VEC().x = hue;
+         sg->out.VEC().y = sat;
+         sg->out.VEC().z = val;
       }
       break;
    case CTV_HSL:
       {
-         float M = MAX3(input.r, input.g, input.b);
-         float m = MIN3(input.r, input.g, input.b);
+         float M = AiMax(input.r, input.g, input.b);
+         float m = AiMin(input.r, input.g, input.b);
          float C = M - m;
          
          float hue = 0.0f;
@@ -165,15 +165,15 @@ shader_evaluate
             }
          }
          
-         sg->out.VEC.x = hue;
-         sg->out.VEC.y = sat;
-         sg->out.VEC.z = lum;
+         sg->out.VEC().x = hue;
+         sg->out.VEC().y = sat;
+         sg->out.VEC().z = lum;
       }
       break;
    case CTV_RAW:
    default:
-      sg->out.VEC.x = input.r;
-      sg->out.VEC.y = input.g;
-      sg->out.VEC.z = input.b;
+      sg->out.VEC().x = input.r;
+      sg->out.VEC().y = input.g;
+      sg->out.VEC().z = input.b;
    }
 }

@@ -25,7 +25,6 @@ AI_SHADER_NODE_EXPORT_METHODS(NodeAttrBMtd);
 enum NodeAttrBParams
 {
    p_target = 0,
-   p_light_index,
    p_target_node,
    p_attribute,
    p_user_defined,
@@ -35,7 +34,6 @@ enum NodeAttrBParams
 node_parameters
 {
    AiParameterEnum(SSTR::target, NAT_surface, NodeAttrTargetNames);
-   AiParameterInt(SSTR::light_index, -1);
    AiParameterNode(SSTR::target_node, NULL);
    AiParameterStr(SSTR::attribute, "");
    AiParameterBool(SSTR::user_defined, true);
@@ -45,7 +43,6 @@ node_parameters
 struct NodeAttrBData
 {
    NodeAttrTarget target;
-   int light_index;
    AtString attribute;
    bool user_defined;
    bool linked;
@@ -61,7 +58,6 @@ node_update
 {
    NodeAttrBData *data = (NodeAttrBData*) AiNodeGetLocalData(node);
    data->target = (NodeAttrTarget) AiNodeGetInt(node, SSTR::target);
-   data->light_index = AiNodeGetInt(node, SSTR::light_index);
    data->attribute = AiNodeGetStr(node, SSTR::attribute);
    data->user_defined = AiNodeGetBool(node, SSTR::user_defined);
    data->linked = AiNodeIsLinked(node, SSTR::target_node);
@@ -88,16 +84,6 @@ shader_evaluate
    case NAT_shader:
       src = sg->shader;
       break;
-   case NAT_light:
-      if (data->light_index < 0)
-      {
-         src = sg->Lp;
-      }
-      else if (data->light_index < sg->nlights)
-      {
-         src = sg->lights[data->light_index];
-      }
-      break;
    case NAT_procedural:
       src = sg->proc;
       break;
@@ -112,7 +98,7 @@ shader_evaluate
    
    if (!src)
    {
-      sg->out.BOOL = AiShaderEvalParamBool(p_default);
+      sg->out.BOOL() = AiShaderEvalParamBool(p_default);
    }
    else
    {
@@ -139,11 +125,11 @@ shader_evaluate
       
       if (type == AI_TYPE_BOOLEAN)
       {
-         sg->out.BOOL = AiNodeGetBool(src, data->attribute);
+         sg->out.BOOL() = AiNodeGetBool(src, data->attribute);
       }
       else
       {
-         sg->out.BOOL = AiShaderEvalParamBool(p_default);
+         sg->out.BOOL() = AiShaderEvalParamBool(p_default);
       }
    }
 }

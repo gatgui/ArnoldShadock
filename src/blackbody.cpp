@@ -88,7 +88,7 @@ struct BlackbodyData
    gmath::Matrix3 CAT;
    bool approx;
    bool fixNans;
-   AtColor nanColor;
+   AtRGB nanColor;
    bool fixedExposure;
    float scale;
 };
@@ -145,7 +145,7 @@ node_update
    {
       gmath::ChromaticAdaptationTransform CAT = (gmath::ChromaticAdaptationTransform) AiNodeGetInt(node, SSTR::ca_transform);
       float Kmax = AiNodeGetFlt(node, SSTR::ca_max_temperature);
-      AtColor Wp = AiNodeGetRGB(node, SSTR::ca_white_point);
+      AtRGB Wp = AiNodeGetRGB(node, SSTR::ca_white_point);
       
       gmath::XYZ from = gmath::Blackbody::GetXYZ(Kmax);
       gmath::XYZ to = data->CS->RGBtoXYZ(gmath::RGB(Wp.r, Wp.g, Wp.b));
@@ -263,15 +263,15 @@ shader_evaluate
       break;
    }
 
-   sg->out.RGB.r = scale * out.r;
-   sg->out.RGB.g = scale * out.g;
-   sg->out.RGB.b = scale * out.b;
+   sg->out.RGB().r = scale * out.r;
+   sg->out.RGB().g = scale * out.g;
+   sg->out.RGB().b = scale * out.b;
    
    if (data->fixNans)
    {
-      if (AiColorCorrupted(sg->out.RGB))
+      if (!AiRGBIsFinite(sg->out.RGB()))
       {
-         sg->out.RGB = data->nanColor;
+         sg->out.RGB() = data->nanColor;
       }
    }
 }

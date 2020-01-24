@@ -31,10 +31,8 @@ enum WriteMsgsParams
    p_int_msg,
    p_float_msg_name,
    p_float_msg,
-   p_point2_msg_name,
-   p_point2_msg,
-   p_point_msg_name,
-   p_point_msg,
+   p_vector2_msg_name,
+   p_vector2_msg,
    p_vector_msg_name,
    p_vector_msg,
    p_rgb_msg_name,
@@ -46,7 +44,7 @@ enum WriteMsgsParams
 
 node_parameters
 {
-   AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
+   AiParameterClosure("input");
    
    AiParameterStr(SSTR::bool_msg_name, "");
    AiParameterBool("bool_msg", false);
@@ -57,11 +55,8 @@ node_parameters
    AiParameterStr(SSTR::float_msg_name, "");
    AiParameterFlt("float_msg", 0.0f);
    
-   AiParameterStr(SSTR::point2_msg_name, "");
-   AiParameterPnt2("point2_msg", 0.0f, 0.0f);
-   
-   AiParameterStr(SSTR::point_msg_name, "");
-   AiParameterPnt("point_msg", 0.0f, 0.0f, 0.0f);
+   AiParameterStr(SSTR::vector2_msg_name, "");
+   AiParameterVec2("point2_msg", 0.0f, 0.0f);
    
    AiParameterStr(SSTR::vector_msg_name, "");
    AiParameterVec("vector_msg", 0.0f, 0.0f, 0.0f);
@@ -80,16 +75,14 @@ struct WriteMsgsData
    bool hasBool;
    bool hasInt;
    bool hasFloat;
-   bool hasPoint2;
-   bool hasPoint;
+   bool hasVector2;
    bool hasVector;
    bool hasRGB;
    bool hasRGBA;
    AtString boolName;
    AtString intName;
    AtString floatName;
-   AtString point2Name;
-   AtString pointName;
+   AtString vector2Name;
    AtString vectorName;
    AtString rgbName;
    AtString rgbaName;
@@ -104,8 +97,7 @@ node_initialize
    data->hasBool = false;
    data->hasInt = false;
    data->hasFloat = false;
-   data->hasPoint2 = false;
-   data->hasPoint = false;
+   data->hasVector2 = false;
    data->hasVector = false;
    data->hasRGB = false;
    data->hasRGBA = false;
@@ -129,11 +121,8 @@ node_update
    data->floatName = AiNodeGetStr(node, SSTR::float_msg_name);
    data->hasFloat = !data->floatName.empty();
    
-   data->point2Name = AiNodeGetStr(node, SSTR::point2_msg_name);
-   data->hasPoint2 = !data->point2Name.empty();
-   
-   data->pointName = AiNodeGetStr(node, SSTR::point_msg_name);
-   data->hasPoint = !data->pointName.empty();
+   data->vector2Name = AiNodeGetStr(node, SSTR::vector2_msg_name);
+   data->hasVector2 = !data->vector2Name.empty();
    
    data->vectorName = AiNodeGetStr(node, SSTR::vector_msg_name);
    data->hasVector = !data->vectorName.empty();
@@ -158,7 +147,7 @@ shader_evaluate
    
    if (data->evalOrder == EO_input_first)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.CLOSURE() = AiShaderEvalParamClosure(p_input);
    }
    
    if (data->hasBool)
@@ -173,13 +162,9 @@ shader_evaluate
    {
       AiStateSetMsgFlt(data->floatName, AiShaderEvalParamFlt(p_float_msg));
    }
-   if (data->hasPoint2)
+   if (data->hasVector2)
    {
-      AiStateSetMsgPnt2(data->point2Name, AiShaderEvalParamPnt2(p_point2_msg));
-   }
-   if (data->hasPoint)
-   {
-      AiStateSetMsgPnt(data->pointName, AiShaderEvalParamPnt(p_point_msg));
+      AiStateSetMsgVec2(data->vector2Name, AiShaderEvalParamVec2(p_vector2_msg));
    }
    if (data->hasVector)
    {
@@ -196,6 +181,6 @@ shader_evaluate
    
    if (data->evalOrder == EO_input_last)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.CLOSURE() = AiShaderEvalParamClosure(p_input);
    }
 }

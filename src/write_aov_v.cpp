@@ -33,7 +33,7 @@ enum WriteAOVVParams
 
 node_parameters
 {
-   AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
+   AiParameterClosure("input");
    
    AiParameterStr(SSTR::aov_name, "");
    AiParameterVec(SSTR::aov_input, 0.0f, 0.0f, 0.0f);
@@ -90,7 +90,7 @@ shader_evaluate
    
    if (data->evalOrder == EO_input_first)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.CLOSURE() = AiShaderEvalParamClosure(p_input);
    }
    
    if ((sg->Rt & AI_RAY_CAMERA))
@@ -103,6 +103,6 @@ shader_evaluate
    
    if (data->evalOrder == EO_input_last)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+      sg->out.CLOSURE() = AiShaderEvalParamClosure(p_input);
    }
 }

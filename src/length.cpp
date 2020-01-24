@@ -48,5 +48,5 @@ shader_evaluate
 {
    AtVector input = AiShaderEvalParamVec(p_input);
    
-   sg->out.VEC = AiV3Length(input);
+   sg->out.VEC() = AiV3Length(input);
 }

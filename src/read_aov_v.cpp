@@ -63,8 +63,8 @@ shader_evaluate
 {
    ReadAOVVData *data = (ReadAOVVData*) AiNodeGetLocalData(node);
    
-   if (!AiAOVGetVec(sg, data->aovName, sg->out.VEC))
+   if (!AiAOVGetVec(sg, data->aovName, sg->out.VEC()))
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_default_value);
+      sg->out.VEC() = AiShaderEvalParamVec(p_default_value);
    }
 }

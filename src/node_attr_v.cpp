@@ -25,7 +25,6 @@ AI_SHADER_NODE_EXPORT_METHODS(NodeAttrVMtd);
 enum NodeAttrVParams
 {
    p_target = 0,
-   p_light_index,
    p_target_node,
    p_attribute,
    p_user_defined,
@@ -35,7 +34,6 @@ enum NodeAttrVParams
 node_parameters
 {
    AiParameterEnum(SSTR::target, NAT_surface, NodeAttrTargetNames);
-   AiParameterInt(SSTR::light_index, -1);
    AiParameterNode(SSTR::target_node, NULL);
    AiParameterStr(SSTR::attribute, "");
    AiParameterBool(SSTR::user_defined, true);
@@ -45,7 +43,6 @@ node_parameters
 struct NodeAttrVData
 {
    NodeAttrTarget target;
-   int light_index;
    AtString attribute;
    bool user_defined;
    bool linked;
@@ -61,7 +58,6 @@ node_update
 {
    NodeAttrVData *data = (NodeAttrVData*) AiNodeGetLocalData(node);
    data->target = (NodeAttrTarget) AiNodeGetInt(node, SSTR::target);
-   data->light_index = AiNodeGetInt(node, SSTR::light_index);
    data->attribute = AiNodeGetStr(node, SSTR::attribute);
    data->user_defined = AiNodeGetBool(node, SSTR::user_defined);
    data->linked = AiNodeIsLinked(node, SSTR::target_node);
@@ -78,7 +74,7 @@ shader_evaluate
 {
    NodeAttrVData *data = (NodeAttrVData*) AiNodeGetLocalData(node);
    
-   sg->out.VEC = AI_V3_ZERO;
+   sg->out.VEC() = AI_V3_ZERO;
    
    AtNode *src = NULL;
    
@@ -89,16 +85,6 @@ shader_evaluate
       break;
    case NAT_shader:
       src = sg->shader;
-      break;
-   case NAT_light:
-      if (data->light_index < 0)
-      {
-         src = sg->Lp;
-      }
-      else if (data->light_index < sg->nlights)
-      {
-         src = sg->lights[data->light_index];
-      }
       break;
    case NAT_procedural:
       src = sg->proc;
@@ -114,7 +100,7 @@ shader_evaluate
       
    if (!src)
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_default);
+      sg->out.VEC() = AiShaderEvalParamVec(p_default);
    }
    else
    {
@@ -141,14 +127,11 @@ shader_evaluate
       
       switch (type)
       {
-      case AI_TYPE_POINT:
-         sg->out.VEC = AiNodeGetPnt(src, data->attribute);
-         break;
       case AI_TYPE_VECTOR:
-         sg->out.VEC = AiNodeGetVec(src, data->attribute);
+         sg->out.VEC() = AiNodeGetVec(src, data->attribute);
          break;
       default:
-         sg->out.VEC = AiShaderEvalParamVec(p_default);
+         sg->out.VEC() = AiShaderEvalParamVec(p_default);
       }
    }
 }

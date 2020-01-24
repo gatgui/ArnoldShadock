@@ -57,7 +57,7 @@ static const char* CoordinateSpaceNames[] =
 node_parameters
 {
    AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
-   AiParameterPnt(SSTR::P, 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::P, 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::P_space, CS_World, CoordinateSpaceNames);
    AiParameterMtx(SSTR::P_world_matrix, AI_M4_IDENTITY);
    AiParameterBool(SSTR::P_is_offset, false);
@@ -103,7 +103,7 @@ node_update
    data->evalPWorldMatrix = (data->PSpace == CS_Custom && AiNodeIsLinked(node, SSTR::P_world_matrix));
    if (!data->evalPWorldMatrix)
    {
-      AiNodeGetMatrix(node, SSTR::P_world_matrix, data->PWorldMatrix);
+      data->PWorldMatrix = AiNodeGetMatrix(node, SSTR::P_world_matrix);
    }
    
    data->evalN = AiNodeIsLinked(node, SSTR::N);
@@ -111,7 +111,7 @@ node_update
    data->evalNWorldMatrix = (data->NSpace == CS_Custom && AiNodeIsLinked(node, SSTR::N_world_matrix));
    if (!data->evalNWorldMatrix)
    {
-      AiNodeGetMatrix(node, SSTR::N_world_matrix, data->NWorldMatrix);
+      data->NWorldMatrix = AiNodeGetMatrix(node, SSTR::N_world_matrix);
    }
    
    data->fhemi = AiNodeGetBool(node, SSTR::fhemi);
@@ -131,8 +131,8 @@ shader_evaluate
 {
    TweakGlobalsData *data = (TweakGlobalsData*) AiNodeGetLocalData(node);
    
-   AtPoint oldP = sg->P;
-   AtPoint oldPo = sg->Po;
+   AtVector oldP = sg->P;
+   AtVector oldPo = sg->Po;
    AtVector oldN = sg->N;
    AtVector oldNf = sg->Nf;
    AtVector oldNs = sg->Ns;
@@ -145,33 +145,33 @@ shader_evaluate
    {
       if (data->PSpace == CS_World)
       {
-         sg->P = (data->PIsOffset ? sg->P : AI_P3_ZERO) + AiShaderEvalParamPnt(p_P);
-         AiM4PointByMatrixMult(&(sg->Po), sg->Minv, &(sg->P));
+         sg->P = (data->PIsOffset ? sg->P : AI_P3_ZERO) + AiShaderEvalParamVec(p_P);
+         sg->Po = AiM4PointByMatrixMult(sg->Minv, sg->P);
       }
       else if (data->PSpace == CS_Object)
       {
-         sg->Po = (data->PIsOffset ? sg->Po : AI_P3_ZERO) + AiShaderEvalParamPnt(p_P);
-         AiM4PointByMatrixMult(&(sg->P), sg->M, &(sg->Po));
+         sg->Po = (data->PIsOffset ? sg->Po : AI_P3_ZERO) + AiShaderEvalParamVec(p_P);
+         sg->P = AiM4PointByMatrixMult(sg->M, sg->Po);
       }
       else
       {
-         AtPoint P = AiShaderEvalParamPnt(p_P);
-         AtPoint Pw = AI_P3_ZERO;
+         AtVector P = AiShaderEvalParamVec(p_P);
+         AtVector Pw = AI_P3_ZERO;
          if (!data->evalPWorldMatrix)
          {
             AtMatrix *W = AiShaderEvalParamMtx(p_P_world_matrix);
-            AiM4PointByMatrixMult(&Pw, *W, &P);
+            Pw = AiM4PointByMatrixMult(*W, P);
          }
          else
          {
-            AiM4PointByMatrixMult(&Pw, data->PWorldMatrix, &P);
+            Pw = AiM4PointByMatrixMult(data->PWorldMatrix, P);
          }
          if (data->PIsOffset)
          {
             Pw += sg->P;
          }
          sg->P = Pw;
-         AiM4PointByMatrixMult(&(sg->Po), sg->Minv, &(sg->P));
+         sg->Po = AiM4PointByMatrixMult(sg->Minv, sg->P);
       }
    }
    
@@ -181,7 +181,7 @@ shader_evaluate
       
       if (data->NSpace == CS_Object)
       {
-         AiM4VectorByMatrixMult(&(sg->N), sg->M, &N);
+         sg->N = AiM4VectorByMatrixMult(sg->M, N);
          sg->N = AiV3Normalize(sg->N);
       }
       else if (data->NSpace == CS_Custom)
@@ -189,11 +189,11 @@ shader_evaluate
          if (!data->evalNWorldMatrix)
          {
             AtMatrix *W = AiShaderEvalParamMtx(p_N_world_matrix);
-            AiM4VectorByMatrixMult(&(sg->N), *W, &N);
+            sg->N = AiM4VectorByMatrixMult(*W, N);
          }
          else
          {
-            AiM4VectorByMatrixMult(&(sg->N), data->NWorldMatrix, &N);
+            sg->N = AiM4VectorByMatrixMult(data->NWorldMatrix, N);
          }
          sg->N = AiV3Normalize(sg->N);
       }
@@ -205,7 +205,7 @@ shader_evaluate
       sg->Ns = sg->N;
       
       sg->Nf = sg->N;
-      AiFaceForward(&(sg->Nf), sg->Rd);
+      AiFaceForward(sg->Nf, sg->Rd);
    }
    
    if (!data->traceset.empty())
@@ -216,7 +216,7 @@ shader_evaluate
    sg->skip_shadow = data->skipShadow;
    sg->fhemi = data->fhemi;
    
-   sg->out.RGB = AiShaderEvalParamRGB(p_input);
+   sg->out.RGB() = AiShaderEvalParamRGB(p_input);
    
    sg->fhemi = oldFhemi;
    sg->skip_shadow = oldSkipShadow;

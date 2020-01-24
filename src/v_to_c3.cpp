@@ -84,46 +84,46 @@ shader_evaluate
          
          if (h < 1.0f)
          {
-            sg->out.RGB.r = C;
-            sg->out.RGB.g = X;
-            sg->out.RGB.b = 0.0f;
+            sg->out.RGB().r = C;
+            sg->out.RGB().g = X;
+            sg->out.RGB().b = 0.0f;
          }
          else if (h < 2.0f)
          {
-            sg->out.RGB.r = X;
-            sg->out.RGB.g = C;
-            sg->out.RGB.b = 0.0f;
+            sg->out.RGB().r = X;
+            sg->out.RGB().g = C;
+            sg->out.RGB().b = 0.0f;
          }
          else if (h < 3.0f)
          {
-            sg->out.RGB.r = 0.0f;
-            sg->out.RGB.g = C;
-            sg->out.RGB.b = X;
+            sg->out.RGB().r = 0.0f;
+            sg->out.RGB().g = C;
+            sg->out.RGB().b = X;
          }
          else if (h < 4.0f)
          {
-            sg->out.RGB.r = 0.0f;
-            sg->out.RGB.g = X;
-            sg->out.RGB.b = C;
+            sg->out.RGB().r = 0.0f;
+            sg->out.RGB().g = X;
+            sg->out.RGB().b = C;
          }
          else if (h < 5.0f)
          {
-            sg->out.RGB.r = X;
-            sg->out.RGB.g = 0.0f;
-            sg->out.RGB.b = C;
+            sg->out.RGB().r = X;
+            sg->out.RGB().g = 0.0f;
+            sg->out.RGB().b = C;
          }
          else
          {
-            sg->out.RGB.r = C;
-            sg->out.RGB.g = 0.0f;
-            sg->out.RGB.b = X;
+            sg->out.RGB().r = C;
+            sg->out.RGB().g = 0.0f;
+            sg->out.RGB().b = X;
          }
          
          float m = input.z - C;
          
-         sg->out.RGB.r += m;
-         sg->out.RGB.g += m;
-         sg->out.RGB.b += m;
+         sg->out.RGB().r += m;
+         sg->out.RGB().g += m;
+         sg->out.RGB().b += m;
       }
       break;
    case VTC_HSL:
@@ -144,52 +144,52 @@ shader_evaluate
          
          if (h < 1.0f)
          {
-            sg->out.RGB.r = C;
-            sg->out.RGB.g = X;
-            sg->out.RGB.b = 0.0f;
+            sg->out.RGB().r = C;
+            sg->out.RGB().g = X;
+            sg->out.RGB().b = 0.0f;
          }
          else if (h < 2.0f)
          {
-            sg->out.RGB.r = X;
-            sg->out.RGB.g = C;
-            sg->out.RGB.b = 0.0f;
+            sg->out.RGB().r = X;
+            sg->out.RGB().g = C;
+            sg->out.RGB().b = 0.0f;
          }
          else if (h < 3.0f)
          {
-            sg->out.RGB.r = 0.0f;
-            sg->out.RGB.g = C;
-            sg->out.RGB.b = X;
+            sg->out.RGB().r = 0.0f;
+            sg->out.RGB().g = C;
+            sg->out.RGB().b = X;
          }
          else if (h < 4.0f)
          {
-            sg->out.RGB.r = 0.0f;
-            sg->out.RGB.g = X;
-            sg->out.RGB.b = C;
+            sg->out.RGB().r = 0.0f;
+            sg->out.RGB().g = X;
+            sg->out.RGB().b = C;
          }
          else if (h < 5.0f)
          {
-            sg->out.RGB.r = X;
-            sg->out.RGB.g = 0.0f;
-            sg->out.RGB.b = C;
+            sg->out.RGB().r = X;
+            sg->out.RGB().g = 0.0f;
+            sg->out.RGB().b = C;
          }
          else
          {
-            sg->out.RGB.r = C;
-            sg->out.RGB.g = 0.0f;
-            sg->out.RGB.b = X;
+            sg->out.RGB().r = C;
+            sg->out.RGB().g = 0.0f;
+            sg->out.RGB().b = X;
          }
          
          float m = input.z - 0.5f * C;
          
-         sg->out.RGB.r += m;
-         sg->out.RGB.g += m;
-         sg->out.RGB.b += m;
+         sg->out.RGB().r += m;
+         sg->out.RGB().g += m;
+         sg->out.RGB().b += m;
       }
       break;
    case VTC_RAW:
    default:
-      sg->out.RGB.r = input.x;
-      sg->out.RGB.g = input.y;
-      sg->out.RGB.b = input.z;
+      sg->out.RGB().r = input.x;
+      sg->out.RGB().g = input.y;
+      sg->out.RGB().b = input.z;
    }
 }

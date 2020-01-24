@@ -63,11 +63,11 @@ shader_evaluate
    
    if (lower <= value && value <= upper)
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_inside_range);
+      sg->out.VEC() = AiShaderEvalParamVec(p_inside_range);
    }
    else if (value < lower-falloff || value > upper+falloff)
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_outside_range);
+      sg->out.VEC() = AiShaderEvalParamVec(p_outside_range);
    }
    else
    {
@@ -84,6 +84,6 @@ shader_evaluate
          blend = 1.0f - SmoothStep(NormalizeToRange(value, upper, upper+falloff));
       }
       
-      sg->out.VEC = (1.0f - blend) * outsideValue + blend * insideValue;
+      sg->out.VEC() = (1.0f - blend) * outsideValue + blend * insideValue;
    }
 }

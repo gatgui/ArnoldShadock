@@ -50,7 +50,7 @@ node_finish
 
 shader_evaluate
 {
-   sg->out.RGB.r = AiShaderEvalParamFlt(p_r);
-   sg->out.RGB.g = AiShaderEvalParamFlt(p_g);
-   sg->out.RGB.b = AiShaderEvalParamFlt(p_b);
+   sg->out.RGB().r = AiShaderEvalParamFlt(p_r);
+   sg->out.RGB().g = AiShaderEvalParamFlt(p_g);
+   sg->out.RGB().b = AiShaderEvalParamFlt(p_b);
 }

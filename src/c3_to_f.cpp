@@ -79,16 +79,16 @@ shader_evaluate
    switch (mode)
    {
    case CTF_INTENSITY:
-      sg->out.FLT = (input.r + input.g + input.b) * sOneThird;
+      sg->out.FLT() = (input.r + input.g + input.b) * sOneThird;
       break;
    case CTF_MAX:
-      sg->out.FLT = MAX3(input.r, input.g, input.b);
+      sg->out.FLT() = AiMax(input.r, input.g, input.b);
       break;
    case CTF_MIN:
-      sg->out.FLT = MIN3(input.r, input.g, input.b);
+      sg->out.FLT() = AiMin(input.r, input.g, input.b);
       break;
    case CTF_LUMINANCE:
    default:
-      sg->out.FLT = 0.2126f * input.r + 0.7152f * input.g + 0.0722f * input.b;
+      sg->out.FLT() = 0.2126f * input.r + 0.7152f * input.g + 0.0722f * input.b;
    }
 }

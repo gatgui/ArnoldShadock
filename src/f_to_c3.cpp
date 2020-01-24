@@ -48,7 +48,7 @@ shader_evaluate
 {
    float input = AiShaderEvalParamFlt(p_input);
    
-   sg->out.RGB.r = input;
-   sg->out.RGB.g = input;
-   sg->out.RGB.b = input;
+   sg->out.RGB().r = input;
+   sg->out.RGB().g = input;
+   sg->out.RGB().b = input;
 }

@@ -42,7 +42,7 @@ struct ReadAOVFData
 node_initialize
 {
    ReadAOVFData *data = (ReadAOVFData*) AiMalloc(sizeof(ReadAOVFData));
-   AiAddMemUsage(AtInt64(sizeof(ReadAOVFData)), "shading_blocks");
+   AiAddMemUsage(int64_t(sizeof(ReadAOVFData)), (AtString)"shading_blocks");
    AiNodeSetLocalData(node, data);
 }
 
@@ -57,15 +57,15 @@ node_finish
 {
    ReadAOVFData *data = (ReadAOVFData*) AiNodeGetLocalData(node);
    AiFree(data);
-   AiAddMemUsage(-AtInt64(sizeof(ReadAOVFData)), "shading_blocks");
+   AiAddMemUsage(-int64_t(sizeof(ReadAOVFData)), (AtString)"shading_blocks");
 }
 
 shader_evaluate
 {
    ReadAOVFData *data = (ReadAOVFData*) AiNodeGetLocalData(node);
    
-   if (!AiAOVGetFlt(sg, data->aovName, sg->out.FLT))
+   if (!AiAOVGetFlt(sg, data->aovName, sg->out.FLT()))
    {
-      sg->out.FLT = AiShaderEvalParamFlt(p_default_value);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_default_value);
    }
 }

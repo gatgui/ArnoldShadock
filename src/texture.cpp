@@ -164,7 +164,7 @@ node_update
    }
    data->handle = 0;
    data->useDefaultColor = AiNodeGetBool(node, SSTR::use_default_color);
-   AiTextureParamsSetDefaults(&(data->params));
+   AiTextureParamsSetDefaults(data->params);
    data->params.filter = AiNodeGetInt(node, SSTR::filter);
    data->params.mipmap_mode = AiNodeGetInt(node, SSTR::mipmap_mode);
    data->params.mipmap_bias = AiNodeGetInt(node, SSTR::mipmap_bias);
@@ -222,42 +222,42 @@ shader_evaluate
    params.start_channel = AiShaderEvalParamByte(p_start_channel);
    
    // Do not use heavy filtering in secondary rays
-   if ((sg->Rt & AI_RAY_DIFFUSE) && (params.filter > AI_TEXTURE_BILINEAR))
+   if ((sg->Rt & AI_RAY_ALL_DIFFUSE) && (params.filter > AI_TEXTURE_BILINEAR))
    {
       params.filter = AI_TEXTURE_BILINEAR;
    }
    
-   AtRGBA rv = AI_RGBA_BLACK;
+   AtRGBA rv = AI_RGB_BLACK;
    
    if (data->evalPath)
    {
-      rv = AiTextureAccess(sg, AiShaderEvalParamStr(p_filename), &params, psuccess);
+      rv = AiTextureAccess(sg, AiShaderEvalParamStr(p_filename), (AtString)"auto", params, psuccess);
    }
    else
    {
       if (data->handle)
       {
-         rv = AiTextureHandleAccess(sg, data->handle, &params, psuccess);
+         rv = AiTextureHandleAccess(sg, data->handle, params, psuccess);
       }
       else
       {
-         rv = AiTextureAccess(sg, data->filename, &params, psuccess);
+         rv = AiTextureAccess(sg, (AtString)data->filename, (AtString)"auto", params, psuccess);
       }
    }
    
    if (data->useDefaultColor && !success)
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_default_color);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_default_color);
    }
    else
    {
-      AtColor multiply = AiShaderEvalParamRGB(p_multiply);
-      AtColor offset = AiShaderEvalParamRGB(p_offset);
+      AtRGB multiply = AiShaderEvalParamRGB(p_multiply);
+      AtRGB offset = AiShaderEvalParamRGB(p_offset);
       
-      sg->out.RGBA.r = offset.r + multiply.r * rv.r;
-      sg->out.RGBA.g = offset.g + multiply.g * rv.g;
-      sg->out.RGBA.b = offset.b + multiply.b * rv.b;
-      sg->out.RGBA.a = rv.a;
+      sg->out.RGBA().r = offset.r + multiply.r * rv.r;
+      sg->out.RGBA().g = offset.g + multiply.g * rv.g;
+      sg->out.RGBA().b = offset.b + multiply.b * rv.b;
+      sg->out.RGBA().a = rv.a;
    }
 }
 

@@ -32,11 +32,11 @@ node_parameters
    AiParameterStr("input", "");
 }
 
-typedef Cache<const char*> StringCache;
+typedef Cache<AtString> StringCache;
 
 node_initialize
 {
-   AiNodeSetLocalData(node, AllocCache<const char*>(0));
+   AiNodeSetLocalData(node, AllocCache<AtString>(0));
 }
 
 node_update
@@ -56,9 +56,9 @@ shader_evaluate
 {
    StringCache *cache = (StringCache*) AiNodeGetLocalData(node);
    
-   if (!GetCacheValue(sg, cache, sg->out.STR))
+   if (!GetCacheValue(sg, cache, sg->out.STR()))
    {
-      sg->out.STR = AiShaderEvalParamStr(p_input);
-      SetCacheValue(sg, cache, sg->out.STR);
+      sg->out.STR() = AiShaderEvalParamStr(p_input);
+      SetCacheValue(sg, cache, sg->out.STR());
    }
 }

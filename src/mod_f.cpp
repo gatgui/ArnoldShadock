@@ -51,5 +51,5 @@ shader_evaluate
    float input1 = AiShaderEvalParamFlt(p_input1);
    float input2 = AiShaderEvalParamFlt(p_input2);
    
-   sg->out.FLT = fmodf(input1, input2);
+   sg->out.FLT() = fmodf(input1, input2);
 }

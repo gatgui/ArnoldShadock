@@ -52,10 +52,10 @@ shader_evaluate
 {
    if (AiShaderEvalParamBool(p_condition))
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_if_true);
+      sg->out.VEC() = AiShaderEvalParamVec(p_if_true);
    }
    else
    {
-      sg->out.VEC = AiShaderEvalParamVec(p_if_false);
+      sg->out.VEC() = AiShaderEvalParamVec(p_if_false);
    }
 }

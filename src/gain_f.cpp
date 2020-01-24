@@ -51,5 +51,5 @@ shader_evaluate
    float input = AiShaderEvalParamFlt(p_input);
    float gain = AiShaderEvalParamFlt(p_gain);
    
-   sg->out.FLT = GAIN(input, gain);
+   sg->out.FLT() = AiGain(input, gain);
 }

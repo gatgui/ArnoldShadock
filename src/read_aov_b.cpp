@@ -63,8 +63,8 @@ shader_evaluate
 {
    ReadAOVBData *data = (ReadAOVBData*) AiNodeGetLocalData(node);
    
-   if (!AiAOVGetBool(sg, data->aovName, sg->out.BOOL))
+   if (!AiAOVGetBool(sg, data->aovName, sg->out.BOOL()))
    {
-      sg->out.BOOL = AiShaderEvalParamBool(p_default_value);
+      sg->out.BOOL() = AiShaderEvalParamBool(p_default_value);
    }
 }

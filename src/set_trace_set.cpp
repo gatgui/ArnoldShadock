@@ -31,7 +31,7 @@ enum SetTraceSetParams
 
 node_parameters
 {
-   AiParameterRGBA("input", 0.0f, 0.0f, 0.0f, 1.0f);
+   AiParameterClosure("input");
    AiParameterStr(SSTR::trace_set, "");
    AiParameterBool(SSTR::inclusive, true);
 }
@@ -68,7 +68,7 @@ shader_evaluate
    
    AiShaderGlobalsSetTraceSet(sg, data->traceSet, data->inclusive);
    
-   sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+   sg->out.CLOSURE() = AiShaderEvalParamClosure(p_input);
    
    AiShaderGlobalsUnsetTraceSet(sg);
 }

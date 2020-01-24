@@ -60,11 +60,11 @@ shader_evaluate
    
    if (value >= threshold+falloff)
    {
-      sg->out.FLT = AiShaderEvalParamFlt(p_if_true);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_if_true);
    }
    else if (value < threshold-falloff)
    {
-      sg->out.FLT = AiShaderEvalParamFlt(p_if_false);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_if_false);
    }
    else
    {
@@ -73,6 +73,6 @@ shader_evaluate
       float trueValue = AiShaderEvalParamFlt(p_if_true);
       float falseValue = AiShaderEvalParamFlt(p_if_false);
       
-      sg->out.FLT = (1.0f - blend) * falseValue + blend * trueValue;
+      sg->out.FLT() = (1.0f - blend) * falseValue + blend * trueValue;
    }
 }

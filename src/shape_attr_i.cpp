@@ -62,22 +62,22 @@ shader_evaluate
 {
    ShapeAttrIData *data = (ShapeAttrIData*) AiNodeGetLocalData(node);
    
-   if (!AiUDataGetInt(data->attribute, &(sg->out.INT)))
+   if (!AiUDataGetInt(data->attribute, sg->out.INT()))
    {
-      AtByte b = 0;
+      uint8_t b = 0;
       unsigned int ui = 0;
 
-      if (AiUDataGetByte(data->attribute, &b))
+      if (AiUDataGetByte(data->attribute, b))
       {
-         sg->out.INT = int(b);
+         sg->out.INT() = int(b);
       }
-      else if (AiUDataGetUInt(data->attribute, &ui))
+      else if (AiUDataGetUInt(data->attribute, ui))
       {
-         sg->out.INT = int(ui);
+         sg->out.INT() = int(ui);
       }
       else
       {
-         sg->out.INT = AiShaderEvalParamInt(p_default);
+         sg->out.INT() = AiShaderEvalParamInt(p_default);
       }
    }
 }

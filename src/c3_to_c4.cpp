@@ -50,8 +50,8 @@ shader_evaluate
 {
    AtRGB input = AiShaderEvalParamRGB(p_color);
 
-   sg->out.RGBA.r = input.r;
-   sg->out.RGBA.g = input.g;
-   sg->out.RGBA.b = input.b;
-   sg->out.RGBA.a = AiShaderEvalParamFlt(p_alpha);
+   sg->out.RGBA().r = input.r;
+   sg->out.RGBA().g = input.g;
+   sg->out.RGBA().b = input.b;
+   sg->out.RGBA().a = AiShaderEvalParamFlt(p_alpha);
 }

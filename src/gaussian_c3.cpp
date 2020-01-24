@@ -54,7 +54,7 @@ node_finish
 
 shader_evaluate
 {
-   AtColor input = AiShaderEvalParamRGB(p_input);
+   AtRGB input = AiShaderEvalParamRGB(p_input);
    float amplitude = AiShaderEvalParamFlt(p_amplitude);
    float center = AiShaderEvalParamFlt(p_center);
    float width = AiShaderEvalParamFlt(p_width);
@@ -66,7 +66,7 @@ shader_evaluate
    
    float scl = 1.0f / (2.0f * width * width);
    
-   sg->out.RGB.r = offset + amplitude * expf(-(tmpr * tmpr) * scl);
-   sg->out.RGB.g = offset + amplitude * expf(-(tmpg * tmpg) * scl);
-   sg->out.RGB.b = offset + amplitude * expf(-(tmpb * tmpb) * scl);
+   sg->out.RGB().r = offset + amplitude * expf(-(tmpr * tmpr) * scl);
+   sg->out.RGB().g = offset + amplitude * expf(-(tmpg * tmpg) * scl);
+   sg->out.RGB().b = offset + amplitude * expf(-(tmpb * tmpb) * scl);
 }

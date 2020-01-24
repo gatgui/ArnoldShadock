@@ -48,7 +48,7 @@ shader_evaluate
 {
    float input = AiShaderEvalParamFlt(p_input);
    
-   sg->out.VEC.x = input;
-   sg->out.VEC.y = input;
-   sg->out.VEC.z = input;
+   sg->out.VEC().x = input;
+   sg->out.VEC().y = input;
+   sg->out.VEC().z = input;
 }

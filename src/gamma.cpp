@@ -102,7 +102,7 @@ shader_evaluate
 
    if (!data->valid)
    {
-      sg->out.RGB = input;
+      sg->out.RGB() = input;
    }
    else
    {
@@ -118,8 +118,8 @@ shader_evaluate
          out = gmath::Gamma::Unlinearize(in, data->gf);
       }
 
-      sg->out.RGB.r = out.r;
-      sg->out.RGB.g = out.g;
-      sg->out.RGB.b = out.b;
+      sg->out.RGB().r = out.r;
+      sg->out.RGB().g = out.g;
+      sg->out.RGB().b = out.b;
    }
 }

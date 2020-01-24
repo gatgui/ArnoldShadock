@@ -51,7 +51,7 @@ shader_evaluate
    AtRGB input = AiShaderEvalParamRGB(p_input);
    AtVector bias = AiShaderEvalParamVec(p_bias);
    
-   sg->out.RGB.r = BIAS(input.r, bias.x);
-   sg->out.RGB.g = BIAS(input.g, bias.y);
-   sg->out.RGB.b = BIAS(input.b, bias.z);
+   sg->out.RGB().r = AiBias(input.r, bias.x);
+   sg->out.RGB().g = AiBias(input.g, bias.y);
+   sg->out.RGB().b = AiBias(input.b, bias.z);
 }

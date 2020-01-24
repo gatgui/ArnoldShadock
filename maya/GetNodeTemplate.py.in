@@ -7,7 +7,6 @@ class AE@GETNODE_MAYA_NODENAME@Template(ShaderAETemplate):
       
       self.beginLayout("Parameters", collapse=False)
       self.addControl("target_node")
-      self.addControl("light_index")
       self.endLayout()
       
       pm.mel.AEdependNodeTemplate(self.nodeName)

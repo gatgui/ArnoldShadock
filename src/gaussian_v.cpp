@@ -66,7 +66,7 @@ shader_evaluate
    
    float scl = 1.0f / (2.0f * width * width);
    
-   sg->out.VEC.x = offset + amplitude * expf(-(tmpx * tmpx) * scl);
-   sg->out.VEC.y = offset + amplitude * expf(-(tmpy * tmpy) * scl);
-   sg->out.VEC.z = offset + amplitude * expf(-(tmpz * tmpz) * scl);
+   sg->out.VEC().x = offset + amplitude * expf(-(tmpx * tmpx) * scl);
+   sg->out.VEC().y = offset + amplitude * expf(-(tmpy * tmpy) * scl);
+   sg->out.VEC().z = offset + amplitude * expf(-(tmpz * tmpz) * scl);
 }

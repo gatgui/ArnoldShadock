@@ -195,50 +195,50 @@ shader_evaluate
 {
    CameraTransformData *data = (CameraTransformData*) AiNodeGetLocalData(node);
    
-   sg->out.pMTX = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
+   sg->out.pMTX() = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
    
    switch (data->mode)
    {
    case MM_world_to_camera:
-      AiWorldToCameraMatrix(data->camera, sg->time, *(sg->out.pMTX));
+      AiWorldToCameraMatrix(data->camera, sg->time, *(sg->out.pMTX()));
       break;
    case MM_camera_to_screen:
       {
          AtMatrix tmp0, tmp1, tmp2;
          AiWorldToCameraMatrix(data->camera, sg->time, tmp0);
-         AiM4Invert(tmp0, tmp1);
+         tmp1 = AiM4Invert(tmp0);
          AiWorldToScreenMatrix(data->camera, sg->time, tmp2);
-         AiM4Mult(*(sg->out.pMTX), tmp1, tmp2);
+         *(sg->out.pMTX()) = AiM4Mult(tmp1, tmp2);
       }
       break;
    case MM_world_to_screen:
-      AiWorldToScreenMatrix(data->camera, sg->time, *(sg->out.pMTX));
+      AiWorldToScreenMatrix(data->camera, sg->time, *(sg->out.pMTX()));
       break;
    case MM_camera_to_world:
       {
          AtMatrix tmp;
          AiWorldToCameraMatrix(data->camera, sg->time, tmp);
-         AiM4Invert(tmp, *(sg->out.pMTX));
+         *(sg->out.pMTX()) = AiM4Invert(tmp);
       }
       break;
    case MM_screen_to_camera:
       {
          AtMatrix tmp0, tmp1, tmp2;
          AiWorldToScreenMatrix(data->camera, sg->time, tmp0);
-         AiM4Invert(tmp0, tmp1);
+         tmp1 = AiM4Invert(tmp0);
          AiWorldToCameraMatrix(data->camera, sg->time, tmp2);
-         AiM4Mult(*(sg->out.pMTX), tmp1, tmp2);
+         *(sg->out.pMTX()) = AiM4Mult(tmp1, tmp2);
       }
       break;
    case MM_screen_to_world:
       {
          AtMatrix tmp;
          AiWorldToScreenMatrix(data->camera, sg->time, tmp);
-         AiM4Invert(tmp, *(sg->out.pMTX));
+         *(sg->out.pMTX()) = AiM4Invert(tmp);
       }
       break;
    default:
-      AiM4Identity(*(sg->out.pMTX));   
+      *(sg->out.pMTX()) = AiM4Identity();   
    }
    
 }

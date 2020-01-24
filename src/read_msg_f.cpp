@@ -63,8 +63,8 @@ shader_evaluate
 {
    ReadMsgFData *data = (ReadMsgFData*) AiNodeGetLocalData(node);
    
-   if (!AiStateGetMsgFlt(data->msgName, &(sg->out.FLT)))
+   if (!AiStateGetMsgFlt(data->msgName, &(sg->out.FLT())))
    {
-      sg->out.FLT = AiShaderEvalParamFlt(p_default_value);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_default_value);
    }
 }

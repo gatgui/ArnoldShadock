@@ -31,6 +31,14 @@ SOFTWARE.
 
 extern const char* CompareOperatorNames[];
 
+#define ABS std::abs
+
+template <typename T>
+inline int SGN(T a)
+{
+   return (a < 0) ? -1 : 1;
+}
+
 enum CompareOperator
 {
    CO_EQ = 0,
@@ -97,15 +105,21 @@ enum RayType
 {
    RT_Camera = 0,
    RT_Shadow,
-   RT_Reflected,
-   RT_Refracted,
+   RT_DiffuseTransmit,
+   RT_SpecularTransmit,
+   RT_Volume,
+   RT_DiffuseReflect,
+   RT_SpecularReflect,
+   RT_Subsurface,
    RT_Diffuse,
-   RT_Glossy,
-   RT_Generic
+   RT_Specular,
+   RT_Reflect,
+   RT_Transmit,
+   RT_All
 };
 
 extern const char* RayTypeNames[];
-extern AtUInt16 RayTypeValues[];
+extern uint8_t RayTypeValues[];
 
 enum GammaMode
 {
@@ -213,7 +227,6 @@ enum NodeAttrTarget
 {
    NAT_surface = 0,
    NAT_shader,
-   NAT_light,
    NAT_procedural,
    NAT_custom
 };
@@ -232,13 +245,13 @@ extern const char* BlendModeNames[];
 
 // ---
 
-struct BRDFData
-{
-   AtBRDFEvalSampleFunc evalSample;
-   AtBRDFEvalBrdfFunc evalBrdf;
-   AtBRDFEvalPdfFunc evalPdf;
-   void *data;
-};
+// struct BRDFData
+// {
+//    AtBRDFEvalSampleFunc evalSample;
+//    AtBRDFEvalBrdfFunc evalBrdf;
+//    AtBRDFEvalPdfFunc evalPdf;
+//    void *data;
+// };
 
 // ---
 
@@ -253,13 +266,13 @@ struct HitData
 template <typename T>
 inline void AddMemUsage()
 {
-   AiAddMemUsage(AtInt64(sizeof(T)), "shading_blocks");
+   AiAddMemUsage(uint64_t(sizeof(T)), (AtString)"shading_blocks");
 }
 
 template <typename T>
 inline void SubMemUsage()
 {
-   AiAddMemUsage(-AtInt64(sizeof(T)), "shading_blocks");
+   AiAddMemUsage(-uint64_t(sizeof(T)), (AtString)"shading_blocks");
 }
 
 inline int GetRenderThreadsCount()
@@ -304,23 +317,22 @@ inline AtRGB SmoothStep(const AtRGB &v)
 
 inline AtVector SmoothStep(const AtVector &v)
 {
-   AtVector rv;
-   AiV3Create(rv, SmoothStep(v.x), SmoothStep(v.y), SmoothStep(v.z));
+   AtVector rv = AtVector(SmoothStep(v.x), SmoothStep(v.y), SmoothStep(v.z));
    return rv;
 }
 
 inline float NormalizeToRange(float in, float range_min, float range_max)
 {
-   return CLAMP((in - range_min) / (range_max - range_min), 0.0f, 1.0f);
+   return AiClamp((in - range_min) / (range_max - range_min), 0.0f, 1.0f);
 }
 
 inline AtVector NormalizeToRange(const AtVector &in, const AtVector &range_min, const AtVector &range_max)
 {
    AtVector rv;
 
-   rv.x = CLAMP((in.x - range_min.x) / (range_max.x - range_min.x), 0.0f, 1.0f);
-   rv.y = CLAMP((in.y - range_min.y) / (range_max.y - range_min.y), 0.0f, 1.0f);
-   rv.z = CLAMP((in.z - range_min.z) / (range_max.z - range_min.z), 0.0f, 1.0f);
+   rv.x = AiClamp((in.x - range_min.x) / (range_max.x - range_min.x), 0.0f, 1.0f);
+   rv.y = AiClamp((in.y - range_min.y) / (range_max.y - range_min.y), 0.0f, 1.0f);
+   rv.z = AiClamp((in.z - range_min.z) / (range_max.z - range_min.z), 0.0f, 1.0f);
 
    return rv;
 }
@@ -330,9 +342,9 @@ inline AtVector NormalizeToRange(const AtVector &in, float range_min, float rang
    AtVector rv;
    float tmp = 1.0f / (range_max - range_min);
 
-   rv.x = CLAMP((in.x - range_min) * tmp, 0.0f, 1.0f);
-   rv.y = CLAMP((in.y - range_min) * tmp, 0.0f, 1.0f);
-   rv.z = CLAMP((in.z - range_min) * tmp, 0.0f, 1.0f);
+   rv.x = AiClamp((in.x - range_min) * tmp, 0.0f, 1.0f);
+   rv.y = AiClamp((in.y - range_min) * tmp, 0.0f, 1.0f);
+   rv.z = AiClamp((in.z - range_min) * tmp, 0.0f, 1.0f);
 
    return rv;
 }
@@ -341,9 +353,9 @@ inline AtRGB NormalizeToRange(const AtRGB &in, const AtRGB &range_min, const AtR
 {
    AtRGB rv;
 
-   rv.r = CLAMP((in.r - range_min.r) / (range_max.r - range_min.r), 0.0f, 1.0f);
-   rv.g = CLAMP((in.g - range_min.g) / (range_max.g - range_min.g), 0.0f, 1.0f);
-   rv.b = CLAMP((in.b - range_min.b) / (range_max.b - range_min.b), 0.0f, 1.0f);
+   rv.r = AiClamp((in.r - range_min.r) / (range_max.r - range_min.r), 0.0f, 1.0f);
+   rv.g = AiClamp((in.g - range_min.g) / (range_max.g - range_min.g), 0.0f, 1.0f);
+   rv.b = AiClamp((in.b - range_min.b) / (range_max.b - range_min.b), 0.0f, 1.0f);
 
    return rv;
 }
@@ -353,9 +365,9 @@ inline AtRGB NormalizeToRange(const AtRGB &in, float range_min, float range_max)
    AtRGB rv;
    float tmp = 1.0f / (range_max - range_min);
 
-   rv.r = CLAMP((in.r - range_min) * tmp, 0.0f, 1.0f);
-   rv.g = CLAMP((in.g - range_min) * tmp, 0.0f, 1.0f);
-   rv.b = CLAMP((in.b - range_min) * tmp, 0.0f, 1.0f);
+   rv.r = AiClamp((in.r - range_min) * tmp, 0.0f, 1.0f);
+   rv.g = AiClamp((in.g - range_min) * tmp, 0.0f, 1.0f);
+   rv.b = AiClamp((in.b - range_min) * tmp, 0.0f, 1.0f);
 
    return rv;
 }
@@ -424,7 +436,7 @@ struct UVData
    void restore(AtShaderGlobals *sg);
 };
 
-inline void ScaleUV(const AtPoint2 &pivot, const AtPoint2 &s, AtPoint2 &uv)
+inline void ScaleUV(const AtVector2 &pivot, const AtVector2 &s, AtVector2 &uv)
 {
    uv -= pivot;
    uv.x *= s.x;
@@ -432,15 +444,15 @@ inline void ScaleUV(const AtPoint2 &pivot, const AtPoint2 &s, AtPoint2 &uv)
    uv += pivot;
 }
 
-inline void RotateUV(const AtPoint2 &pivot, float cosA, float sinA, AtPoint2 &uv)
+inline void RotateUV(const AtVector2 &pivot, float cosA, float sinA, AtVector2 &uv)
 {
-   AtPoint2 tmp = uv - pivot;
+   AtVector2 tmp = uv - pivot;
 
    uv.x = pivot.x + cosA * tmp.x - sinA * tmp.y;
    uv.y = pivot.y + cosA * tmp.y + sinA * tmp.x;
 }
 
-inline void TranslateUV(const AtPoint2 &t, AtPoint2 &uv)
+inline void TranslateUV(const AtVector2 &t, AtVector2 &uv)
 {
    uv += t;
 }

@@ -63,8 +63,8 @@ shader_evaluate
 {
    ReadAOVIData *data = (ReadAOVIData*) AiNodeGetLocalData(node);
    
-   if (!AiAOVGetInt(sg, data->aovName, sg->out.INT))
+   if (!AiAOVGetInt(sg, data->aovName, sg->out.INT()))
    {
-      sg->out.INT = AiShaderEvalParamInt(p_default_value);
+      sg->out.INT() = AiShaderEvalParamInt(p_default_value);
    }
 }

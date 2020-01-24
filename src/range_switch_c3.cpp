@@ -60,10 +60,10 @@ shader_evaluate
    
    if (lower <= value && value <= upper)
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_inside_range);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_inside_range);
    }
    else
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_outside_range);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_outside_range);
    }
 }

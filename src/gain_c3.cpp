@@ -51,7 +51,7 @@ shader_evaluate
    AtRGB input = AiShaderEvalParamRGB(p_input);
    AtVector gain = AiShaderEvalParamVec(p_gain);
    
-   sg->out.RGB.r = GAIN(input.r, gain.x);
-   sg->out.RGB.g = GAIN(input.g, gain.y);
-   sg->out.RGB.b = GAIN(input.b, gain.z);
+   sg->out.RGB().r = AiGain(input.r, gain.x);
+   sg->out.RGB().g = AiGain(input.g, gain.y);
+   sg->out.RGB().b = AiGain(input.b, gain.z);
 }

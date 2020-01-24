@@ -51,8 +51,8 @@ shader_evaluate
    float input = AiShaderEvalParamFlt(p_input);
    float alpha = AiShaderEvalParamFlt(p_alpha);
    
-   sg->out.RGBA.r = input;
-   sg->out.RGBA.g = input;
-   sg->out.RGBA.b = input;
-   sg->out.RGBA.a = alpha;
+   sg->out.RGBA().r = input;
+   sg->out.RGBA().g = input;
+   sg->out.RGBA().b = input;
+   sg->out.RGBA().a = alpha;
 }

@@ -69,9 +69,9 @@ shader_evaluate
    if (data->output_mode == AM_V)
    {
       // Int, UInt, Byte?
-      if (!AiUDataGetFlt(data->attribute, &(sg->out.FLT)))
+      if (!AiUDataGetFlt(data->attribute, sg->out.FLT()))
       {
-         sg->out.FLT = AiShaderEvalParamFlt(p_default);
+         sg->out.FLT() = AiShaderEvalParamFlt(p_default);
       }
    }
    else
@@ -79,13 +79,13 @@ shader_evaluate
       float dVdx = 0.0f;
       float dVdy = 0.0f;
       
-      if (!AiUDataGetDxyDerivativesFlt(data->attribute, &dVdx, &dVdx))
+      if (!AiUDataGetDxyDerivativesFlt(data->attribute, dVdx, dVdx))
       {
-         sg->out.FLT = AiShaderEvalParamFlt(p_default);
+         sg->out.FLT() = AiShaderEvalParamFlt(p_default);
       }
       else
       {
-         sg->out.FLT = (data->output_mode == AM_dVdx ? dVdx : dVdy);
+         sg->out.FLT() = (data->output_mode == AM_dVdx ? dVdx : dVdy);
       }
    }
 }

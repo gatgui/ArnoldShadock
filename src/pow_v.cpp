@@ -51,7 +51,7 @@ shader_evaluate
    AtVector input1 = AiShaderEvalParamVec(p_input1);
    AtVector input2 = AiShaderEvalParamVec(p_input2);
    
-   sg->out.VEC.x = powf(input1.x, input2.x);
-   sg->out.VEC.y = powf(input1.y, input2.y);
-   sg->out.VEC.z = powf(input1.z, input2.z);
+   sg->out.VEC().x = powf(input1.x, input2.x);
+   sg->out.VEC().y = powf(input1.y, input2.y);
+   sg->out.VEC().z = powf(input1.z, input2.z);
 }

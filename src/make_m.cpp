@@ -41,9 +41,9 @@ node_parameters
    AiParameterEnum(SSTR::rotation_order, RO_XYZ, RotationOrderNames);
    AiParameterEnum(SSTR::angle_units, AU_Degrees, AngleUnitsNames);
    AiParameterVec(SSTR::rotation, 0.0f, 0.0f, 0.0f);
-   AiParameterPnt(SSTR::rotation_pivot, 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::rotation_pivot, 0.0f, 0.0f, 0.0f);
    AiParameterVec(SSTR::scale, 1.0f, 1.0f, 1.0f);
-   AiParameterPnt(SSTR::scale_pivot, 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::scale_pivot, 0.0f, 0.0f, 0.0f);
 }
 
 struct MakeMData
@@ -108,7 +108,7 @@ node_update
    {
       data->T_set = true;
       AtVector T = AiNodeGetVec(node, SSTR::translation);
-      AiM4Translation(data->T, &T);
+      data->T = AiM4Translation(T);
    }
 
    if (!AiNodeIsLinked(node, SSTR::rotation))
@@ -119,9 +119,9 @@ node_update
       data->Ry_set = true;
       data->Rz_set = true;
 
-      AiM4RotationX(data->Rx, data->angleScale * R.x);
-      AiM4RotationY(data->Ry, data->angleScale * R.y);
-      AiM4RotationZ(data->Rz, data->angleScale * R.z);
+      data->Rx = AiM4RotationX(data->angleScale * R.x);
+      data->Ry = AiM4RotationY(data->angleScale * R.y);
+      data->Rz = AiM4RotationZ(data->angleScale * R.z);
    }
    else
    {
@@ -130,7 +130,7 @@ node_update
       {
          data->Rx_set = true;
          AtVector R = AiNodeGetVec(node, SSTR::rotation);
-         AiM4RotationX(data->Rx, data->angleScale * R.x);
+         data->Rx = AiM4RotationX(data->angleScale * R.x);
       }
 
       data->Ry_set = false;
@@ -138,7 +138,7 @@ node_update
       {
          data->Ry_set = true;
          AtVector R = AiNodeGetVec(node, SSTR::rotation);
-         AiM4RotationY(data->Ry, data->angleScale * R.y);
+         data->Ry = AiM4RotationY(data->angleScale * R.y);
       }
 
       data->Rz_set = false;
@@ -146,7 +146,7 @@ node_update
       {
          data->Rz_set = true;
          AtVector R = AiNodeGetVec(node, SSTR::rotation);
-         AiM4RotationZ(data->Rz, data->angleScale * R.z);
+         data->Rz = AiM4RotationZ(data->angleScale * R.z);
       }
    }
 
@@ -154,10 +154,10 @@ node_update
    if (!AiNodeIsLinked(node, SSTR::rotation_pivot))
    {
       data->Rp_set = true;
-      AtPoint P = AiNodeGetPnt(node, SSTR::rotation_pivot);
-      AiM4Translation(data->Rp, &P);
+      AtVector P = AiNodeGetVec(node, SSTR::rotation_pivot);
+      data->Rp = AiM4Translation(P);
       P = -P;
-      AiM4Translation(data->iRp, &P);
+      data->iRp = AiM4Translation(P);
    }
 
    data->S_set = false;
@@ -165,17 +165,17 @@ node_update
    {
       data->S_set = true;
       AtVector S = AiNodeGetVec(node, SSTR::scale);
-      AiM4Scaling(data->S, &S);
+      data->S = AiM4Scaling(S);
    }
 
    data->Sp_set = false;
    if (!AiNodeIsLinked(node, SSTR::scale_pivot))
    {
       data->Sp_set = true;
-      AtPoint P = AiNodeGetPnt(node, SSTR::scale_pivot);
-      AiM4Translation(data->Sp, &P);
+      AtVector P = AiNodeGetVec(node, SSTR::scale_pivot);
+      data->Sp = AiM4Translation(P);
       P = -P;
-      AiM4Translation(data->iSp, &P);
+      data->iSp = AiM4Translation(P);
    }
 
    if (data->Rx_set && data->Ry_set && data->Rz_set)
@@ -185,43 +185,43 @@ node_update
       switch (data->rotationOrder)
       {
       case RO_XYZ:
-         AiM4Mult(tmp, data->Ry, data->Rx);
-         AiM4Mult(data->R, data->Rz, tmp);
+         tmp = AiM4Mult(data->Ry, data->Rx);
+         data->R = AiM4Mult(data->Rz, tmp);
          break;
       case RO_XZY:
-         AiM4Mult(tmp, data->Rz, data->Rx);
-         AiM4Mult(data->R, data->Ry, tmp);
+         tmp = AiM4Mult(data->Rz, data->Rx);
+         data->R = AiM4Mult(data->Ry, tmp);
          break;
       case RO_YXZ:
-         AiM4Mult(tmp, data->Rx, data->Ry);
-         AiM4Mult(data->R, data->Rz, tmp);
+         tmp = AiM4Mult(data->Rx, data->Ry);
+         data->R = AiM4Mult(data->Rz, tmp);
          break;
       case RO_YZX:
-         AiM4Mult(tmp, data->Rz, data->Ry);
-         AiM4Mult(data->R, data->Rx, tmp);
+         tmp = AiM4Mult(data->Rz, data->Ry);
+         data->R = AiM4Mult(data->Rx, tmp);
          break;
       case RO_ZXY:
-         AiM4Mult(tmp, data->Rx, data->Rz);
-         AiM4Mult(data->R, data->Ry, tmp);
+         tmp = AiM4Mult(data->Rx, data->Rz);
+         data->R = AiM4Mult(data->Ry, tmp);
          break;
       case RO_ZYX:
       default:
-         AiM4Mult(tmp, data->Ry, data->Rz);
-         AiM4Mult(data->R, data->Rx, tmp);
+         tmp = AiM4Mult(data->Ry, data->Rz);
+         data->R = AiM4Mult(data->Rx, tmp);
       }
 
       if (data->Rp_set)
       {
-         AiM4Mult(tmp, data->R, data->iRp);
-         AiM4Mult(data->Rf, data->Rp, tmp);
+         tmp = AiM4Mult(data->R, data->iRp);
+         data->Rf = AiM4Mult(data->Rp, tmp);
       }
    }
 
    if (data->S_set && data->Sp_set)
    {
       AtMatrix tmp;
-      AiM4Mult(tmp, data->S, data->iSp);
-      AiM4Mult(data->Sf, data->Sp, tmp);
+      tmp = AiM4Mult(data->S, data->iSp);
+      data->Sf = AiM4Mult(data->Sp, tmp);
    }
 }
 
@@ -246,11 +246,11 @@ shader_evaluate
    if (!data->T_set)
    {
       t = AiShaderEvalParamVec(p_translation);
-      AiM4Translation(T, &t);
+      T = AiM4Translation(t);
    }
    else
    {
-      AiM4Copy(T, data->T);
+      T = data->T;
    }
    
    // Compute rotation matrix
@@ -261,69 +261,69 @@ shader_evaluate
       
       if (!data->Rx_set)
       {
-         AiM4RotationX(Rx, data->angleScale * r.x);
+         Rx = AiM4RotationX(data->angleScale * r.x);
       }
       else
       {
-         AiM4Copy(Rx, data->Rx);
+         Rx = data->Rx;
       }
       
       if (!data->Ry_set)
       {
-         AiM4RotationY(Ry, data->angleScale * r.y);
+         Ry = AiM4RotationY(data->angleScale * r.y);
       }
       else
       {
-         AiM4Copy(Ry, data->Ry);
+         Ry = data->Ry;
       }
       
       if (!data->Rz_set)
       {
-         AiM4RotationZ(Rz, data->angleScale * r.z);
+         Rz = AiM4RotationZ(data->angleScale * r.z);
       }
       else
       {
-         AiM4Copy(Rz, data->Rz);
+         Rz = data->Rz;
       }
       
       switch (data->rotationOrder)
       {
       case RO_XYZ:
-         AiM4Mult(tmp, Ry, Rx);
-         AiM4Mult(R, Rz, tmp);
+         tmp = AiM4Mult(Ry, Rx);
+         R = AiM4Mult(Rz, tmp);
          break;
       case RO_XZY:
-         AiM4Mult(tmp, Rz, Rx);
-         AiM4Mult(R, Ry, tmp);
+         tmp = AiM4Mult(Rz, Rx);
+         R = AiM4Mult(Ry, tmp);
          break;
       case RO_YXZ:
-         AiM4Mult(tmp, Rx, Ry);
-         AiM4Mult(R, Rz, tmp);
+         tmp = AiM4Mult(Rx, Ry);
+         R = AiM4Mult(Rz, tmp);
          break;
       case RO_YZX:
-         AiM4Mult(tmp, Rz, Ry);
-         AiM4Mult(R, Rx, tmp);
+         tmp = AiM4Mult(Rz, Ry);
+         R = AiM4Mult(Rx, tmp);
          break;
       case RO_ZXY:
-         AiM4Mult(tmp, Rx, Rz);
-         AiM4Mult(R, Ry, tmp);
+         tmp = AiM4Mult(Rx, Rz);
+         R = AiM4Mult(Ry, tmp);
          break;
       case RO_ZYX:
       default:
-         AiM4Mult(tmp, Ry, Rz);
-         AiM4Mult(R, Rx, tmp);
+         tmp = AiM4Mult(Ry, Rz);
+         R = AiM4Mult(Rx, tmp);
       }
    }
    else
    {
       if (data->Rp_set)
       {
-         AiM4Copy(R, data->Rf);
+         R = data->Rf;
          computeR = false;
       }
       else
       {
-         AiM4Copy(R, data->R);
+         R = data->R;
       }
    }
    
@@ -332,16 +332,16 @@ shader_evaluate
       p = AiShaderEvalParamVec(p_rotation_pivot);
       ip = -p;
       
-      AiM4Translation(P, &p);
-      AiM4Translation(iP, &ip);
+      P = AiM4Translation(p);
+      iP = AiM4Translation(ip);
       
-      AiM4Mult(tmp, R, iP);
-      AiM4Mult(R, P, tmp);
+      tmp = AiM4Mult(R, iP);
+      R = AiM4Mult(P, tmp);
    }
    else if (computeR)
    {
-      AiM4Mult(tmp, R, data->iRp);
-      AiM4Mult(R, data->Rp, tmp);
+      tmp = AiM4Mult(R, data->iRp);
+      R = AiM4Mult(data->Rp, tmp);
    }
    
    // Compute scale matrix
@@ -349,18 +349,18 @@ shader_evaluate
    if (!data->S_set)
    {
       s = AiShaderEvalParamVec(p_scale);
-      AiM4Scaling(S, &s);
+      S = AiM4Scaling(s);
    }
    else
    {
       if (data->Sp_set)
       {
-         AiM4Copy(S, data->Sf);
+         S = data->Sf;
          computeS = false;
       }
       else
       {
-         AiM4Copy(S, data->S);
+         S = data->S;
       }
    }
    
@@ -369,45 +369,45 @@ shader_evaluate
       p = AiShaderEvalParamVec(p_scale_pivot);
       ip = -p;
       
-      AiM4Translation(P, &p);
-      AiM4Translation(iP, &ip);
+      P = AiM4Translation(p);
+      iP = AiM4Translation(ip);
       
-      AiM4Mult(tmp, S, iP);
-      AiM4Mult(S, P, tmp);
+      tmp = AiM4Mult(S, iP);
+      S = AiM4Mult(P, tmp);
    }
    else if (computeS)
    {
-      AiM4Mult(tmp, S, data->iSp);
-      AiM4Mult(S, data->Sp, tmp);
+      tmp = AiM4Mult(S, data->iSp);
+      S = AiM4Mult(data->Sp, tmp);
    }
    
-   sg->out.pMTX = (AtMatrix*)AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
+   sg->out.pMTX() = (AtMatrix*)AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
    
    switch (data->transformOrder)
    {
    case TO_SRT:
-      AiM4Mult(tmp, R, S);
-      AiM4Mult(*(sg->out.pMTX), T, tmp);
+      tmp = AiM4Mult(R, S);
+      *(sg->out.pMTX()) = AiM4Mult(T, tmp);
       break;
    case TO_STR:
-      AiM4Mult(tmp, T, S);
-      AiM4Mult(*(sg->out.pMTX), R, tmp);
+      tmp = AiM4Mult(T, S);
+      *(sg->out.pMTX()) = AiM4Mult(R, tmp);
       break;
    case TO_RST:
-      AiM4Mult(tmp, S, R);
-      AiM4Mult(*(sg->out.pMTX), T, tmp);
+      tmp = AiM4Mult(S, R);
+      *(sg->out.pMTX()) = AiM4Mult(T, tmp);
       break;
    case TO_RTS:
-      AiM4Mult(tmp, T, R);
-      AiM4Mult(*(sg->out.pMTX), S, tmp);
+      tmp = AiM4Mult(T, R);
+      *(sg->out.pMTX()) = AiM4Mult(S, tmp);
       break;
    case TO_TSR:
-      AiM4Mult(tmp, S, T);
-      AiM4Mult(*(sg->out.pMTX), R, tmp);
+      tmp = AiM4Mult(S, T);
+      *(sg->out.pMTX()) = AiM4Mult(R, tmp);
       break;
    case TO_TRS:
    default:
-      AiM4Mult(tmp, R, T);
-      AiM4Mult(*(sg->out.pMTX), S, tmp);
+      tmp = AiM4Mult(R, T);
+      *(sg->out.pMTX()) = AiM4Mult(S, tmp);
    }
 }

@@ -52,10 +52,10 @@ shader_evaluate
 {
    if (AiShaderEvalParamBool(p_condition))
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_if_true);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_if_true);
    }
    else
    {
-      sg->out.RGB = AiShaderEvalParamRGB(p_if_false);
+      sg->out.RGB() = AiShaderEvalParamRGB(p_if_false);
    }
 }

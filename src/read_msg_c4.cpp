@@ -63,8 +63,8 @@ shader_evaluate
 {
    ReadMsgC4Data *data = (ReadMsgC4Data*) AiNodeGetLocalData(node);
    
-   if (!AiStateGetMsgRGBA(data->msgName, &(sg->out.RGBA)))
+   if (!AiStateGetMsgRGBA(data->msgName, &(sg->out.RGBA())))
    {
-      sg->out.RGBA = AiShaderEvalParamRGBA(p_default_value);
+      sg->out.RGBA() = AiShaderEvalParamRGBA(p_default_value);
    }
 }

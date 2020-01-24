@@ -48,5 +48,5 @@ shader_evaluate
 {
    AtRGB input = AiShaderEvalParamRGB(p_input);
    
-   sg->out.RGB = -input;
+   sg->out.RGB() = -input;
 }

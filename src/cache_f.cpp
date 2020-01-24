@@ -56,9 +56,9 @@ shader_evaluate
 {
    FloatCache *cache = (FloatCache*) AiNodeGetLocalData(node);
    
-   if (!GetCacheValue(sg, cache, sg->out.FLT))
+   if (!GetCacheValue(sg, cache, sg->out.FLT()))
    {
-      sg->out.FLT = AiShaderEvalParamFlt(p_input);
-      SetCacheValue(sg, cache, sg->out.FLT);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_input);
+      SetCacheValue(sg, cache, sg->out.FLT());
    }
 }

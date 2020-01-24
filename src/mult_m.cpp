@@ -30,8 +30,7 @@ enum MultMParams
 
 node_parameters
 {
-   AtMatrix id;
-   AiM4Identity(id);
+   AtMatrix id = AiM4Identity();
    
    AiParameterMtx("input1", id);
    AiParameterMtx("input2", id);
@@ -54,7 +53,7 @@ shader_evaluate
    AtMatrix *mtx1 = AiShaderEvalParamMtx(p_input1);
    AtMatrix *mtx2 = AiShaderEvalParamMtx(p_input2);
    
-   sg->out.pMTX = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
+   sg->out.pMTX() = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
    
-   AiM4Mult(*(sg->out.pMTX), *mtx1, *mtx2);
+   *(sg->out.pMTX()) = AiM4Mult(*mtx1, *mtx2);
 }

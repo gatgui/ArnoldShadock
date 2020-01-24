@@ -106,8 +106,8 @@ shader_evaluate
    {
       if (data->target == TR_Render)
       {
-         sg->out.VEC.x = float(data->w);
-         sg->out.VEC.y = float(data->h);
+         sg->out.VEC().x = float(data->w);
+         sg->out.VEC().y = float(data->h);
       }
       else
       {
@@ -118,27 +118,27 @@ shader_evaluate
             
             if (filename && filename[0] != '\0' && AiTextureGetResolution(filename, &w, &h))
             {
-               sg->out.VEC.x = float(w);
-               sg->out.VEC.y = float(h);
+               sg->out.VEC().x = float(w);
+               sg->out.VEC().y = float(h);
             }
             else
             {
-               sg->out.VEC.x = 0.0f;
-               sg->out.VEC.y = 0.0f;
+               sg->out.VEC().x = 0.0f;
+               sg->out.VEC().y = 0.0f;
             }
          }
          else
          {
-            sg->out.VEC.x = data->w;
-            sg->out.VEC.y = data->h;
+            sg->out.VEC().x = data->w;
+            sg->out.VEC().y = data->h;
          }
       }
       
       // Add aspect in Z channel
-      sg->out.VEC.z = (sg->out.VEC.y >= AI_EPSILON ? (sg->out.VEC.x / sg->out.VEC.y) : 0.0f);
+      sg->out.VEC().z = (sg->out.VEC().y >= AI_EPSILON ? (sg->out.VEC().x / sg->out.VEC().y) : 0.0f);
    }
    else
    {
-      sg->out.VEC = AI_V3_ZERO;
+      sg->out.VEC() = AI_V3_ZERO;
    }
 }

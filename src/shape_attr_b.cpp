@@ -62,8 +62,8 @@ shader_evaluate
 {
    ShapeAttrBData *data = (ShapeAttrBData*) AiNodeGetLocalData(node);
 
-   if (!AiUDataGetBool(data->attribute, &(sg->out.BOOL)))
+   if (!AiUDataGetBool(data->attribute, sg->out.BOOL()))
    {
-      sg->out.BOOL = AiShaderEvalParamBool(p_default);
+      sg->out.BOOL() = AiShaderEvalParamBool(p_default);
    }
 }

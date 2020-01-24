@@ -50,9 +50,9 @@ node_finish
 
 shader_evaluate
 {
-   AtColor c1 = AiShaderEvalParamRGB(p_input1);
-   AtColor c2 = AiShaderEvalParamRGB(p_input2);
+   AtRGB c1 = AiShaderEvalParamRGB(p_input1);
+   AtRGB c2 = AiShaderEvalParamRGB(p_input2);
    float blend = AiShaderEvalParamFlt(p_blend);
    
-   sg->out.RGB = AiColorLerp(blend, c1, c2);
+   sg->out.RGB() = AiLerp(blend, c1, c2);
 }

@@ -26,14 +26,9 @@ class AE@WRITEAOVS_MAYA_NODENAME@Template(ShaderAETemplate):
       self.addControl("float_aov", label="Value")
       self.endLayout()
       
-      self.beginLayout("Point2")
-      self.addControl("point2_aov_name", label="Name")
-      self.addControl("point2_aov", label="Value")
-      self.endLayout()
-      
-      self.beginLayout("Point")
-      self.addControl("point_aov_name", label="Name")
-      self.addControl("point_aov", label="Value")
+      self.beginLayout("Vector2")
+      self.addControl("vector2_aov_name", label="Name")
+      self.addControl("vector2_aov", label="Value")
       self.endLayout()
       
       self.beginLayout("Vector")

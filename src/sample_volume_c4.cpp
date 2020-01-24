@@ -59,7 +59,7 @@ node_parameters
 {
    AiParameterStr(SSTR::field, "");
    AiParameterEnum(SSTR::interpolation, VI_linear, VolumeInterpNames);
-   AiParameterPnt(SSTR::P, 0.0f, 0.0f, 0.0f);
+   AiParameterVec(SSTR::P, 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::P_space, S_world, SpaceNames);
    AiParameterBool(SSTR::P_is_offset, true);
    AiParameterRGBA(SSTR::pre_multiply, 1.0f, 1.0f, 1.0f, 1.0f);
@@ -81,7 +81,7 @@ struct SampleVolumeC4Data
    int interpolation;
    bool evalP;
    bool ignoreP;
-   AtPoint P;
+   AtVector P;
    Space space;
    bool isOffset;
    bool evalDefault;
@@ -124,8 +124,8 @@ node_update
    data->evalP = AiNodeIsLinked(node, SSTR::P);
    if (!data->evalP)
    {
-      data->P = AiNodeGetPnt(node, SSTR::P);
-      data->ignoreP = (data->isOffset && AiV3IsZero(data->P));
+      data->P = AiNodeGetVec(node, SSTR::P);
+      data->ignoreP = (data->isOffset && AiV3IsSmall(data->P));
    }
    else
    {
@@ -144,18 +144,18 @@ shader_evaluate
 {
    SampleVolumeC4Data *data = (SampleVolumeC4Data*) AiNodeGetLocalData(node);
    
-   AtPoint oldP = sg->P;
-   AtPoint oldPo = sg->Po;
+   AtVector oldP = sg->P;
+   AtVector oldPo = sg->Po;
    
    if (!data->ignoreP)
    {
-      AtPoint P;
+      AtVector P;
       bool updateP = true;
       
       if (data->evalP)
       {
-         P = AiShaderEvalParamPnt(p_P);
-         updateP = (!data->isOffset || !AiV3IsZero(P));
+         P = AiShaderEvalParamVec(p_P);
+         updateP = (!data->isOffset || !AiV3IsSmall(P));
       }
       else
       {
@@ -168,21 +168,21 @@ shader_evaluate
          {
          case S_object:
             sg->Po = (data->isOffset ? (sg->Po + P) : P);
-            AiM4PointByMatrixMult(&(sg->P), sg->M, &(sg->Po));
+            sg->P = AiM4PointByMatrixMult(sg->M, sg->Po);
             break;
          case S_world:
          default:
             sg->P = (data->isOffset ? (sg->P + P) : P);
-            AiM4PointByMatrixMult(&(sg->Po), sg->Minv, &(sg->P));
+            sg->Po = AiM4PointByMatrixMult(sg->Minv, sg->P);
          }
       }
    }
 
-   AtRGBA out = AI_RGBA_BLACK;
+   AtRGBA out = AI_RGB_BLACK;
 
    if (!AiVolumeSampleRGBA(data->field, data->interpolation, &out))
    {
-      sg->out.RGBA = (data->evalDefault ? AiShaderEvalParamRGBA(p_default) : data->_default);
+      sg->out.RGBA() = (data->evalDefault ? AiShaderEvalParamRGBA(p_default) : data->_default);
    }
    else
    {
@@ -226,13 +226,13 @@ shader_evaluate
       }
       
       // Gain/Bias
-      out.r = GAIN(BIAS(out.r, data->bias), data->gain);
-      out.g = GAIN(BIAS(out.g, data->bias), data->gain);
-      out.b = GAIN(BIAS(out.b, data->bias), data->gain);
-      out.a = GAIN(BIAS(out.a, data->bias), data->gain);
+      out.r = AiGain(AiBias(out.r, data->bias), data->gain);
+      out.g = AiGain(AiBias(out.g, data->bias), data->gain);
+      out.b = AiGain(AiBias(out.b, data->bias), data->gain);
+      out.a = AiGain(AiBias(out.a, data->bias), data->gain);
       
       // Post mult/add
-      sg->out.RGBA = data->postAdd + data->postMult * out;
+      sg->out.RGBA() = data->postAdd + data->postMult * out;
    }
 
    sg->P = oldP;

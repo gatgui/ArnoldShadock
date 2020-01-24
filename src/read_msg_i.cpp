@@ -63,8 +63,8 @@ shader_evaluate
 {
    ReadMsgIData *data = (ReadMsgIData*) AiNodeGetLocalData(node);
    
-   if (!AiStateGetMsgInt(data->msgName, &(sg->out.INT)))
+   if (!AiStateGetMsgInt(data->msgName, &(sg->out.INT())))
    {
-      sg->out.INT = AiShaderEvalParamInt(p_default_value);
+      sg->out.INT() = AiShaderEvalParamInt(p_default_value);
    }
 }

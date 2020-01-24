@@ -83,14 +83,13 @@ namespace SSTR
    extern AtString logc_exposure;
    
    extern AtString target_node;
-   extern AtString light_index;
    
-   extern AtString agsb_brdf;
-   extern AtString agsb_ray;
-   extern AtString agsb_trace_hit;
-   extern AtString agsb_tir;
-   extern AtString agsb_sampler;
-   extern AtString agsb_sample_value;
+   // extern AtString agsb_brdf;
+   // extern AtString agsb_ray;
+   // extern AtString agsb_trace_hit;
+   // extern AtString agsb_tir;
+   // extern AtString agsb_sampler;
+   // extern AtString agsb_sample_value;
    
    extern AtString method;
    extern AtString origin;
@@ -191,16 +190,18 @@ namespace SSTR
    extern AtString camera_use_default;
    extern AtString shadow;
    extern AtString shadow_use_default;
-   extern AtString reflected;
-   extern AtString reflected_use_default;
-   extern AtString refracted;
-   extern AtString refracted_use_default;
+   extern AtString diffuse_transmit;
+   extern AtString diffuse_transmit_use_default;
+   extern AtString specular_transmit;
+   extern AtString specular_transmit_use_default;
+   extern AtString volume;
+   extern AtString volume_use_default;
+   extern AtString diffuse_reflect;
+   extern AtString diffuse_reflect_use_default;
+   extern AtString specular_reflect;
+   extern AtString specular_reflect_use_default;
    extern AtString subsurface;
    extern AtString subsurface_use_default;
-   extern AtString diffuse;
-   extern AtString diffuse_use_default;
-   extern AtString glossy;
-   extern AtString glossy_use_default;
 
    extern AtString matrix;
    extern AtString as_point;
@@ -235,8 +236,7 @@ namespace SSTR
    extern AtString bool_aov_name;
    extern AtString int_aov_name;
    extern AtString float_aov_name;
-   extern AtString point2_aov_name;
-   extern AtString point_aov_name;
+   extern AtString vector2_aov_name;
    extern AtString vector_aov_name;
    extern AtString rgb_aov_name;
    extern AtString rgba_aov_name;
@@ -245,8 +245,7 @@ namespace SSTR
    extern AtString bool_msg_name;
    extern AtString int_msg_name;
    extern AtString float_msg_name;
-   extern AtString point2_msg_name;
-   extern AtString point_msg_name;
+   extern AtString vector2_msg_name;
    extern AtString vector_msg_name;
    extern AtString rgb_msg_name;
    extern AtString rgba_msg_name;
@@ -295,6 +294,14 @@ namespace SSTR
    extern AtString blend;
    extern AtString blend_min;
    extern AtString blend_max;
+
+   extern AtString saturation_scale;
+   extern AtString hue_shift;
+   extern AtString in_black;
+   extern AtString in_white;
+   extern AtString out_white;
+   extern AtString out_black;
+   extern AtString gamma;
 }
 
 #endif

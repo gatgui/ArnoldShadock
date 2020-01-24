@@ -54,5 +54,5 @@ shader_evaluate
    AtVector v2 = AiShaderEvalParamVec(p_input2);
    float blend = AiShaderEvalParamFlt(p_blend);
    
-   sg->out.VEC = AiV3Lerp(blend, v1, v2);
+   sg->out.VEC() = AiV3Lerp(blend, v1, v2);
 }

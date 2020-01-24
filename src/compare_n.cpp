@@ -51,5 +51,5 @@ shader_evaluate
    void *ptr1 = AiShaderEvalParamPtr(p_node1);
    void *ptr2 = AiShaderEvalParamPtr(p_node2);
    
-   sg->out.BOOL = (ptr1 == ptr2);
+   sg->out.BOOL() = (ptr1 == ptr2);
 }

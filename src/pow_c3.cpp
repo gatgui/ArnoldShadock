@@ -51,7 +51,7 @@ shader_evaluate
    AtRGB input1 = AiShaderEvalParamRGB(p_input1);
    AtRGB input2 = AiShaderEvalParamRGB(p_input2);
    
-   sg->out.RGB.r = powf(input1.r, input2.r);
-   sg->out.RGB.g = powf(input1.g, input2.g);
-   sg->out.RGB.b = powf(input1.b, input2.b);
+   sg->out.RGB().r = powf(input1.r, input2.r);
+   sg->out.RGB().g = powf(input1.g, input2.g);
+   sg->out.RGB().b = powf(input1.b, input2.b);
 }

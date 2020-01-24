@@ -51,7 +51,7 @@ shader_evaluate
    AtRGB input1 = AiShaderEvalParamRGB(p_input1);
    AtRGB input2 = AiShaderEvalParamRGB(p_input2);
    
-   sg->out.RGB.r = MIN(input1.r, input2.r);
-   sg->out.RGB.g = MIN(input1.g, input2.g);
-   sg->out.RGB.b = MIN(input1.b, input2.b);
+   sg->out.RGB().r = AiMin(input1.r, input2.r);
+   sg->out.RGB().g = AiMin(input1.g, input2.g);
+   sg->out.RGB().b = AiMin(input1.b, input2.b);
 }

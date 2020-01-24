@@ -46,5 +46,5 @@ node_finish
 
 shader_evaluate
 {
-   sg->out.FLT = (AiShaderEvalParamBool(p_input) ? 1.0f : 0.0f);
+   sg->out.FLT() = (AiShaderEvalParamBool(p_input) ? 1.0f : 0.0f);
 }

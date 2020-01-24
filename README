@@ -6,7 +6,7 @@ Dependencies
 ============
 
    ArnoldAnimCurve    v2.0.9
-   ArnoldNoiseShaders v1.1.9
+   ArnoldNoiseShaders v1.1.10
    SeExprArnold       v2.0.0 (optional LLVM backend support)
    ArnoldStateShaders v1.1.7
    ArnoldUserDataRamp v1.1.3

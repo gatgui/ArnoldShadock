@@ -74,9 +74,9 @@ shader_evaluate
    AtVector D = AiShaderEvalParamVec(p_direction);
    AtVector N = (data->evalN ? AiShaderEvalParamVec(p_normal) : sg->N);
    
-   if (!AiRefract(&D, &N, &(sg->out.VEC), data->ior1, data->ior2))
+   if (!AiRefract(D, N, sg->out.VEC(), data->ior1, data->ior2))
    {
       // Total Internal Reflection
-      sg->out.VEC = AI_V3_ZERO;
+      sg->out.VEC() = AI_V3_ZERO;
    }
 }

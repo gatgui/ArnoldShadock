@@ -82,14 +82,13 @@ namespace SSTR
    AtString logc_exposure("logc_exposure");
    
    AtString target_node("target_node");
-   AtString light_index("light_index");
    
-   AtString agsb_brdf("agsb_brdf");
-   AtString agsb_ray("agsb_ray");
-   AtString agsb_trace_hit("agsb_trace_hit");
-   AtString agsb_tir("agsb_tir");
-   AtString agsb_sampler("agsb_sampler");
-   AtString agsb_sample_value("agsb_sample_value");
+   // AtString agsb_brdf("agsb_brdf");
+   // AtString agsb_ray("agsb_ray");
+   // AtString agsb_trace_hit("agsb_trace_hit");
+   // AtString agsb_tir("agsb_tir");
+   // AtString agsb_sampler("agsb_sampler");
+   // AtString agsb_sample_value("agsb_sample_value");
    
    AtString method("method");
    AtString origin("origin");
@@ -174,16 +173,18 @@ namespace SSTR
    AtString camera_use_default("camera_use_default");
    AtString shadow("shadow");
    AtString shadow_use_default("shadow_use_default");
-   AtString reflected("reflected");
-   AtString reflected_use_default("reflected_use_default");
-   AtString refracted("refracted");
-   AtString refracted_use_default("refracted_use_default");
+   AtString diffuse_transmit("diffuse_transmit");
+   AtString diffuse_transmit_use_default("diffuse_transmit_use_default");
+   AtString specular_transmit("specular_transmit");
+   AtString specular_transmit_use_default("specular_transmit_use_default");
+   AtString volume("volume");
+   AtString volume_use_default("volume_use_default");
+   AtString diffuse_reflect("diffuse_reflect");
+   AtString diffuse_reflect_use_default("diffuse_reflect_use_default");
+   AtString specular_reflect("specular_reflect");
+   AtString specular_reflect_use_default("specular_reflect_use_default");
    AtString subsurface("subsurface");
    AtString subsurface_use_default("subsurface_use_default");
-   AtString diffuse("diffuse");
-   AtString diffuse_use_default("diffuse_use_default");
-   AtString glossy("glossy");
-   AtString glossy_use_default("glossy_use_default");
 
    AtString mipmap_mode("mipmap_mode");
    AtString mipmap_bias("mipmap_bias");
@@ -236,8 +237,7 @@ namespace SSTR
    AtString bool_aov_name("bool_aov_name");
    AtString int_aov_name("int_aov_name");
    AtString float_aov_name("float_aov_name");
-   AtString point2_aov_name("point2_aov_name");
-   AtString point_aov_name("point_aov_name");
+   AtString vector2_aov_name("vector2_aov_name");
    AtString vector_aov_name("vector_aov_name");
    AtString rgb_aov_name("rgb_aov_name");
    AtString rgba_aov_name("rgba_aov_name");
@@ -246,8 +246,7 @@ namespace SSTR
    AtString bool_msg_name("bool_msg_name");
    AtString int_msg_name("int_msg_name");
    AtString float_msg_name("float_msg_name");
-   AtString point2_msg_name("point2_msg_name");
-   AtString point_msg_name("point_msg_name");
+   AtString vector2_msg_name("vector2_msg_name");
    AtString vector_msg_name("vector_msg_name");
    AtString rgb_msg_name("rgb_msg_name");
    AtString rgba_msg_name("rgba_msg_name");
@@ -338,4 +337,12 @@ namespace SSTR
    AtString vparam_value("vparam_value");
    AtString stop_on_error("stop_on_error");
 #endif
+
+   AtString in_white("in_white");
+   AtString in_black("in_black");
+   AtString out_white("out_white");
+   AtString out_black("out_black");
+   AtString saturation_scale("saturation_scale");
+   AtString hue_shift("hue_shift");
+   AtString gamma("gamma");
 }

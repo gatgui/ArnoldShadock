@@ -52,10 +52,10 @@ shader_evaluate
 {
    if (AiShaderEvalParamBool(p_condition))
    {
-      sg->out.FLT = AiShaderEvalParamFlt(p_if_true);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_if_true);
    }
    else
    {
-      sg->out.FLT = AiShaderEvalParamFlt(p_if_false);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_if_false);
    }
 }

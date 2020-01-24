@@ -66,7 +66,7 @@ node_finish
 shader_evaluate
 {
    AtVector dPdx, dPdy;
-   AtPoint2 altuv, altuvDx, altuvDy;
+   AtVector2 altuv, altuvDx, altuvDy;
    
    UVData uvs(sg);
    
@@ -78,12 +78,12 @@ shader_evaluate
       ComputeSurfaceScreenDerivatives(sg, dPdx, dPdy);
    }
    
-   if (AiUDataGetPnt2(data->uvSetName, &altuv))
+   if (AiUDataGetVec2(data->uvSetName, altuv))
    {
       sg->u = altuv.x;
       sg->v = altuv.y;
       
-      if (AiUDataGetDxyDerivativesPnt2(data->uvSetName, &altuvDx, &altuvDy)) 
+      if (AiUDataGetDxyDerivativesVec2(data->uvSetName, altuvDx, altuvDy)) 
       { 
          sg->dudx = altuvDx.x; 
          sg->dvdx = altuvDx.y; 
@@ -107,7 +107,7 @@ shader_evaluate
       }
    }
    
-   sg->out.RGBA = AiShaderEvalParamRGBA(p_input);
+   sg->out.RGBA() = AiShaderEvalParamRGBA(p_input);
    
    uvs.restore(sg);
 }

@@ -52,8 +52,8 @@ node_finish
 
 shader_evaluate
 {
-   sg->out.RGBA.r = AiShaderEvalParamFlt(p_r);
-   sg->out.RGBA.g = AiShaderEvalParamFlt(p_g);
-   sg->out.RGBA.b = AiShaderEvalParamFlt(p_b);
-   sg->out.RGBA.a = AiShaderEvalParamFlt(p_a);
+   sg->out.RGBA().r = AiShaderEvalParamFlt(p_r);
+   sg->out.RGBA().g = AiShaderEvalParamFlt(p_g);
+   sg->out.RGBA().b = AiShaderEvalParamFlt(p_b);
+   sg->out.RGBA().a = AiShaderEvalParamFlt(p_a);
 }

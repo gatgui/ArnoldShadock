@@ -79,5 +79,5 @@ node_finish
 shader_evaluate
 {
    int which = AiShaderEvalParamInt(p_which);
-   sg->out.FLT = AiShaderEvalParamFlt(p_input0 + (which < 0 ? 0 : (which > 15 ? 15 : which)));
+   sg->out.FLT() = AiShaderEvalParamFlt(p_input0 + (which < 0 ? 0 : (which > 15 ? 15 : which)));
 }

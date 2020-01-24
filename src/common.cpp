@@ -83,25 +83,35 @@ const char* RayTypeNames[] =
 {
    "camera",
    "shadow",
-   "reflected",
-   "refracted",
+   "diffuse_transmit",
+   "specular_transmit",
+   "volume",
+   "diffuse_reflect",
+   "specular_reflect",
    "subsurface",
    "diffuse",
-   "glossy",
-   "generic",
+   "specular",
+   "reflect",
+   "transmit",
+   "all",
    NULL
 };
 
-AtUInt16 RayTypeValues[] =
+uint8_t RayTypeValues[] =
 {
    AI_RAY_CAMERA,
    AI_RAY_SHADOW,
-   AI_RAY_REFLECTED,
-   AI_RAY_REFRACTED,
+   AI_RAY_DIFFUSE_TRANSMIT,
+   AI_RAY_SPECULAR_TRANSMIT,
+   AI_RAY_VOLUME,
+   AI_RAY_DIFFUSE_REFLECT,
+   AI_RAY_SPECULAR_REFLECT,
    AI_RAY_SUBSURFACE,
-   AI_RAY_DIFFUSE,
-   AI_RAY_GLOSSY,
-   AI_RAY_GENERIC
+   AI_RAY_ALL_DIFFUSE,
+   AI_RAY_ALL_SPECULAR,
+   AI_RAY_ALL_REFLECT,
+   AI_RAY_ALL_TRANSMIT,
+   AI_RAY_ALL
 };
 
 const char* GammaModeNames[] =
@@ -221,7 +231,6 @@ const char* NodeAttrTargetNames[] =
 {
    "surface",
    "shader",
-   "light",
    "procedural",
    "custom",
    NULL
@@ -254,9 +263,9 @@ static void GetArrayElement(AtArray *a, unsigned int i, AtRGB &e)
 template <typename T>
 static void RampT(AtArray *p, AtArray *v, AtArray *it, RampInterpolation defi, unsigned int *shuffle, float t, T &result)
 {
-   unsigned int inext = p->nelements;
+   unsigned int inext = AiArrayGetNumElements(p);
 
-   for (unsigned int i = 0; (i < p->nelements); ++i)
+   for (unsigned int i = 0; (i < AiArrayGetNumElements(p)); ++i)
    {
       if (t < AiArrayGetFlt(p, shuffle[i]))
       {
@@ -265,9 +274,9 @@ static void RampT(AtArray *p, AtArray *v, AtArray *it, RampInterpolation defi, u
       }
    }
 
-   if (inext >= p->nelements)
+   if (inext >= AiArrayGetNumElements(p))
    {
-      GetArrayElement(v, shuffle[p->nelements - 1], result);
+      GetArrayElement(v, shuffle[AiArrayGetNumElements(p) - 1], result);
       return;
    }
 
@@ -355,7 +364,7 @@ static void RampT(AtArray *p, AtArray *v, AtArray *it, RampInterpolation defi, u
          t1 = sy / sx;
 
          // Compute end tangent
-         if (inext+1 >= p->nelements)
+         if (inext+1 >= AiArrayGetNumElements(p))
          {
             p3 = p2 + dp;
             v3 = v2;
@@ -406,9 +415,9 @@ private:
 
 void SortRampPositions(AtArray *a, unsigned int *shuffle)
 {
-   if (a && shuffle && a->nelements > 0)
+   if (a && shuffle && AiArrayGetNumElements(a) > 0)
    {
-      unsigned int n = a->nelements;
+      unsigned int n = AiArrayGetNumElements(a);
 
       for (unsigned int i=0; i<n; ++i)
       {

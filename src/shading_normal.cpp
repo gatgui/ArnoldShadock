@@ -63,8 +63,7 @@ static const char* ShadingNormalSpaceNames[] =
 
 node_parameters
 {
-   AtMatrix id;
-   AiM4Identity(id);
+   AtMatrix id = AiM4Identity();
    
    AiParameterFlt(SSTR::time, 0.0f);
    AiParameterEnum(SSTR::mode, SNM_Default, ShadingNormalModeNames);
@@ -113,9 +112,9 @@ node_update
    {
       // custom space -> world matrix
       AtMatrix tmp;
-      AiNodeGetMatrix(node, SSTR::custom_space, tmp);
+      tmp = AiNodeGetMatrix(node, SSTR::custom_space);
       // world -> custom space matrix
-      AiM4Invert(data->customSpace, tmp);
+      data->customSpace = AiM4Invert(tmp);
    }
 }
 
@@ -130,9 +129,9 @@ shader_evaluate
 {
    ShadingNormalData *data = (ShadingNormalData*) AiNodeGetLocalData(node);
    
-   AtPoint P, N, Ns, Ng, outN;
+   AtVector P, N, Ns, Ng, outN;
    
-   AiShaderGlobalsGetPositionAtTime(sg, (data->evalTime ? AiShaderEvalParamFlt(p_time) : data->time), &P, &N, &Ng, &Ns);
+   AiShaderGlobalsGetPositionAtTime(sg, (data->evalTime ? AiShaderEvalParamFlt(p_time) : data->time), P, &N, &Ng, &Ns);
    
    switch (data->mode)
    {
@@ -150,13 +149,13 @@ shader_evaluate
    
    if (data->faceforward)
    {
-      AiFaceForward(&outN, sg->Rd);
+      AiFaceForward(outN, sg->Rd);
    }
    
    switch (data->space)
    {
    case SNS_Object:
-      sg->out.VEC = AiShaderGlobalsTransformNormal(sg, outN, AI_WORLD_TO_OBJECT);
+      sg->out.VEC() = AiShaderGlobalsTransformNormal(sg, outN, AI_WORLD_TO_OBJECT);
       break;
       
    case SNS_Custom:
@@ -169,22 +168,22 @@ shader_evaluate
             AtMatrix *tmp = AiShaderEvalParamMtx(p_custom_space);
             // world -> custom space matrix
             AtMatrix customSpace;
-            AiM4Invert(customSpace, *tmp);
+            customSpace = AiM4Invert(*tmp);
             
-            AiM4VectorByMatrixMult(&csN, customSpace, &outN);
+            csN = AiM4VectorByMatrixMult(customSpace, outN);
          }
          else
          {
-            AiM4VectorByMatrixMult(&csN, data->customSpace, &outN);
+            csN = AiM4VectorByMatrixMult(data->customSpace, outN);
          }
          
-         sg->out.VEC = AiV3Normalize(csN);
+         sg->out.VEC() = AiV3Normalize(csN);
       }
       break;
       
    case SNS_World:
    default:
-      sg->out.VEC = outN;
+      sg->out.VEC() = outN;
       break;
    }
 }

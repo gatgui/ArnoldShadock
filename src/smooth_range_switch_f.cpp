@@ -63,11 +63,11 @@ shader_evaluate
    
    if (lower <= value && value <= upper)
    {
-      sg->out.FLT = AiShaderEvalParamFlt(p_inside_range);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_inside_range);
    }
    else if (value < lower-falloff || value > upper+falloff)
    {
-      sg->out.FLT = AiShaderEvalParamFlt(p_outside_range);
+      sg->out.FLT() = AiShaderEvalParamFlt(p_outside_range);
    }
    else
    {
@@ -84,6 +84,6 @@ shader_evaluate
          blend = 1.0f - SmoothStep(NormalizeToRange(value, upper, upper+falloff));
       }
       
-      sg->out.FLT = (1.0f - blend) * outsideValue + blend * insideValue;
+      sg->out.FLT() = (1.0f - blend) * outsideValue + blend * insideValue;
    }
 }

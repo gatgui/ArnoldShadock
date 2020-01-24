@@ -85,5 +85,5 @@ shader_evaluate
 
    float lineWidth = AiShaderEvalParamFlt(p_line_width);
    
-   sg->out.FLT = AiWireframe(sg, lineWidth, data->units == WS_screen, data->edgeType);
+   sg->out.FLT() = AiWireframe(sg, lineWidth, data->units == WS_screen, data->edgeType);
 }

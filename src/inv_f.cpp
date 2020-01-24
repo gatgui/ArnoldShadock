@@ -48,5 +48,5 @@ shader_evaluate
 {
    float input = AiShaderEvalParamFlt(p_input);
    
-   sg->out.FLT = 1.0f / input;
+   sg->out.FLT() = 1.0f / input;
 }

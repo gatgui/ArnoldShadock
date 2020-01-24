@@ -31,8 +31,7 @@ enum LerpMParams
 
 node_parameters
 {
-   AtMatrix id;
-   AiM4Identity(id);
+   AtMatrix id = AiM4Identity();
    
    AiParameterMtx("input1", id);
    AiParameterMtx("input2", id);
@@ -53,11 +52,11 @@ node_finish
 
 shader_evaluate
 {
-   sg->out.pMTX = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
+   sg->out.pMTX() = (AtMatrix*) AiShaderGlobalsQuickAlloc(sg, sizeof(AtMatrix));
    
    AtMatrix *mtx1 = AiShaderEvalParamMtx(p_input1);
    AtMatrix *mtx2 = AiShaderEvalParamMtx(p_input2);
    float blend = AiShaderEvalParamFlt(p_blend);
    
-   AiM4Lerp(*(sg->out.pMTX), blend, *mtx1, *mtx2);
+   *(sg->out.pMTX()) = AiM4Lerp(blend, *mtx1, *mtx2);
 }

@@ -66,19 +66,19 @@ shader_evaluate
 {
    ShapeAttrC4Data *data = (ShapeAttrC4Data*) AiNodeGetLocalData(node);
 
-   sg->out.RGBA = AI_RGBA_BLACK;
+   sg->out.RGBA() = AI_RGB_BLACK;
    
    if (data->output_mode == AM_V)
    {
-      if (!AiUDataGetRGBA(data->attribute, &(sg->out.RGBA)))
+      if (!AiUDataGetRGBA(data->attribute, sg->out.RGBA()))
       {
-         if (!AiUDataGetRGB(data->attribute, &(sg->out.RGB)))
+         if (!AiUDataGetRGB(data->attribute, sg->out.RGB()))
          {
-            sg->out.RGBA = AiShaderEvalParamRGBA(p_default);
+            sg->out.RGBA() = AiShaderEvalParamRGBA(p_default);
          }
          else
          {
-            sg->out.RGBA.a = 1.0f;
+            sg->out.RGBA().a = 1.0f;
          }
       }
    }
@@ -86,11 +86,11 @@ shader_evaluate
    {
       AtRGBA dVdx, dVdy;
       
-      if (!AiUDataGetDxyDerivativesRGBA(data->attribute, &dVdx, &dVdy))
+      if (!AiUDataGetDxyDerivativesRGBA(data->attribute, dVdx, dVdy))
       {
-         if (!AiUDataGetDxyDerivativesRGB(data->attribute, &dVdx.rgb(), &dVdy.rgb()))
+         if (!AiUDataGetDxyDerivativesRGB(data->attribute, dVdx.rgb(), dVdy.rgb()))
          {
-            sg->out.RGBA = AiShaderEvalParamRGBA(p_default);
+            sg->out.RGBA() = AiShaderEvalParamRGBA(p_default);
             return;
          }
          
@@ -98,6 +98,6 @@ shader_evaluate
          dVdy.a = 1.0f;
       }
       
-      sg->out.RGBA = (data->output_mode == AM_dVdx ? dVdx : dVdy);
+      sg->out.RGBA() = (data->output_mode == AM_dVdx ? dVdx : dVdy);
    }
 }
