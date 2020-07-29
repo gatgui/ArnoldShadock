@@ -1,4 +1,4 @@
-import pymel.core as pm
+import maya.mel
 from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
 
 class AE@WRITEMSGI_MAYA_NODENAME@Template(ShaderAETemplate):
@@ -12,7 +12,7 @@ class AE@WRITEMSGI_MAYA_NODENAME@Template(ShaderAETemplate):
       self.addControl("msg_input")
       self.endLayout()
       
-      pm.mel.AEdependNodeTemplate(self.nodeName)
+      maya.mel.eval('AEdependNodeTemplate '+self.nodeName)
       self.addExtraControls()
       self.endScrollLayout()
 

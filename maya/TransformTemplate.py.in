@@ -1,4 +1,4 @@
-import pymel.core as pm
+import maya.mel
 from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
 
 class AE@TRANSFORM_MAYA_NODENAME@Template(ShaderAETemplate):
@@ -11,7 +11,7 @@ class AE@TRANSFORM_MAYA_NODENAME@Template(ShaderAETemplate):
       self.addControl("as_point")
       self.endLayout()
       
-      pm.mel.AEdependNodeTemplate(self.nodeName)
+      maya.mel.eval('AEdependNodeTemplate '+self.nodeName)
       self.addExtraControls()
       self.endScrollLayout()
 

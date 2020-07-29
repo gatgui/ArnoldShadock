@@ -1,0 +1,20 @@
+import maya.mel
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@SMOOTHRANGESWITCHCL_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("value")
+      self.addControl("lower_bound")
+      self.addControl("upper_bound")
+      self.addControl("falloff")
+      self.addControl("inside_range")
+      self.addControl("outside_range")
+      self.endLayout()
+      
+      maya.mel.eval('AEdependNodeTemplate '+self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+

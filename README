@@ -5,11 +5,11 @@ Requires Arnold 4.2.12.0 or above
 Dependencies
 ============
 
-   ArnoldAnimCurve    v2.0.9
-   ArnoldNoiseShaders v1.1.10
+   ArnoldAnimCurve    v2.0.10
+   ArnoldNoiseShaders v1.1.11
    SeExprArnold       v2.0.0 (optional LLVM backend support)
-   ArnoldStateShaders v1.1.7
-   ArnoldUserDataRamp v1.1.3
+   ArnoldStateShaders v1.1.8
+   ArnoldUserDataRamp v1.1.4
 
 How to
 ======

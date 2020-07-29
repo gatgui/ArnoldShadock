@@ -1,0 +1,33 @@
+import maya.mel
+from mtoa.ui.ae.shaderTemplate import ShaderAETemplate
+
+class AE@SWITCHRAYCL_MAYA_NODENAME@Template(ShaderAETemplate):
+   def setup(self):
+      self.beginScrollLayout()
+      
+      self.beginLayout("Parameters", collapse=False)
+      self.addControl("camera")
+      self.addControl("camera_use_default")
+      self.addControl("shadow")
+      self.addControl("shadow_use_default")
+      self.addControl("diffuse_transmit")
+      self.addControl("diffuse_transmit_use_default")
+      self.addControl("specular_transmit")
+      self.addControl("specular_transmit_use_default")
+      self.addControl("volume")
+      self.addControl("volume_use_default")
+      self.addControl("diffuse_reflect")
+      self.addControl("diffuse_reflect_use_default")
+      self.addControl("specular_reflect")
+      self.addControl("specular_reflect_use_default")
+      self.addControl("subsurface")
+      self.addControl("subsurface_use_default")
+      self.addControl("default")
+      self.addControl("failed")
+      self.endLayout()
+      
+      maya.mel.eval('AEdependNodeTemplate '+self.nodeName)
+      self.addExtraControls()
+      self.endScrollLayout()
+
+
