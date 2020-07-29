@@ -56,7 +56,7 @@ static const char* CoordinateSpaceNames[] =
 
 node_parameters
 {
-   AiParameterRGB("input", 0.0f, 0.0f, 0.0f);
+   AiParameterClosure("input");
    AiParameterVec(SSTR::P, 0.0f, 0.0f, 0.0f);
    AiParameterEnum(SSTR::P_space, CS_World, CoordinateSpaceNames);
    AiParameterMtx(SSTR::P_world_matrix, AI_M4_IDENTITY);
@@ -216,7 +216,7 @@ shader_evaluate
    sg->skip_shadow = data->skipShadow;
    sg->fhemi = data->fhemi;
    
-   sg->out.RGB() = AiShaderEvalParamRGB(p_input);
+   sg->out.CLOSURE() = AiShaderEvalParamClosure(p_input);
    
    sg->fhemi = oldFhemi;
    sg->skip_shadow = oldSkipShadow;

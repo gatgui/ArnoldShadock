@@ -266,13 +266,13 @@ struct HitData
 template <typename T>
 inline void AddMemUsage()
 {
-   AiAddMemUsage(uint64_t(sizeof(T)), (AtString)"shading_blocks");
+   AiAddMemUsage(int64_t(sizeof(T)), (AtString)"shading_blocks");
 }
 
 template <typename T>
 inline void SubMemUsage()
 {
-   AiAddMemUsage(-uint64_t(sizeof(T)), (AtString)"shading_blocks");
+   AiAddMemUsage(-int64_t(sizeof(T)), (AtString)"shading_blocks");
 }
 
 inline int GetRenderThreadsCount()

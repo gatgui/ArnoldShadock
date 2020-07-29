@@ -41,10 +41,18 @@ static int gsShaderCount = 0;
 
 #define DECLARE_VECTOR_SHADER(name) DECLARE_SHADER(name##V)
 
+#define DECLARE_CLOSURE_SHADER(name) DECLARE_SHADER(name##Cl)
+
 #define DECLARE_FCV_SHADER(name)\
    DECLARE_FLOAT_SHADER(name);\
    DECLARE_COLOR_SHADER(name);\
    DECLARE_VECTOR_SHADER(name)
+
+#define DECLARE_FCVC_SHADER(name)\
+   DECLARE_FLOAT_SHADER(name);\
+   DECLARE_COLOR_SHADER(name);\
+   DECLARE_VECTOR_SHADER(name);\
+   DECLARE_CLOSURE_SHADER(name)
 
 #define REGISTER_SHADER(s_name, a_name, a_type)\
    if (i == s_name)\
@@ -63,15 +71,23 @@ static int gsShaderCount = 0;
 
 #define REGISTER_VECTOR_SHADER(s_name, a_name) REGISTER_SHADER(s_name##V, a_name##_v, AI_TYPE_VECTOR)
 
+#define REGISTER_CLOSURE_SHADER(s_name, a_name) REGISTER_SHADER(s_name##Cl, a_name##_cl, AI_TYPE_CLOSURE)
+
 #define REGISTER_FCV_SHADER(s_name, a_name)\
    REGISTER_FLOAT_SHADER(s_name, a_name)\
    REGISTER_COLOR_SHADER(s_name, a_name)\
    REGISTER_VECTOR_SHADER(s_name, a_name)
 
+#define REGISTER_FCVC_SHADER(s_name, a_name)\
+   REGISTER_FLOAT_SHADER(s_name, a_name)\
+   REGISTER_COLOR_SHADER(s_name, a_name)\
+   REGISTER_VECTOR_SHADER(s_name, a_name)\
+   REGISTER_CLOSURE_SHADER(s_name, a_name)
+
 // ---
 
 DECLARE_FCV_SHADER(Abs);
-DECLARE_FCV_SHADER(Add);
+DECLARE_FCVC_SHADER(Add);
 DECLARE_FCV_SHADER(Bias);
 DECLARE_FCV_SHADER(BiasGain);
 DECLARE_FCV_SHADER(Ceil);
@@ -101,18 +117,18 @@ DECLARE_FCV_SHADER(Max);
 DECLARE_FCV_SHADER(Min);
 DECLARE_FCV_SHADER(Mix);
 DECLARE_FCV_SHADER(Mod);
-DECLARE_FCV_SHADER(MultiSwitch);
-DECLARE_FCV_SHADER(Mult);
-DECLARE_FCV_SHADER(Neg);
+DECLARE_FCVC_SHADER(MultiSwitch);
+DECLARE_FCVC_SHADER(Mult);
+DECLARE_FCVC_SHADER(Neg);
 DECLARE_SHADER(Normalize);
 DECLARE_FCV_SHADER(Pow);
 DECLARE_FCV_SHADER(Remap);
 DECLARE_FCV_SHADER(Round);
-DECLARE_FCV_SHADER(Switch);
+DECLARE_FCVC_SHADER(Switch);
 DECLARE_FCV_SHADER(Sign);
 DECLARE_FCV_SHADER(SmoothStep);
 DECLARE_FCV_SHADER(Sqrt);
-DECLARE_FCV_SHADER(Sub);
+DECLARE_FCVC_SHADER(Sub);
 DECLARE_FLOAT_SHADER(Trigo);
 DECLARE_VECTOR_SHADER(Trigo);
 DECLARE_SHADER(Length);
@@ -153,9 +169,9 @@ DECLARE_SHADER(InvM);
 DECLARE_SHADER(Transpose);
 DECLARE_SHADER(LerpM);
 DECLARE_FCV_SHADER(Ramp);
-DECLARE_FCV_SHADER(SmoothSwitch);
-DECLARE_FCV_SHADER(RangeSwitch);
-DECLARE_FCV_SHADER(SmoothRangeSwitch);
+DECLARE_FCVC_SHADER(SmoothSwitch);
+DECLARE_FCVC_SHADER(RangeSwitch);
+DECLARE_FCVC_SHADER(SmoothRangeSwitch);
 DECLARE_SHADER(MakeV2);
 DECLARE_SHADER(MakeV);
 DECLARE_SHADER(MakeC3);
@@ -241,7 +257,7 @@ DECLARE_SHADER(CompareN);
 // DECLARE_SHADER(BrdfEvalSample);
 // DECLARE_SHADER(BrdfEvalPdf);
 // DECLARE_SHADER(BrdfEval);
-DECLARE_FCV_SHADER(Lerp);
+DECLARE_FCVC_SHADER(Lerp);
 // DECLARE_SHADER(SetRayDir);
 // DECLARE_SHADER(IsValidRay);
 // DECLARE_SHADER(IsTirRay);
@@ -251,6 +267,7 @@ DECLARE_SHADER(SwitchRayF);
 DECLARE_SHADER(SwitchRayC3);
 DECLARE_SHADER(SwitchRayC4);
 DECLARE_SHADER(SwitchRayShader);
+DECLARE_SHADER(SwitchRayCl);
 // DECLARE_SHADER(Volume);
 DECLARE_SHADER(SampleVolumeF);
 DECLARE_SHADER(SampleVolumeV2);
@@ -300,7 +317,7 @@ node_loader
       return false;
    }
    REGISTER_FCV_SHADER(Abs, abs)
-   REGISTER_FCV_SHADER(Add, add)
+   REGISTER_FCVC_SHADER(Add, add)
    REGISTER_FCV_SHADER(Bias, bias)
    REGISTER_FCV_SHADER(BiasGain, bias_gain)
    REGISTER_FCV_SHADER(Ceil, ceil)
@@ -330,18 +347,18 @@ node_loader
    REGISTER_FCV_SHADER(Min, min)
    REGISTER_FCV_SHADER(Mix, mix)
    REGISTER_FCV_SHADER(Mod, mod)
-   REGISTER_FCV_SHADER(MultiSwitch, multi_switch)
-   REGISTER_FCV_SHADER(Mult, mult)
-   REGISTER_FCV_SHADER(Neg, neg)
+   REGISTER_FCVC_SHADER(MultiSwitch, multi_switch)
+   REGISTER_FCVC_SHADER(Mult, mult)
+   REGISTER_FCVC_SHADER(Neg, neg)
    REGISTER_SHADER(Normalize, normalize, AI_TYPE_VECTOR)
    REGISTER_FCV_SHADER(Pow, pow)
    REGISTER_FCV_SHADER(Remap, remap)
    REGISTER_FCV_SHADER(Round, round)
-   REGISTER_FCV_SHADER(Switch, switch)
+   REGISTER_FCVC_SHADER(Switch, switch)
    REGISTER_FCV_SHADER(Sign, sign)
    REGISTER_FCV_SHADER(SmoothStep, smooth_step)
    REGISTER_FCV_SHADER(Sqrt, sqrt)
-   REGISTER_FCV_SHADER(Sub, sub)
+   REGISTER_FCVC_SHADER(Sub, sub)
    REGISTER_FLOAT_SHADER(Trigo, trigo)
    REGISTER_VECTOR_SHADER(Trigo, trigo)
    REGISTER_SHADER(Length, length, AI_TYPE_FLOAT)
@@ -382,9 +399,9 @@ node_loader
    REGISTER_SHADER(Transpose, transpose, AI_TYPE_MATRIX)
    REGISTER_SHADER(LerpM, lerp_m, AI_TYPE_MATRIX)
    REGISTER_FCV_SHADER(Ramp, ramp)
-   REGISTER_FCV_SHADER(SmoothSwitch, smooth_switch)
-   REGISTER_FCV_SHADER(RangeSwitch, range_switch)
-   REGISTER_FCV_SHADER(SmoothRangeSwitch, smooth_range_switch)
+   REGISTER_FCVC_SHADER(SmoothSwitch, smooth_switch)
+   REGISTER_FCVC_SHADER(RangeSwitch, range_switch)
+   REGISTER_FCVC_SHADER(SmoothRangeSwitch, smooth_range_switch)
    REGISTER_SHADER(MakeV2, make_v2, AI_TYPE_VECTOR2)
    REGISTER_SHADER(MakeV, make_v, AI_TYPE_VECTOR)
    REGISTER_SHADER(MakeC3, make_c3, AI_TYPE_RGB)
@@ -439,7 +456,7 @@ node_loader
    REGISTER_SHADER(MakeFrame, make_frame, AI_TYPE_MATRIX)
    REGISTER_SHADER(Rotate, rotate, AI_TYPE_VECTOR)
    REGISTER_SHADER(Scale, scale, AI_TYPE_VECTOR)
-   REGISTER_SHADER(TweakGlobals, tweak_globals, AI_TYPE_RGB)
+   REGISTER_SHADER(TweakGlobals, tweak_globals, AI_TYPE_CLOSURE)
    REGISTER_FCV_SHADER(Cache, cache)
    REGISTER_SHADER(CacheM, cache_m, AI_TYPE_MATRIX)
    // REGISTER_SHADER(CacheBrdf, cache_brdf, AI_TYPE_RGB)
@@ -470,7 +487,7 @@ node_loader
    // REGISTER_SHADER(BrdfEvalSample, brdf_eval_sample, AI_TYPE_VECTOR)
    // REGISTER_SHADER(BrdfEvalPdf, brdf_eval_pdf, AI_TYPE_FLOAT)
    // REGISTER_SHADER(BrdfEval, brdf_eval, AI_TYPE_RGB)
-   REGISTER_FCV_SHADER(Lerp, lerp)
+   REGISTER_FCVC_SHADER(Lerp, lerp)
    // REGISTER_SHADER(SetRayDir, set_ray_dir, AI_TYPE_VECTOR)
    // REGISTER_SHADER(IsValidRay, is_valid_ray, AI_TYPE_BOOLEAN)
    // REGISTER_SHADER(IsTirRay, is_tir_ray, AI_TYPE_BOOLEAN)
@@ -479,7 +496,8 @@ node_loader
    REGISTER_SHADER(SwitchRayF, switch_ray_f, AI_TYPE_FLOAT)
    REGISTER_SHADER(SwitchRayC3, switch_ray_c3, AI_TYPE_RGB)
    REGISTER_SHADER(SwitchRayC4, switch_ray_c4, AI_TYPE_RGBA)
-   REGISTER_SHADER(SwitchRayShader, switch_ray_shader, AI_TYPE_CLOSURE)
+   REGISTER_SHADER(SwitchRayShader, switch_ray_shader, AI_TYPE_CLOSURE) // deprecated, use switch_ray_cl
+   REGISTER_SHADER(SwitchRayCl, switch_ray_cl, AI_TYPE_CLOSURE)
    // REGISTER_SHADER(Volume, volume, AI_TYPE_RGB)
    REGISTER_SHADER(SampleVolumeF, sample_volume_f, AI_TYPE_FLOAT)
    REGISTER_SHADER(SampleVolumeV2, sample_volume_v2, AI_TYPE_VECTOR2)
