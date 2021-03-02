@@ -321,6 +321,7 @@ if withState:
   defs.append("WITH_STATE_SHADERS")
   prjs.append({"name": "state_shaders",
                "type": "staticlib",
+               "prefix": "arnold-%s" % arnold.Version(compat=True),
                "bldprefix": "arnold-%s" % arnold.Version(compat=True),
                "srcs": glob.glob("ArnoldStateShaders/src/state_*.cpp"),
                "custom": [arnold.Require]})
@@ -336,6 +337,7 @@ if withNoises:
   incs.append("ArnoldNoiseShaders/src")
   prjs.append({"name": "noise_shaders",
                "type": "staticlib",
+               "prefix": "arnold-%s" % arnold.Version(compat=True),
                "bldprefix": "arnold-%s" % arnold.Version(compat=True),
                "srcs": ["ArnoldNoiseShaders/src/fractal.cpp",
                         "ArnoldNoiseShaders/src/distort_point.cpp",
@@ -357,6 +359,7 @@ if withSeExpr:
   defs.append("WITH_SEEXPR_SHADER")
   prjs.append({"name": "seexpr_shader",
                "type": "staticlib",
+               "prefix": "arnold-%s" % arnold.Version(compat=True),
                "bldprefix": "arnold-%s" % arnold.Version(compat=True),
                "srcs": ["SeExprArnold/src/seexpr.cpp"],
                "custom": [RequireSeExpr2, arnold.Require]})
@@ -370,6 +373,7 @@ if withAnimCurve:
   defs.extend(["WITH_ANIMCURVE_SHADER"])
   prjs.append({"name": "animcurve_shader",
                "type": "staticlib",
+               "prefix": "arnold-%s" % arnold.Version(compat=True),
                "bldprefix": "arnold-%s" % arnold.Version(compat=True),
                "srcs": ["ArnoldAnimCurve/src/anim_curve.cpp"],
                "custom": [RequireGmath, arnold.Require]})
@@ -384,6 +388,7 @@ if withUserDataRamp:
   incs.append("ArnoldUserDataRamp/src")
   prjs.append({"name": "userdataramp_shaders",
                "type": "staticlib",
+               "prefix": "arnold-%s" % arnold.Version(compat=True),
                "bldprefix": "arnold-%s" % arnold.Version(compat=True),
                "srcs": glob.glob("ArnoldUserDataRamp/src/user_data_ramp*.cpp") + \
                        ["ArnoldUserDataRamp/src/common.cpp"],
@@ -401,13 +406,14 @@ instfiles["maya"] = aes
 
 prjs.append(
   {"name": "shadock",
-   "prefix": "arnold",
+   "prefix": "arnold/%s" % arnold.Version(compat=True),
    "bldprefix": "arnold-%s" % arnold.Version(compat=True),
    "type": "dynamicmodule",
    "defs": defs,
    "incdirs": incs,
    "ext": arnold.PluginExt(),
    "libs": libs,
+   "libdirs": ["%s/lib/arnold-%s" % (excons.OutputBaseDirectory(), arnold.Version(compat=True))],
    "srcs": glob.glob("src/*.cpp") + extra_srcs,
    "install": instfiles,
    "custom": reqs
