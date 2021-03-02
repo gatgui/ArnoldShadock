@@ -298,7 +298,7 @@ opts = {"PREFIX": shdprefix}
 GenerateMtd = excons.config.AddGenerator(env, "mtd", opts)
 
 mtd = GenerateMtd("shadock.mtd", make_mtd_in())
-instfiles["arnold"] = mtd
+instfiles["arnold/%s" % arnold.Version(compat=True)] = mtd
 
 tpls = []
 for item in excons.glob("src/*.cpp"):
