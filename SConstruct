@@ -397,6 +397,7 @@ instfiles["maya"] = aes
 prjs.append(
   {"name": "shadock",
    "prefix": "arnold",
+   "bldprefix": "arnold-%s" % arnold.Version(compat=True),
    "type": "dynamicmodule",
    "defs": defs,
    "incdirs": incs,
