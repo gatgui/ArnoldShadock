@@ -321,6 +321,7 @@ if withState:
   defs.append("WITH_STATE_SHADERS")
   prjs.append({"name": "state_shaders",
                "type": "staticlib",
+               "bldprefix": "arnold-%s" % arnold.Version(compat=True),
                "srcs": glob.glob("ArnoldStateShaders/src/state_*.cpp"),
                "custom": [arnold.Require]})
   libs.append("state_shaders")
@@ -335,6 +336,7 @@ if withNoises:
   incs.append("ArnoldNoiseShaders/src")
   prjs.append({"name": "noise_shaders",
                "type": "staticlib",
+               "bldprefix": "arnold-%s" % arnold.Version(compat=True),
                "srcs": ["ArnoldNoiseShaders/src/fractal.cpp",
                         "ArnoldNoiseShaders/src/distort_point.cpp",
                         "ArnoldNoiseShaders/src/voronoi.cpp",
@@ -355,6 +357,7 @@ if withSeExpr:
   defs.append("WITH_SEEXPR_SHADER")
   prjs.append({"name": "seexpr_shader",
                "type": "staticlib",
+               "bldprefix": "arnold-%s" % arnold.Version(compat=True),
                "srcs": ["SeExprArnold/src/seexpr.cpp"],
                "custom": [RequireSeExpr2, arnold.Require]})
   libs.extend(["seexpr_shader"])
@@ -367,6 +370,7 @@ if withAnimCurve:
   defs.extend(["WITH_ANIMCURVE_SHADER"])
   prjs.append({"name": "animcurve_shader",
                "type": "staticlib",
+               "bldprefix": "arnold-%s" % arnold.Version(compat=True),
                "srcs": ["ArnoldAnimCurve/src/anim_curve.cpp"],
                "custom": [RequireGmath, arnold.Require]})
   libs.append("animcurve_shader")
@@ -380,6 +384,7 @@ if withUserDataRamp:
   incs.append("ArnoldUserDataRamp/src")
   prjs.append({"name": "userdataramp_shaders",
                "type": "staticlib",
+               "bldprefix": "arnold-%s" % arnold.Version(compat=True),
                "srcs": glob.glob("ArnoldUserDataRamp/src/user_data_ramp*.cpp") + \
                        ["ArnoldUserDataRamp/src/common.cpp"],
                "custom": [arnold.Require]})
