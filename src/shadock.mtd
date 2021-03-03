@@ -18,6 +18,82 @@
 #
 # shadock is numbering down from the end of the range
 
+[node switch_ray_c3]
+   maya.classification STRING "utility/trace"
+   maya.id INT 0x001164DB
+   
+   [attr camera_use_default]
+      linkable BOOL false
+
+   [attr shadow_use_default]
+      linkable BOOL false
+
+   [attr diffuse_transmit_use_default]
+      linkable BOOL false
+
+   [attr specular_transmit_use_default]
+      linkable BOOL false
+
+   [attr volume_use_default]
+      linkable BOOL false
+
+   [attr diffuse_reflect_use_default]
+      linkable BOOL false
+
+   [attr specular_reflect_use_default]
+      linkable BOOL false
+
+   [attr subsurface_use_default]
+      linkable BOOL false
+
+   [attr diffuse_use_default]
+      linkable BOOL false
+
+   [attr specular_use_default]
+      linkable BOOL false
+
+   [attr reflect_use_default]
+      linkable BOOL false
+
+   [attr transmit_use_default]
+      linkable BOOL false
+
+[node sub_cl]
+   maya.classification STRING "utility/closure"
+   maya.id INT 0x001164DC
+
+[node smooth_switch_cl]
+   maya.classification STRING "utility/closure"
+   maya.id INT 0x001164DD
+   
+   [attr threshold]
+      softmin FLOAT -5.0
+      softmax FLOAT 5.0
+   
+   [attr falloff]
+      min FLOAT 0.0
+      softmax FLOAT 5.0
+
+[node smooth_range_switch_cl]
+   maya.classification STRING "utility/closure"
+   maya.id INT 0x001164DE
+   
+   [attr falloff]
+      min FLOAT 0.0
+      softmax FLOAT 5.0
+
+[node range_switch_cl]
+   maya.classification STRING "utility/closure"
+   maya.id INT 0x001164DF
+
+[node lerp_cl]
+   maya.classification STRING "utility/closure"
+   maya.id INT 0x001164E0
+   
+   [attr blend]
+      min FLOAT 0.0
+      max FLOAT 1.0
+
 [node switch_cl]
    maya.classification STRING "utility/closure"
    maya.id INT 0x001164E1
