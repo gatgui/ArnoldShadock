@@ -18,7 +18,7 @@
 #
 # shadock is numbering down from the end of the range
 
-[node switch_ray_c3]
+[node switch_ray_cl]
    maya.classification STRING "utility/trace"
    maya.id INT 0x001164DB
    
