@@ -18,6 +18,30 @@
 #
 # shadock is numbering down from the end of the range
 
+[node switch_cl]
+   maya.classification STRING "utility/closure"
+   maya.id INT 0x001164E1
+
+[node neg_cl]
+   maya.classification STRING "utility/closure"
+   maya.id INT 0x001164E2
+
+[node mult_cl]
+   maya.classification STRING "utility/closure"
+   maya.id INT 0x001164E3
+
+[node multi_switch_cl]
+   maya.classification STRING "utility/closure"
+   maya.id INT 0x001164E4
+
+   [attr which]
+      min INT 0
+      max INT 15
+
+[node add_cl]
+   maya.classification STRING "utility/closure"
+   maya.id INT 0x001164E5
+
 [node grade]
    maya.classificatoin STRING "utility/color"
    maya.id INT 0x001164E6
